@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" [threshold="all"] [debug="false"]>
+	
+	<!-- Filtering resources -->
+	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <filters>
+			<filter>src/main/filters/local.properties</filter>
+		</filters>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+			</plugin>
+		</plugins>		
+    </build>
+	
+	
+	<!-- Console logs -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender"> 
+		<param name="Target" value="System.out"/> 
+		<layout class="org.apache.log4j.PatternLayout"> 
+		  <param name="ConversionPattern" value="%d %-5p [%C{1} :: %M] %m%n"/> 
+		</layout> 
+	</appender>	
+	
+	<!-- All the logs -->
+	<appender name="logAll" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <param name="File" value="${logAllpath}/logALL.log "/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%C{1} :: %M] %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="FATAL" />
+		</filter>
+	</appender>
+ 
+  	<!-- Debug logs -->   
+	<appender name="logDebug" class="org.apache.log4j.DailyRollingFileAppender">
+	        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+	        <param name="File" value="${logDebugPath}/logDEBUG.log "/>
+	        
+	        <layout class="org.apache.log4j.PatternLayout">
+	            <param name="ConversionPattern" value="%d %-5p [%C{1} :: %M] %m%n" />
+	        </layout>
+	        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+				<param name="levelMin" value="WARN" />
+				<param name="levelMax" value="FATAL" />
+			</filter>
+	</appender>  
+ 
+ 	<!-- Severe logs -->   
+	<appender name="logWarn" class="org.apache.log4j.DailyRollingFileAppender">
+	        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+	        <param name="File" value="${logWarnPath}/logWARN.log "/>
+	        
+	        <layout class="org.apache.log4j.PatternLayout">
+	            <param name="ConversionPattern" value="%d %-5p [%C{1} :: %M] %m%n" />
+	        </layout>
+	        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+				<param name="levelMin" value="WARN" />
+				<param name="levelMax" value="FATAL" />
+			</filter>
+	</appender>    
+    
+    
+    <logger name="org.springframework">
+        <level value="WARN" />
+	</logger>
+	
+	<logger name="org.hibernate">
+        <level value="WARN" />
+	</logger>
+	
+	<logger name="org.hibernate.SQL">
+        <level value="ALL" />
+	</logger>
+	
+    <root>
+        <priority value ="debug" /> 
+        <!-- log all log entries on console -->
+    	<appender-ref ref="console" /> 
+    	<!-- push all errors in 3 files -->
+   	 	<appender-ref ref="logAll" />
+   	 	<appender-ref ref="logDebug"/>
+   	 	<appender-ref ref="logWarn"/>
+	</root>
+	 
+</log4j:configuration>
