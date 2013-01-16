@@ -6,6 +6,12 @@ import entity.*;
 import bean.*;
 import presentation.*;
 
+/**
+ * App_Root
+ * @author jamesbegg
+ *
+ */
+
 // TODO FINISH
 public class App_Root
 {
@@ -17,8 +23,7 @@ public class App_Root
 	
 	public static Mediator resourceMediator;
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		Root_Window mainWindow = new Root_Window();
 		mainWindow.start();
 		
@@ -28,10 +33,9 @@ public class App_Root
 	}
 	
 	
-	public static void exit()
-	{
+	public static void exit() {
 		resourceMediator.close();
-		
+				
 		System.exit(0);
 	}
 

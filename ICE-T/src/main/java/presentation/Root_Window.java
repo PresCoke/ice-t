@@ -10,18 +10,29 @@ import java.awt.*;
 import java.awt.event.*;
 
 
+/**
+ * Root_Window
+ * 
+ * @author jamesbegg
+ *
+ */
+
 public class Root_Window {
 	
-	JFrame main_window;
+	JFrame main_window; // main application window
 	
-	public Root_Window()
-	{
+	Combat_Tab combat_tab; // holds all GUI related functions for the Combat tab
+	Edit_Tab editEntity_tab; // holds all GUI related functions for the Edit tab
+	Help_Tab help_tab; // holds all GUI related functions for the Help tab
+	New_Tab newEntity_tab; // holds all GUI related functions for the New tab
+	Welcome_Tab welcome_tab; // holds all GUI related functions for the Welcome tab
+	
+	public Root_Window() {
 		main_window = new JFrame();
-		main_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 	}
 	
-	public int start ()
-	{
+	public int start () {
 		/*
 		 * Pre: Application has just started
 		 * Post: Window Created and ready to accept 
@@ -38,16 +49,15 @@ public class Root_Window {
 				
 			}
 
-			public void windowClosed(WindowEvent arg0)
-			{
+			public void windowClosed(WindowEvent arg0) {
 				
-				App_Root.exit();
+				
 				
 			}
 
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				main_window.setVisible(false);
+				App_Root.exit();
 			}
 
 			public void windowDeactivated(WindowEvent arg0) {
@@ -73,24 +83,32 @@ public class Root_Window {
 		});
 		
 		
-		//BEGIN HACK: FOR ILLUSTRATIVE PUPROSES ONLY
-		JPanel panel1 = new JPanel();
-		panel1.setAlignmentY(10);
-		panel1.setLayout(new FlowLayout());
-		panel1.add( new JLabel ("STUFF GOES HERE") );
+		/*
+		 *  Creation and addition of tabs
+		 */
+		JTabbedPane major_tabs = new JTabbedPane();
+		//This image icon is a hack... should be updated with custom icons and should double check for null values
+		ImageIcon test_icon = new ImageIcon ("src/main/resources/new_hat.jpg");
 		
-		JComponent content = panel1;
-		//END HACK: FOR ILLUSTRATIVE PUPROSES ONLY
+		welcome_tab = new Welcome_Tab(); major_tabs.addTab("Home", test_icon, welcome_tab.getPanel());
+		newEntity_tab = new New_Tab(); major_tabs.addTab("New", test_icon, newEntity_tab.getPanel());
+		editEntity_tab = new Edit_Tab(); major_tabs.addTab("Edit", test_icon, editEntity_tab.getPanel());
+		combat_tab = new Combat_Tab(); major_tabs.addTab("Combat", test_icon, combat_tab.getPanel());
+		help_tab = new Help_Tab(); major_tabs.addTab("Help", test_icon, help_tab.getPanel());
 		
+		JComponent content = major_tabs;
 		
 		main_window.setTitle("Interactive Combat Encounter Tool");
+		//main_window.setDefaultLookAndFeelDecorated(true);
 		main_window.setContentPane(content);
-		main_window.setAlwaysOnTop(true);
-		main_window.setResizable(false);
+	
+		main_window.setResizable(false);  //should be a property
+	
+		main_window.setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize() ); // sets window size to the screen resolution
 		main_window.pack();
 		main_window.validate();
 		main_window.setVisible(true);
 		
-		return -1;
+		return 1;// I'm not sure what this value means
 	}
 }
