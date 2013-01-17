@@ -12,12 +12,20 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 
+import controller.Help;
+
 public class Help_Tab implements ListSelectionListener {
 
 	private JPanel help_panel;
 	private JList helpTopic_list;
 	private JEditorPane helpDisplay_pane;
+	private Help controller_reference;
 	
+	public Help_Tab(Help help_controller) {
+		// TODO Auto-generated constructor stub
+		controller_reference = help_controller;
+	}
+
 	public Component getPanel() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component

@@ -10,6 +10,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import controller.Welcome;
+
 public class Welcome_Tab {
 
 	private class Welcome_Package {
@@ -68,7 +70,13 @@ public class Welcome_Tab {
 	}
 	
 	private JPanel welcome_panel;
+	private Welcome controller_reference;
 	
+	public Welcome_Tab(Welcome welcome_controller) {
+		// TODO Auto-generated constructor stub
+		controller_reference = welcome_controller;
+	}
+
 	public Component getPanel() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component
@@ -86,8 +94,8 @@ public class Welcome_Tab {
 	private void createPanel() {
 		welcome_panel = new JPanel();
 
-		Welcome_Package first_pkg = getRandomPackage(); 
-		Welcome_Package second_pkg = getRandomPackage();		
+		Welcome_Package first_pkg = new Welcome_Package();		//TODO: change this back to get RandomPackage... 
+		Welcome_Package second_pkg = getRandomPackage();
 		
 		//TODO: make sizing dynamic
 		Dimension size = new Dimension(450, 300); // should become more dynamic
@@ -108,7 +116,8 @@ public class Welcome_Tab {
 		Welcome_Package pkg = new Welcome_Package();
 		try {
 			//TODO: this method should get some random stuff from the DB
-			pkg.setFields("src/main/resources/new_hat.jpg", "This is something worth noting", "Something About Nothing");
+			controller_reference.generateRandomStory();
+			pkg.setFields( controller_reference.getPictureURL(), controller_reference.getStory(), controller_reference.getTitle() );
 			return pkg;
 		} catch (Exception e) {
 			Exception_Window.showException(e);

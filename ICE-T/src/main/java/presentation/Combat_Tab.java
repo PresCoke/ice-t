@@ -7,6 +7,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import controller.Combat;
+
 public class Combat_Tab implements ActionListener, ListSelectionListener {
 
 	private JPanel combat_panel;
@@ -21,6 +23,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 	private JEditorPane storyNotes_pane, currentCreature_pane, selectedCreature_pane;
 	private JTable gmTally_table;
 	private Object[][] table_data;
+	private Combat controller_reference;
 	
 	/* THIS IS A JPANEL THAT CAN BE RENDERED IN A LIST!!*/
 	public class entityCell_renderer extends JPanel implements ListCellRenderer {
@@ -43,6 +46,11 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 	}
 	
+	public Combat_Tab(Combat combat_controller) {
+		// TODO Auto-generated constructor stub
+		controller_reference = combat_controller;
+	}
+
 	public Component getPanel() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component

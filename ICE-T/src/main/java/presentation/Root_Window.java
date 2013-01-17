@@ -30,6 +30,12 @@ public class Root_Window {
 	public Root_Window() {
 		main_window = new JFrame();
 		
+		welcome_tab = new Welcome_Tab(App_Root.welcome_controller); 
+		newEntity_tab = new New_Tab(App_Root.newEntity_controller); 
+		editEntity_tab = new Edit_Tab(App_Root.editEntity_controller); 
+		combat_tab = new Combat_Tab(App_Root.combat_controller); 
+		help_tab = new Help_Tab(App_Root.help_controller);
+		
 	}
 	
 	public int start () {
@@ -89,12 +95,12 @@ public class Root_Window {
 		JTabbedPane major_tabs = new JTabbedPane();
 		//This image icon is a hack... should be updated with custom icons and should double check for null values
 		ImageIcon test_icon = new ImageIcon ("src/main/resources/new_hat.jpg");
-		
-		welcome_tab = new Welcome_Tab(); major_tabs.addTab("Home", test_icon, welcome_tab.getPanel());
-		newEntity_tab = new New_Tab(); major_tabs.addTab("New", test_icon, newEntity_tab.getPanel());
-		editEntity_tab = new Edit_Tab(); major_tabs.addTab("Edit", test_icon, editEntity_tab.getPanel());
-		combat_tab = new Combat_Tab(); major_tabs.addTab("Combat", test_icon, combat_tab.getPanel());
-		help_tab = new Help_Tab(); major_tabs.addTab("Help", test_icon, help_tab.getPanel());
+		//TODO: create better icons
+		major_tabs.addTab("Home", test_icon, welcome_tab.getPanel());
+		major_tabs.addTab("New", test_icon, newEntity_tab.getPanel());
+		major_tabs.addTab("Edit", test_icon, editEntity_tab.getPanel());
+		major_tabs.addTab("Combat", test_icon, combat_tab.getPanel());
+		major_tabs.addTab("Help", test_icon, help_tab.getPanel());
 		
 		JComponent content = major_tabs;
 		

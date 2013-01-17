@@ -10,8 +10,10 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
+
+import controller.NewEntity;
+import entity.*;
 
 public class New_Tab implements ActionListener, ListSelectionListener {
 
@@ -19,7 +21,13 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 	private JButton save_button, cancel_button;
 	private JEditorPane entityCreation_pane;
 	private JList item_list;
+	private NewEntity controller_reference;
 	
+	public New_Tab(NewEntity new_controller) {
+		// TODO Auto-generated constructor stub
+		controller_reference = new_controller;
+	}
+
 	public Component getPanel() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component
@@ -124,13 +132,14 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 
 	private void getEntityFrameOfType(String entityType) {
 		//TODO: implement further
-		entityCreation_pane.setText(entityType);
+		String emptyEntity_html = controller_reference.getEmptyEntityBeanOfType(entityType);
 		
 		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		temp_border.setTitle(entityType);
 		temp_border.setTitleJustification(TitledBorder.CENTER);
 		
 		entityCreation_pane.setBorder(temp_border);
+		entityCreation_pane.setText(emptyEntity_html);
 //		entityCreation_pane.repaint();
 		
 	}
@@ -144,11 +153,23 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 	}
 	
 	private boolean saveNewEntity() {
-		//TODO: implement save
-		entityCreation_pane.setText( entityCreation_pane.getText() + "Save " );
-		return true;
+		//TODO: figure out how to give the appropriate information to the controller in order to save the entity
+		//TODO: check the data to ensure all required fields are filled and all data is of appropriate type
+		boolean result;
+		String html = entityCreation_pane.getText();
+		if ( this.validate_fields(html) ) {
+			result = controller_reference.saveEntity(html);
+		} else {
+			result = false;
+		}
+		return result;
 	}
 	
+	private boolean validate_fields(String html) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	private boolean wipeEditorPane() {
 		//TODO: wipe editor pane
 		entityCreation_pane.setText("");

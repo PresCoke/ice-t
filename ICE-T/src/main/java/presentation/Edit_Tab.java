@@ -12,6 +12,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
+
+import controller.EditEntity;
 //TODO: enable tab switching between lists... dat classy.
 public class Edit_Tab implements ListSelectionListener, ActionListener {
 
@@ -20,7 +22,13 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	private DefaultListModel type_list, name_list;
 	private JEditorPane entityEdit_pane;
 	private JButton save_button, remove_button, cancel_button;
+	private EditEntity controller_reference;
 	
+	public Edit_Tab(EditEntity edit_controller) {
+		// TODO Auto-generated constructor stub
+		controller_reference = edit_controller;
+	}
+
 	public Component getPanel() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component
