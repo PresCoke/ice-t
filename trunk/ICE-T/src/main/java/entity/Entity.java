@@ -2,10 +2,10 @@ package entity;
 
 /**
  * Entity Class
- * @author TimHP
+ * @author TimHP and James Begg
  *
  */
-public class Entity {
+public abstract class Entity {
 
 	//Name
 	private String name;
@@ -21,23 +21,17 @@ public class Entity {
 	/**
 	 * Save an entity
 	 */
-	public void save(){
-		//TODO
-	}
+	public abstract void save();
 	
 	/**
 	 * Edit an entity
 	 */
-	public void edit(){
-		//TODO
-	}
+	public abstract void edit();
 	
 	/**
 	 * Remove an entity
 	 */
-	public void remove(){
-		//TODO
-	}
+	public abstract void remove();
 
 	//Getters & Setters
 	public String getName() {

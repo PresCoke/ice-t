@@ -31,5 +31,23 @@ public class CombatEncounter extends Entity {
 		//TODO
 		return null;
 	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void edit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

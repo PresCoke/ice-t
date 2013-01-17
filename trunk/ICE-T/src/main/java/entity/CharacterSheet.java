@@ -2,7 +2,7 @@ package entity;
 
 /**
  * CharacterSheet Class
- * @author TimHP
+ * @author TimHP and James Begg
  *
  */
 public class CharacterSheet extends Entity {
@@ -438,5 +438,25 @@ public class CharacterSheet extends Entity {
 
 	public void setPowerSource(String powerSource) {
 		this.powerSource = powerSource;
+	}
+
+	public String toHTML() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void edit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 }

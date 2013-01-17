@@ -123,4 +123,25 @@ public class TrapHazard extends Entity {
 	public void setCounterMeasureDescription(String counterMeasureDescription) {
 		this.counterMeasureDescription = counterMeasureDescription;
 	}
+
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void edit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
 }
