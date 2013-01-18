@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 janv. 2013 16:02:57 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="entity.Attack" table="ATTACK">
+        <id name="primaryTarget" type="java.lang.String">
+            <column name="PRIMARYTARGET" />
+            <generator class="assigned" />
+        </id>
+        <property name="secondaryTarget" type="java.lang.String">
+            <column name="SECONDARYTARGET" />
+        </property>
+        <property name="accessories" type="java.lang.String">
+            <column name="ACCESSORIES" />
+        </property>
+        <property name="powerSource" type="java.lang.String">
+            <column name="POWERSOURCE" />
+        </property>
+        <property name="effectType">
+            <column name="EFFECTTYPE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Effect_Type</param>
+            </type>
+        </property>
+        <property name="damageType">
+            <column name="DAMAGETYPE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Resistance_Type</param>
+            </type>
+        </property>
+        <property name="frequency" type="int">
+            <column name="FREQUENCY" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        <property name="ability">
+            <column name="ABILITY" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Ability</param>
+            </type>
+        </property>
+        <property name="hit" type="java.lang.String">
+            <column name="HIT" />
+        </property>
+        <property name="miss" type="java.lang.String">
+            <column name="MISS" />
+        </property>
+        <property name="defense">
+            <column name="DEFENSE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Defense</param>
+            </type>
+        </property>
+        <property name="sustain">
+            <column name="SUSTAIN" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Sustain</param>
+            </type>
+        </property>
+        <property name="action">
+            <column name="ACTION" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Action</param>
+            </type>
+        </property>
+        <property name="useType">
+            <column name="USETYPE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$A_Use_Type</param>
+            </type>
+        </property>
+        <property name="basic" type="boolean">
+            <column name="BASIC" />
+        </property>
+        <property name="trigger" type="java.lang.String">
+            <column name="TRIGGER" />
+        </property>
+    </class>
+</hibernate-mapping>

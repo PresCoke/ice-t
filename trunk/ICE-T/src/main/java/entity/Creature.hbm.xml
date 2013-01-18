@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 janv. 2013 16:02:57 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <joined-subclass name="entity.Creature" extends="entity.CharacterSheet" table="CREATURE" lazy="false">
+        <key>
+            <column name="NAME" />
+        </key>
+        <property name="ID" type="java.lang.String">
+            <column name="ID" />
+        </property>
+        <property name="playerName" type="java.lang.String">
+            <column name="PLAYERNAME" />
+        </property>
+        <property name="kills" type="int">
+            <column name="KILLS" />
+        </property>
+        <property name="currentHP" type="int">
+            <column name="CURRENTHP" />
+        </property>
+        <property name="currentHealSurges" type="int">
+            <column name="CURRENTHEALSURGES" />
+        </property>
+        <property name="currentLevel" type="int">
+            <column name="CURRENTLEVEL" />
+        </property>
+        <property name="secondWind" type="boolean">
+            <column name="SECONDWIND" />
+        </property>
+        <property name="tempHP" type="int">
+            <column name="TEMPHP" />
+        </property>
+    </joined-subclass>
+</hibernate-mapping>
