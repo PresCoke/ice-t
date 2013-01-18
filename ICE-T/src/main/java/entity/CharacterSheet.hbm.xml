@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 janv. 2013 16:02:57 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <joined-subclass name="entity.CharacterSheet" extends="entity.Entity" table="CHARACTERSHEET" lazy="false">
+        <key>
+            <column name="NAME" />
+        </key>
+        <property name="intimidate" type="int">
+            <column name="INTIMIDATE" />
+        </property>
+        <property name="acrobatics" type="int">
+            <column name="ACROBATICS" />
+        </property>
+        <property name="athletics" type="int">
+            <column name="ATHLETICS" />
+        </property>
+        <property name="arcana" type="int">
+            <column name="ARCANA" />
+        </property>
+        <property name="bluff" type="int">
+            <column name="BLUFF" />
+        </property>
+        <property name="diplomacy" type="int">
+            <column name="DIPLOMACY" />
+        </property>
+        <property name="dungeoneering" type="int">
+            <column name="DUNGEONEERING" />
+        </property>
+        <property name="endurance" type="int">
+            <column name="ENDURANCE" />
+        </property>
+        <property name="heal" type="int">
+            <column name="HEAL" />
+        </property>
+        <property name="history" type="int">
+            <column name="HISTORY" />
+        </property>
+        <property name="insight" type="int">
+            <column name="INSIGHT" />
+        </property>
+        <property name="nature" type="int">
+            <column name="NATURE" />
+        </property>
+        <property name="perception" type="int">
+            <column name="PERCEPTION" />
+        </property>
+        <property name="religion" type="int">
+            <column name="RELIGION" />
+        </property>
+        <property name="stealth" type="int">
+            <column name="STEALTH" />
+        </property>
+        <property name="streetwise" type="int">
+            <column name="STREETWISE" />
+        </property>
+        <property name="thievery" type="int">
+            <column name="THIEVERY" />
+        </property>
+        <property name="AC" type="int">
+            <column name="AC" />
+        </property>
+        <property name="REF" type="int">
+            <column name="REF" />
+        </property>
+        <property name="FORT" type="int">
+            <column name="FORT" />
+        </property>
+        <property name="WILL" type="int">
+            <column name="WILL" />
+        </property>
+        <property name="maxHP" type="int">
+            <column name="MAXHP" />
+        </property>
+        <property name="bloodied" type="int">
+            <column name="BLOODIED" />
+        </property>
+        <property name="surgesValue" type="int">
+            <column name="SURGESVALUE" />
+        </property>
+        <property name="surgesPerDay" type="int">
+            <column name="SURGESPERDAY" />
+        </property>
+        <property name="STR" type="int">
+            <column name="STR" />
+        </property>
+        <property name="CON" type="int">
+            <column name="CON" />
+        </property>
+        <property name="INT" type="int">
+            <column name="INT" />
+        </property>
+        <property name="DEX" type="int">
+            <column name="DEX" />
+        </property>
+        <property name="WIS" type="int">
+            <column name="WIS" />
+        </property>
+        <property name="CHAR" type="int">
+            <column name="CHAR" />
+        </property>
+        <property name="level" type="int">
+            <column name="LEVEL" />
+        </property>
+        <property name="XP" type="int">
+            <column name="XP" />
+        </property>
+        <property name="raceFeatures" type="java.lang.String">
+            <column name="RACEFEATURES" />
+        </property>
+        <property name="speed" type="int">
+            <column name="SPEED" />
+        </property>
+        <property name="resistanceValue" type="int">
+            <column name="RESISTANCEVALUE" />
+        </property>
+        <property name="initiative" type="int">
+            <column name="INITIATIVE" />
+        </property>
+        <property name="languages" type="java.lang.String">
+            <column name="LANGUAGES" />
+        </property>
+        <property name="misc" type="java.lang.String">
+            <column name="MISC" />
+        </property>
+        <property name="role">
+            <column name="ROLE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Role</param>
+            </type>
+        </property>
+        <property name="size">
+            <column name="SIZE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Size</param>
+            </type>
+        </property>
+        <property name="resistanceType">
+            <column name="RESISTANCETYPE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Resistance_Type</param>
+            </type>
+        </property>
+        <property name="monsterOrigin">
+            <column name="MONSTERORIGIN" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Monster_Origin</param>
+            </type>
+        </property>
+        <property name="monsterType">
+            <column name="MONSTERTYPE" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="type">12</param>
+                <param name="enumClass">entity.EntityEnum$CS_Monster_Type</param>
+            </type>
+        </property>
+        <property name="keywords" type="java.lang.String">
+            <column name="KEYWORDS" />
+        </property>
+        <property name="powerSource" type="java.lang.String">
+            <column name="POWERSOURCE" />
+        </property>
+    </joined-subclass>
+</hibernate-mapping>

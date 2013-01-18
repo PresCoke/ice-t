@@ -1,19 +1,46 @@
 package entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+
 /**
  * Creature Class
  * @author TimHP
  *
  */
+@Entity
+@Table(name="Creature")
 public class Creature extends CharacterSheet {
 
+	@Id
+	@GeneratedValue
+	@Column(name="id")
 	private String ID;
+	
+	@Column(name="player_name")
 	private String playerName;
+	
+	@Column(name="kills")
 	private int kills;
+	
+	@Column(name="currentHP")
 	private int currentHP;
+	
+	@Column(name="currentHealSurges")
 	private int currentHealSurges;
+	
+	@Column(name="currentLevel")
 	private int currentLevel;
+	
+	@Column(name="secondWind")
 	private boolean secondWind;
+	
+	@Column(name="tempHP")
 	private int tempHP;
 		
 	
