@@ -2,7 +2,7 @@ package presentation;
 
 //-- Project Imports --//
 import controller.*;
-import bean.*;
+import bean.combat.*;
 //-- Class Imports --//
 import javax.swing.*;
 

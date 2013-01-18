@@ -3,7 +3,7 @@ package controller;
 //-- Project Imports --//
 import mediator.*;
 import entity.*;
-import bean.*;
+import bean.combat.*;
 import presentation.*;
 
 /**
@@ -29,6 +29,8 @@ public class App_Root
 	public static GenerateRandomEncounter gre_controller; //TODO: not currently instantiated
 	
 	public static void main(String[] args) {
+		
+		
 		
 		resource_mediator = new Mediator("properties");
 		resource_mediator.start();

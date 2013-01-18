@@ -114,9 +114,11 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		DefaultListModel entity_list = new DefaultListModel();
 		//TODO: implement this further
 		
-		entity_list.addElement("Creature");
-		entity_list.addElement("Trap");
-		entity_list.addElement("etc...");
+		String[] entityTypeNames = controller_reference.getEntityTypeNames();
+		
+		for (int index = 0; index < entityTypeNames.length; index++) {
+			entity_list.addElement(entityTypeNames[index]);
+		}
 		
 		return entity_list;
 	}
