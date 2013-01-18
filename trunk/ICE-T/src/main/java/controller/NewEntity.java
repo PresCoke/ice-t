@@ -28,4 +28,10 @@ public class NewEntity {
 		
 	}
 
+	public String[] getEntityTypeNames() {
+		// TODO Auto-generated method stub
+		String[] temp_HACK = {"Character Sheet", "Team", "Trap/Hazard", "Combat Encounter", "Effect"};
+		return temp_HACK;
+	}
+
 }

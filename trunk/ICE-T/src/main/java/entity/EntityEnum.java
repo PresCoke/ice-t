@@ -1,15 +1,7 @@
 package entity;
 
 public final class EntityEnum {
-
-	//available entities
-	public enum Entity_Type {
-		character_sheet,
-		combat_encounter,
-		effect,
-		team,
-		trap_hazard;
-	}
+	
 	//Resistance type of a creature
 	public enum CS_Resistance_Type {
 		acid,
