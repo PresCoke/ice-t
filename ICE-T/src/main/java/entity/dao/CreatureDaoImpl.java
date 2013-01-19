@@ -20,7 +20,7 @@ public class CreatureDaoImpl implements CreatureDao {
 		List<Creature> creatures = q.list();
 		
 		for (Creature c : creatures) {
-			System.out.println("Name = " + c.getName() + " - HP = " + c.getCurrentHP());
+			System.out.println("Name = " + c.getPlayerName() + " - HP = " + c.getCurrentHP());
 		}
 	}
 

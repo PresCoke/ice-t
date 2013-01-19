@@ -11,6 +11,12 @@ public abstract class Entity {
 	private String name;
 	
 	/**
+	 * Default constructor
+	 */
+	public Entity(){
+	}
+	
+	/**
 	 * Constructor
 	 * @param name
 	 */
