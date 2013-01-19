@@ -64,6 +64,12 @@ public class CharacterSheet extends Entity {
 	private String powerSource;
 		
 	/**
+	 * Default constructor
+	 */
+	public CharacterSheet() {
+	}
+	
+	/**
 	 * Constructor
 	 * @param name
 	 */

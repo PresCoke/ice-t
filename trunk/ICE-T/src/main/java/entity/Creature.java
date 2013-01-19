@@ -20,7 +20,7 @@ public class Creature extends CharacterSheet {
 	@Id
 	@GeneratedValue
 	@Column(name="id")
-	private String ID;
+	private int ID;
 	
 	@Column(name="player_name")
 	private String playerName;
@@ -42,23 +42,31 @@ public class Creature extends CharacterSheet {
 	
 	@Column(name="tempHP")
 	private int tempHP;
-		
+
 	
+	/**
+	 * Default constructor
+	 * @param name
+	 */
+	public Creature() {
+	}
+
 	/**
 	 * Constructor
 	 * @param name
 	 */
 	public Creature(String name) {
 		super(name);
+		playerName = name;
 	}
 
 	//Getters & Setters
-	public String getID() {
+	public int getID() {
 		return ID;
 	}
 
 
-	public void setID(String iD) {
+	public void setID(int iD) {
 		ID = iD;
 	}
 
