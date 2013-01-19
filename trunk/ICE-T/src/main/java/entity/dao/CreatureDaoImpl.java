@@ -6,8 +6,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import resource.HibernateUtil;
+
 import entity.Creature;
-import entity.HibernateUtil;
 
 public class CreatureDaoImpl implements CreatureDao {
 
