@@ -1,12 +1,16 @@
 package entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-
 
 /**
  * Creature Class
@@ -25,9 +29,6 @@ public class Creature extends CharacterSheet {
 	@Column(name="player_name")
 	private String playerName;
 	
-	@Column(name="kills")
-	private int kills;
-	
 	@Column(name="currentHP")
 	private int currentHP;
 	
@@ -42,6 +43,19 @@ public class Creature extends CharacterSheet {
 	
 	@Column(name="tempHP")
 	private int tempHP;
+	
+	//Associations
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Stats stats;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="Attack")
+	private Set<Attack> attacks;
+	
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name="Attack")
+//	private Set<Attack> attacks;
 
 	
 	/**
@@ -52,7 +66,7 @@ public class Creature extends CharacterSheet {
 	}
 
 	/**
-	 * Constructor
+	 * Constructors
 	 * @param name
 	 */
 	public Creature(String name) {
@@ -78,16 +92,6 @@ public class Creature extends CharacterSheet {
 
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
-	}
-
-
-	public int getKills() {
-		return kills;
-	}
-
-
-	public void setKills(int kills) {
-		this.kills = kills;
 	}
 
 

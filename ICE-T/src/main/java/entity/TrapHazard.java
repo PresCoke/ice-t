@@ -1,22 +1,49 @@
 package entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * TrapHazard Class
  * @author TimHP
  *
  */
-public class TrapHazard extends Entity {
+@Entity
+@Table(name="TrapHazard")
+public class TrapHazard extends EntityM {
 
+	@Column(name="avoidance")
 	private int avoidance;
+	
+	@Column(name="level")
 	private int level;
+	
+	@Column(name="skill")
 	private String skill;
+	
+	@Column(name="triggers")
 	private String triggers;
+	
+	@Column(name="value")
 	private int value;
+	
+	@Column(name="xp")
 	private int xp;
+	
+	@Column(name="type")
 	private EntityEnum.T_Type type;
+	
+	@Column(name="role")
 	private EntityEnum.T_Role role;
+	
+	@Column(name="counterMeasureSkill")
 	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
+	
+	@Column(name="difficultyLevel")
 	private int difficultyLevel;
+	
+	@Column(name="counterMeasureDescription")
 	private String counterMeasureDescription;
 	
 	/**
@@ -28,7 +55,9 @@ public class TrapHazard extends Entity {
 	}
 
 	
-	//Getters and Setters
+	/**
+	 * Getters & Setters
+	 */
 	public int getAvoidance() {
 		return avoidance;
 	}

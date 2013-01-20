@@ -1,33 +1,91 @@
 package entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ * Attack Class
+ * @author TimHP
+ *
+ */
+@Entity
+@Table(name="Attack")
 public class Attack {
 	
 	//Target
+	@Column(name="primaryTarget")
 	private String primaryTarget;
+	
+	@Column(name="secondaryTarget")
 	private String secondaryTarget;
 	
 	//Keywords
-	private String accessories;
-	private String powerSource;
-	private EntityEnum.A_Effect_Type effectType;
-	private EntityEnum.CS_Resistance_Type damageType;
-	private int frequency;
+	@Id
+	@GeneratedValue
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="accessories")
+	private String accessories;
+	
+	@Column(name="powerSource")
+	private String powerSource;
+	
+	@Column(name="effectType")
+	private EntityEnum.A_Effect_Type effectType;
+	
+	@Column(name="damageType")
+	private EntityEnum.CS_Resistance_Type damageType;
+	
+	@Column(name="frequency")
+	private int frequency;
+	
+	@Column(name="ability")
 	private EntityEnum.A_Ability ability;
+	
+	@Column(name="hit")
 	private String hit;
+	
+	@Column(name="miss")
 	private String miss;
+	
+	@Column(name="defense")
 	private EntityEnum.A_Defense defense;
+	
+	@Column(name="sustain")
 	private EntityEnum.A_Sustain sustain;
+	
+	@Column(name="action")
 	private EntityEnum.A_Action action;
+	
+	@Column(name="useType")
 	private EntityEnum.A_Use_Type useType;
+	
+	@Column(name="basic")
 	private boolean basic;
+	
+	@Column(name="trigger")
 	private String trigger;
 	
+	//Associations
+	@OneToOne(cascade = CascadeType.ALL)
+	private Attack_Type attackType;
+	
+	/**
+	 * Default constructor
+	 */
 	public Attack() {
 		// TODO Auto-generated constructor stub
 	}
 
-	//Getters & Setters
+	/**
+	 * Getters & Setters
+	 */
 	public String getPrimaryTarget() {
 		return primaryTarget;
 	}

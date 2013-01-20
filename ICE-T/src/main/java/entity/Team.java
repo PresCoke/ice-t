@@ -2,13 +2,20 @@ package entity;
 
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * Team Class
  * @author TimHP
  *
  */
-public class Team extends Entity {
+@Entity
+@Table(name="Team")
+public class Team extends EntityM {
 
+	//Association
+	
 	private ArrayList<Creature> creatures;
 	
 	/**
