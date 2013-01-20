@@ -16,7 +16,6 @@ import javax.persistence.Table;
 public class Tuple {
 
 	@Id
-	@GeneratedValue
 	@Column(name="name")
 	private String name;
 	

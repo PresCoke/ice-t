@@ -21,6 +21,9 @@ public abstract class EntityM {
 
 	@Id
 	@GeneratedValue
+	@Column(name="id")
+	private int id;
+	
 	@Column(name="name")
 	private String name;
 	
@@ -53,12 +56,22 @@ public abstract class EntityM {
 	 */
 	public abstract void remove();
 
-	//Getters & Setters
+	/**
+	 * Getters & Setters
+	 */
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getID() {
+		return id;
+	}
+
+	public void setID(int id) {
+		this.id = id;
 	}
 }

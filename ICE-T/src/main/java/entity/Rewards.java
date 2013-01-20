@@ -2,6 +2,8 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -13,8 +15,14 @@ import javax.persistence.Table;
 @Table(name="Rewards")
 public class Rewards {
 
+	@Id
+	@GeneratedValue
+	@Column(name="id")
+	private int id;
+	
 	@Column(name="XP")
 	private int XP;
+	
 	@Column(name="treasure")
 	private String treasure;
 	

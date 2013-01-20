@@ -17,8 +17,6 @@ import javax.persistence.Table;
 @Table(name="A_ARea")
 public class A_Area extends Attack_Type {
 
-	@Id
-	@GeneratedValue
 	@Column(name="areaType")
 	private EntityEnum.A_Area_Type areaType;
 	

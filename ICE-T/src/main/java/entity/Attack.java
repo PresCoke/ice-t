@@ -3,7 +3,6 @@ package entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -17,6 +16,10 @@ import javax.persistence.Table;
 @Table(name="Attack")
 public class Attack {
 	
+	@Id
+	@Column(name="name")
+	private String name;
+	
 	//Target
 	@Column(name="primaryTarget")
 	private String primaryTarget;
@@ -24,12 +27,7 @@ public class Attack {
 	@Column(name="secondaryTarget")
 	private String secondaryTarget;
 	
-	//Keywords
-	@Id
-	@GeneratedValue
-	@Column(name="name")
-	private String name;
-	
+	//Keywords	
 	@Column(name="accessories")
 	private String accessories;
 	
