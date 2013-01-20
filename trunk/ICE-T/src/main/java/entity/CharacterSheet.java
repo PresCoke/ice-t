@@ -1,68 +1,124 @@
 package entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+
 /**
  * CharacterSheet Class
  * @author TimHP and James Begg
  *
  */
-public class CharacterSheet extends Entity {
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@Table(name="CharacterSheet")
+public class CharacterSheet extends EntityM {
 
 	//Skills
+	@Column(name="acrobatics")
 	private int acrobatics;
+	@Column(name="athletics")
 	private int athletics;
+	@Column(name="arcana")
 	private int arcana;
+	@Column(name="bluff")
 	private int bluff;
+	@Column(name="diplomacy")
 	private int diplomacy;
+	@Column(name="dungeoneering")
 	private int dungeoneering;
+	@Column(name="endurance")
 	private int endurance;
+	@Column(name="heal")
 	private int heal;
+	@Column(name="history")
 	private int history;
+	@Column(name="insight")
 	private int insight;
+	@Column(name="intimidate")
 	private int intimidate;
+	@Column(name="nature")
 	private int nature;
+	@Column(name="perception")
 	private int perception;
+	@Column(name="religion")
 	private int religion;
+	@Column(name="stealth")
 	private int stealth;
+	@Column(name="streetwise")
 	private int streetwise;
+	@Column(name="thievery")
 	private int thievery;
 	
 	//Defenses
+	@Column(name="AC")
 	private int AC;
+	@Column(name="REF")
 	private int REF;
+	@Column(name="FORT")
 	private int FORT;
+	@Column(name="WILL")
 	private int WILL;
 	
 	//Health
+	@Column(name="maxHP")
 	private int maxHP;
+	@Column(name="bloodied")
 	private int bloodied;
+	@Column(name="surgesValue")
 	private int surgesValue;
+	@Column(name="surgesPerDay")
 	private int surgesPerDay;
 	
 	//Ability scores
+	@Column(name="STR")
 	private int STR;
+	@Column(name="CON")
 	private int CON;
+	@Column(name="INT")
 	private int INT;
+	@Column(name="DEX")
 	private int DEX;
+	@Column(name="WIS")
 	private int WIS;
+	@Column(name="CHAR")
 	private int CHAR;
 		
 	//Other
+	@Column(name="level")
 	private int level;
+	@Column(name="XP")
 	private int XP;
+	@Column(name="raceFeatures")
 	private String raceFeatures;
+	@Column(name="speed")
 	private int speed;
+	@Column(name="resistanceValue")
 	private int resistanceValue;
+	@Column(name="initiative")
 	private int initiative;
+	@Column(name="languages")
 	private String languages;
+	@Column(name="misc")
 	private String misc;
+	@Column(name="role")
 	private EntityEnum.CS_Role role;
+	@Column(name="size")
 	private EntityEnum.CS_Size size;
+	@Column(name="resistanceType")
 	private EntityEnum.CS_Resistance_Type resistanceType;
+	@Column(name="monsterOrigin")
 	private EntityEnum.CS_Monster_Origin monsterOrigin;
+	@Column(name="monsterType")
 	private EntityEnum.CS_Monster_Type monsterType;
+	@Column(name="keywords")
 	private String keywords;
+	@Column(name="powerSource")
 	private String powerSource;
 		
+
 	/**
 	 * Default constructor
 	 */
@@ -77,7 +133,9 @@ public class CharacterSheet extends Entity {
 		super(name);
 	}
 
-	//Getters & Setters
+	/**
+	 * Getters & Setters
+	 */
 	public int getAcrobatics() {
 		return acrobatics;
 	}
@@ -446,6 +504,7 @@ public class CharacterSheet extends Entity {
 		this.powerSource = powerSource;
 	}
 
+	
 	public String toHTML() {
 		// TODO Auto-generated method stub
 		return null;

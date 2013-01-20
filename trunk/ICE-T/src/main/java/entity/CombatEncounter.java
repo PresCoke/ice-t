@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author TimHP
  *
  */
-public class CombatEncounter extends Entity {
+public class CombatEncounter extends EntityM {
 
 	private String notes;
 	

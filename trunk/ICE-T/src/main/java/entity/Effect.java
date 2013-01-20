@@ -1,15 +1,28 @@
 package entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * Effect Class
  * @author TimHP
  *
  */
-public class Effect extends Entity {
+@Entity
+@Table(name="Effect")
+public class Effect extends EntityM {
 	
+	@Column(name="duration")
 	private EntityEnum.E_Duration duration;
+	
+	@Column(name="changes")
 	private String changes;
+	
+	@Column(name="damage")
 	private int damage;
+	
+	@Column(name="metrics")
 	private String metrics;
 		
 	/**
@@ -18,10 +31,12 @@ public class Effect extends Entity {
 	 */
 	public Effect(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
-	//Getters & Setters
+	
+	/**
+	 * Getters & Setters
+	 */
 	public EntityEnum.E_Duration getDuration() {
 		return duration;
 	}

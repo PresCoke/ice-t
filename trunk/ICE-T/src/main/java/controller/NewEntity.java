@@ -3,7 +3,7 @@ import entity.*;
 
 public class NewEntity {
 
-	Entity empty_entity;
+	EntityM empty_entity;
 	
 	
 	public String getEmptyEntityBeanOfType(String entityType) {
