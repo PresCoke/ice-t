@@ -1,9 +1,11 @@
 package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -16,10 +18,12 @@ import javax.persistence.Table;
 public class Tally {
 
 	@Id
-	@GeneratedValue
 	@Column(name="name")
 	private String name;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="Tuple")
+	private Tuple tuple;
 
 	/**
 	 * Constructor

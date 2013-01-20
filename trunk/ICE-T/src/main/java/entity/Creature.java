@@ -5,8 +5,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,11 +19,6 @@ import javax.persistence.Table;
 @Table(name="Creature")
 public class Creature extends CharacterSheet {
 
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int ID;
-	
 	@Column(name="player_name")
 	private String playerName;
 	
@@ -53,9 +46,9 @@ public class Creature extends CharacterSheet {
 	@JoinTable(name="Attack")
 	private Set<Attack> attacks;
 	
-//	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinTable(name="Attack")
-//	private Set<Attack> attacks;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="Effect")
+	private Set<Effect> effects;
 
 	
 	/**
@@ -74,17 +67,9 @@ public class Creature extends CharacterSheet {
 		playerName = name;
 	}
 
-	//Getters & Setters
-	public int getID() {
-		return ID;
-	}
-
-
-	public void setID(int iD) {
-		ID = iD;
-	}
-
-
+	/**
+	 * Getters & Setters
+	 */
 	public String getPlayerName() {
 		return playerName;
 	}

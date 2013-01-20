@@ -2,8 +2,9 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 /**
@@ -12,11 +13,11 @@ import javax.persistence.Table;
  *
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="Attack_Type")
 public abstract class Attack_Type {
 
 	@Id
-	@GeneratedValue
 	@Column(name="attack_type")
 	private String attack_type;
 

@@ -2,7 +2,10 @@ package entity;
 
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -15,7 +18,8 @@ import javax.persistence.Table;
 public class Team extends EntityM {
 
 	//Association
-	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="Creature")
 	private ArrayList<Creature> creatures;
 	
 	/**
