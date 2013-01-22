@@ -31,6 +31,7 @@ public class Welcome_Tab {
 		public void setFields (String pictureURL, String story_text, String story_title) {
 			
 			//TODO: set text font and picture size
+			//TODO: very difficult to localize this!
 			text.setText("    "+story_text);
 			//text.setVerticalTextPosition(SwingConstants.TOP);
 			

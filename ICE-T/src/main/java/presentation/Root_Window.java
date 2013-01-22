@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 
 /**
@@ -95,16 +96,19 @@ public class Root_Window {
 		JTabbedPane major_tabs = new JTabbedPane();
 		//This image icon is a hack... should be updated with custom icons and should double check for null values
 		ImageIcon test_icon = new ImageIcon ("src/main/resources/new_hat.jpg");
-		//TODO: create better icons
-		major_tabs.addTab("Home", test_icon, welcome_tab.getPanel());
-		major_tabs.addTab("New", test_icon, newEntity_tab.getPanel());
-		major_tabs.addTab("Edit", test_icon, editEntity_tab.getPanel());
-		major_tabs.addTab("Combat", test_icon, combat_tab.getPanel());
-		major_tabs.addTab("Help", test_icon, help_tab.getPanel());
+		//TODO: create better icons 
+		
+		ResourceBundle root_window_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.RootWindow", App_Root.language_locale);
+		
+		major_tabs.addTab(root_window_l11n.getString("Home_Tab"), test_icon, welcome_tab.getPanel());
+		major_tabs.addTab(root_window_l11n.getString("New_Tab"), test_icon, newEntity_tab.getPanel());
+		major_tabs.addTab(root_window_l11n.getString("Edit_Tab"), test_icon, editEntity_tab.getPanel());
+		major_tabs.addTab(root_window_l11n.getString("Combat_Tab"), test_icon, combat_tab.getPanel());
+		major_tabs.addTab(root_window_l11n.getString("Help_Tab"), test_icon, help_tab.getPanel());
 		
 		JComponent content = major_tabs;
 		
-		main_window.setTitle("Interactive Combat Encounter Tool");
+		main_window.setTitle(root_window_l11n.getString("App_Title"));
 		//main_window.setDefaultLookAndFeelDecorated(true);
 		main_window.setContentPane(content);
 	

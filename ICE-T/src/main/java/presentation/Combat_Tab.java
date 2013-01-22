@@ -4,9 +4,12 @@ import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
+import controller.App_Root;
 import controller.Combat;
 
 public class Combat_Tab implements ActionListener, ListSelectionListener {
@@ -80,6 +83,8 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		this.combat_panel.setLayout( new GridBagLayout() );
 		this.combat_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) );
 		
+		ResourceBundle combatTab_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.CombatTab", App_Root.language_locale);
+		
 		// creature organization, and effects
 		JPanel initiative_panel = new JPanel();
 		initiative_panel.setLayout( new GridBagLayout() );
@@ -87,13 +92,13 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
-		autoRoll_button = new JButton("Auto-Roll");
+		autoRoll_button = new JButton(combatTab_l11n.getString("AutoRoll_Button"));
 		autoRoll_button.addActionListener(this);
 		//autoRoll_button.setAlignmentX(Component.LEFT_ALIGNMENT);
-		organizeInitiative_button = new JButton("Organize Initiatives");
+		organizeInitiative_button = new JButton(combatTab_l11n.getString("OrganizeInitiative_Button"));
 		organizeInitiative_button.addActionListener(this);
 		//organizeInitiative_button.setAlignmentX(Component.LEFT_ALIGNMENT);
-		finishTurn_button = new JButton("Finish Creature Turn");
+		finishTurn_button = new JButton(combatTab_l11n.getString("FinishTurn_Button"));
 		finishTurn_button.addActionListener(this);
 		//finishTurn_button.setAlignmentX(Component.LEFT_ALIGNMENT);
 		button_panel.add(finishTurn_button);
@@ -136,13 +141,13 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		initiative_panel.add(effect_pane, effect_constraints);
 		
 		JPanel menu_panel = new JPanel();
-		addTeam_button = new JButton("Add Team");
+		addTeam_button = new JButton(combatTab_l11n.getString("AddTeam_Button"));
 		addTeam_button.addActionListener(this);
 		menu_panel.add(addTeam_button);
-		addEffect_button = new JButton("Add Effect");
+		addEffect_button = new JButton(combatTab_l11n.getString("AddEffect_Button"));
 		addEffect_button.addActionListener(this);
 		menu_panel.add(addEffect_button);
-		addCreature_button = new JButton("Add Creature");
+		addCreature_button = new JButton(combatTab_l11n.getString("AddCreature_Button"));
 		addCreature_button.addActionListener(this);
 		menu_panel.add(addCreature_button);
 		
@@ -154,16 +159,18 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		tempStoryNotes_panel.setLayout( new BorderLayout() );
 		tempStoryNotes_panel.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),
-				BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY), "Story Notes")
+				BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY), combatTab_l11n.getString("Story_Title"))
 				) );
 		tempStoryNotes_panel.add(storyNotes_pane, BorderLayout.CENTER);
 		table_data = this.setTableData();
-		String[] columnNames = {"Name", "Successes", "Failures" };
+		String[] columnNames = {combatTab_l11n.getString("TupleColName_Title"),
+								combatTab_l11n.getString("TupleColSucc_Title"),
+								combatTab_l11n.getString("TupleColFail_Title")};
 		gmTally_table = new JTable(table_data, columnNames);
 		gmTally_table.setBorder( BorderFactory.createEtchedBorder() );
 		JPanel table_container = new JPanel();
 		table_container.setLayout( new BorderLayout() );
-		table_container.setBorder( BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY), "GM Tally") );
+		//table_container.setBorder( BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY), combatTab_l11n.getString("Tally_Title")) );
 		table_container.add(gmTally_table.getTableHeader(), BorderLayout.PAGE_START);
 		table_container.add(gmTally_table, BorderLayout.CENTER);
 		story_panel.add(tempStoryNotes_panel);
@@ -192,13 +199,13 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		JPanel characterSheet_panel = new JPanel();
 		characterSheet_panel.setLayout( new GridLayout(1, 2, 5, 0) );
 		//TODO: need better population 
-		currentCreature_pane = new JEditorPane(); currentCreature_pane.setText("current");
+		currentCreature_pane = new JEditorPane(); currentCreature_pane.setText("current"); //TODO: should be creatures name
 		currentCreature_pane.setOpaque(false);
 		currentCreature_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 2, 0),
 				BorderFactory.createLineBorder(Color.GRAY) 					) );
 		//TODO:
-		selectedCreature_pane = new JEditorPane(); selectedCreature_pane.setText("selected");
+		selectedCreature_pane = new JEditorPane(); selectedCreature_pane.setText("selected"); //TODO: should be creatures name
 		selectedCreature_pane.setOpaque(false);
 		selectedCreature_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 2, 5),
