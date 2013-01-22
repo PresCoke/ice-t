@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name="CharacterSheet")
 public class CharacterSheet extends EntityM {
 
-	//Skills
+	//Skills - TODO: should put these in their own class
 	@Column(name="acrobatics")
 	private int acrobatics;
 	@Column(name="athletics")
@@ -109,10 +109,15 @@ public class CharacterSheet extends EntityM {
 	private EntityEnum.CS_Size size;
 	@Column(name="resistanceType")
 	private EntityEnum.CS_Resistance_Type resistanceType;
+<<<<<<< .mine
+	private EntityEnum.CS_Monster_Origin monsterOrigin; //TODO: should be in it's own class
+	private EntityEnum.CS_Monster_Type monsterType; //TODO: should be in it's own class
+=======
 	@Column(name="monsterOrigin")
 	private EntityEnum.CS_Monster_Origin monsterOrigin;
 	@Column(name="monsterType")
 	private EntityEnum.CS_Monster_Type monsterType;
+>>>>>>> .r17
 	@Column(name="keywords")
 	private String keywords;
 	@Column(name="powerSource")
