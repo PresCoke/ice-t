@@ -7,11 +7,13 @@ package presentation;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 
+import controller.App_Root;
 import controller.NewEntity;
 import entity.*;
 
@@ -48,13 +50,15 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		newEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) ); // a little less on the top
 		   																			 // and a little more on the bottom
 		
+		ResourceBundle new_tab_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.NewEditTab", App_Root.language_locale);
+		
 		save_button = new JButton();
 		cancel_button = new JButton();
 		
-		save_button.setText("Save");
+		save_button.setText(new_tab_l11n.getString("Save_Button"));
 		save_button.addActionListener(this);
 		
-		cancel_button.setText("Cancel");
+		cancel_button.setText(new_tab_l11n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();
@@ -112,7 +116,6 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 	
 	private DefaultListModel populateEntityList() {
 		DefaultListModel entity_list = new DefaultListModel();
-		//TODO: implement this further
 		
 		String[] entityTypeNames = controller_reference.getEntityTypeNames();
 		

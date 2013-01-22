@@ -101,7 +101,7 @@ public class Help_Tab implements ListSelectionListener {
 	private DefaultListModel populateHelpTopicList() {
 		DefaultListModel tempHelp_list = new DefaultListModel();
 		
-		//TODO: implement properly
+		//TODO: implement properly - with localization
 		tempHelp_list.addElement("How to not be a douche");
 		tempHelp_list.addElement("How to add Creatures");
 		tempHelp_list.addElement("How to play D&D");

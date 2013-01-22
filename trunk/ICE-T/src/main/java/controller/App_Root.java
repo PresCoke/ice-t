@@ -1,6 +1,8 @@
 package controller;
 
 //-- Project Imports --//
+import java.util.Locale;
+
 import mediator.*;
 import entity.*;
 import bean.combat.*;
@@ -27,10 +29,12 @@ public class App_Root
 	public static NewEntity newEntity_controller;
 	public static Welcome welcome_controller;
 	public static GenerateRandomEncounter gre_controller; //TODO: not currently instantiated
+	public static Locale language_locale;
 	
 	public static void main(String[] args) {
 		
-		
+		// TODO: set this from a settings file
+		language_locale = new Locale("en_CA");
 		
 		resource_mediator = new Mediator("properties");
 		resource_mediator.start();

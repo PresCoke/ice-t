@@ -8,12 +8,13 @@ package presentation;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 
-import controller.EditEntity;
+import controller.*;
 //TODO: enable tab switching between lists... dat classy.
 public class Edit_Tab implements ListSelectionListener, ActionListener {
 
@@ -49,6 +50,8 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		editEntity_panel.setLayout( new GridBagLayout() );
 		editEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) );
 		
+		ResourceBundle editTab_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.NewEditTab", App_Root.language_locale);
+		
 		type_list = new DefaultListModel();
 		populateEntityTypeList();
 		entityType_list = new JList(type_list);
@@ -73,11 +76,11 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		listSelection_panel.add( Box.createRigidArea( new Dimension(5, 0) ) );
 		listSelection_panel.add(name_pane);
 		
-		save_button = new JButton("Save");
+		save_button = new JButton(editTab_l11n.getString("Save_Button"));
 		save_button.addActionListener(this);
-		remove_button = new JButton("Remove");
+		remove_button = new JButton(editTab_l11n.getString("Remove_Button"));
 		remove_button.addActionListener(this);
-		cancel_button = new JButton("Cancel");
+		cancel_button = new JButton(editTab_l11n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();
@@ -146,11 +149,11 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	
 	
 	private void populateEntityTypeList() {
-		//TODO: implement this further
+		String[] entityTypeNames = controller_reference.getEntityTypeNames();
 		
-		type_list.addElement("Creature");
-		type_list.addElement("Trap");
-		type_list.addElement("etc...");
+		for (int index = 0; index < entityTypeNames.length; index++) {
+			type_list.addElement(entityTypeNames[index]);
+		}
 	}
 	
 	private void getEntityInfoFor(String selectedEntityName) {

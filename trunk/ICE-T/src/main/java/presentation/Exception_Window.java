@@ -11,8 +11,11 @@ import javax.swing.border.*;
 
 import org.apache.commons.logging.impl.Log4JLogger;
 
+import controller.App_Root;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 public final class Exception_Window {
 	
@@ -22,11 +25,12 @@ public final class Exception_Window {
 	
 	public static void showException(Exception e) {
 		
+		ResourceBundle exception_bundle_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.ExceptionWindow", App_Root.language_locale);
 		exc = e;
 		
 		final JDialog exceptionFrame = new JDialog();
 		
-		moveOn = new JButton("Continue");
+		moveOn = new JButton(exception_bundle_l11n.getString("Continue_Button"));
 		moveOn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -35,7 +39,7 @@ public final class Exception_Window {
 			
 		});
 		
-		logEx = new JButton("Log Exception");
+		logEx = new JButton(exception_bundle_l11n.getString("Log_Button"));
 		logEx.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
@@ -45,7 +49,7 @@ public final class Exception_Window {
 			
 		});
 		
-		showTrace = new JButton ("Show Stack Trace");
+		showTrace = new JButton (exception_bundle_l11n.getString("Trace_Button"));
 		showTrace.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,7 +84,7 @@ public final class Exception_Window {
 		
 		JComponent content = exceptionPanel;
 		
-		exceptionFrame.setTitle("An Error Has Occurred");
+		exceptionFrame.setTitle(exception_bundle_l11n.getString("ExceptionWindow_Title"));
 		exceptionFrame.setContentPane(content);
 		exceptionFrame.setAlwaysOnTop(true);
 		exceptionFrame.setResizable(false);
