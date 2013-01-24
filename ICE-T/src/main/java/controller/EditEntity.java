@@ -6,7 +6,8 @@ import java.util.ResourceBundle;
 public class EditEntity {
 
 	public String[] getEntityTypeNames() {
-		String[] entity_names = new String[5];
+		//TODO: remove hard-coded size
+		String[] entity_names = new String[6];
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l11n.EntityTypeName", App_Root.language_locale);
 		Enumeration entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {

@@ -2,38 +2,54 @@ package controller;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-import entity.*;
+import bean.forms.*;
 
 public class NewEntity {
 
-	EntityM empty_entity;
+	FormBean empty_entity;
+	String[] entity_names;
 	
 	
-	public String getEmptyEntityBeanOfType(String entityType) {
-		// TODO Auto-generated method stub
-		/*switch (entityType) {
+	public FormBean getEmptyEntityBeanOfType(String entityType) {
+		empty_entity = null;
+		int entity_index = 0;
+		for (int index = 0; index<entity_names.length; index++) {
+			if (entityType == entity_names[index]) {
+				entity_index = index;
+			}
+		}
+		switch (entity_index) {
+		case 0://Character
+			empty_entity = new CharacterSheetForm();
+			break;
+		case 1://Monster
+			empty_entity = new CharacterSheetForm();
+			break;
+		case 2://Team
+			empty_entity = new TeamForm();
+			break;
+		case 3://Effect
+			empty_entity = new EffectForm();
+			break;
+		case 4://Trap/Hazard
+			empty_entity = new TrapHazardForm();
+			break;
+		case 5://Combat Encounter
+			empty_entity = new CombatEncounterForm();
+			break;
+		}
 		
-		}*/
-		
-		return "FUCK YOU!";
+		return empty_entity;
 	}
 
-	public boolean saveEntity(String validated_html) {
-		// TODO Auto-generated method stub
-		scrape_and_store(validated_html);
-		return false;
+	public void saveEntity() {
+		empty_entity.getEntity().save();
 	}
 
-	private void scrape_and_store(String validated_html) {
-		// TODO: scrape useful data put it into empty_entity
-		
-		empty_entity.save();
-		
-	}
 
 	public String[] getEntityTypeNames() {
 		// TODO HARD-CODED SIZE!!!!!
-		String[] entity_names = new String[5];
+		entity_names = new String[6];
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l11n.EntityTypeName", App_Root.language_locale);
 		Enumeration entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
