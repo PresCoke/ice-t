@@ -96,7 +96,7 @@ public class CharacterSheet extends EntityM {
 	@Column(name="speed")
 	private int speed;
 	@Column(name="resistanceValue")
-	private int resistanceValue;
+	private int resistanceValue; //should be an array of a separate resitance class
 	@Column(name="initiative")
 	private int initiative;
 	@Column(name="languages")
@@ -108,13 +108,13 @@ public class CharacterSheet extends EntityM {
 	@Column(name="size")
 	private EntityEnum.CS_Size size;
 	@Column(name="resistanceType")
-	private EntityEnum.CS_Resistance_Type resistanceType;
+	private EntityEnum.CS_Resistance_Type resistanceType; //should be an array of a separate resitance class
 	@Column(name="monsterOrigin")
-	private EntityEnum.CS_Monster_Origin monsterOrigin;
+	private EntityEnum.CS_Monster_Origin monsterOrigin; //should be in monster subclass
 	@Column(name="monsterType")
-	private EntityEnum.CS_Monster_Type monsterType;
+	private EntityEnum.CS_Monster_Type monsterType; //should be in monster subclass
 	@Column(name="keywords")
-	private String keywords;
+	private String keywords; //should be in monster subclass
 	@Column(name="powerSource")
 	private String powerSource;
 		
