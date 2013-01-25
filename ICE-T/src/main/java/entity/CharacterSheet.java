@@ -2,9 +2,14 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * CharacterSheet Class
@@ -14,8 +19,15 @@ import javax.persistence.Table;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="CharacterSheet")
+@PrimaryKeyJoinColumn(name="id")
 public class CharacterSheet extends EntityM {
-
+	
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="CharacterSheet_id")
+    private int id;
+	
 	//Skills
 	@Column(name="acrobatics")
 	private int acrobatics;
@@ -55,7 +67,7 @@ public class CharacterSheet extends EntityM {
 	//Defenses
 	@Column(name="AC")
 	private int AC;
-	@Column(name="REF")
+	@Column(name="RE")
 	private int REF;
 	@Column(name="FORT")
 	private int FORT;
@@ -77,17 +89,17 @@ public class CharacterSheet extends EntityM {
 	private int STR;
 	@Column(name="CON")
 	private int CON;
-	@Column(name="INT")
+	@Column(name="INTE")
 	private int INT;
 	@Column(name="DEX")
 	private int DEX;
 	@Column(name="WIS")
 	private int WIS;
-	@Column(name="CHAR")
+	@Column(name="CHARA")
 	private int CHAR;
 		
 	//Other
-	@Column(name="level")
+	@Column(name="levelCS")
 	private int level;
 	@Column(name="XP")
 	private int XP;
@@ -103,21 +115,17 @@ public class CharacterSheet extends EntityM {
 	private String languages;
 	@Column(name="misc")
 	private String misc;
-	@Column(name="role")
-	private EntityEnum.CS_Role role;
-	@Column(name="size")
-	private EntityEnum.CS_Size size;
-	@Column(name="resistanceType")
-	private EntityEnum.CS_Resistance_Type resistanceType; //should be an array of a separate resitance class
-	@Column(name="monsterOrigin")
-	private EntityEnum.CS_Monster_Origin monsterOrigin; //should be in monster subclass
-	@Column(name="monsterType")
-	private EntityEnum.CS_Monster_Type monsterType; //should be in monster subclass
 	@Column(name="keywords")
 	private String keywords; //should be in monster subclass
 	@Column(name="powerSource")
 	private String powerSource;
 		
+	//Enum
+	private EntityEnum.CS_Role role;
+	private EntityEnum.CS_Size size;
+	private EntityEnum.CS_Resistance_Type resistanceType; //should be an array of a separate resitance class
+	private EntityEnum.CS_Monster_Origin monsterOrigin; //should be in monster subclass
+	private EntityEnum.CS_Monster_Type monsterType; //should be in monster subclass
 
 	/**
 	 * Default constructor
@@ -504,6 +512,14 @@ public class CharacterSheet extends EntityM {
 
 	public void setPowerSource(String powerSource) {
 		this.powerSource = powerSource;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

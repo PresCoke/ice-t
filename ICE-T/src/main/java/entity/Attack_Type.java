@@ -2,10 +2,13 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack_Type Class
@@ -16,10 +19,12 @@ import javax.persistence.Table;
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="Attack_Type")
 public abstract class Attack_Type {
-
-	@Id
-	@Column(name="attack_type")
-	private String attack_type;
+	
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Attack_Type_id")
+    private int id;
 
 	@Column(name="isPersonal")
 	private boolean isPersonal;
@@ -39,11 +44,11 @@ public abstract class Attack_Type {
 		this.isPersonal = isPersonal;
 	}
 	
-	public String getAttack_type() {
-		return attack_type;
+	public int getId() {
+		return id;
 	}
 
-	public void setAttack_type(String attack_type) {
-		this.attack_type = attack_type;
+	public void setId(int id) {
+		this.id = id;
 	}
 }

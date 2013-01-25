@@ -2,7 +2,12 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack Range Class
@@ -11,8 +16,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="A_Range")
+@PrimaryKeyJoinColumn(name="id")
 public class A_Range extends Attack_Type {
 
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="A_Range_id")
+    private int id;
+	
 	@Column(name="L_range")
 	private int L_range;
 	
@@ -45,6 +57,12 @@ public class A_Range extends Attack_Type {
 		S_range = s_range;
 	}
 
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 }

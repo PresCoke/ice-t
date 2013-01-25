@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * Rewards Class
  * @author TimHP
@@ -15,10 +17,11 @@ import javax.persistence.Table;
 @Table(name="Rewards")
 public class Rewards {
 
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int id;
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Rewards_id")
+    private int id;
 	
 	@Column(name="XP")
 	private int XP;

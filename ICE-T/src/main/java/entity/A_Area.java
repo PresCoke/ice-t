@@ -2,7 +2,12 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -13,47 +18,64 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="A_ARea")
+@PrimaryKeyJoinColumn(name="id")
 public class A_Area extends Attack_Type {
 
-	@Column(name="areaType")
-	private EntityEnum.A_Area_Type areaType;
-	
-	@Column(name="range")
-	private int range;	
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="A_ARea_id")
+    private int id;
 
-	@Column(name="size")
-	private int size;
+	@Column(name="area_range")
+	private int area_range;	
+
+	@Column(name="area_size")
+	private int area_size;
+	
+	//Enum
+	private EntityEnum.A_Area_Type area_type;
 	
 	/**
 	 * Default constructor
 	 */
 	public A_Area() {
 	}
+
 	
 	/**
 	 * Getters and Setters
 	 */
-	public int getRange() {
-		return range;
+	public EntityEnum.A_Area_Type getArea_type() {
+		return area_type;
 	}
 
-	public void setRange(int range) {
-		this.range = range;
+	public void setArea_type(EntityEnum.A_Area_Type area_type) {
+		this.area_type = area_type;
 	}
 
-	public int getSize() {
-		return size;
+	public int getArea_range() {
+		return area_range;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setArea_range(int area_range) {
+		this.area_range = area_range;
 	}
 
-	public EntityEnum.A_Area_Type getAreaType() {
-		return areaType;
+	public int getArea_size() {
+		return area_size;
 	}
 
-	public void setAreaType(EntityEnum.A_Area_Type areaType) {
-		this.areaType = areaType;
+	public void setArea_size(int area_size) {
+		this.area_size = area_size;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 }

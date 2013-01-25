@@ -5,10 +5,15 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Creature Class
@@ -17,8 +22,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Creature")
+@PrimaryKeyJoinColumn(name="id")
 public class Creature extends CharacterSheet {
 
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Creature_id")
+    private int id;
+	
 	@Column(name="player_name")
 	private String playerName;
 	
@@ -43,11 +55,11 @@ public class Creature extends CharacterSheet {
 	private Stats stats;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="Attack")
+	//@JoinTable(name="Attack")
 	private Set<Attack> attacks;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="Effect")
+	//@JoinTable(name="Effect")
 	private Set<Effect> effects;
 
 	
@@ -119,7 +131,7 @@ public class Creature extends CharacterSheet {
 		this.secondWind = secondWind;
 	}
 
-
+	
 	public int getTempHP() {
 		return tempHP;
 	}
@@ -127,6 +139,16 @@ public class Creature extends CharacterSheet {
 
 	public void setTempHP(int tempHP) {
 		this.tempHP = tempHP;
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

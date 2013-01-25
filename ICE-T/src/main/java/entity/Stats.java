@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * Stats Class
  * @author TimHP
@@ -15,10 +17,11 @@ import javax.persistence.Table;
 @Table(name="Stats")
 public class Stats {
 
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int id;
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Stats_id")
+    private int id;	
 	
 	@Column(name="kills")
 	private int kills;
