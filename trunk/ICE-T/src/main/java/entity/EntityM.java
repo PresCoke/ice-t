@@ -21,9 +21,10 @@ public abstract class EntityM {
 
 	@Id
 	@GeneratedValue
-	@Column(name="id")
+	@Column(name="EntityM_id")
 	private int id;
 	
+	@Id
 	@Column(name="name")
 	private String name;
 	

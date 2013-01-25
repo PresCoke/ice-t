@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack Melee Class
@@ -13,12 +16,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="A_Melee")
+@PrimaryKeyJoinColumn(name="id")
 public class A_Melee extends Attack_Type {
+
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="A_Melee_id")
+    private int id;
 	
-	@Id
-	@GeneratedValue
-	@Column(name="reach")
-	private int reach;
+	@Column(name="melee_reach")
+	private int melee_reach;
 	
 	/**
 	 * Default constructor
@@ -31,11 +39,19 @@ public class A_Melee extends Attack_Type {
 	 * Getters and Setters
 	 */
 	public int getReach() {
-		return reach;
+		return melee_reach;
 	}
 
 	public void setReach(int reach) {
-		this.reach = reach;
+		this.melee_reach = reach;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

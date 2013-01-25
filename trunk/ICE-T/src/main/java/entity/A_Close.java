@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack Close Class
@@ -13,15 +16,20 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="A_Close")
+@PrimaryKeyJoinColumn(name="id")
 public class A_Close extends Attack_Type {
 
-	@Id
-	@GeneratedValue
-	@Column(name="closeType")
-	private EntityEnum.A_Use_Type closeType;
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="A_Close_id")
+    private int id;
+    
+	@Column(name="close_size")
+	private int close_size;
 	
-	@Column(name="size")
-	private int size;
+	//Enum
+	private EntityEnum.A_Use_Type closeType;
 	
 
 	/**
@@ -42,11 +50,18 @@ public class A_Close extends Attack_Type {
 	}
 
 	public int getSize() {
-		return size;
+		return close_size;
 	}
 
 	public void setSize(int size) {
-		this.size = size;
+		this.close_size = size;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }

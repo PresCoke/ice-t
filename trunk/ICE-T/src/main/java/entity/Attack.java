@@ -3,9 +3,12 @@ package entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack Class
@@ -15,10 +18,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Attack")
 public class Attack {
-	
-	@Id
-	@Column(name="name")
-	private String name;
+
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Attack_id")
+    private int id;
 	
 	//Target
 	@Column(name="primaryTarget")
@@ -33,46 +38,35 @@ public class Attack {
 	
 	@Column(name="powerSource")
 	private String powerSource;
-	
-	@Column(name="effectType")
-	private EntityEnum.A_Effect_Type effectType;
-	
-	@Column(name="damageType")
-	private EntityEnum.CS_Resistance_Type damageType;
-	
+
 	@Column(name="frequency")
 	private int frequency;
-	
-	@Column(name="ability")
-	private EntityEnum.A_Ability ability;
-	
+		
 	@Column(name="hit")
 	private String hit;
 	
 	@Column(name="miss")
 	private String miss;
-	
-	@Column(name="defense")
-	private EntityEnum.A_Defense defense;
-	
-	@Column(name="sustain")
-	private EntityEnum.A_Sustain sustain;
-	
-	@Column(name="action")
-	private EntityEnum.A_Action action;
-	
-	@Column(name="useType")
-	private EntityEnum.A_Use_Type useType;
-	
+		
 	@Column(name="basic")
 	private boolean basic;
 	
-	@Column(name="trigger")
+	@Column(name="triggers")
 	private String trigger;
 	
 	//Associations
 	@OneToOne(cascade = CascadeType.ALL)
 	private Attack_Type attackType;
+	
+	//Enum
+	private EntityEnum.A_Effect_Type effectType;
+	private EntityEnum.A_Ability ability;
+	private EntityEnum.CS_Resistance_Type damageType;
+	private EntityEnum.A_Defense defense;
+	private EntityEnum.A_Sustain sustain;
+	private EntityEnum.A_Action action;
+	private EntityEnum.A_Use_Type useType;
+	
 	
 	/**
 	 * Default constructor
@@ -138,14 +132,6 @@ public class Attack {
 
 	public void setFrequency(int frequency) {
 		this.frequency = frequency;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public EntityEnum.A_Ability getAbility() {
@@ -218,5 +204,13 @@ public class Attack {
 
 	public void setTrigger(String trigger) {
 		this.trigger = trigger;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

@@ -2,7 +2,11 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * TrapHazard Class
@@ -13,10 +17,16 @@ import javax.persistence.Table;
 @Table(name="TrapHazard")
 public class TrapHazard extends EntityM {
 
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="TrapHazard_id")
+    private int id;	
+	
 	@Column(name="avoidance")
 	private int avoidance;
 	
-	@Column(name="level")
+	@Column(name="levelTH")
 	private int level;
 	
 	@Column(name="skill")
@@ -25,26 +35,22 @@ public class TrapHazard extends EntityM {
 	@Column(name="triggers")
 	private String triggers;
 	
-	@Column(name="value")
+	@Column(name="valueTH")
 	private int value;
 	
 	@Column(name="xp")
 	private int xp;
-	
-	@Column(name="type")
-	private EntityEnum.T_Type type;
-	
-	@Column(name="role")
-	private EntityEnum.T_Role role;
-	
-	@Column(name="counterMeasureSkill")
-	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
 	
 	@Column(name="difficultyLevel")
 	private int difficultyLevel;
 	
 	@Column(name="counterMeasureDescription")
 	private String counterMeasureDescription;
+	
+	//Enum
+	private EntityEnum.T_Type type;
+	private EntityEnum.T_Role role;
+	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
 	
 	/**
 	 * Constructor

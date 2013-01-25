@@ -13,21 +13,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * CombatEncounter Class
  * @author TimHP
  *
  */
 @Entity
-@Table(name="Creature")
+@Table(name="CombatEncounter")
 public class CombatEncounter{
 
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int id;
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="CombatEncounter_id")
+    private int id;
 	
-	@Column(name="name")
+    @Id
+	@Column(name="CEname")
 	private String name;
 	
 	@Column(name="notes")
@@ -36,18 +40,18 @@ public class CombatEncounter{
 	//Associations
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="EntityM")
-	private Set<Entity> entities;
+	//@JoinTable(name="EntityM")
+	private Set<EntityM> entities;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="Rewards")
+	//@JoinTable(name="Rewards")
 	private Set<Rewards> rewards;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Tally tally;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="Stats")
+	//@JoinTable(name="Stats")
 	private Set<Stats> stats;
 	
 	/**

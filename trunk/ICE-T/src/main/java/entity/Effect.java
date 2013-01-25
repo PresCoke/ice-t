@@ -2,7 +2,11 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Effect Class
@@ -12,9 +16,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Effect")
 public class Effect extends EntityM {
-	
-	@Column(name="duration")
-	private EntityEnum.E_Duration duration;
+
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Effect_id")
+    private int id;	
 	
 	@Column(name="changes")
 	private String changes;
@@ -24,6 +31,9 @@ public class Effect extends EntityM {
 	
 	@Column(name="metrics")
 	private String metrics;
+	
+	//Enum
+	private EntityEnum.E_Duration duration;
 		
 	/**
 	 * Constructor
@@ -69,6 +79,15 @@ public class Effect extends EntityM {
 		this.metrics = metrics;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub

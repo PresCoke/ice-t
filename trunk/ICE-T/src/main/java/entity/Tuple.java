@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * Tuple Class
  * @author TimHP
@@ -15,8 +17,14 @@ import javax.persistence.Table;
 @Table(name="Tuple")
 public class Tuple {
 
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Tuple_id")
+    private int id;
+	
 	@Id
-	@Column(name="name")
+	@Column(name="Tuple_name")
 	private String name;
 	
 	@Column(name="value1")

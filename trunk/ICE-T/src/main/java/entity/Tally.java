@@ -1,12 +1,17 @@
 package entity;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Tally Class
@@ -17,13 +22,19 @@ import javax.persistence.Table;
 @Table(name="Tally")
 public class Tally {
 
+    @Id
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
+    @Column(name="Tally_id")
+    private int id;
+	
 	@Id
 	@Column(name="name")
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="Tuple")
-	private Tuple tuple;
+	//@JoinTable(name="Tuple")
+	private Set<Tuple> tuple;
 
 	/**
 	 * Constructor
@@ -43,4 +54,13 @@ public class Tally {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Set<Tuple> getTuple() {
+		return tuple;
+	}
+
+	public void setTuple(Set<Tuple> tuple) {
+		this.tuple = tuple;
+	}
+	
 }

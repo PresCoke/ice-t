@@ -12,8 +12,11 @@ public class HibernateTest {
 	private static final Logger logger = Logger.getLogger(HibernateTest.class);
 	
 	public static void main(String[] args) throws HibernateException {
+//		Attack_TypeDao aDao = new Attack_TypeDaoImpl();
+//		aDao.readAllAttacks(); 
+		
 		CreatureDao cDao = new CreatureDaoImpl();
-		cDao.readAllCreatures(); 
+		cDao.readAllCreatures();
 	}
  
 }
