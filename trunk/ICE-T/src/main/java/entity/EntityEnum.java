@@ -9,7 +9,7 @@ public final class EntityEnum {
 		fire,
 		force,
 		lightning,
-		nerotic,
+		necrotic,
 		poison,
 		psychic,
 		radiant,

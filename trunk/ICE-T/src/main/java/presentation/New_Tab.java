@@ -17,20 +17,22 @@ import controller.App_Root;
 import controller.NewEntity;
 import entity.*;
 
-public class New_Tab implements ActionListener, ListSelectionListener {
-
+public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
+/*TODO: make window close with cmd+w*/
 	private JPanel newEntity_panel;
 	private JButton save_button, cancel_button;
 	private JPanel entityCreation_pane;
-	private JList item_list;
+	//private JList item_list;
 	private NewEntity controller_reference;
+	private String entityType;
 	
-	public New_Tab(NewEntity new_controller) {
+	public New_Tab(NewEntity new_controller, String entityTypeName) {
 		// TODO Auto-generated constructor stub
 		controller_reference = new_controller;
+		entityType = entityTypeName;
 	}
 
-	public Component getPanel() {
+	public void showFrame() {
 		/* Start Hack
 		 * - this behaviour may be better implemented by inheriting from component
 		 *   or creating a custom class with a super getPanel() method.
@@ -39,26 +41,34 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 //		newEntity_panel = new JPanel();
 //		newEntity_panel.add( new JTextField("NEW ENTITY") );
 		
-		this.createPanel();
-		return newEntity_panel;
+		this.createPanel(entityType);
+		JScrollPane scrollable = new JScrollPane(newEntity_panel);
+		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JFrame newEntity_window = new JFrame(entityType);
+		
+		newEntity_window.setContentPane(scrollable);
+		newEntity_window.pack();
+		newEntity_window.validate();
+		newEntity_window.setVisible(true);
 	}
 
-	private void createPanel() {
+	private void createPanel(String entityTypeName) {
 		
 		newEntity_panel = new JPanel();
-		newEntity_panel.setLayout( new GridBagLayout() );
+		GroupLayout newEntity_layout = new GroupLayout(newEntity_panel); 
 		newEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) ); // a little less on the top
 		   																			 // and a little more on the bottom
 		
-		ResourceBundle new_tab_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.NewEditTab", App_Root.language_locale);
+		ResourceBundle new_tab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
 		
 		save_button = new JButton();
 		cancel_button = new JButton();
 		
-		save_button.setText(new_tab_l11n.getString("Save_Button"));
+		save_button.setText(new_tab_l10n.getString("Save_Button"));
 		save_button.addActionListener(this);
 		
-		cancel_button.setText(new_tab_l11n.getString("Cancel_Button"));
+		cancel_button.setText(new_tab_l10n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();
@@ -67,7 +77,7 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		button_panel.add(save_button);
 		button_panel.add(cancel_button);
 		
-		item_list = new JList( this.populateEntityList() );
+		/*item_list = new JList( this.populateEntityList() );
 		item_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		item_list.setLayoutOrientation(JList.VERTICAL);
 		item_list.addListSelectionListener(this);
@@ -79,16 +89,18 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		JPanel list_panel = new JPanel();
 		list_panel.setLayout( new BoxLayout(list_panel, BoxLayout.LINE_AXIS) );
 		list_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
-		list_panel.add(itemList_pane);
+		list_panel.add(itemList_pane);*/
 		
 		entityCreation_pane = new JPanel();
 		//entityCreation_pane.setOpaque(false);
+		entityCreation_pane.setAutoscrolls(true);
 		entityCreation_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),
 				BorderFactory.createLineBorder(Color.GRAY) )
 				);
+		getEntityFrameOfType(entityType);
 		
-		GridBagConstraints list_constraints = new GridBagConstraints();
+		/*GridBagConstraints list_constraints = new GridBagConstraints();
 		list_constraints.fill = GridBagConstraints.BOTH;
 		list_constraints.gridx = 0;
 		list_constraints.gridy = 0;
@@ -111,10 +123,21 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		button_constraints.gridx = 2;
 		button_constraints.gridy = 2;
 		button_constraints.anchor = GridBagConstraints.SOUTHEAST;
-		newEntity_panel.add(button_panel, button_constraints);
+		newEntity_panel.add(button_panel, button_constraints);*/
+		
+		newEntity_layout.setHorizontalGroup( newEntity_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(button_panel)
+				.addComponent(entityCreation_pane)
+				);
+		newEntity_layout.setVerticalGroup( newEntity_layout.createSequentialGroup()
+				.addComponent(button_panel)
+				.addComponent(entityCreation_pane)
+				);
+		newEntity_panel.setLayout(newEntity_layout);
+		
 	}
 	
-	private DefaultListModel populateEntityList() {
+	/*private DefaultListModel populateEntityList() {
 		DefaultListModel entity_list = new DefaultListModel();
 		
 		String[] entityTypeNames = controller_reference.getEntityTypeNames();
@@ -124,28 +147,28 @@ public class New_Tab implements ActionListener, ListSelectionListener {
 		}
 		
 		return entity_list;
-	}
+	}*/
 
-	public void valueChanged(ListSelectionEvent e) {
+	/*public void valueChanged(ListSelectionEvent e) {
 		// TODO implement this to set editor pane to appropriate entity creation page
 		if (e.getValueIsAdjusting() == false && item_list.getSelectedIndex() != -1) {
 				//TODO: must get appropriate info from DB/Bean
 				this.getEntityFrameOfType( (String) item_list.getSelectedValue() );
 				
 		}
-	}
+	}*/
 
 	private void getEntityFrameOfType(String entityType) {
 		//TODO: implement further
 		JPanel form_panel = ( controller_reference.getEmptyEntityBeanOfType(entityType) ).createEntityPanel();
-		
-		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
-		temp_border.setTitle(entityType);
-		temp_border.setTitleJustification(TitledBorder.CENTER);
-		
-		entityCreation_pane.setBorder(temp_border);
+//		
+//		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
+//		temp_border.setTitle(entityType);
+//		temp_border.setTitleJustification(TitledBorder.CENTER);
+//		
+//		entityCreation_pane.setBorder(temp_border);
 		entityCreation_pane.add(form_panel);
-		entityCreation_pane.repaint();
+		//entityCreation_pane.repaint();
 		
 	}
 

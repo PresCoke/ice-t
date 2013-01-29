@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 
@@ -28,14 +29,16 @@ public class Root_Window {
 	New_Tab newEntity_tab; // holds all GUI related functions for the New tab
 	Welcome_Tab welcome_tab; // holds all GUI related functions for the Welcome tab
 	
+	String[] entity_names;
+	
 	public Root_Window() {
 		main_window = new JFrame();
 		
-		welcome_tab = new Welcome_Tab(App_Root.welcome_controller); 
+		/*welcome_tab = new Welcome_Tab(App_Root.welcome_controller); 
 		newEntity_tab = new New_Tab(App_Root.newEntity_controller); 
-		editEntity_tab = new Edit_Tab(App_Root.editEntity_controller); 
+		editEntity_tab = new Edit_Tab(App_Root.editEntity_controller);*/ 
 		combat_tab = new Combat_Tab(App_Root.combat_controller); 
-		help_tab = new Help_Tab(App_Root.help_controller);
+		//help_tab = new Help_Tab(App_Root.help_controller);
 		
 	}
 	
@@ -93,22 +96,92 @@ public class Root_Window {
 		/*
 		 *  Creation and addition of tabs
 		 */
-		JTabbedPane major_tabs = new JTabbedPane();
+		
 		//This image icon is a hack... should be updated with custom icons and should double check for null values
 		ImageIcon test_icon = new ImageIcon ("src/main/resources/new_hat.jpg");
 		//TODO: create better icons 
 		
-		ResourceBundle root_window_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.RootWindow", App_Root.language_locale);
+		ResourceBundle root_window_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.RootWindow", App_Root.language_locale);
 		
-		major_tabs.addTab(root_window_l11n.getString("Home_Tab"), test_icon, welcome_tab.getPanel());
-		major_tabs.addTab(root_window_l11n.getString("New_Tab"), test_icon, newEntity_tab.getPanel());
-		major_tabs.addTab(root_window_l11n.getString("Edit_Tab"), test_icon, editEntity_tab.getPanel());
-		major_tabs.addTab(root_window_l11n.getString("Combat_Tab"), test_icon, combat_tab.getPanel());
-		major_tabs.addTab(root_window_l11n.getString("Help_Tab"), test_icon, help_tab.getPanel());
+		/*major_tabs.addTab(root_window_l10n.getString("Home_Tab"), test_icon, welcome_tab.getPanel());
+		major_tabs.addTab(root_window_l10n.getString("New_Tab"), test_icon, newEntity_tab.getPanel());
+		major_tabs.addTab(root_window_l10n.getString("Edit_Tab"), test_icon, editEntity_tab.getPanel());
+		major_tabs.addTab(root_window_l10n.getString("Combat_Tab"), test_icon, combat_tab.getPanel());
+		major_tabs.addTab(root_window_l10n.getString("Help_Tab"), test_icon, help_tab.getPanel());*/
 		
-		JComponent content = major_tabs;
+		JMenuBar app_menubar = new JMenuBar();
+		JMenu file_menu, new_menu, edit_menu;
+		JMenuItem save_item, prefs_item, help_item, quit_item;
 		
-		main_window.setTitle(root_window_l11n.getString("App_Title"));
+		file_menu = new JMenu(root_window_l10n.getString("File_menu"));
+		
+		prefs_item = new JMenuItem(root_window_l10n.getString("Preferences_menuitem"));
+		prefs_item.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				//TODO: get app to open new preferneces JFrame pop-up
+			}
+		});
+		file_menu.add(prefs_item);
+		save_item = new JMenuItem(root_window_l10n.getString("Save_menuitem"));
+		save_item.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				//TODO: get app to save currently open combat encounter
+			}
+		});
+		file_menu.add(save_item);
+		help_item = new JMenuItem(root_window_l10n.getString("Help_menuitem"));
+		help_item.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				//TODO: launch new JFrame pop-up with help in it
+			}
+		});
+		file_menu.add(help_item);
+		quit_item = new JMenuItem(root_window_l10n.getString("Quit_menuitem"));
+		quit_item.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				//should include a save of the current combat encounter
+				App_Root.exit();
+			}
+		});
+		file_menu.add(quit_item);
+		app_menubar.add(file_menu);
+		
+		new_menu = new JMenu(root_window_l10n.getString("New_menu"));
+		entity_names = App_Root.newEntity_controller.getEntityTypeNames();
+		for (int index = 0; index < this.entity_names.length; index++) {
+			JMenuItem aMenuItem = new JMenuItem(entity_names[index]);
+			aMenuItem.addActionListener( new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					//TODO I'm thinking this should go through controller.NewEntity not presentation.New_Tab
+					String entityToBeCreated = ((JMenuItem) ae.getSource()).getText();
+					New_Tab aNewEntityFrame = new New_Tab(App_Root.newEntity_controller, entityToBeCreated);
+					aNewEntityFrame.showFrame();
+				}
+			});
+			new_menu.add(aMenuItem);
+		}
+		app_menubar.add(new_menu);
+		
+		//TODO: may need to make specific sub-menus
+		edit_menu = new JMenu(root_window_l10n.getString("Edit_menu"));
+		entity_names = App_Root.editEntity_controller.getEntityTypeNames();
+		for (int index = 0; index < this.entity_names.length; index++) {
+			JMenuItem aMenuItem = new JMenuItem(entity_names[index]);
+			aMenuItem.addActionListener( new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					//TODO create edit entity frame from following string
+					String entityToBeCreated = ((JMenuItem) ae.getSource()).getText();
+				}
+			});
+			edit_menu.add(aMenuItem);
+		}
+		app_menubar.add(edit_menu);
+		
+		main_window.setJMenuBar(app_menubar);
+		
+		JComponent content = (JComponent)combat_tab.getPanel();
+		
+		main_window.setTitle(root_window_l10n.getString("App_title"));
 		//main_window.setDefaultLookAndFeelDecorated(true);
 		main_window.setContentPane(content);
 	

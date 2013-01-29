@@ -50,7 +50,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		editEntity_panel.setLayout( new GridBagLayout() );
 		editEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) );
 		
-		ResourceBundle editTab_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.NewEditTab", App_Root.language_locale);
+		ResourceBundle editTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
 		
 		type_list = new DefaultListModel();
 		populateEntityTypeList();
@@ -76,11 +76,11 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		listSelection_panel.add( Box.createRigidArea( new Dimension(5, 0) ) );
 		listSelection_panel.add(name_pane);
 		
-		save_button = new JButton(editTab_l11n.getString("Save_Button"));
+		save_button = new JButton(editTab_l10n.getString("Save_Button"));
 		save_button.addActionListener(this);
-		remove_button = new JButton(editTab_l11n.getString("Remove_Button"));
+		remove_button = new JButton(editTab_l10n.getString("Remove_Button"));
 		remove_button.addActionListener(this);
-		cancel_button = new JButton(editTab_l11n.getString("Cancel_Button"));
+		cancel_button = new JButton(editTab_l10n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();

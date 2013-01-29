@@ -1,36 +1,49 @@
 package bean.forms;
 
-import java.beans.*;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.*;
+
+import bean.combat.ResistanceBean;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import entity.CharacterSheet;
+import entity.Character;
 import entity.EntityM;
+import entity.Resistance;
 
-public class CharacterSheetForm extends FormBean implements ActionListener {
+
+/*
+ * TODO: going to newTab, entering data, switching to another tab and then returning to the newTab causes the Bean to tile ugily
+ * TODO: I'm really starting to think it was better to split up resistance form and resistance list display
+ * 		the reason being if the add button is outside the character sheet form then how the hell am I going to know when to 
+ * 		add resistances and get them out. 
+ */
+public class CharacterSheetForm implements FormBean, KeyListener {
 	
-	private CharacterSheet theCharacter;
+	private Character theCharacter;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field;
+	private ResistanceForm resistanceForm_bean;
+	private JPanel resistanceForm_panel;
+	private JList resistance_list;
+	DefaultListModel resistance_list_model;
+	//JScrollPane resistance_pane;
 	
-	@Override
 	public JPanel createEntityPanel() {
-		theCharacter = new CharacterSheet();
+		theCharacter = new Character();
 		
 		createPanel();
 		
 		return characterForm_panel;
 	}
 	
-	@Override
 	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
-		if (usingThis instanceof CharacterSheet) {
-			theCharacter = (CharacterSheet) usingThis;
+		if (usingThis instanceof Character) {
+			theCharacter = (Character) usingThis;
 		}
 		
 		createPanel();
@@ -38,7 +51,6 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		return characterForm_panel;
 	}
 
-	@Override
 	public EntityM getEntity() {
 	
 		return theCharacter;
@@ -46,9 +58,9 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 	
 	private void createPanel() {
 		characterForm_panel = new JPanel();
-		characterForm_panel.setLayout( new GridBagLayout() );
+		GroupLayout characterForm_layout = new GroupLayout(characterForm_panel); 
 		
-		final ResourceBundle entity_l10n = ResourceBundle.getBundle("Entity", controller.App_Root.language_locale);
+		final ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.beanGUI_l10n.Entity", controller.App_Root.language_locale);
 		
 		/*
 		 * 
@@ -56,17 +68,66 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		 * 
 		 */
 		JPanel generalInfo_panel = new JPanel();
-		generalInfo_panel.setLayout( new GridLayout(2, 8) );
 		generalInfo_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		//Character Name
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
+		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField name_field = new JTextField();
-		name_field.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				theCharacter.setName( ((JTextField) arg0.getSource()).getText() );
-			}	
+		name_field.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getName();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setName(deleted_string);
+					}
+				}
+			}
+
+			public void keyReleased(KeyEvent ke) {
+				
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getName();
+				current += ke.getKeyChar();
+				theCharacter.setName(current);
+			}
+			
 		});
-		generalInfo_panel.add(name_label); generalInfo_panel.add(name_field);
+		name_field.setText(theCharacter.getName());
+		
+		//Player Name
+		JLabel playerName_label = new JLabel( entity_l10n.getString("PlayerName_entity") );
+		playerName_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JTextField playerName_field = new JTextField();
+		playerName_field.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getPlayerName();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setPlayerName(deleted_string);
+					}
+				}
+			}
+
+			public void keyReleased(KeyEvent ke) {
+				
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getPlayerName();
+				current += ke.getKeyChar();
+				theCharacter.setPlayerName(current);
+			}
+			
+		});
+		playerName_field.setText(theCharacter.getPlayerName());		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
 		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
@@ -77,64 +138,123 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 				theCharacter.setLevel(lvl);
 			}
 		});
-
-		generalInfo_panel.add(lvl_label); generalInfo_panel.add(lvl_field);
-		//XP
+		//surge_num
 		JLabel xp_label = new JLabel(entity_l10n.getString("XP_entity") );
+		xp_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField xp_field = new JTextField();
-		xp_field.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					int xp = Integer.parseInt( ((JTextField) arg0.getSource()).getText() );
-					if (xp >= 0) {
+		xp_field.addKeyListener( new KeyListener(){
+			public void keyPressed(KeyEvent ke) {
+				int xp = 0;
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					xp = theCharacter.getXP();
+					String deleted_string = Integer.toString(xp);
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						xp = Integer.parseInt(deleted_string);
 						theCharacter.setXP(xp);
 					} else {
-						((JTextField) arg0.getSource()).setText(entity_l10n.getString("Zero_warning"));
+						theCharacter.setXP(0);
 					}
-				} catch (NumberFormatException nfe) {
-					((JTextField) arg0.getSource()).setText(entity_l10n.getString("Integer_warning"));
 				}
-			}	
+			}
+
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+					int xp = ke.getKeyChar() - '0';
+					if (xp >= 0 && xp <= 9) { // ensure health is an integer
+						xp += theCharacter.getXP() * 10;
+						theCharacter.setXP(xp);
+					} else {
+						ke.consume();
+					}
+				
+			}
 		});
-		generalInfo_panel.add(xp_label); generalInfo_panel.add(xp_field);		
+		xp_field.setText( Integer.toString(theCharacter.getSurgesPerDay()) );		
 		//speed
 		JLabel speed_label = new JLabel(entity_l10n.getString("Speed_entity"));
+		speed_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField speed_field = new JTextField();
-		speed_field.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					int speed = Integer.parseInt( ((JTextField) arg0.getSource()).getText() );
-					if (speed > 0) {
+		speed_field.addKeyListener( new KeyListener(){
+			public void keyPressed(KeyEvent ke) {
+				int speed = 0;
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					speed = theCharacter.getSpeed();
+					String deleted_string = Integer.toString(speed);
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						speed = Integer.parseInt(deleted_string);
 						theCharacter.setSpeed(speed);
 					} else {
-						((JTextField) arg0.getSource()).setText(entity_l10n.getString("Zero_warning"));
+						theCharacter.setSpeed(0);
 					}
-				} catch (NumberFormatException nfe) {
-					((JTextField) arg0.getSource()).setText(entity_l10n.getString("Integer_warning"));
 				}
-			}	
+			}
+
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+					int speed = ke.getKeyChar() - '0';
+					if (speed >= 0 && speed <= 9) { // ensure health is an integer
+						speed += theCharacter.getSpeed() * 10;
+						theCharacter.setSpeed(speed);
+					} else {
+						ke.consume();
+					}
+				
+			}
 		});
-		generalInfo_panel.add(speed_label); generalInfo_panel.add(speed_field);
+		speed_field.setText( Integer.toString(theCharacter.getSpeed()) );
 		//initiative
 		JLabel init_label = new JLabel(entity_l10n.getString("Init_entity"));
+		init_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField init_field = new JTextField();
-		init_field.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					int init = Integer.parseInt( ((JTextField) arg0.getSource()).getText() );
-					if (init >= 0) {
-						theCharacter.setInitiative(init);
+		init_field.addKeyListener( new KeyListener(){
+			public void keyPressed(KeyEvent ke) {
+				int initiative = 0;
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					initiative = theCharacter.getInitiative();
+					String deleted_string = Integer.toString(initiative);
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						initiative = Integer.parseInt(deleted_string);
+						theCharacter.setInitiative(initiative);
 					} else {
-						((JTextField) arg0.getSource()).setText(entity_l10n.getString("Zero_warning"));
+						theCharacter.setInitiative(0);
 					}
-				} catch (NumberFormatException nfe) {
-					((JTextField) arg0.getSource()).setText(entity_l10n.getString("Integer_warning"));
 				}
-			}	
+			}
+
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+					int initiative = ke.getKeyChar() - '0';
+					if (initiative >= 0 && initiative <= 9) { // ensure health is an integer
+						initiative += theCharacter.getInitiative() * 10;
+						theCharacter.setInitiative(initiative);
+					} else {
+						ke.consume();
+					}
+				
+			}
 		});
-		generalInfo_panel.add(init_label); generalInfo_panel.add(init_field);
+		init_field.setText( Integer.toString(theCharacter.getInitiative()) );
 		//role
 		JLabel role_label = new JLabel(entity_l10n.getString("Role_entity"));
+		role_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		//TODO: remove hardcoding - separate file iterate through all keys
 		String[] roles = {  entity_l10n.getString("Striker_role"),
 							entity_l10n.getString("Controller_role"),
@@ -171,9 +291,12 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 				}
 			}
 		});
-		generalInfo_panel.add(role_label); generalInfo_panel.add(role_list);
+		if (theCharacter.getRole() != null) {
+			role_list.setSelectedItem( theCharacter.getRole() );
+		}
 		//size
 		JLabel size_label = new JLabel(entity_l10n.getString("Size_entity"));
+		size_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		//TODO: remove hard-coding - separate file (iterate through all keys)
 		String[] sizes = {  entity_l10n.getString("Tiny_size"),
 							entity_l10n.getString("Small_size"),
@@ -201,16 +324,108 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 				}
 			}
 		});
-		generalInfo_panel.add(size_label); generalInfo_panel.add(size_list);
+		if (theCharacter.getSize() != null) {
+			size_list.setSelectedItem( theCharacter.getSize() );
+		}
 		//power source
 		JLabel pwr_label = new JLabel(entity_l10n.getString("Power_entity"));
+		pwr_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField pwr_field = new JTextField();
-		pwr_field.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theCharacter.setPowerSource( ((JTextField) ae.getSource()).getText() );
+		pwr_field.addKeyListener( new KeyListener() {
+
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getPowerSource();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setPowerSource(deleted_string);
+					}
+				}
 			}
+
+			public void keyReleased(KeyEvent ke) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getPowerSource();
+				current += ke.getKeyChar();
+				theCharacter.setPowerSource(current);
+			}
+			
 		});
-		generalInfo_panel.add(pwr_label); generalInfo_panel.add(pwr_field);
+		pwr_field.setText(theCharacter.getPowerSource());
+		
+		GroupLayout generalInfo_layout = new GroupLayout(generalInfo_panel);
+		generalInfo_layout.setAutoCreateGaps(true);
+		generalInfo_layout.setHorizontalGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup( generalInfo_layout.createSequentialGroup()
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(name_label)
+							.addComponent(name_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(playerName_label)
+							.addComponent(playerName_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(lvl_label)
+							.addComponent(lvl_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(xp_label)
+							.addComponent(xp_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(speed_label)
+							.addComponent(speed_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(init_label)
+							.addComponent(init_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(pwr_label)
+							.addComponent(pwr_field))
+					)
+				.addGroup( generalInfo_layout.createSequentialGroup()
+						.addComponent(size_label)
+						.addComponent(size_list)
+						.addGap(15)
+						.addComponent(role_label)
+						.addComponent(role_list))
+						
+				);
+		generalInfo_layout.setVerticalGroup( generalInfo_layout.createSequentialGroup()
+				.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(name_label)
+								.addComponent(name_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(playerName_label)
+								.addComponent(playerName_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(lvl_label)
+								.addComponent(lvl_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(xp_label)
+								.addComponent(xp_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(speed_label)
+								.addComponent(speed_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(init_label)
+								.addComponent(init_field))
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(pwr_label)
+								.addComponent(pwr_field))
+						)
+				.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(size_label)
+						.addComponent(size_list)
+						.addGap(15)
+						.addComponent(role_label)
+						.addComponent(role_list))
+				);
+		
+		
+		generalInfo_panel.setLayout(generalInfo_layout);
 		
 		/*
 		 * 
@@ -218,69 +433,135 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		 * 
 		 */
 		JPanel ability_panel = new JPanel();
-		ability_panel.setLayout( new GridLayout(0, 1) );
+		GroupLayout ability_layout = new GroupLayout(ability_panel);
 		ability_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Ability_title")) );
-		SpinnerNumberModel abl_model = new SpinnerNumberModel(0, 0, 100, 1);
 		//STR
 		JLabel str_label = new JLabel(entity_l10n.getString("STR_entity"));
-		JSpinner str_field = new JSpinner(abl_model);
+		JSpinner str_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		str_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setSTR(abl);
 			}
 		});
-		ability_panel.add(str_label); ability_panel.add(str_field);
+		str_field.setValue(theCharacter.getSTR());
+		
 		//CON
 		JLabel con_label = new JLabel(entity_l10n.getString("CON_entity"));
-		JSpinner con_field = new JSpinner(abl_model);
+		JSpinner con_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		con_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setCON(abl);
 			}
 		});
-		ability_panel.add(con_label); ability_panel.add(con_field);
+		con_field.setValue(theCharacter.getCON());
+		
 		//INT
 		JLabel int_label = new JLabel(entity_l10n.getString("INT_entity"));
-		JSpinner int_field = new JSpinner(abl_model);
+		JSpinner int_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		int_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setINT(abl);
 			}
 		});
-		ability_panel.add(int_label); ability_panel.add(int_field);
+		int_field.setValue(theCharacter.getINT());
+		
 		//DEX
 		JLabel dex_label = new JLabel(entity_l10n.getString("DEX_entity"));
-		JSpinner dex_field = new JSpinner(abl_model);
+		JSpinner dex_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		dex_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setDEX(abl);
 			}
 		});
-		ability_panel.add(dex_label); ability_panel.add(dex_field);
+		dex_field.setValue(theCharacter.getDEX());
+		
 		//WIS
 		JLabel wis_label = new JLabel(entity_l10n.getString("WIS_entity"));
-		JSpinner wis_field = new JSpinner(abl_model);
+		JSpinner wis_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		wis_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setWIS(abl);
 			}
 		});
-		ability_panel.add(wis_label); ability_panel.add(wis_field);
+		wis_field.setValue(theCharacter.getWIS());
+		
 		//CHA
 		JLabel cha_label = new JLabel(entity_l10n.getString("CHA_entity"));
-		JSpinner cha_field = new JSpinner(abl_model);
+		JSpinner cha_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		cha_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setCHAR(abl);
 			}
 		});
-		ability_panel.add(cha_label); ability_panel.add(cha_field);
+		cha_field.setValue(theCharacter.getCHAR());
+		
+		ability_layout.setAutoCreateGaps(true);
+		ability_layout.setHorizontalGroup( ability_layout.createSequentialGroup()
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(str_label)
+						.addComponent(str_field))
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(con_label)
+						.addComponent(con_field))
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(dex_label)
+						.addComponent(dex_field))
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(int_label)
+						.addComponent(int_field))
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(wis_label)
+						.addComponent(wis_field))
+				.addGroup( ability_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(cha_label)
+						.addComponent(cha_field))
+				);
+		ability_layout.setVerticalGroup(ability_layout.createParallelGroup()
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(str_label)
+						.addComponent(str_field))
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(con_label)
+						.addComponent(con_field))
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(dex_label)
+						.addComponent(dex_field))
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(int_label)
+						.addComponent(int_field))
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(wis_label)
+						.addComponent(wis_field))
+				.addGroup( ability_layout.createSequentialGroup()
+						.addComponent(cha_label)
+						.addComponent(cha_field))
+				
+				);
+		ability_layout.linkSize(SwingConstants.VERTICAL, str_field, str_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, str_field, str_label);
+		
+		ability_layout.linkSize(SwingConstants.VERTICAL, con_field, con_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, con_field, con_label);
+		
+		ability_layout.linkSize(SwingConstants.VERTICAL, dex_field, dex_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, dex_field, dex_label);
+		
+		ability_layout.linkSize(SwingConstants.VERTICAL, int_field, int_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, int_field, int_label);
+		
+		ability_layout.linkSize(SwingConstants.VERTICAL, wis_field, wis_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, wis_field, wis_label);
+		
+		ability_layout.linkSize(SwingConstants.VERTICAL, cha_field, cha_label);
+		ability_layout.linkSize(SwingConstants.HORIZONTAL, cha_field, cha_label);
+		
+		ability_panel.setLayout(ability_layout);
 		
 		/*
 		 * 
@@ -288,48 +569,91 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		 * 
 		 */
 		JPanel defense_panel = new JPanel();
-		defense_panel.setLayout( new GridLayout(1, 0) );
+		GroupLayout defense_layout = new GroupLayout(defense_panel);
 		defense_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Defense_title")) );
 		//AC
 		JLabel ac_label = new JLabel(entity_l10n.getString("AC_entity"));
-		JSpinner ac_field = new JSpinner(abl_model);
+		JSpinner ac_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		ac_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setAC(def);
 			}
 		});
-		defense_panel.add(ac_label); defense_panel.add(ac_field);
+		ac_field.setValue(theCharacter.getAC());
+
 		//REF
 		JLabel ref_label = new JLabel(entity_l10n.getString("REF_entity"));
-		JSpinner ref_field = new JSpinner(abl_model);
+		JSpinner ref_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		ref_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setREF(def);
 			}
 		});
-		defense_panel.add(ref_label); defense_panel.add(ref_field);
+		ref_field.setValue(theCharacter.getREF());
+		
 		//FORT
 		JLabel fort_label = new JLabel(entity_l10n.getString("FORT_entity"));
-		JSpinner fort_field = new JSpinner(abl_model);
+		JSpinner fort_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		fort_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setFORT(def);
 			}
 		});
-		defense_panel.add(fort_label); defense_panel.add(fort_field);
+		fort_field.setValue(theCharacter.getFORT());
+		
 		//WILL
 		JLabel will_label = new JLabel(entity_l10n.getString("WILL_entity"));
-		JSpinner will_field = new JSpinner(abl_model);
+		JSpinner will_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		will_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setWILL(def);
 			}
 		});
-		defense_panel.add(will_label); defense_panel.add(will_field);
+		will_field.setValue(theCharacter.getWILL());
+		
+		defense_layout.setAutoCreateGaps(true);
+		defense_layout.setHorizontalGroup( defense_layout.createSequentialGroup()
+				.addGroup( defense_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(ac_label)
+						.addComponent(ac_field))
+				.addGroup( defense_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(ref_label)
+						.addComponent(ref_field))
+				.addGroup( defense_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(fort_label)
+						.addComponent(fort_field))
+				.addGroup( defense_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(will_label)
+						.addComponent(will_field))
+				);
+		defense_layout.setVerticalGroup( defense_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup( defense_layout.createSequentialGroup()
+						.addComponent(ac_label)
+						.addComponent(ac_field))
+				.addGroup( defense_layout.createSequentialGroup()
+						.addComponent(ref_label)
+						.addComponent(ref_field))
+				.addGroup( defense_layout.createSequentialGroup()
+						.addComponent(fort_label)
+						.addComponent(fort_field))
+				.addGroup( defense_layout.createSequentialGroup()
+						.addComponent(will_label)
+						.addComponent(will_field))
+				);
+		defense_layout.linkSize(SwingConstants.VERTICAL, ac_field, ac_label);
+		//defense_layout.linkSize(SwingConstants.HORIZONTAL, ac_field, ac_label);
+		defense_layout.linkSize(SwingConstants.VERTICAL, ref_field, ref_label);
+		//defense_layout.linkSize(SwingConstants.HORIZONTAL, ref_field, ref_label);
+		defense_layout.linkSize(SwingConstants.VERTICAL, fort_field, fort_label);
+		//defense_layout.linkSize(SwingConstants.HORIZONTAL, fort_field, fort_label);
+		defense_layout.linkSize(SwingConstants.VERTICAL, will_field, will_label);
+		//defense_layout.linkSize(SwingConstants.HORIZONTAL, will_field, will_label);
+		
+		defense_panel.setLayout(defense_layout);
 		
 		/*
 		 * 
@@ -341,173 +665,190 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		skill_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Skill_title")) );
 		//acrobatics
 		JLabel acro_label = new JLabel(entity_l10n.getString("ACRO_entity"));
-		JSpinner acro_field = new JSpinner(abl_model);
+		JSpinner acro_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		acro_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setAcrobatics(skill);
 			}
 		});
+		acro_field.setValue(theCharacter.getAcrobatics());
 		skill_panel.add(acro_label); skill_panel.add(acro_field);
 		//athletics
 		JLabel athl_label = new JLabel(entity_l10n.getString("ATHL_entity"));
-		JSpinner athl_field = new JSpinner(abl_model);
+		JSpinner athl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		athl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setAthletics(skill);
 			}
 		});
+		athl_field.setValue(theCharacter.getAthletics());
 		skill_panel.add(athl_label); skill_panel.add(athl_field);
 		//arcana
-		JLabel arca_label = new JLabel(entity_l10n.getString("arca_entity"));
-		JSpinner arca_field = new JSpinner(abl_model);
+		JLabel arca_label = new JLabel(entity_l10n.getString("ARCA_entity"));
+		JSpinner arca_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		arca_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setArcana(skill);
 			}
 		});
+		arca_field.setValue(theCharacter.getArcana());
 		skill_panel.add(arca_label); skill_panel.add(arca_field);
 		//bluff
 		JLabel bluf_label = new JLabel(entity_l10n.getString("BLUF_entity"));
-		JSpinner bluf_field = new JSpinner(abl_model);
+		JSpinner bluf_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		bluf_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setBluff(skill);
 			}
 		});
+		bluf_field.setValue(theCharacter.getBluff());
 		skill_panel.add(bluf_label); skill_panel.add(bluf_field);
 		//diplomacy
-		JLabel dipl_label = new JLabel(entity_l10n.getString("dipl_entity"));
-		JSpinner dipl_field = new JSpinner(abl_model);
-		acro_field.addChangeListener( new ChangeListener() {
+		JLabel dipl_label = new JLabel(entity_l10n.getString("DIPL_entity"));
+		JSpinner dipl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		dipl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setDiplomacy(skill);
 			}
 		});
+		dipl_field.setValue(theCharacter.getDiplomacy());
 		skill_panel.add(dipl_label); skill_panel.add(dipl_field);
 		//dungeoneering
 		JLabel dung_label = new JLabel(entity_l10n.getString("DUNG_entity"));
-		JSpinner dung_field = new JSpinner(abl_model);
+		JSpinner dung_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		dung_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setDungeoneering(skill);
 			}
 		});
+		dung_field.setValue(theCharacter.getDungeoneering());
 		skill_panel.add(dung_label); skill_panel.add(dung_field);
 		//endurance
 		JLabel endu_label = new JLabel(entity_l10n.getString("ENDU_entity"));
-		JSpinner endu_field = new JSpinner(abl_model);
+		JSpinner endu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		endu_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setEndurance(skill);
 			}
 		});
+		endu_field.setValue(theCharacter.getEndurance());
 		skill_panel.add(endu_label); skill_panel.add(endu_field);
 		//heal
 		JLabel heal_label = new JLabel(entity_l10n.getString("HEAL_entity"));
-		JSpinner heal_field = new JSpinner(abl_model);
+		JSpinner heal_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		heal_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setHeal(skill);
 			}
 		});
+		heal_field.setValue(theCharacter.getHeal());
 		skill_panel.add(heal_label); skill_panel.add(heal_field);
 		//history
 		JLabel hist_label = new JLabel(entity_l10n.getString("HIST_entity"));
-		JSpinner hist_field = new JSpinner(abl_model);
+		JSpinner hist_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		hist_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setHistory(skill);
 			}
 		});
+		hist_field.setValue(theCharacter.getHistory());
 		skill_panel.add(hist_label); skill_panel.add(hist_field);
 		//insight
 		JLabel insi_label = new JLabel(entity_l10n.getString("INSI_entity"));
-		JSpinner insi_field = new JSpinner(abl_model);
+		JSpinner insi_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		insi_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setInsight(skill);
 			}
 		});
+		insi_field.setValue(theCharacter.getInsight());
 		skill_panel.add(insi_label); skill_panel.add(insi_field);
 		//intimidate
 		JLabel inti_label = new JLabel(entity_l10n.getString("INTI_entity"));
-		JSpinner inti_field = new JSpinner(abl_model);
+		JSpinner inti_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		inti_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setIntimidate(skill);
 			}
 		});
+		inti_field.setValue(theCharacter.getIntimidate());
 		skill_panel.add(inti_label); skill_panel.add(inti_field);
 		//nature
 		JLabel natu_label = new JLabel(entity_l10n.getString("NATU_entity"));
-		JSpinner natu_field = new JSpinner(abl_model);
+		JSpinner natu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		natu_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setNature(skill);
 			}
 		});
+		natu_field.setValue(theCharacter.getNature());
 		skill_panel.add(natu_label); skill_panel.add(natu_field);
 		//perception
 		JLabel perc_label = new JLabel(entity_l10n.getString("PERC_entity"));
-		JSpinner perc_field = new JSpinner(abl_model);
+		JSpinner perc_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		perc_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setPerception(skill);
 			}
 		});
+		perc_field.setValue(theCharacter.getPerception());
 		skill_panel.add(perc_label); skill_panel.add(perc_field);
 		//religion
 		JLabel reli_label = new JLabel(entity_l10n.getString("RELI_entity"));
-		JSpinner reli_field = new JSpinner(abl_model);
+		JSpinner reli_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		reli_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setReligion(skill);
 			}
 		});
+		reli_field.setValue(theCharacter.getReligion());
 		skill_panel.add(reli_label); skill_panel.add(reli_field);
 		//stealth
 		JLabel stea_label = new JLabel(entity_l10n.getString("STEA_entity"));
-		JSpinner stea_field = new JSpinner(abl_model);
+		JSpinner stea_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		stea_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setStealth(skill);
 			}
 		});
+		stea_field.setValue(theCharacter.getStealth());
 		skill_panel.add(stea_label); skill_panel.add(stea_field);
 		//streetwise
 		JLabel stre_label = new JLabel(entity_l10n.getString("STRE_entity"));
-		JSpinner stre_field = new JSpinner(abl_model);
+		JSpinner stre_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		stre_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setStreetwise(skill);
 			}
 		});
+		stre_field.setValue(theCharacter.getStreetwise());
 		skill_panel.add(stre_label); skill_panel.add(stre_field);
 		//theivery
 		JLabel thie_label = new JLabel(entity_l10n.getString("THIE_entity"));
-		JSpinner thie_field = new JSpinner(abl_model);
+		JSpinner thie_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		thie_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setThievery(skill);
 			}
 		});
+		thie_field.setValue(theCharacter.getThievery());
 		skill_panel.add(thie_label); skill_panel.add(thie_field);
 		
 		/*
@@ -516,40 +857,95 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		 * 
 		 */
 		JPanel health_panel = new JPanel();
-		health_panel.setLayout( new GridLayout(1, 0) );
-		health_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
+		GroupLayout health_layout = new GroupLayout(health_panel);
+		//health_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		//maxHP
 		JLabel maxHP_label = new JLabel(entity_l10n.getString("MAXHP_entity"));
 		maxHP_field = new JTextField();
-		maxHP_field.addActionListener(this);
-		health_panel.add(maxHP_label); health_panel.add(maxHP_field);
-		
+		maxHP_field.addKeyListener(this);
+		maxHP_field.setText( Integer.toString(theCharacter.getMaxHP()) );
+		//bloodied
 		JLabel bloodied_label = new JLabel(entity_l10n.getString("Bloodied_entity"));
 		bloodied_field = new JTextField(); bloodied_field.setEditable(false);
-		health_panel.add(bloodied_label); health_panel.add(bloodied_field);
-		
+		bloodied_field.setText( Integer.toString(theCharacter.getBloodied()) );
+		//surge value
 		JLabel surgeValue_label = new JLabel(entity_l10n.getString("SurgeValue_entity"));
 		surgeValue_field = new JTextField(); surgeValue_field.setEditable(false);
-		health_panel.add(surgeValue_label); health_panel.add(surgeValue_field);
-		
+		surgeValue_field.setText( Integer.toString(theCharacter.getSurgesValue()) );
 		//surges/day
 		JLabel surgeNum_label = new JLabel(entity_l10n.getString("SurgeNum_entity"));
 		JTextField surgeNum_field = new JTextField();
-		surgeNum_field.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					int surge = Integer.parseInt( ((JTextField) arg0.getSource()).getText() );
-					if (surge >= 0) {
-						theCharacter.setSurgesPerDay(surge);
+		surgeNum_field.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				int surge_num = 0;
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					surge_num = theCharacter.getSurgesPerDay();
+					String deleted_string = Integer.toString(surge_num);
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						surge_num = Integer.parseInt(deleted_string);
+						theCharacter.setSurgesPerDay(surge_num);
 					} else {
-						((JTextField) arg0.getSource()).setText(entity_l10n.getString("Zero_warning"));
+						theCharacter.setSurgesPerDay(0);
 					}
-				} catch (NumberFormatException nfe) {
-					((JTextField) arg0.getSource()).setText(entity_l10n.getString("Integer_warning"));
 				}
-			}	
+			}
+
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+					int surge_num = ke.getKeyChar() - '0';
+					if (surge_num >= 0 && surge_num <= 9) { // ensure health is an integer
+						surge_num += theCharacter.getSurgesPerDay() * 10;
+						theCharacter.setSurgesPerDay(surge_num);
+					} else {
+						ke.consume();
+					}
+				
+			}
 		});
-		health_panel.add(surgeNum_label); health_panel.add(surgeNum_field);
+		surgeNum_field.setText( Integer.toString(theCharacter.getSurgesPerDay()) );
+		
+		health_layout.setAutoCreateGaps(true);
+		health_layout.setHorizontalGroup( health_layout.createSequentialGroup()
+				.addGroup( health_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(maxHP_label)
+						.addComponent(maxHP_field))
+				.addGroup( health_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(bloodied_label)
+						.addComponent(bloodied_field))
+				.addGroup( health_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(surgeValue_label)
+						.addComponent(surgeValue_field))
+				.addGroup( health_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(surgeNum_label)
+						.addComponent(surgeNum_field))
+				);
+		health_layout.setVerticalGroup( health_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup( health_layout.createSequentialGroup()
+						.addComponent(maxHP_label)
+						.addComponent(maxHP_field))
+				.addGroup( health_layout.createSequentialGroup()
+						.addComponent(bloodied_label)
+						.addComponent(bloodied_field))
+				.addGroup( health_layout.createSequentialGroup()
+						.addComponent(surgeValue_label)
+						.addComponent(surgeValue_field))
+				.addGroup( health_layout.createSequentialGroup()
+						.addComponent(surgeNum_label)
+						.addComponent(surgeNum_field))		
+				);
+		health_layout.linkSize(SwingConstants.VERTICAL, maxHP_field, maxHP_label);
+		health_layout.linkSize(SwingConstants.VERTICAL, bloodied_field, bloodied_label);
+		health_layout.linkSize(SwingConstants.VERTICAL, surgeValue_field, surgeValue_label);
+		health_layout.linkSize(SwingConstants.VERTICAL, surgeNum_field, surgeNum_label);
+		
+		health_panel.setLayout(health_layout);
+		
 		
 		/*
 		 * 
@@ -557,73 +953,271 @@ public class CharacterSheetForm extends FormBean implements ActionListener {
 		 * 
 		 */
 		JPanel otherInfo_panel = new JPanel();
-		otherInfo_panel.setLayout( new GridLayout(1, 0) );
+		GroupLayout otherInfo_layout = new GroupLayout(otherInfo_panel);
 		//race features
 		JLabel racef_label = new JLabel(entity_l10n.getString("RaceF_entity"));
-		JTextField racef_field = new JTextField();
-		racef_field.addActionListener( new ActionListener() {
+		JEditorPane racef_field = new JEditorPane();
+		//TODO: remove hard-coding
+		//TODO: line in JTextField begins in middle of the box
+		racef_field.setPreferredSize( new Dimension(50, 50) );
+		racef_field.addKeyListener( new KeyListener() {
+
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getRaceFeatures();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setRaceFeatures(deleted_string);
+					}
+				}
+			}
+
+			public void keyReleased(KeyEvent ke) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getRaceFeatures();
+				current += ke.getKeyChar();
+				theCharacter.setRaceFeatures(current);
+			}
+			
+		});
+		racef_field.setText( theCharacter.getRaceFeatures() );
+		//resistances
+		resistanceForm_bean = new ResistanceForm();
+		resistanceForm_panel = resistanceForm_bean.createEntityPanel();
+		JButton addResist_button = new JButton(entity_l10n.getString("Add_button"));
+		addResist_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				theCharacter.setRaceFeatures( ((JTextField) ae.getSource()).toString() );
+				Resistance addThis = (Resistance) resistanceForm_bean.getEntity();
+				if (addThis.getResistanceType() != null && addThis.getResistanceValue() != 0) {
+					theCharacter.addResistance(addThis);
+					resistance_list_model.addElement(addThis);
+					//resistanceForm_bean = new ResistanceForm();
+					resistanceForm_panel = resistanceForm_bean.createEntityPanel();
+					/*if (resistance_list.getSelectedIndex() != -1) {
+						resistance_list.remove( resistance_list.getSelectedIndex() );
+					}*/
+				}		
 			}
 		});
-		otherInfo_panel.add(racef_label); otherInfo_panel.add(racef_field);
-		//resistances
-		//TODO: implement resistances better
+		
+		JButton removeResist_button = new JButton(entity_l10n.getString("Remove_button"));
+		removeResist_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				int selected = resistance_list.getSelectedIndex();
+				if (selected != -1) {
+					resistance_list_model.remove(selected);
+					theCharacter.removeResistanceAt(selected);
+				}
+				characterForm_panel.repaint();
+			}
+		});
+		resistance_list_model = new DefaultListModel();
+		for (int index = 0; index < theCharacter.getNumberOfResistances(); index++) {
+			ResistanceBean temp_bean = new ResistanceBean();
+			temp_bean.createPanelFrom(theCharacter.getResistanceAt(index));
+			resistance_list_model.addElement(temp_bean);
+		}
+		
+		resistance_list = new JList(resistance_list_model);
+		resistance_list.setLayoutOrientation(JList.VERTICAL);
+		resistance_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		resistance_list.setCellRenderer(new ResistanceBean());
+	/*	resistance_list.addListSelectionListener( new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent lse) {
+				if (lse.getValueIsAdjusting() == false && resistance_list.getSelectedIndex() != -1) {
+					//Object forTesting = resistance_list.getSelectedValue();
+					Resistance createFrom = (Resistance) resistance_list.getSelectedValue();
+					//resistanceForm_bean = new ResistanceForm();
+					resistanceForm_panel = resistanceForm_bean.createPanelFromExistingEntity(createFrom);
+					characterForm_panel.repaint();
+				}
+			}
+		});*/
+		
+		JScrollPane resistance_pane = new JScrollPane(resistance_list);
+		/*resistance_pane.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if ( key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE && ((JScrollPane) ke.getSource()).hasFocus() ) {
+					int index = resistance_list.getSelectedIndex();
+					if (index != -1) {
+						Resistance temp_resistance = ( (Resistance) ( (ResistanceBean) resistance_list_model.getElementAt(index) ).getEntity() );
+						resistance_list_model.removeElementAt(index);
+						theCharacter.removeResistance(temp_resistance);						
+					}
+				}
+			}
+
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				ke.consume();
+			}
+		});*/
+		
 		//languages
 		JLabel lang_label = new JLabel(entity_l10n.getString("Lang_entity"));
 		JTextField lang_field = new JTextField();
-		lang_field.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theCharacter.setLanguages( ((JTextField) ae.getSource()).toString() );
+		lang_field.setPreferredSize( new Dimension(50, 50) );
+		lang_field.addKeyListener( new KeyListener() {
+
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getLanguages();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setLanguages(deleted_string);
+					}
+				}
 			}
+
+			public void keyReleased(KeyEvent ke) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getLanguages();
+				current += ke.getKeyChar();
+				theCharacter.setLanguages(current);
+			}
+			
 		});
-		otherInfo_panel.add(lang_label); otherInfo_panel.add(lang_field);
-		//misc
+		lang_field.setText( theCharacter.getLanguages() );		
+		
 		JLabel misc_label = new JLabel(entity_l10n.getString("Misc_entity"));
-		JTextField misc_field = new JTextField();
-		misc_field.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theCharacter.setMisc( ((JTextField) ae.getSource()).toString() );
+		JEditorPane misc_field = new JEditorPane();
+		misc_field.setPreferredSize( new Dimension(50, 50) );
+		misc_field.addKeyListener( new KeyListener() {
+
+			public void keyPressed(KeyEvent ke) {
+				int key_press = ke.getKeyCode();
+				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+					String deleted_string = theCharacter.getMisc();
+					if (deleted_string.length() > 1) {
+						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+						theCharacter.setMisc(deleted_string);
+					}
+				}
 			}
+
+			public void keyReleased(KeyEvent ke) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void keyTyped(KeyEvent ke) {
+				String current = theCharacter.getMisc();
+				current += ke.getKeyChar();
+				theCharacter.setMisc(current);
+			}
+			
 		});
-		otherInfo_panel.add(misc_label); otherInfo_panel.add(misc_field);
+		misc_field.setText( theCharacter.getMisc() );
 		
-		GridBagConstraints generalInfo_constraints = new GridBagConstraints();
-		//TODO: set constraints
-		characterForm_panel.add(generalInfo_panel, generalInfo_constraints);
+		otherInfo_layout.setAutoCreateGaps(true);
+		otherInfo_layout.setHorizontalGroup( otherInfo_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(racef_label)
+				.addComponent(racef_field)
+				.addComponent(lang_label)
+				.addComponent(lang_field)
+				.addComponent(misc_label)
+				.addComponent(misc_field)
+				.addGroup( otherInfo_layout.createSequentialGroup()
+						.addComponent(resistanceForm_panel)
+						.addComponent(addResist_button)
+						.addComponent(removeResist_button)
+						)
+				.addComponent(resistance_pane)
+				);
+		otherInfo_layout.setVerticalGroup( otherInfo_layout.createSequentialGroup()
+				.addComponent(racef_label)
+				.addComponent(racef_field)
+				.addComponent(lang_label)
+				.addComponent(lang_field)
+				.addComponent(misc_label)
+				.addComponent(misc_field)
+				.addGroup( otherInfo_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(resistanceForm_panel)
+						.addComponent(addResist_button)
+						.addComponent(removeResist_button)
+						)
+				.addComponent(resistance_pane)
+				);
+		otherInfo_panel.setLayout(otherInfo_layout);
 		
-		GridBagConstraints ability_constraints = new GridBagConstraints();
-		//TODO: set constraints
-		characterForm_panel.add(ability_panel, ability_constraints);
+		characterForm_layout.setAutoCreateGaps(true);
+		characterForm_layout.setHorizontalGroup( characterForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(generalInfo_panel)
+				.addGroup( characterForm_layout.createSequentialGroup()
+						.addGroup( characterForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(ability_panel)
+								.addComponent(defense_panel)
+								.addComponent(health_panel)
+								.addComponent(otherInfo_panel))
+						.addComponent(skill_panel)
+						)
+				);
+		characterForm_layout.setVerticalGroup( characterForm_layout.createSequentialGroup()
+				.addComponent(generalInfo_panel)
+				.addGroup( characterForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup( characterForm_layout.createSequentialGroup()
+								.addComponent(ability_panel)
+								.addComponent(defense_panel)
+								.addComponent(health_panel)
+								.addComponent(otherInfo_panel))
+						.addComponent(skill_panel)
+						)
+				);
 		
-		GridBagConstraints skill_constraints = new GridBagConstraints();
-		//TODO: set constraints
-		characterForm_panel.add(skill_panel, skill_constraints);
-		
-		GridBagConstraints health_constraints = new GridBagConstraints();
-		//TODO: set constraints
-		characterForm_panel.add(health_panel, health_constraints);
-		
-		GridBagConstraints otherInfo_constraints = new GridBagConstraints();
-		//TODO: set constraints
-		characterForm_panel.add(otherInfo_panel, otherInfo_constraints);
+		characterForm_panel.setLayout(characterForm_layout);
+		characterForm_panel.setAutoscrolls(true);
+				
 	}
 
-	public void actionPerformed(ActionEvent ae) {
-		try {
-			int health = Integer.parseInt( ((JTextField) ae.getSource()).getText() );
-			if (health > 0) {
+	public void keyPressed(KeyEvent ke) {
+		int health = 0;
+		int key_press = ke.getKeyCode();
+		if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
+			health = theCharacter.getMaxHP();
+			String deleted_string = Integer.toString(health);
+			if (deleted_string.length() > 1) {
+				deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
+				health = Integer.parseInt(deleted_string);
 				theCharacter.setMaxHP(health);
 				bloodied_field.setText( ((Integer) theCharacter.getBloodied()).toString() );
 				surgeValue_field.setText( ((Integer) theCharacter.getSurgesValue()).toString() );
 			} else {
-				ResourceBundle entity_l10n = ResourceBundle.getBundle("Entity", controller.App_Root.language_locale);
-				((JTextField) ae.getSource()).setText(entity_l10n.getString("Zero_warning"));
+				theCharacter.setMaxHP(0);
+				bloodied_field.setText( ((Integer) theCharacter.getBloodied()).toString() );
+				surgeValue_field.setText( ((Integer) theCharacter.getSurgesValue()).toString() );
 			}
-		} catch (NumberFormatException nfe) {
-			ResourceBundle entity_l10n = ResourceBundle.getBundle("Entity", controller.App_Root.language_locale);
-			((JTextField) ae.getSource()).setText(entity_l10n.getString("Integer_warning"));
 		}
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyTyped(KeyEvent ke) {
+			int health = ke.getKeyChar() - '0';
+			if (health >= 0 && health <= 9) { // ensure health is an integer
+				health += theCharacter.getMaxHP() * 10;
+				theCharacter.setMaxHP(health);
+				bloodied_field.setText( ((Integer) theCharacter.getBloodied()).toString() );
+				surgeValue_field.setText( ((Integer) theCharacter.getSurgesValue()).toString() );
+			} else {
+				ke.consume();
+			}
 		
 	}
 

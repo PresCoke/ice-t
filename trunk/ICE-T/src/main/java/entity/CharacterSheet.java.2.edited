@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -113,13 +114,32 @@ public class CharacterSheet extends EntityM {
 	protected String languages;
 	@Column(name="misc")
 	protected String misc;
+<<<<<<< .mine
+	@Column(name="role")
+	protected EntityEnum.CS_Role role;
+	@Column(name="size")
+	protected EntityEnum.CS_Size size;
 	/*In the database resistance will reference Character Sheet*/
-	protected List<Resistance> character_resistances;		
+	protected List<Resistance> character_resistances;
+	
+=======
+	@Column(name="keywords")
+	private String keywords; //should be in monster subclass
+	@Column(name="powerSource")
+	private String powerSource;
+>>>>>>> .r23
+		
 	//Enum
 	@Transient
-	protected EntityEnum.CS_Role role;
+	private EntityEnum.CS_Role role;
 	@Transient
-	protected EntityEnum.CS_Size size;
+	private EntityEnum.CS_Size size;
+	@Transient
+	private EntityEnum.CS_Resistance_Type resistanceType; //should be an array of a separate resitance class
+	@Transient
+	private EntityEnum.CS_Monster_Origin monsterOrigin; //should be in monster subclass
+	@Transient
+	private EntityEnum.CS_Monster_Type monsterType; //should be in monster subclass
 
 	/**
 	 * Default constructor
@@ -572,6 +592,8 @@ public class CharacterSheet extends EntityM {
 	public int getNumberOfResistances() {
 		return this.character_resistances.size();
 	}
+<<<<<<< .mine
+=======
 	
 	public int getId() {
 		return id;
@@ -580,6 +602,8 @@ public class CharacterSheet extends EntityM {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+>>>>>>> .r23
 	
 	public String toHTML() {
 		// TODO Auto-generated method stub
