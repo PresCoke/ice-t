@@ -7,4 +7,6 @@ package entity.dao;
  */
 public interface CombatEncounterDao {
 
+	public void readAllCombatEncounters();
+
 }

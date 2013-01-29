@@ -7,8 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -28,14 +30,24 @@ public class Tally {
     @Column(name="Tally_id")
     private int id;
 	
-	@Id
 	@Column(name="name")
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="Tuple")
-	private Set<Tuple> tuple;
+	//Associations
+	@OneToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
+	
+	@OneToMany(mappedBy = "tally")
+	private Set<Tuple> tuples;
 
+
+	/**
+	 * Default constructor
+	 */
+	public Tally() {
+	}
+	
 	/**
 	 * Constructor
 	 * @param name
@@ -54,13 +66,28 @@ public class Tally {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Set<Tuple> getTuple() {
-		return tuple;
+	
+	public int getId() {
+		return id;
 	}
 
-	public void setTuple(Set<Tuple> tuple) {
-		this.tuple = tuple;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
+
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
 	}
 	
+	public Set<Tuple> getTuples() {
+		return tuples;
+	}
+
+	public void setTuples(Set<Tuple> tuples) {
+		this.tuples = tuples;
+	}
 }

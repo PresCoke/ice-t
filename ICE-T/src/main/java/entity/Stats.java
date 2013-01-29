@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -33,6 +36,15 @@ public class Stats {
 	private int misses;
 	@Column(name="assists")
 	private int assists;
+	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
+	
+//	@OneToOne
+//	@JoinColumn (name="Creature_id")
+//	private Creature creature;
 	
 	/**
 	 * Default constructor
@@ -82,6 +94,25 @@ public class Stats {
 
 	public void setAssists(int assists) {
 		this.assists = assists;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
+
+
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
 	}
 
 }

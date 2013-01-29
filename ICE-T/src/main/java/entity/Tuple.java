@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -22,8 +24,7 @@ public class Tuple {
     @GeneratedValue(generator="generator")
     @Column(name="Tuple_id")
     private int id;
-	
-	@Id
+
 	@Column(name="Tuple_name")
 	private String name;
 	
@@ -32,6 +33,18 @@ public class Tuple {
 	
 	@Column(name="value2")
 	private int value2;
+	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="Tally_id")
+	private Tally tally;
+	
+	
+	/**
+	 * Default constructor
+	 */
+	public Tuple() {
+	}
 	
 	/**
 	 * Constructor
@@ -69,6 +82,23 @@ public class Tuple {
 		this.value2 = value2;
 	}
 
-	
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public Tally getTally() {
+		return tally;
+	}
+
+
+	public void setTally(Tally tally) {
+		this.tally = tally;
+	}
 	
 }

@@ -29,23 +29,26 @@
           
         <property name="hbm2ddl.auto">validate</property>
    
+      	<mapping class="entity.CombatEncounter"/>
+      	<mapping class="entity.Rewards"/>
+      	<mapping class="entity.Tally"/>
+      	<mapping class="entity.Tuple"/>
+      	<mapping class="entity.Stats"/>
+  		<mapping class="entity.EntityM"/>
+  		<mapping class="entity.Team"/>
+  		<mapping class="entity.TrapHazard"/>
+  		<mapping class="entity.CharacterSheet"/>
+  		<mapping class="entity.Creature"/>
+  		
+  		<!--  		
    		<mapping class="entity.A_Area"/>
    		<mapping class="entity.A_Close"/>
    		<mapping class="entity.A_Melee"/>
    		<mapping class="entity.A_Range"/>
    		<mapping class="entity.Attack_Type"/>
    		<mapping class="entity.Attack"/>
-   		<mapping class="entity.CharacterSheet"/>
-   		<mapping class="entity.CombatEncounter"/>
-        <mapping class="entity.Creature"/>
-   		<mapping class="entity.Effect"/>
-        <mapping class="entity.EntityM"/>
-        <mapping class="entity.Rewards"/>
-        <mapping class="entity.Stats"/> 
-        <mapping class="entity.Tally"/>
-        <mapping class="entity.Team"/>
-        <mapping class="entity.TrapHazard"/>
-        <mapping class="entity.Tuple"/>
+   		<mapping class="entity.Effect"/>            
+         -->
            
     </session-factory>
 </hibernate-configuration>
