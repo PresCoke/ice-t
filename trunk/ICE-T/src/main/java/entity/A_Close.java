@@ -26,7 +26,7 @@ public class A_Close extends Attack_Type {
 	private int close_size;
 	
 	//Enum
-	@Transient
+	@Column(name="closeType")
 	private EntityEnum.A_Use_Type closeType;
 	
 

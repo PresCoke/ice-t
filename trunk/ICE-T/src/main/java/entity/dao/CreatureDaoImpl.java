@@ -60,7 +60,7 @@ public class CreatureDaoImpl implements CreatureDao {
         try {
             transaction = session.beginTransaction();
             Creature c = (Creature) session.get(Creature.class, creatureId);
-            c.setName(playerName);
+            c.setPlayerName(playerName);
             c.setCurrentHP(currentHP);
             c.setCurrentHealSurges(currentHealSurges);
             c.setCurrentLevel(currentLevel);

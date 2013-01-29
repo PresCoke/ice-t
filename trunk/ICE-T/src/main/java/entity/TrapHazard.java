@@ -2,11 +2,14 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * TrapHazard Class
@@ -15,10 +18,16 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="TrapHazard")
-public class TrapHazard extends EntityM {
+public class TrapHazard implements EntityM {
 
+	@Id
+	@GenericGenerator(name="generator", strategy="increment")
+	@GeneratedValue(generator="generator")
     @Column(name="TrapHazard_id")
     private int id;	
+	
+	@Column(name="TrapHazard_name")
+	private String name;
 	
 	@Column(name="avoidance")
 	private int avoidance;
@@ -45,24 +54,23 @@ public class TrapHazard extends EntityM {
 	private String counterMeasureDescription;
 	
 	//Enum
-	@Transient
+	@Column(name="type")
 	private EntityEnum.T_Type type;
-	@Transient
+	@Column(name="role")
 	private EntityEnum.T_Role role;
-	@Transient
+	@Column(name="counterMeasureSkill")
 	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
 	
 	//Associations
-	@ManyToOne
-	@JoinColumn (name="CombatEncounter_id")
-	private CombatEncounter combatEncounter;
+//	@ManyToOne
+//	@JoinColumn (name="CombatEncounter_id")
+//	private CombatEncounter combatEncounter;
 
 
 	/**
 	 * Default constructor
 	 */
 	public TrapHazard() {
-		super();
 	}
 
 	
@@ -71,7 +79,7 @@ public class TrapHazard extends EntityM {
 	 * @param name
 	 */
 	public TrapHazard(String name) {
-		super(name);
+		this.name=name;
 	}
 
 	
@@ -183,33 +191,44 @@ public class TrapHazard extends EntityM {
 	}
 
 
-	public CombatEncounter getCombatEncounter() {
-		return combatEncounter;
-	}
-
-
-	public void setCombatEncounter(CombatEncounter combatEncounter) {
-		this.combatEncounter = combatEncounter;
-	}
+//	public CombatEncounter getCombatEncounter() {
+//		return combatEncounter;
+//	}
+//
+//
+//	public void setCombatEncounter(CombatEncounter combatEncounter) {
+//		this.combatEncounter = combatEncounter;
+//	}
 	
+	
+	public String getName() {
+		return name;
+	}
 
-	@Override
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	/**
+	 * Other functions
+	 */
 	public void save() {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	@Override
 	public void edit() {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	@Override
 	public void remove() {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

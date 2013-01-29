@@ -1,19 +1,9 @@
 package entity;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -25,8 +15,11 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="Creature")
-public class Creature extends CharacterSheet {
+public class Creature {
 
+	@Id
+	@GenericGenerator(name="generator", strategy="increment")
+	@GeneratedValue(generator="generator")
     @Column(name="Creature_id")
     private int id;
 	
@@ -76,9 +69,8 @@ public class Creature extends CharacterSheet {
 	 * Constructors
 	 * @param name
 	 */
-	public Creature(String name) {
-		super(name);
-		playerName = name;
+	public Creature(String playerName) {
+		this.playerName = playerName;
 	}
 
 	/**

@@ -16,10 +16,16 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="Effect")
-public class Effect extends EntityM {
+public class Effect implements EntityM {
 
+	@Id
+	@GenericGenerator(name="generator", strategy="increment")
+	@GeneratedValue(generator="generator")
     @Column(name="Effect_id")
     private int id;	
+	
+	@Column(name="Effect_name")
+	private String name;
 	
 	@Column(name="changes")
 	private String changes;
@@ -31,7 +37,7 @@ public class Effect extends EntityM {
 	private String metrics;
 	
 	//Enum
-	@Transient
+	@Column(name="duration")
 	private EntityEnum.E_Duration duration;
 		
 	/**
@@ -39,7 +45,7 @@ public class Effect extends EntityM {
 	 * @param name
 	 */
 	public Effect(String name) {
-		super(name);
+		this.name=name;
 	}
 
 	
@@ -86,20 +92,28 @@ public class Effect extends EntityM {
 		this.id = id;
 	}
 	
-	
-	@Override
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	/**
+	 * Other functions
+	 */
 	public void save() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void edit() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void remove() {
 		// TODO Auto-generated method stub
 		
