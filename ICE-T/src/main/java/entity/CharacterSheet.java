@@ -30,6 +30,8 @@ public class CharacterSheet implements EntityM {
 	
 	@Column(name="CharacterSheet_name")
 	private String name;
+	@Column(name="CharacterSheet_player")
+	private String playerName;
 	
 	//Skills
 	@Column(name="acrobatics")
@@ -232,6 +234,14 @@ public class CharacterSheet implements EntityM {
 		this.languages = "";
 		this.misc = "";
 		this.character_resistances = new ArrayList<Resistance>();
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
 	}
 
 	/**
