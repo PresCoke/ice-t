@@ -34,9 +34,6 @@ public class NewEntity {
 		case 4://Trap/Hazard
 			empty_entity = new TrapHazardForm();
 			break;
-		case 5://Combat Encounter
-			empty_entity = new CombatEncounterForm();
-			break;
 		}
 		
 		return empty_entity;
@@ -50,7 +47,7 @@ public class NewEntity {
 	public String[] getEntityTypeNames() {
 		// TODO HARD-CODED SIZE!!!!!
 		entity_names = new String[6];
-		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l11n.EntityTypeName", App_Root.language_locale);
+		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		Enumeration entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
 			String key = (String) entityName_keys.nextElement();

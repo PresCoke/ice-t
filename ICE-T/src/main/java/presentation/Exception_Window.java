@@ -25,12 +25,12 @@ public final class Exception_Window {
 	
 	public static void showException(Exception e) {
 		
-		ResourceBundle exception_bundle_l11n = ResourceBundle.getBundle("filters.mainGUI_l11n.ExceptionWindow", App_Root.language_locale);
+		ResourceBundle exception_bundle_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.ExceptionWindow", App_Root.language_locale);
 		exc = e;
 		
 		final JDialog exceptionFrame = new JDialog();
 		
-		moveOn = new JButton(exception_bundle_l11n.getString("Continue_Button"));
+		moveOn = new JButton(exception_bundle_l10n.getString("Continue_Button"));
 		moveOn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -39,7 +39,7 @@ public final class Exception_Window {
 			
 		});
 		
-		logEx = new JButton(exception_bundle_l11n.getString("Log_Button"));
+		logEx = new JButton(exception_bundle_l10n.getString("Log_Button"));
 		logEx.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
@@ -49,7 +49,7 @@ public final class Exception_Window {
 			
 		});
 		
-		showTrace = new JButton (exception_bundle_l11n.getString("Trace_Button"));
+		showTrace = new JButton (exception_bundle_l10n.getString("Trace_Button"));
 		showTrace.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -84,7 +84,7 @@ public final class Exception_Window {
 		
 		JComponent content = exceptionPanel;
 		
-		exceptionFrame.setTitle(exception_bundle_l11n.getString("ExceptionWindow_Title"));
+		exceptionFrame.setTitle(exception_bundle_l10n.getString("ExceptionWindow_Title"));
 		exceptionFrame.setContentPane(content);
 		exceptionFrame.setAlwaysOnTop(true);
 		exceptionFrame.setResizable(false);

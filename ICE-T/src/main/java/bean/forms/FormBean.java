@@ -3,9 +3,9 @@ package bean.forms;
 import entity.EntityM;
 import javax.swing.*;
 
-public abstract class FormBean {
+public interface FormBean {
 
-	public abstract JPanel createEntityPanel();
-	public abstract JPanel createPanelFromExistingEntity(EntityM usingThis);
-	public abstract EntityM getEntity();
+	public JPanel createEntityPanel();
+	public JPanel createPanelFromExistingEntity(EntityM usingThis);
+	public EntityM getEntity();
 }
