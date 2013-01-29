@@ -9,10 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -23,10 +20,16 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="CharacterSheet")
-public class CharacterSheet extends EntityM {
+public class CharacterSheet implements EntityM {
 	
+	@Id
+	@GenericGenerator(name="generator", strategy="increment")
+	@GeneratedValue(generator="generator")
     @Column(name="CharacterSheet_id")
     private int id;
+	
+	@Column(name="CharacterSheet_name")
+	private String name;
 	
 	//Skills
 	@Column(name="acrobatics")
@@ -113,13 +116,24 @@ public class CharacterSheet extends EntityM {
 	protected String languages;
 	@Column(name="misc")
 	protected String misc;
+	@Column(name="powerSource")
+	private String powerSource; //TODO
+
+	//Enum
+	@Column(name="role")
+	protected EntityEnum.CS_Role role;
+	@Column(name="size")
+	protected EntityEnum.CS_Size size;
+	@Column(name="monsterOrigin")
+	private EntityEnum.CS_Monster_Origin monsterOrigin;
+	@Column(name="monsterType")
+	private EntityEnum.CS_Monster_Type monsterType;
+	@Column(name="keywords")
+	private String keywords; 
+	
+	//Associations
 	/*In the database resistance will reference Character Sheet*/
 	protected List<Resistance> character_resistances;		
-	//Enum
-	@Transient
-	protected EntityEnum.CS_Role role;
-	@Transient
-	protected EntityEnum.CS_Size size;
 
 	/**
 	 * Default constructor
@@ -174,7 +188,7 @@ public class CharacterSheet extends EntityM {
 	 * @param name
 	 */
 	public CharacterSheet(String name) {
-		super(name);
+		this.name = name;
 		
 		/*Abilities*/
 		this.STR = 0;
@@ -573,6 +587,14 @@ public class CharacterSheet extends EntityM {
 		return this.character_resistances.size();
 	}
 	
+	public String getPowerSource() {
+		return powerSource;
+	}
+
+	public void setPowerSource(String powerSource) {
+		this.powerSource = powerSource;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -581,6 +603,50 @@ public class CharacterSheet extends EntityM {
 		this.id = id;
 	}
 	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public EntityEnum.CS_Monster_Origin getMonsterOrigin() {
+		return monsterOrigin;
+	}
+
+	public void setMonsterOrigin(EntityEnum.CS_Monster_Origin monsterOrigin) {
+		this.monsterOrigin = monsterOrigin;
+	}
+
+	public EntityEnum.CS_Monster_Type getMonsterType() {
+		return monsterType;
+	}
+
+	public void setMonsterType(EntityEnum.CS_Monster_Type monsterType) {
+		this.monsterType = monsterType;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public List<Resistance> getCharacter_resistances() {
+		return character_resistances;
+	}
+
+	public void setCharacter_resistances(List<Resistance> character_resistances) {
+		this.character_resistances = character_resistances;
+	}
+	
+	/**
+	 * Other Functions
+	 */
 	public String toHTML() {
 		// TODO Auto-generated method stub
 		return null;

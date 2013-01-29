@@ -31,7 +31,7 @@ public class A_Area extends Attack_Type {
 	private int area_size;
 	
 	//Enum
-	@Transient
+	@Column(name="area_type")
 	private EntityEnum.A_Area_Type area_type;
 	
 	/**

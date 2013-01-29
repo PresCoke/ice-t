@@ -35,22 +35,16 @@ public class Attack {
 	//Keywords	
 	@Column(name="accessories")
 	private String accessories;
-	
 	@Column(name="powerSource")
 	private String powerSource;
-
 	@Column(name="frequency")
-	private int frequency;
-		
+	private int frequency;	
 	@Column(name="hit")
 	private String hit;
-	
 	@Column(name="miss")
-	private String miss;
-		
+	private String miss;	
 	@Column(name="basic")
 	private boolean basic;
-	
 	@Column(name="triggers")
 	private String trigger;
 	
@@ -59,12 +53,19 @@ public class Attack {
 //	private Attack_Type attackType;
 	
 	//Enum
+	@Column(name="effectType")
 	private EntityEnum.A_Effect_Type effectType;
+	@Column(name="ability")
 	private EntityEnum.A_Ability ability;
+	@Column(name="damageType")
 	private EntityEnum.CS_Resistance_Type damageType;
+	@Column(name="defense")
 	private EntityEnum.A_Defense defense;
+	@Column(name="sustain")
 	private EntityEnum.A_Sustain sustain;
+	@Column(name="action")
 	private EntityEnum.A_Action action;
+	@Column(name="useType")
 	private EntityEnum.A_Use_Type useType;
 	
 	
