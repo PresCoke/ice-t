@@ -1,13 +1,16 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -22,15 +25,14 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="CombatEncounter")
-public class CombatEncounter{
+public class CombatEncounter {
 
-    @Id
+	@Id
     @GenericGenerator(name="generator", strategy="increment")
     @GeneratedValue(generator="generator")
     @Column(name="CombatEncounter_id")
     private int id;
-	
-    @Id
+
 	@Column(name="CEname")
 	private String name;
 	
@@ -38,22 +40,22 @@ public class CombatEncounter{
 	private String notes;
 	
 	//Associations
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="EntityM")
-	private Set<EntityM> entities;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="Rewards")
+	@OneToMany(mappedBy = "combatEncounter")
+	private Set<TrapHazard> traphazards;
+		
+	@OneToMany(mappedBy = "combatEncounter")
 	private Set<Rewards> rewards;
-	
-	@OneToOne(cascade = CascadeType.ALL)
+
+	@OneToOne(mappedBy = "combatEncounter")
 	private Tally tally;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="Stats")
+	@OneToMany(mappedBy = "combatEncounter")
 	private Set<Stats> stats;
 	
+	@OneToMany(mappedBy = "combatEncounter")
+	private Set<Team> teams;
+
+
 	/**
 	 * Default constructor
 	 */
@@ -96,7 +98,46 @@ public class CombatEncounter{
 		this.notes = notes;
 	}
 	
+	public Set<TrapHazard> getTraphazards() {
+		return traphazards;
+	}
+
+	public void setTraphazards(Set<TrapHazard> traphazards) {
+		this.traphazards = traphazards;
+	}
 	
+	public Set<Rewards> getRewards() {
+		return rewards;
+	}
+
+	public void setRewards(Set<Rewards> rewards) {
+		this.rewards = rewards;
+	}
+	
+	public Tally getTally() {
+		return tally;
+	}
+
+	public void setTally(Tally tally) {
+		this.tally = tally;
+	}
+	
+	public Set<Stats> getStats() {
+		return stats;
+	}
+
+	public void setStats(Set<Stats> stats) {
+		this.stats = stats;
+	}
+
+	public Set<Team> getTeams() {
+		return teams;
+	}
+
+	public void setTeams(Set<Team> teams) {
+		this.teams = teams;
+	}
+
 	/**
 	 * Other functions
 	 */

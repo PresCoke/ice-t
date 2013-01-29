@@ -55,8 +55,8 @@ public class Attack {
 	private String trigger;
 	
 	//Associations
-	@OneToOne(cascade = CascadeType.ALL)
-	private Attack_Type attackType;
+//	@OneToOne(cascade = CascadeType.ALL)
+//	private Attack_Type attackType;
 	
 	//Enum
 	private EntityEnum.A_Effect_Type effectType;

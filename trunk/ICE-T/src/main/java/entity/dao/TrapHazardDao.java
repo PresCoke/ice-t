@@ -7,4 +7,6 @@ package entity.dao;
  */
 public interface TrapHazardDao {
 
+	public void readAllTrapHazards();
+	
 }

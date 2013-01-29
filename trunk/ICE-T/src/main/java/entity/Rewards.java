@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +32,12 @@ public class Rewards {
 	@Column(name="treasure")
 	private String treasure;
 	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
+	
+
 	/**
 	 * Default constructor
 	 */
@@ -54,6 +63,20 @@ public class Rewards {
 		this.treasure = treasure;
 	}
 	
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
+
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
+	}
 
 }

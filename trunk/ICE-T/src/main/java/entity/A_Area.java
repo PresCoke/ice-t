@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,12 +19,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="A_ARea")
-@PrimaryKeyJoinColumn(name="id")
 public class A_Area extends Attack_Type {
 
-    @Id
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
     @Column(name="A_ARea_id")
     private int id;
 
@@ -34,6 +31,7 @@ public class A_Area extends Attack_Type {
 	private int area_size;
 	
 	//Enum
+	@Transient
 	private EntityEnum.A_Area_Type area_type;
 	
 	/**

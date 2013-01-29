@@ -2,11 +2,11 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Transient;
 
 /**
  * TrapHazard Class
@@ -17,9 +17,6 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="TrapHazard")
 public class TrapHazard extends EntityM {
 
-    @Id
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
     @Column(name="TrapHazard_id")
     private int id;	
 	
@@ -48,9 +45,26 @@ public class TrapHazard extends EntityM {
 	private String counterMeasureDescription;
 	
 	//Enum
+	@Transient
 	private EntityEnum.T_Type type;
+	@Transient
 	private EntityEnum.T_Role role;
+	@Transient
 	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
+	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
+
+
+	/**
+	 * Default constructor
+	 */
+	public TrapHazard() {
+		super();
+	}
+
 	
 	/**
 	 * Constructor
@@ -159,6 +173,25 @@ public class TrapHazard extends EntityM {
 		this.counterMeasureDescription = counterMeasureDescription;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
+
+
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
+	}
+	
 
 	@Override
 	public void save() {

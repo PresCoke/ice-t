@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -22,12 +25,8 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="Creature")
-@PrimaryKeyJoinColumn(name="id")
 public class Creature extends CharacterSheet {
 
-    @Id
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
     @Column(name="Creature_id")
     private int id;
 	
@@ -50,19 +49,22 @@ public class Creature extends CharacterSheet {
 	private int tempHP;
 	
 	//Associations
+//	@ManyToOne
+//	@JoinColumn (name="Team_id")
+//	private Team team;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Stats stats;
+//	@OneToOne(mappedBy = "creature")
+//	private Stats stats;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="Attack")
-	private Set<Attack> attacks;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	//@JoinTable(name="Effect")
-	private Set<Effect> effects;
+//	@OneToMany(cascade = CascadeType.ALL)
+//	//@JoinTable(name="Attack")
+//	private Set<Attack> attacks;
+//	
+//	@OneToMany(cascade = CascadeType.ALL)
+//	//@JoinTable(name="Effect")
+//	private Set<Effect> effects;
 
-	
+
 	/**
 	 * Default constructor
 	 * @param name
@@ -151,5 +153,13 @@ public class Creature extends CharacterSheet {
 		this.id = id;
 	}
 
+	
+//	public Team getTeam() {
+//		return team;
+//	}
+//
+//	public void setTeam(Team team) {
+//		this.team = team;
+//	}
 	
 }

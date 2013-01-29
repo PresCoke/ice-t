@@ -8,6 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -19,12 +20,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="CharacterSheet")
-@PrimaryKeyJoinColumn(name="id")
 public class CharacterSheet extends EntityM {
 	
-    @Id
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
     @Column(name="CharacterSheet_id")
     private int id;
 	
@@ -121,10 +118,15 @@ public class CharacterSheet extends EntityM {
 	private String powerSource;
 		
 	//Enum
+	@Transient
 	private EntityEnum.CS_Role role;
+	@Transient
 	private EntityEnum.CS_Size size;
+	@Transient
 	private EntityEnum.CS_Resistance_Type resistanceType; //should be an array of a separate resitance class
+	@Transient
 	private EntityEnum.CS_Monster_Origin monsterOrigin; //should be in monster subclass
+	@Transient
 	private EntityEnum.CS_Monster_Type monsterType; //should be in monster subclass
 
 	/**

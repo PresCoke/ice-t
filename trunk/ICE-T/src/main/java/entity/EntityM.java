@@ -8,6 +8,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 
 /**
  * EntityM Class
@@ -20,11 +22,11 @@ import javax.persistence.Table;
 public abstract class EntityM {
 
 	@Id
-	@GeneratedValue
+	@GenericGenerator(name="generator", strategy="increment")
+	@GeneratedValue(generator="generator")
 	@Column(name="EntityM_id")
 	private int id;
 	
-	@Id
 	@Column(name="name")
 	private String name;
 	
@@ -68,11 +70,11 @@ public abstract class EntityM {
 		this.name = name;
 	}
 	
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 
-	public void setID(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 }
