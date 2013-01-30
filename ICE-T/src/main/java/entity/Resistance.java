@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +31,11 @@ public class Resistance {
 	
 	@Column(name="resistanceValue")
 	private int resistanceValue;
+	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="CharacterSheet_id")
+	private CharacterSheet characterSheet;
 	
 	/**
 	 * Constructors
@@ -57,5 +64,30 @@ public class Resistance {
 
 	public void setResistanceValue(int resistanceValue) {
 		this.resistanceValue = resistanceValue;
+	}
+	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public CharacterSheet getCharacterSheet() {
+		return characterSheet;
+	}
+
+	public void setCharacterSheet(CharacterSheet characterSheet) {
+		this.characterSheet = characterSheet;
 	}
 }

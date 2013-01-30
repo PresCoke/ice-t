@@ -2,6 +2,7 @@ package testHibernate;
 
 import org.hibernate.HibernateException;
 
+import entity.EntityEnum;
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
 import entity.dao.CreatureDao;
@@ -15,12 +16,12 @@ public class HibernateTest {
 	public static void main(String[] args) throws HibernateException {
 //		CreatureDao cDao = new CreatureDaoImpl();
 //		cDao.readAllCreatures();
-		
+//		
 		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
 		ceDao.readAllCombatEncounters();
-		
+//		
 //		TrapHazardDao thDao = new TrapHazardDaoImpl();
 //		thDao.readAllTrapHazards();
 	}
- 
+	
 }

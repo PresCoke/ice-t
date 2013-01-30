@@ -1,11 +1,14 @@
 package entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -29,12 +32,12 @@ public class Team implements EntityM {
 	private String name;
 
 	//Associations
-//	@ManyToOne
-//	@JoinColumn (name="CombatEncounter_id")
-//	private CombatEncounter combatEncounter;
+	@ManyToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
 
-//	@OneToMany(mappedBy = "team")
-//	private Set<Creature> creatures;
+	@OneToMany(mappedBy = "team")
+	private Set<Creature> creatures;
 	
 	
 	/**
@@ -63,13 +66,13 @@ public class Team implements EntityM {
 		this.id = id;
 	}
 
-//	public CombatEncounter getCombatEncounter() {
-//		return combatEncounter;
-//	}
-//
-//	public void setCombatEncounter(CombatEncounter combatEncounter) {
-//		this.combatEncounter = combatEncounter;
-//	}
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
+
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
+	}
 	
 	public String getName() {
 		return name;
@@ -79,13 +82,13 @@ public class Team implements EntityM {
 		this.name = name;
 	}
 	
-//	public Set<Creature> getCreatures() {
-//		return creatures;
-//	}
-//
-//	public void setCreatures(Set<Creature> creatures) {
-//		this.creatures = creatures;
-//	}
+	public Set<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public void setCreatures(Set<Creature> creatures) {
+		this.creatures = creatures;
+	}
 	
 
 

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -28,6 +30,11 @@ public class Attack_Type {
 
 	@Column(name="isPersonal")
 	private boolean isPersonal;
+	
+	//Associations
+	@OneToOne
+	@JoinColumn (name="Attack_id")
+	private Attack attack;
 	
 	public Attack_Type() {
 		// TODO Auto-generated constructor stub

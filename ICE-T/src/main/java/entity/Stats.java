@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -38,13 +37,9 @@ public class Stats {
 	private int assists;
 	
 	//Associations
-	@ManyToOne
-	@JoinColumn (name="CombatEncounter_id")
-	private CombatEncounter combatEncounter;
-	
-//	@OneToOne
-//	@JoinColumn (name="Creature_id")
-//	private Creature creature;
+	@OneToOne
+	@JoinColumn (name="Creature_id")
+	private Creature creature;
 	
 	/**
 	 * Default constructor
@@ -100,19 +95,15 @@ public class Stats {
 		return id;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-	public CombatEncounter getCombatEncounter() {
-		return combatEncounter;
+	
+	public Creature getCreature() {
+		return creature;
 	}
 
-
-	public void setCombatEncounter(CombatEncounter combatEncounter) {
-		this.combatEncounter = combatEncounter;
+	public void setCreature(Creature creature) {
+		this.creature = creature;
 	}
-
 }
