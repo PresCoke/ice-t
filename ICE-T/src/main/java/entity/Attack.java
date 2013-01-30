@@ -26,6 +26,9 @@ public class Attack {
     private int id;
 	
 	//Target
+    @Column(name="attackName")
+    private String attackName;
+
 	@Column(name="primaryTarget")
 	private String primaryTarget;
 	
@@ -79,6 +82,14 @@ public class Attack {
 	/**
 	 * Getters & Setters
 	 */
+	public String getAttackName() {
+		return attackName;
+	}
+
+	public void setAttackName(String attackName) {
+		this.attackName = attackName;
+	}
+	
 	public String getPrimaryTarget() {
 		return primaryTarget;
 	}

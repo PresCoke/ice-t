@@ -11,12 +11,12 @@ public class TeamForm implements FormBean {
 		return null;
 	}
 
-	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
+	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public EntityM getEntity() {
+	public Object getEntity() {
 		// TODO Auto-generated method stub
 		return null;
 	}

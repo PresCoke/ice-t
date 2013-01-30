@@ -3,7 +3,6 @@ package bean.forms;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.*;
 
 import bean.combat.ResistanceBean;
@@ -11,8 +10,7 @@ import bean.combat.ResistanceBean;
 import java.awt.*;
 import java.awt.event.*;
 
-import entity.Character;
-import entity.EntityM;
+import entity.CharacterSheet;
 import entity.Resistance;
 
 
@@ -24,7 +22,7 @@ import entity.Resistance;
  */
 public class CharacterSheetForm implements FormBean, KeyListener {
 	
-	private Character theCharacter;
+	private CharacterSheet theCharacter;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field;
 	private ResistanceForm resistanceForm_bean;
@@ -34,16 +32,16 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 	//JScrollPane resistance_pane;
 	
 	public JPanel createEntityPanel() {
-		theCharacter = new Character();
+		theCharacter = new CharacterSheet();
 		
 		createPanel();
 		
 		return characterForm_panel;
 	}
 	
-	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
-		if (usingThis instanceof Character) {
-			theCharacter = (Character) usingThis;
+	public JPanel createPanelFromExistingEntity(Object usingThis) {
+		if (usingThis instanceof CharacterSheet) {
+			theCharacter = (CharacterSheet) usingThis;
 		}
 		
 		createPanel();
@@ -51,7 +49,7 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 		return characterForm_panel;
 	}
 
-	public EntityM getEntity() {
+	public Object getEntity() {
 	
 		return theCharacter;
 	}
@@ -1133,8 +1131,9 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 				.addComponent(misc_field)
 				.addGroup( otherInfo_layout.createSequentialGroup()
 						.addComponent(resistanceForm_panel)
-						.addComponent(addResist_button)
-						.addComponent(removeResist_button)
+						.addGroup( otherInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(addResist_button)
+							.addComponent(removeResist_button))
 						)
 				.addComponent(resistance_pane)
 				);
@@ -1147,8 +1146,9 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 				.addComponent(misc_field)
 				.addGroup( otherInfo_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(resistanceForm_panel)
-						.addComponent(addResist_button)
-						.addComponent(removeResist_button)
+						.addGroup( otherInfo_layout.createSequentialGroup()
+							.addComponent(addResist_button)
+							.addComponent(removeResist_button))
 						)
 				.addComponent(resistance_pane)
 				);

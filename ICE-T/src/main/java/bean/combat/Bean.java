@@ -4,6 +4,6 @@ import javax.swing.*;
 import entity.EntityM;
 
 public interface Bean extends ListCellRenderer{
-	public void createPanelFrom(EntityM thisEntity);
-	public EntityM getEntity();
+	public void createPanelFrom(Object thisEntity);
+	public Object getEntity();
 }

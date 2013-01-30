@@ -8,27 +8,26 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import entity.Character;
-import entity.Monster;
+import entity.CharacterSheet;
 import entity.EntityM;
 
 public class MonsterSheetForm implements FormBean, KeyListener {
 	
-	private Monster theMonster;
+	private CharacterSheet theMonster;
 	private JPanel monsterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field;
 	
 	public JPanel createEntityPanel() {
-		theMonster = new Monster();
+		theMonster = new CharacterSheet();
 		
 		createPanel();
 		
 		return monsterForm_panel;
 	}
 
-	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
-		if (usingThis instanceof Monster) {
-			theMonster = (Monster) usingThis;
+	public JPanel createPanelFromExistingEntity(Object usingThis) {
+		if (usingThis instanceof CharacterSheet) {
+			theMonster = (CharacterSheet) usingThis;
 		}
 		
 		createPanel();
@@ -36,7 +35,7 @@ public class MonsterSheetForm implements FormBean, KeyListener {
 		return monsterForm_panel;
 	}
 
-	public EntityM getEntity() {
+	public Object getEntity() {
 		return theMonster;
 	}
 	
