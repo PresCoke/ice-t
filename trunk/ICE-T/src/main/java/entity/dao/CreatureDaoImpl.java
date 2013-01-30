@@ -18,6 +18,7 @@ public class CreatureDaoImpl implements CreatureDao {
 	private static final Logger logger = Logger.getLogger(CreatureDaoImpl.class);
 	
 	public void readAllCreatures() {
+    	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Creature");
@@ -26,14 +27,15 @@ public class CreatureDaoImpl implements CreatureDao {
 		List<Creature> creatures = q.list();
 		
 		for (Creature c : creatures) {
-			logger.debug("Name = " + c.getPlayerName() + " - HP = " + c.getCurrentHP());
+			logger.info("Creature Name = " + c.getCharacterSheet().getName() + " - Player Name = "+ c.getPlayerName());
 		}
 	}
 
-    public Long saveCreature(String playerName, int kills, int currentHP, int currentHealSurges, int currentLevel, boolean secondWind, int tempHP){
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    public int saveCreature(String playerName, int kills, int currentHP, int currentHealSurges, int currentLevel, boolean secondWind, int tempHP){
+    	logger.debug("Creature " + playerName + " is about to be created in the database.");
+    	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
-        Long creatureID = null;
+        int creatureID = -1;
         try {
             transaction = session.beginTransaction();
             Creature c = new Creature(playerName);
@@ -42,20 +44,22 @@ public class CreatureDaoImpl implements CreatureDao {
             c.setCurrentLevel(currentLevel);
             c.setSecondWind(secondWind);
             c.setTempHP(tempHP);
-            creatureID = (Long) session.save(c);
+            creatureID = (Integer) session.save(c);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving creature " + playerName + " in the database", e.getCause());
         } finally {
+        	logger.info("Creature " + playerName + " was successfully saved in the database.");
             session.close();
         }
         return creatureID;
     }
  
  
-    public void updateCity(Long creatureId, String playerName, int kills, int currentHP, int currentHealSurges, int currentLevel, boolean secondWind, int tempHP){
-        Session session = HibernateUtil.getSessionFactory().openSession();
+    public void updateCreature(int creatureId, String playerName, int kills, int currentHP, int currentHealSurges, int currentLevel, boolean secondWind, int tempHP){
+    	logger.debug("Creature " + playerName + " is about to be updated in the database.");
+    	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -71,11 +75,13 @@ public class CreatureDaoImpl implements CreatureDao {
             transaction.rollback();
             logger.fatal("Error while updating creature " + playerName + " in the database", e.getCause());
         } finally {
+        	logger.info("Creature " + playerName + " was successfully updated in the database.");
             session.close();
         }
     }
  
-    public void deleteCity(Long creatureId){
+    public void deleteCreature(int creatureId){
+		logger.debug("Creature " + creatureId + " is about to be deleted from the database.");
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
@@ -87,6 +93,7 @@ public class CreatureDaoImpl implements CreatureDao {
             transaction.rollback();
             logger.fatal("Error while deleting creature " + creatureId + " in the database", e.getCause());
         } finally {
+        	logger.info("Creature " + creatureId + " was successfully removed from the database.");
             session.close();
         }
     }
