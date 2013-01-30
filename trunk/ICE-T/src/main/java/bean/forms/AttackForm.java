@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
 
+import entity.A_Area;
+import entity.A_Close;
+import entity.A_Melee;
+import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
 import entity.EntityEnum;
@@ -39,11 +43,16 @@ public class AttackForm implements FormBean {
 	private JRadioButton attackTypeMelee_button;
 	private JRadioButton attackTypeClose_button;
 	private JRadioButton attackTypeArea_button;
+	private JRadioButton attackTypePrsnl_button;
+	private AttackTypeForm attackType_form;
 	
 	
 	public AttackForm() {
 		
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
+		
+		attack_panel = new JPanel();
+		attackType_panel = new JPanel();
 		
 		JLabel attackName_label = new JLabel(entity_l10n.getString("Name_attack"));
 		attackName_field = new JTextField();
@@ -481,6 +490,193 @@ public class AttackForm implements FormBean {
 			}
 			
 		});
+		
+		attackType_form = new AttackTypeForm();
+		ButtonGroup attackType_buttongroup = new ButtonGroup();
+		attackTypeRange_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeRange_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				theAttackType = new A_Range();
+				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+			}
+		});
+		attackTypeMelee_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeMelee_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				theAttackType = new A_Melee();
+				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+			}
+		});
+		attackTypeClose_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeClose_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				theAttackType = new A_Close();
+				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+			}
+		});
+		attackTypeArea_button  = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeArea_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				theAttackType = new A_Area();
+				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+			}
+		});
+		attackTypePrsnl_button = new JRadioButton(entity_l10n.getString(""));
+		attackTypePrsnl_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				theAttackType = new Attack_Type();
+				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+			}
+		});
+		attackTypePrsnl_button.setSelected(true);
+		
+		attackType_buttongroup.add(attackTypeRange_button);
+		attackType_buttongroup.add(attackTypeMelee_button);
+		attackType_buttongroup.add(attackTypeClose_button);
+		attackType_buttongroup.add(attackTypeArea_button);
+		attackType_buttongroup.add(attackTypePrsnl_button);
+		
+		GroupLayout attack_layout = new GroupLayout(attack_panel);
+		
+		attack_layout.setHorizontalGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup( attack_layout.createSequentialGroup()
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackUse_label)
+								.addComponent(attackUse_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackAbility_label)
+								.addComponent(attackAbility_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackDefense_label)
+								.addComponent(attackDefense_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackAction_label)
+								.addComponent(attackAction_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackHit_label)
+								.addComponent(attackHit_field))
+						)
+				.addGroup( attack_layout.createSequentialGroup()
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackName_label)
+								.addComponent(attackName_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackPrimary_label)
+								.addComponent(attackPrimary_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackSecondary_label)
+								.addComponent(attackSecondary_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackSustain_label)
+								.addComponent(attackSustain_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackMiss_label)
+								.addComponent(attackMiss_field))
+						
+						)
+				.addGroup( attack_layout.createSequentialGroup()
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackTrigger_label)
+								.addComponent(attackTrigger_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackBasic_label)
+								.addComponent(attackBasic_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackDamage_label)
+								.addComponent(attackDamage_field))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackEffect_label)
+								.addComponent(attackEffect_list))
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackPwr_label)
+								.addComponent(attackPwr_field))
+						)
+				.addGroup( attack_layout.createSequentialGroup()
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(attackAccessories_label)
+								.addComponent(attackAccessories_field))
+						)
+				.addGroup( attack_layout.createSequentialGroup()
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(attackTypePrsnl_button)
+								.addComponent(attackTypeRange_button)
+								.addComponent(attackTypeMelee_button)
+								.addComponent(attackTypeArea_button)
+								.addComponent(attackTypeClose_button))
+						.addComponent(attackType_panel)		
+						)
+				);
+		
+		attack_layout.setVerticalGroup( attack_layout.createSequentialGroup()
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackUse_label)
+								.addComponent(attackUse_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackAbility_label)
+								.addComponent(attackAbility_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackDefense_label)
+								.addComponent(attackDefense_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackAction_label)
+								.addComponent(attackAction_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackHit_label)
+								.addComponent(attackHit_field))
+						)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackName_label)
+								.addComponent(attackName_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackPrimary_label)
+								.addComponent(attackPrimary_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackSecondary_label)
+								.addComponent(attackSecondary_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackSustain_label)
+								.addComponent(attackSustain_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackMiss_label)
+								.addComponent(attackMiss_field))
+						
+						)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackTrigger_label)
+								.addComponent(attackTrigger_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackBasic_label)
+								.addComponent(attackBasic_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackDamage_label)
+								.addComponent(attackDamage_field))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackEffect_label)
+								.addComponent(attackEffect_list))
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackPwr_label)
+								.addComponent(attackPwr_field))
+						)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackAccessories_label)
+								.addComponent(attackAccessories_field))
+						)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createSequentialGroup()
+								.addComponent(attackTypePrsnl_button)
+								.addComponent(attackTypeRange_button)
+								.addComponent(attackTypeMelee_button)
+								.addComponent(attackTypeArea_button)
+								.addComponent(attackTypeClose_button))
+						.addComponent(attackType_panel)		
+						)
+				);
+		//TODO: link sizes
+		attack_panel.setLayout(attack_layout);
 	}
 	
 	public JPanel createEntityPanel() {
@@ -501,6 +697,7 @@ public class AttackForm implements FormBean {
 	}
 
 	public Object getEntity() {
+		theAttack.setAttackType(theAttackType);
 		return theAttack;
 	}
 	

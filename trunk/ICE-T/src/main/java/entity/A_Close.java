@@ -21,7 +21,7 @@ public class A_Close extends Attack_Type {
 	
 	//Enum
 	@Column(name="closeType")
-	private EntityEnum.A_Use_Type closeType;
+	private EntityEnum.A_Close_Type closeType;
 	
 
 	/**
@@ -33,11 +33,11 @@ public class A_Close extends Attack_Type {
 	/**
 	 * Getters & Setters
 	 */
-	public EntityEnum.A_Use_Type getCloseType() {
+	public EntityEnum.A_Close_Type getCloseType() {
 		return closeType;
 	}
 
-	public void setCloseType(EntityEnum.A_Use_Type closeType) {
+	public void setCloseType(EntityEnum.A_Close_Type closeType) {
 		this.closeType = closeType;
 	}
 
