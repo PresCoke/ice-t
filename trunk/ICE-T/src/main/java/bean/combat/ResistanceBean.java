@@ -15,7 +15,7 @@ public class ResistanceBean implements Bean {
 	 * But must colour selected*/
 	Resistance theResistance;
 
-	public void createPanelFrom(EntityM thisEntity) {
+	public void createPanelFrom(Object thisEntity) {
 		if (thisEntity instanceof Resistance) {
 			theResistance = (Resistance) thisEntity;
 		} else {
@@ -23,12 +23,14 @@ public class ResistanceBean implements Bean {
 		}
 	}
 
-	public EntityM getEntity() {
+	public Resistance getEntity() {
 		return theResistance;
 	}
 
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
+		
+		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
 		theResistance = (Resistance) value;
 		JLabel resistanceType_label;
@@ -60,9 +62,9 @@ public class ResistanceBean implements Bean {
 		JLabel resistanceValue_label = new JLabel( Integer.toString(theResistance.getResistanceValue()) );
 		
 		JPanel resistance_panel = new JPanel();
-		/*if (isSelected) {
-			resistance_panel.setBackground(Toolkit.getDefaultToolkit().getColorModel().get)
-		}*/
+		if (isSelected) {
+			resistance_panel.setBackground( system_defaults.getColor("List.selectionBackground") );
+		}
 		resistance_panel.setLayout( new BoxLayout(resistance_panel, BoxLayout.LINE_AXIS) );
 		resistance_panel.add(Box.createHorizontalGlue());
 		resistance_panel.add(resistanceType_label);

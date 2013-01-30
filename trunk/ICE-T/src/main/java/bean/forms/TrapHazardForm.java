@@ -90,7 +90,7 @@ public class TrapHazardForm implements FormBean {
 		return traphazardForm_panel;
 	}
 	
-	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
+	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof Resistance) {
 			theTrapHazard = (TrapHazard) usingThis;
 		}
@@ -99,7 +99,7 @@ public class TrapHazardForm implements FormBean {
 		return traphazardForm_panel;
 	}
 
-	public EntityM getEntity() {
+	public Object getEntity() {
 		
 		return theTrapHazard;
 	}

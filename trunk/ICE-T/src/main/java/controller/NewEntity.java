@@ -2,6 +2,7 @@ package controller;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
+import entity.EntityM;
 import bean.forms.*;
 
 public class NewEntity {
@@ -40,7 +41,10 @@ public class NewEntity {
 	}
 
 	public void saveEntity() {
-		empty_entity.getEntity().save();
+		if (empty_entity.getEntity() instanceof EntityM) {
+			((EntityM) empty_entity.getEntity() ).save();
+		}
+		
 	}
 
 

@@ -6,6 +6,6 @@ import javax.swing.*;
 public interface FormBean {
 
 	public JPanel createEntityPanel();
-	public JPanel createPanelFromExistingEntity(EntityM usingThis);
-	public EntityM getEntity();
+	public JPanel createPanelFromExistingEntity(Object usingThis);
+	public Object getEntity();
 }

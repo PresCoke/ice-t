@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="Attack_Type")
-public abstract class Attack_Type {
+public class Attack_Type {
 	
     @Id
     @GenericGenerator(name="generator", strategy="increment")

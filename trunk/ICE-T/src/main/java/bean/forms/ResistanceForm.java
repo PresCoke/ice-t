@@ -77,17 +77,21 @@ public class ResistanceForm implements FormBean {
 		
 		GroupLayout resistanceForm_layout = new GroupLayout(resistanceForm_panel);
 		resistanceForm_layout.setAutoCreateGaps(true);
-		resistanceForm_layout.setHorizontalGroup( resistanceForm_layout.createSequentialGroup()
-				.addComponent(resistType_label)
-				.addComponent(resistType_list)
-				.addComponent(resistValue_label)
-				.addComponent(resistValue_field)
+		resistanceForm_layout.setHorizontalGroup( resistanceForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(resistanceForm_layout.createSequentialGroup()
+						.addComponent(resistType_label)
+						.addComponent(resistType_list))
+				.addGroup(resistanceForm_layout.createSequentialGroup()
+						.addComponent(resistValue_label)
+						.addComponent(resistValue_field))
 				);
-		resistanceForm_layout.setVerticalGroup( resistanceForm_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(resistType_label)
-				.addComponent(resistType_list)
-				.addComponent(resistValue_label)
-				.addComponent(resistValue_field)
+		resistanceForm_layout.setVerticalGroup( resistanceForm_layout.createSequentialGroup()
+				.addGroup(resistanceForm_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+					.addComponent(resistType_label)
+					.addComponent(resistType_list))
+				.addGroup(resistanceForm_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+					.addComponent(resistValue_label)
+					.addComponent(resistValue_field))
 				);
 		resistanceForm_layout.linkSize(SwingConstants.VERTICAL, resistValue_field, resistValue_label);
 		resistanceForm_panel.setLayout(resistanceForm_layout);
@@ -101,7 +105,7 @@ public class ResistanceForm implements FormBean {
 		return resistanceForm_panel;
 	}
 
-	public JPanel createPanelFromExistingEntity(EntityM usingThis) {
+	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof Resistance) {
 			theResistance = (Resistance) usingThis;
 		}
@@ -110,7 +114,7 @@ public class ResistanceForm implements FormBean {
 		return resistanceForm_panel;
 	}
 
-	public EntityM getEntity() {
+	public Resistance getEntity() {
 		
 		return theResistance;
 	}
