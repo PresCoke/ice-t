@@ -2,13 +2,13 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,7 +18,6 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
 @Table(name="CharacterSheet")
 public class CharacterSheet implements EntityM {
 	
@@ -27,11 +26,9 @@ public class CharacterSheet implements EntityM {
 	@GeneratedValue(generator="generator")
     @Column(name="CharacterSheet_id")
     private int id;
-	
+
 	@Column(name="CharacterSheet_name")
 	private String name;
-	@Column(name="CharacterSheet_player")
-	private String playerName;
 	
 	//Skills
 	@Column(name="acrobatics")
@@ -118,24 +115,28 @@ public class CharacterSheet implements EntityM {
 	protected String languages;
 	@Column(name="misc")
 	protected String misc;
+	@Column(name="keywords")
+	private String keywords;
 	@Column(name="powerSource")
-	private String powerSource; //TODO
+	private String powerSource;
 
 	//Enum
-	@Column(name="role")
+	@Column(name="roleCS")
 	protected EntityEnum.CS_Role role;
-	@Column(name="size")
+	@Column(name="sizeCS")
 	protected EntityEnum.CS_Size size;
-	@Column(name="monsterOrigin")
+	@Column(name="monsterOriginCS")
 	private EntityEnum.CS_Monster_Origin monsterOrigin;
-	@Column(name="monsterType")
-	private EntityEnum.CS_Monster_Type monsterType;
-	@Column(name="keywords")
-	private String keywords; 
+	@Column(name="monsterTypeCS")
+	private EntityEnum.CS_Monster_Type monsterType; 
 	
 	//Associations
+	@OneToMany(mappedBy = "characterSheet")
+	private Set<Creature> creatures;
+	
 	/*In the database resistance will reference Character Sheet*/
-	protected List<Resistance> character_resistances;		
+	@OneToMany(mappedBy = "characterSheet")
+	private List<Resistance> character_resistances;
 
 	/**
 	 * Default constructor
@@ -235,15 +236,7 @@ public class CharacterSheet implements EntityM {
 		this.misc = "";
 		this.character_resistances = new ArrayList<Resistance>();
 	}
-
-	public String getPlayerName() {
-		return playerName;
-	}
-
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
-
+	
 	/**
 	 * Getters & Setters
 	 */
@@ -654,6 +647,14 @@ public class CharacterSheet implements EntityM {
 		this.character_resistances = character_resistances;
 	}
 	
+	public Set<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public void setCreatures(Set<Creature> creatures) {
+		this.creatures = creatures;
+	}
+
 	/**
 	 * Other Functions
 	 */

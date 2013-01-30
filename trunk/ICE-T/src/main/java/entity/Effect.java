@@ -4,9 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -39,7 +39,19 @@ public class Effect implements EntityM {
 	//Enum
 	@Column(name="duration")
 	private EntityEnum.E_Duration duration;
-		
+	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="Creature_id")
+	private Creature creature;
+
+
+	/**
+	 * Default constructor
+	 */
+	public Effect() {
+	}
+	
 	/**
 	 * Constructor
 	 * @param name
@@ -98,6 +110,15 @@ public class Effect implements EntityM {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Creature getCreature() {
+		return creature;
+	}
+
+
+	public void setCreature(Creature creature) {
+		this.creature = creature;
 	}
 
 

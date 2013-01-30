@@ -1,10 +1,11 @@
 package entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,14 +25,13 @@ public class Attack {
     @GeneratedValue(generator="generator")
     @Column(name="Attack_id")
     private int id;
+    
+    @Column(name="Attack_name")
+    private String attackName;
 	
 	//Target
-    @Column(name="attackName")
-    private String attackName;
-
 	@Column(name="primaryTarget")
 	private String primaryTarget;
-	
 	@Column(name="secondaryTarget")
 	private String secondaryTarget;
 	
@@ -52,8 +52,12 @@ public class Attack {
 	private String trigger;
 	
 	//Associations
-//	@OneToOne(cascade = CascadeType.ALL)
-//	private Attack_Type attackType;
+	@ManyToOne
+	@JoinColumn (name="Creature_id")
+	private Creature creature;
+	
+	@OneToOne(mappedBy="attack")
+	private Attack_Type attackType;
 	
 	//Enum
 	@Column(name="effectType")
@@ -82,14 +86,6 @@ public class Attack {
 	/**
 	 * Getters & Setters
 	 */
-	public String getAttackName() {
-		return attackName;
-	}
-
-	public void setAttackName(String attackName) {
-		this.attackName = attackName;
-	}
-	
 	public String getPrimaryTarget() {
 		return primaryTarget;
 	}
@@ -224,5 +220,29 @@ public class Attack {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Creature getCreature() {
+		return creature;
+	}
+
+	public void setCreature(Creature creature) {
+		this.creature = creature;
+	}
+	
+	public String getAttackName() {
+		return attackName;
+	}
+
+	public void setAttackName(String attackName) {
+		this.attackName = attackName;
+	}
+
+	public Attack_Type getAttackType() {
+		return attackType;
+	}
+
+	public void setAttackType(Attack_Type attackType) {
+		this.attackType = attackType;
 	}
 }

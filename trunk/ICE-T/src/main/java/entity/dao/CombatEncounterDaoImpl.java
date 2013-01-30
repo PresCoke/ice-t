@@ -9,8 +9,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import resource.HibernateUtil;
+import entity.Attack;
 import entity.CombatEncounter;
 import entity.Creature;
+import entity.Effect;
 import entity.EntityM;
 import entity.Rewards;
 import entity.Stats;
@@ -66,25 +68,27 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 //			}
 //		}
 //		
-//		for (CombatEncounter ce : ces) {
-//			logger.debug("CE Name = " + ce.getName());
-//			Set<Stats> stats = ce.getStats();
-//			for (Stats s : stats){
-//				logger.debug("Stats associated : Deaths = " + s.getDeaths() + " - Assists = " + s.getAssists());
-//			}
-//		}
-		
-		
 		for (CombatEncounter ce : ces) {
 			logger.debug("CE Name = " + ce.getName());
 			Set<Team> teams = ce.getTeams();
 			for (Team t : teams){
 				logger.debug("Team associated : Name = " + t.getName());
-//				Set<Creature> creatures = t.getCreatures();
-//				logger.debug("liste vide ?? " + creatures.isEmpty());
-//				for (Creature c : creatures){	
-//					logger.debug("Creature associated : Name = " + c.getName() + " - Nature = " + c.getNature() + " - HP = " + c.getCurrentHP());
-//				}
+				Set<Creature> creatures = t.getCreatures();
+				for (Creature c : creatures){	
+					logger.debug("Creature associated : Player_Name = " + c.getPlayerName() + " - HP = " + c.getCurrentHP());
+					logger.debug("Stats associated : Kills = " + c.getStats().getKills() + " - Assists = " + c.getStats().getAssists());
+					Set<Effect> effects = c.getEffects();
+					for (Effect e : effects){
+						logger.debug("Effects associated : Name = " + e.getName()  + " - Damage = " + e.getDamage());
+					}
+					logger.debug("CharacterSheet associated : Name = " + c.getCharacterSheet().getName() + " - Bluff =  " + c.getCharacterSheet().getBluff());
+					logger.debug("Resistance associated : Name = " + c.getCharacterSheet().getResistanceAt(0).getName() + " - Value =  " + c.getCharacterSheet().getResistanceAt(0).getResistanceValue());
+					Set<Attack> attacks = c.getAttacks();
+					for (Attack a : attacks){
+						logger.debug("Attack associated : Primary Target = " + a.getPrimaryTarget() + " - frequency = " + a.getFrequency());
+					}
+
+				}
 			}
 		}
 	}

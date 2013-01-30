@@ -105,10 +105,10 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getPlayerName();
+					String deleted_string = theCharacter.getName();
 					if (deleted_string.length() > 1) {
 						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setPlayerName(deleted_string);
+						theCharacter.setName(deleted_string);
 					}
 				}
 			}
@@ -119,13 +119,13 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 			}
 
 			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getPlayerName();
+				String current = theCharacter.getName();
 				current += ke.getKeyChar();
-				theCharacter.setPlayerName(current);
+				theCharacter.setName(current);
 			}
 			
 		});
-		playerName_field.setText(theCharacter.getPlayerName());		
+		playerName_field.setText(theCharacter.getName());		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
 		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);

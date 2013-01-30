@@ -28,7 +28,7 @@ public class CombatEncounter {
     @Column(name="CombatEncounter_id")
     private int id;
 
-	@Column(name="CEname")
+	@Column(name="CombatEncounter_name")
 	private String name;
 	
 	@Column(name="notes")
@@ -36,16 +36,13 @@ public class CombatEncounter {
 	
 	//Associations
 	@OneToMany(mappedBy = "combatEncounter")
-	private Set<TrapHazard> traphazards;
-		
-	@OneToMany(mappedBy = "combatEncounter")
 	private Set<Rewards> rewards;
+	
+	@OneToMany(mappedBy = "combatEncounter")
+	private Set<TrapHazard> traphazards;
 
 	@OneToOne(mappedBy = "combatEncounter")
 	private Tally tally;
-	
-	@OneToMany(mappedBy = "combatEncounter")
-	private Set<Stats> stats;
 	
 	@OneToMany(mappedBy = "combatEncounter")
 	private Set<Team> teams;
@@ -117,14 +114,6 @@ public class CombatEncounter {
 		this.tally = tally;
 	}
 	
-	public Set<Stats> getStats() {
-		return stats;
-	}
-
-	public void setStats(Set<Stats> stats) {
-		this.stats = stats;
-	}
-
 	public Set<Team> getTeams() {
 		return teams;
 	}

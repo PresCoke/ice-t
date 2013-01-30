@@ -1,9 +1,15 @@
 package entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -42,25 +48,26 @@ public class Creature {
 	private int tempHP;
 	
 	//Associations
-//	@ManyToOne
-//	@JoinColumn (name="Team_id")
-//	private Team team;
+	@ManyToOne
+	@JoinColumn (name="Team_id")
+	private Team team;
 	
-//	@OneToOne(mappedBy = "creature")
-//	private Stats stats;
+	@OneToOne(mappedBy = "creature")
+	private Stats stats;
 	
-//	@OneToMany(cascade = CascadeType.ALL)
-//	//@JoinTable(name="Attack")
-//	private Set<Attack> attacks;
-//	
-//	@OneToMany(cascade = CascadeType.ALL)
-//	//@JoinTable(name="Effect")
-//	private Set<Effect> effects;
+	@ManyToOne
+	@JoinColumn (name="CharacterSheet_id")
+	private CharacterSheet characterSheet;
+	
+	@OneToMany(mappedBy = "creature")
+	private Set<Attack> attacks;
+
+	@OneToMany(mappedBy = "creature")
+	private Set<Effect> effects;
 
 
 	/**
 	 * Default constructor
-	 * @param name
 	 */
 	public Creature() {
 	}
@@ -146,12 +153,45 @@ public class Creature {
 	}
 
 	
-//	public Team getTeam() {
-//		return team;
-//	}
-//
-//	public void setTeam(Team team) {
-//		this.team = team;
-//	}
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+	
+	public Stats getStats() {
+		return stats;
+	}
+
+	public void setStats(Stats stats) {
+		this.stats = stats;
+	}
+	
+	public Set<Effect> getEffects() {
+		return effects;
+	}
+
+	public void setEffects(Set<Effect> effects) {
+		this.effects = effects;
+	}
+
+	public CharacterSheet getCharacterSheet() {
+		return characterSheet;
+	}
+
+	public void setCharacterSheet(CharacterSheet characterSheet) {
+		this.characterSheet = characterSheet;
+	}
+
+	public Set<Attack> getAttacks() {
+		return attacks;
+	}
+
+	public void setAttacks(Set<Attack> attacks) {
+		this.attacks = attacks;
+	}
+	
 	
 }

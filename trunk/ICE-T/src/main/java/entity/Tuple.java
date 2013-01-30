@@ -86,16 +86,13 @@ public class Tuple {
 		return id;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
 	public Tally getTally() {
 		return tally;
 	}
-
 
 	public void setTally(Tally tally) {
 		this.tally = tally;

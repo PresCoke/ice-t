@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -54,17 +52,19 @@ public class TrapHazard implements EntityM {
 	private String counterMeasureDescription;
 	
 	//Enum
-	@Column(name="type")
+	@Column(name="typeTH")
 	private EntityEnum.T_Type type;
-	@Column(name="role")
+	
+	@Column(name="roleTH")
 	private EntityEnum.T_Role role;
-	@Column(name="counterMeasureSkill")
+	
+	@Column(name="counterMeasureSkillTH")
 	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
 	
 	//Associations
-//	@ManyToOne
-//	@JoinColumn (name="CombatEncounter_id")
-//	private CombatEncounter combatEncounter;
+	@ManyToOne
+	@JoinColumn (name="CombatEncounter_id")
+	private CombatEncounter combatEncounter;
 
 
 	/**
@@ -156,8 +156,7 @@ public class TrapHazard implements EntityM {
 	}
 
 
-	public void setCounterMeasureSkill(
-			EntityEnum.T_CounterMeasureSkill counterMeasureSkill) {
+	public void setCounterMeasureSkill(EntityEnum.T_CounterMeasureSkill counterMeasureSkill) {
 		this.counterMeasureSkill = counterMeasureSkill;
 	}
 
@@ -190,15 +189,13 @@ public class TrapHazard implements EntityM {
 		this.id = id;
 	}
 
+	public CombatEncounter getCombatEncounter() {
+		return combatEncounter;
+	}
 
-//	public CombatEncounter getCombatEncounter() {
-//		return combatEncounter;
-//	}
-//
-//
-//	public void setCombatEncounter(CombatEncounter combatEncounter) {
-//		this.combatEncounter = combatEncounter;
-//	}
+	public void setCombatEncounter(CombatEncounter combatEncounter) {
+		this.combatEncounter = combatEncounter;
+	}
 	
 	
 	public String getName() {
