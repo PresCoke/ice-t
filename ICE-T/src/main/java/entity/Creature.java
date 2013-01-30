@@ -60,9 +60,6 @@ public class Creature {
 	private CharacterSheet characterSheet;
 	
 	@OneToMany(mappedBy = "creature")
-	private Set<Attack> attacks;
-
-	@OneToMany(mappedBy = "creature")
 	private Set<Effect> effects;
 
 
@@ -183,15 +180,5 @@ public class Creature {
 
 	public void setCharacterSheet(CharacterSheet characterSheet) {
 		this.characterSheet = characterSheet;
-	}
-
-	public Set<Attack> getAttacks() {
-		return attacks;
-	}
-
-	public void setAttacks(Set<Attack> attacks) {
-		this.attacks = attacks;
-	}
-	
-	
+	}	
 }

@@ -134,6 +134,9 @@ public class CharacterSheet implements EntityM {
 	@OneToMany(mappedBy = "characterSheet")
 	private Set<Creature> creatures;
 	
+	@OneToMany(mappedBy = "characterSheet")
+	private Set<Attack> attacks;
+		
 	/*In the database resistance will reference Character Sheet*/
 	@OneToMany(mappedBy = "characterSheet")
 	private List<Resistance> character_resistances;
@@ -653,6 +656,14 @@ public class CharacterSheet implements EntityM {
 
 	public void setCreatures(Set<Creature> creatures) {
 		this.creatures = creatures;
+	}
+	
+	public Set<Attack> getAttacks() {
+		return attacks;
+	}
+
+	public void setAttacks(Set<Attack> attacks) {
+		this.attacks = attacks;
 	}
 
 	/**
