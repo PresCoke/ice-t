@@ -10,6 +10,7 @@ import bean.combat.ResistanceBean;
 import java.awt.*;
 import java.awt.event.*;
 
+import entity.Attack;
 import entity.CharacterSheet;
 import entity.Resistance;
 
@@ -27,6 +28,8 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 	private JTextField maxHP_field, bloodied_field, surgeValue_field;
 	private ResistanceForm resistanceForm_bean;
 	private JPanel resistanceForm_panel;
+	private AttackForm attackForm_bean;
+	private JPanel attackForm_panel;
 	private JList resistance_list;
 	DefaultListModel resistance_list_model;
 	//JScrollPane resistance_pane;
@@ -1154,6 +1157,19 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 				);
 		otherInfo_panel.setLayout(otherInfo_layout);
 		
+		attackForm_bean = new AttackForm();
+		attackForm_panel = attackForm_bean.createEntityPanel();
+		JButton addAttack_button = new JButton(entity_l10n.getString("Add_button"));
+		addAttack_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				Attack addThis = (Attack) attackForm_bean.getEntity();
+				//TODO: add attack to character
+				//TODO: add to list
+				attackForm_panel = attackForm_bean.createEntityPanel();
+			}
+		});
+		
+		
 		characterForm_layout.setAutoCreateGaps(true);
 		characterForm_layout.setHorizontalGroup( characterForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(generalInfo_panel)
@@ -1165,6 +1181,8 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 								.addComponent(otherInfo_panel))
 						.addComponent(skill_panel)
 						)
+				.addComponent(attackForm_panel)
+				.addComponent(addAttack_button)
 				);
 		characterForm_layout.setVerticalGroup( characterForm_layout.createSequentialGroup()
 				.addComponent(generalInfo_panel)
@@ -1176,6 +1194,8 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 								.addComponent(otherInfo_panel))
 						.addComponent(skill_panel)
 						)
+				.addComponent(attackForm_panel)
+				.addComponent(addAttack_button)
 				);
 		
 		characterForm_panel.setLayout(characterForm_layout);

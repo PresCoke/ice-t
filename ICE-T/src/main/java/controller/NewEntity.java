@@ -41,6 +41,7 @@ public class NewEntity {
 	}
 
 	public void saveEntity() {
+		//TODO: FIX THIS
 		if (empty_entity.getEntity() instanceof EntityM) {
 			((EntityM) empty_entity.getEntity() ).save();
 		}
