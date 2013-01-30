@@ -51,14 +51,6 @@ public class Attack {
 	@Column(name="triggers")
 	private String trigger;
 	
-	//Associations
-	@ManyToOne
-	@JoinColumn (name="Creature_id")
-	private Creature creature;
-	
-	@OneToOne(mappedBy="attack")
-	private Attack_Type attackType;
-	
 	//Enum
 	@Column(name="effectType")
 	private EntityEnum.A_Effect_Type effectType;
@@ -75,12 +67,28 @@ public class Attack {
 	@Column(name="useType")
 	private EntityEnum.A_Use_Type useType;
 	
+	//Associations
+	@ManyToOne
+	@JoinColumn (name="CharacterSheet_id")
+	private CharacterSheet characterSheet;
+	
+	@OneToOne(mappedBy="attack")
+	private Attack_Type attackType;
+	
 	
 	/**
 	 * Default constructor
 	 */
 	public Attack() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * Constructor
+	 * @param attackName
+	 */
+	public Attack(String attackName) {
+		this.attackName = attackName;
 	}
 
 	/**
@@ -221,15 +229,15 @@ public class Attack {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public Creature getCreature() {
-		return creature;
-	}
-
-	public void setCreature(Creature creature) {
-		this.creature = creature;
-	}
 	
+	public CharacterSheet getCharacterSheet() {
+		return characterSheet;
+	}
+
+	public void setCharacterSheet(CharacterSheet characterSheet) {
+		this.characterSheet = characterSheet;
+	}
+
 	public String getAttackName() {
 		return attackName;
 	}

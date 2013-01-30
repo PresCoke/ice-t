@@ -87,6 +87,7 @@ public class CreatureDaoImpl implements CreatureDao {
         try {
             transaction = session.beginTransaction();
             Creature c = (Creature) session.get(Creature.class, creatureId);
+            logger.info("Deletion of Creature " + c.getPlayerName());
             session.delete(c);
             transaction.commit();
         } catch (HibernateException e) {
