@@ -37,7 +37,7 @@ public class Attack_Type {
 	private Attack attack;
 	
 	public Attack_Type() {
-		// TODO Auto-generated constructor stub
+		isPersonal = true;
 	}
 
 	/**

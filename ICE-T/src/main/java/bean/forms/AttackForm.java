@@ -19,6 +19,7 @@ import entity.EntityEnum;
 
 public class AttackForm implements FormBean {
 
+	/*TODO: for whatever reason the hit field screws up and doesn't actually delete stuff*/
 	private Attack theAttack;
 	private Attack_Type theAttackType;
 	private JPanel attack_panel;
@@ -39,11 +40,6 @@ public class AttackForm implements FormBean {
 	private JTextField attackHit_field;
 	private JTextField attackMiss_field;
 	private JTextField attackTrigger_field;
-	private JRadioButton attackTypeRange_button;
-	private JRadioButton attackTypeMelee_button;
-	private JRadioButton attackTypeClose_button;
-	private JRadioButton attackTypeArea_button;
-	private JRadioButton attackTypePrsnl_button;
 	private AttackTypeForm attackType_form;
 	
 	
@@ -338,7 +334,7 @@ public class AttackForm implements FormBean {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					String deleted_string = theAttack.getHit();
-					if (deleted_string.length() > 1) {
+					if (deleted_string.length() >= 1) {
 						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
 						theAttack.setHit(deleted_string);
 					}
@@ -492,7 +488,8 @@ public class AttackForm implements FormBean {
 		});
 		
 		attackType_form = new AttackTypeForm();
-		ButtonGroup attackType_buttongroup = new ButtonGroup();
+		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+/*		ButtonGroup attackType_buttongroup = new ButtonGroup();
 		attackTypeRange_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
 		attackTypeRange_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -500,28 +497,28 @@ public class AttackForm implements FormBean {
 				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 			}
 		});
-		attackTypeMelee_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeMelee_button = new JRadioButton(entity_l10n.getString("Melee_attack"));
 		attackTypeMelee_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				theAttackType = new A_Melee();
 				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 			}
 		});
-		attackTypeClose_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeClose_button = new JRadioButton(entity_l10n.getString("Close_attack"));
 		attackTypeClose_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				theAttackType = new A_Close();
 				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 			}
 		});
-		attackTypeArea_button  = new JRadioButton(entity_l10n.getString("Ranged_attack"));
+		attackTypeArea_button  = new JRadioButton(entity_l10n.getString("Area_attack"));
 		attackTypeArea_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				theAttackType = new A_Area();
 				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 			}
 		});
-		attackTypePrsnl_button = new JRadioButton(entity_l10n.getString(""));
+		attackTypePrsnl_button = new JRadioButton(entity_l10n.getString("Personal_attack"));
 		attackTypePrsnl_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				theAttackType = new Attack_Type();
@@ -534,7 +531,7 @@ public class AttackForm implements FormBean {
 		attackType_buttongroup.add(attackTypeMelee_button);
 		attackType_buttongroup.add(attackTypeClose_button);
 		attackType_buttongroup.add(attackTypeArea_button);
-		attackType_buttongroup.add(attackTypePrsnl_button);
+		attackType_buttongroup.add(attackTypePrsnl_button);*/
 		
 		GroupLayout attack_layout = new GroupLayout(attack_panel);
 		
@@ -592,23 +589,23 @@ public class AttackForm implements FormBean {
 								.addComponent(attackPwr_field))
 						)
 				.addGroup( attack_layout.createSequentialGroup()
-						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(attackAccessories_label)
 								.addComponent(attackAccessories_field))
 						)
 				.addGroup( attack_layout.createSequentialGroup()
-						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						/*.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(attackTypePrsnl_button)
 								.addComponent(attackTypeRange_button)
 								.addComponent(attackTypeMelee_button)
 								.addComponent(attackTypeArea_button)
-								.addComponent(attackTypeClose_button))
+								.addComponent(attackTypeClose_button))*/
 						.addComponent(attackType_panel)		
 						)
 				);
 		
 		attack_layout.setVerticalGroup( attack_layout.createSequentialGroup()
-				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addGroup( attack_layout.createSequentialGroup()
 								.addComponent(attackUse_label)
 								.addComponent(attackUse_field))
@@ -625,7 +622,7 @@ public class AttackForm implements FormBean {
 								.addComponent(attackHit_label)
 								.addComponent(attackHit_field))
 						)
-				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addGroup( attack_layout.createSequentialGroup()
 								.addComponent(attackName_label)
 								.addComponent(attackName_field))
@@ -643,7 +640,7 @@ public class AttackForm implements FormBean {
 								.addComponent(attackMiss_field))
 						
 						)
-				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addGroup( attack_layout.createSequentialGroup()
 								.addComponent(attackTrigger_label)
 								.addComponent(attackTrigger_field))
@@ -660,27 +657,36 @@ public class AttackForm implements FormBean {
 								.addComponent(attackPwr_label)
 								.addComponent(attackPwr_field))
 						)
-				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addGroup( attack_layout.createSequentialGroup()
 								.addComponent(attackAccessories_label)
 								.addComponent(attackAccessories_field))
 						)
 				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup( attack_layout.createSequentialGroup()
+						/*.addGroup( attack_layout.createSequentialGroup()
 								.addComponent(attackTypePrsnl_button)
 								.addComponent(attackTypeRange_button)
 								.addComponent(attackTypeMelee_button)
 								.addComponent(attackTypeArea_button)
-								.addComponent(attackTypeClose_button))
+								.addComponent(attackTypeClose_button))*/
 						.addComponent(attackType_panel)		
 						)
 				);
-		//TODO: link sizes
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackHit_field, attackHit_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackName_field, attackName_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackHit_field, attackHit_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackPrimary_field, attackPrimary_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackSecondary_field, attackSecondary_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackHit_field, attackHit_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackTrigger_field, attackTrigger_label);
+		attack_layout.linkSize(SwingConstants.VERTICAL, attackPwr_field, attackPwr_label);
+		
 		attack_panel.setLayout(attack_layout);
 	}
 	
 	public JPanel createEntityPanel() {
 		theAttack = new Attack();
+		theAttackType = new Attack_Type();
 		createPanel();
 		return attack_panel;
 
@@ -689,20 +695,42 @@ public class AttackForm implements FormBean {
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof Attack) {
 			theAttack = (Attack) usingThis;
+			theAttackType = theAttack.getAttackType();
 		} else {
 			theAttack = new Attack();
+			theAttackType = new Attack_Type();
 		}
 		createPanel();
 		return attack_panel;
 	}
 
 	public Object getEntity() {
+		theAttackType = (Attack_Type) attackType_form.getEntity();
 		theAttack.setAttackType(theAttackType);
 		return theAttack;
 	}
 	
 	private void createPanel() {
+		attackEffect_list.setSelectedIndex(theAttack.getEffectType().ordinal());
+		attackDamage_field.setSelectedIndex(theAttack.getDamageType().ordinal());
+		attackAbility_field.setSelectedIndex(theAttack.getAbility().ordinal());
+		attackDefense_field.setSelectedIndex(theAttack.getDefense().ordinal());
+		attackAction_field.setSelectedIndex(theAttack.getAction().ordinal());
+		attackSustain_field.setSelectedIndex(theAttack.getSustain().ordinal());
+		attackUse_field.setSelectedIndex(theAttack.getUseType().ordinal());
 		
+		attackBasic_field.setSelected(theAttack.isBasic());
+		
+		attackName_field.setText(theAttack.getAttackName());
+		attackPrimary_field.setText(theAttack.getPrimaryTarget());
+		attackSecondary_field.setText(theAttack.getSecondaryTarget());
+		attackAccessories_field.setText(theAttack.getAccessories());
+		attackPwr_field.setText(theAttack.getPowerSource());
+		attackHit_field.setText(theAttack.getHit());
+		attackMiss_field.setText(theAttack.getMiss());
+		attackTrigger_field.setText(theAttack.getTrigger());
+		theAttackType = theAttack.getAttackType();
+		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 	}
 
 }

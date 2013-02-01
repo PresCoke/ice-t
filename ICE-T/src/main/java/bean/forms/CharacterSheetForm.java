@@ -5,6 +5,9 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import controller.App_Root;
+
+import bean.combat.AttackBean;
 import bean.combat.ResistanceBean;
 
 import java.awt.*;
@@ -21,25 +24,38 @@ import entity.Resistance;
  * 		the reason being if the add button is outside the character sheet form then how the hell am I going to know when to 
  * 		add resistances and get them out. 
  */
-public class CharacterSheetForm implements FormBean, KeyListener {
+public class CharacterSheetForm implements FormBean, KeyListener, ActionListener {
+	
+	private JPanel totalBean_panel;
+	GroupLayout totalBean_layout;
+	JButton next_button;
 	
 	private CharacterSheet theCharacter;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field;
+	
 	private ResistanceForm resistanceForm_bean;
 	private JPanel resistanceForm_panel;
-	private AttackForm attackForm_bean;
-	private JPanel attackForm_panel;
 	private JList resistance_list;
 	DefaultListModel resistance_list_model;
-	//JScrollPane resistance_pane;
+	
+	private AttackForm attackForm_bean;
+	private JPanel attackForm_panel;
+	private JPanel attackForm_majorpanel;
+	private JList attack_list;
+	DefaultListModel attack_list_model;
+	
+	public CharacterSheetForm() {
+		
+	}
+	
 	
 	public JPanel createEntityPanel() {
 		theCharacter = new CharacterSheet();
 		
 		createPanel();
 		
-		return characterForm_panel;
+		return totalBean_panel;
 	}
 	
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
@@ -49,7 +65,7 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 		
 		createPanel();
 		
-		return characterForm_panel;
+		return totalBean_panel;
 	}
 
 	public Object getEntity() {
@@ -1157,18 +1173,67 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 				);
 		otherInfo_panel.setLayout(otherInfo_layout);
 		
+		
 		attackForm_bean = new AttackForm();
 		attackForm_panel = attackForm_bean.createEntityPanel();
 		JButton addAttack_button = new JButton(entity_l10n.getString("Add_button"));
 		addAttack_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				Attack addThis = (Attack) attackForm_bean.getEntity();
-				//TODO: add attack to character
-				//TODO: add to list
+				theCharacter.addAttack(addThis);
 				attackForm_panel = attackForm_bean.createEntityPanel();
+				attack_list_model.addElement(addThis);
+			}
+		});
+		JButton removeAttack_button = new JButton(entity_l10n.getString("Remove_button"));
+		removeAttack_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				int selected = attack_list.getSelectedIndex();
+				if (selected != -1) {
+					attack_list_model.remove(selected);
+					theCharacter.removeAttackAt(selected);
+				}
+				characterForm_panel.repaint();
 			}
 		});
 		
+		attack_list_model = new DefaultListModel();
+		for (int index = 0; index < theCharacter.getNumberOfAttacks(); index++) {
+			AttackBean temp_bean = new AttackBean();
+			temp_bean.createPanelFrom(theCharacter.getAttackAt(index));
+			attack_list_model.addElement(temp_bean);
+		}
+		
+		attack_list = new JList(attack_list_model);
+		attack_list.setLayoutOrientation(JList.VERTICAL);
+		attack_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		attack_list.setCellRenderer(new AttackBean());
+		
+		JScrollPane attack_pane = new JScrollPane(attack_list);
+		
+		attackForm_majorpanel = new JPanel();
+		GroupLayout attackForm_layout = new GroupLayout(attackForm_majorpanel);
+		attackForm_layout.setAutoCreateGaps(true);
+		attackForm_layout.setHorizontalGroup( attackForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(attackForm_panel)
+				.addGroup( attackForm_layout.createSequentialGroup()
+						.addComponent(attack_pane)
+						.addGroup( attackForm_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(addAttack_button)
+								.addComponent(removeAttack_button))
+						)
+				);
+		
+		attackForm_layout.setVerticalGroup( attackForm_layout.createSequentialGroup()
+				.addComponent(attackForm_panel)
+				.addGroup( attackForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(attack_pane)
+						.addGroup( attackForm_layout.createSequentialGroup()
+								.addComponent(addAttack_button)
+								.addComponent(removeAttack_button))
+						)
+				);
+		attackForm_majorpanel.setLayout(attackForm_layout);
 		
 		characterForm_layout.setAutoCreateGaps(true);
 		characterForm_layout.setHorizontalGroup( characterForm_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -1181,8 +1246,8 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 								.addComponent(otherInfo_panel))
 						.addComponent(skill_panel)
 						)
-				.addComponent(attackForm_panel)
-				.addComponent(addAttack_button)
+//				.addComponent(attackForm_panel)
+//				.addComponent(addAttack_button)
 				);
 		characterForm_layout.setVerticalGroup( characterForm_layout.createSequentialGroup()
 				.addComponent(generalInfo_panel)
@@ -1194,13 +1259,27 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 								.addComponent(otherInfo_panel))
 						.addComponent(skill_panel)
 						)
-				.addComponent(attackForm_panel)
-				.addComponent(addAttack_button)
+//				.addComponent(attackForm_panel)
+//				.addComponent(addAttack_button)
 				);
 		
 		characterForm_panel.setLayout(characterForm_layout);
 		characterForm_panel.setAutoscrolls(true);
-				
+		
+		next_button = new JButton(entity_l10n.getString("Next_button"));
+		next_button.addActionListener(this);
+		
+		totalBean_panel = new JPanel();
+		totalBean_layout = new GroupLayout(totalBean_panel);
+		totalBean_layout.setHorizontalGroup( totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+				.addComponent(next_button)
+				.addComponent(characterForm_panel)
+				);
+		totalBean_layout.setVerticalGroup( totalBean_layout.createSequentialGroup()
+				.addComponent(next_button)
+				.addComponent(characterForm_panel)
+				);
+		totalBean_panel.setLayout(totalBean_layout);
 	}
 
 	public void keyPressed(KeyEvent ke) {
@@ -1238,6 +1317,42 @@ public class CharacterSheetForm implements FormBean, KeyListener {
 			} else {
 				ke.consume();
 			}
+		
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
+		JButton theButton = (JButton) e.getSource();
+		if ( theButton.getText().equals( entity_l10n.getString("Next_button") ) ) {
+			theButton.setText(entity_l10n.getString("Back_button"));
+			totalBean_layout.removeLayoutComponent(characterForm_panel);
+			characterForm_panel.setVisible(false);
+			attackForm_panel.setVisible(true);
+			totalBean_layout.setHorizontalGroup( totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+					.addComponent(next_button)
+					.addComponent(attackForm_majorpanel)
+					);
+			totalBean_layout.setVerticalGroup( totalBean_layout.createSequentialGroup()
+					.addComponent(next_button)
+					.addComponent(attackForm_majorpanel)
+					);
+			totalBean_panel.setLayout(totalBean_layout);
+			
+		} else if ( theButton.getText().equals( entity_l10n.getString("Back_button") ) ) {
+			theButton.setText(entity_l10n.getString("Next_button"));
+			totalBean_layout.removeLayoutComponent(attackForm_panel);
+			characterForm_panel.setVisible(true);
+			attackForm_panel.setVisible(false);
+			totalBean_layout.setHorizontalGroup( totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+					.addComponent(next_button)
+					.addComponent(characterForm_panel)
+					);
+			totalBean_layout.setVerticalGroup( totalBean_layout.createSequentialGroup()
+					.addComponent(next_button)
+					.addComponent(characterForm_panel)
+					);
+			totalBean_panel.setLayout(totalBean_layout);
+		}
 		
 	}
 

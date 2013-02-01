@@ -139,7 +139,7 @@ public class Root_Window {
 		quit_item = new JMenuItem(root_window_l10n.getString("Quit_menuitem"));
 		quit_item.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//should include a save of the current combat encounter
+				//TODO: should include a save of the current combat encounter
 				App_Root.exit();
 			}
 		});
