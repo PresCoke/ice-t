@@ -45,8 +45,8 @@
   		<mapping class="entity.Attack_Type"/>
 	   	<mapping class="entity.A_Area"/>
 	   	<mapping class="entity.A_Close"/>
-<!-- 	   	<mapping class="entity.A_Melee"/> -->
-<!-- 	   	<mapping class="entity.A_Range"/> -->
+	   	<mapping class="entity.A_Melee"/>
+	   	<mapping class="entity.A_Range"/>
    	 
     </session-factory>
 </hibernate-configuration>

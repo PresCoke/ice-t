@@ -2,7 +2,9 @@ package controller;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
+import entity.CharacterSheet;
 import entity.EntityM;
+import entity.TrapHazard;
 import bean.forms.*;
 
 public class NewEntity {
@@ -44,8 +46,12 @@ public class NewEntity {
 
 	public void saveEntity() {
 		//TODO: FIX THIS
-		if (empty_entity.getEntity() instanceof EntityM) {
-			((EntityM) empty_entity.getEntity() ).save();
+		if (empty_entity.getEntity() instanceof CharacterSheet) {
+			CharacterSheet cs = (CharacterSheet) empty_entity.getEntity();
+			cs.save();
+		} else if (empty_entity.getEntity() instanceof TrapHazard) {
+			TrapHazard th = (TrapHazard) empty_entity.getEntity();
+			th.save();
 		}
 		
 	}

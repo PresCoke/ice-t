@@ -27,10 +27,7 @@ public class Resistance {
 	@GeneratedValue(generator="generator")
     @Column(name="Resistance_id")
     private int id;	
-    
-	@Column(name="Resistance_name")
-	private String name;
-	
+
 	@Column(name="resistanceType")
 	private EntityEnum.CS_Resistance_Type resistanceType;
 	
@@ -48,12 +45,7 @@ public class Resistance {
 	public Resistance() {
 	}
 	
-	public Resistance(String name) {
-		this.name=name;
-	}
-	
 	public Resistance(String name, EntityEnum.CS_Resistance_Type resistanceType, int resistanceValue) {
-		this.name=name;
 		this.resistanceType=resistanceType;
 		this.resistanceValue=resistanceValue;
 	}
@@ -84,14 +76,6 @@ public class Resistance {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public CharacterSheet getCharacterSheet() {

@@ -91,7 +91,7 @@ public class Attack {
 	@JoinColumn (name="TrapHazard_id")
 	private TrapHazard trap;
 	
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -285,5 +285,13 @@ public class Attack {
 
 	public void setAttackType(Attack_Type attackType) {
 		this.attackType = attackType;
+	}
+	
+	public TrapHazard getTrap() {
+		return trap;
+	}
+
+	public void setTrap(TrapHazard trap) {
+		this.trap = trap;
 	}
 }

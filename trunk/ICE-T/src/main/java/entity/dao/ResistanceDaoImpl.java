@@ -26,7 +26,7 @@ public class ResistanceDaoImpl implements ResistanceDao {
         int resistanceID = -1;
         try {
             transaction = session.beginTransaction();
-            Resistance r = new Resistance(name);
+            Resistance r = new Resistance();
             r.setResistanceType(resistanceType);
             r.setResistanceValue(resistanceValue);
             logger.debug("Association with a character sheet");
@@ -54,7 +54,6 @@ public class ResistanceDaoImpl implements ResistanceDao {
         try {
             transaction = session.beginTransaction();
             Resistance r = (Resistance) session.get(Resistance.class, resistanceId);
-            r.setName(name);
             r.setResistanceType(resistanceType);
             r.setResistanceValue(resistanceValue);
             logger.debug("Association with a character sheet");
@@ -80,7 +79,7 @@ public class ResistanceDaoImpl implements ResistanceDao {
             transaction = session.beginTransaction();
             Resistance r = (Resistance) session.get(Resistance.class, resistanceId);
             CharacterSheet cs = r.getCharacterSheet();
-            logger.info("Deletion of resistance " + r.getName() + " associated to the character sheet " + r.getCharacterSheet().getName());
+            logger.info("Deletion of resistance " + r.getId() + " associated to the character sheet " + r.getCharacterSheet().getName());
             session.delete(r);
             logger.info("Updtate of the Character Sheet associated to the resistance removed.");
             session.saveOrUpdate(cs);

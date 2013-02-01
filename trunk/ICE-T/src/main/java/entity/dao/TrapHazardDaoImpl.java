@@ -10,7 +10,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
-import entity.EntityEnum;
+import entity.Attack;
+import entity.Attack_Type;
 import entity.EntityEnum.T_CounterMeasureSkill;
 import entity.EntityEnum.T_Role;
 import entity.EntityEnum.T_Type;
@@ -39,9 +40,10 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 	}
 
 	public int saveTrapHazard(String name, int avoidance, int level,
-			T_CounterMeasureSkill skill, String triggers, int value, int xp,
+			T_CounterMeasureSkill skill, String triggers, int xp,
 			int difficultyLevel, String counterMeasureDescription, T_Type type,
-			T_Role role, T_CounterMeasureSkill counterMeasureSkill) {
+			T_Role role, T_CounterMeasureSkill counterMeasureSkill, Attack attack,
+			Attack_Type atype) {
 
     	logger.debug("TrapHazard " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
@@ -52,15 +54,18 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             TrapHazard th = new TrapHazard(name);
             th.setAvoidance(avoidance);
             th.setLevel(level);
-            th.setSkill(skill);
+            th.setAvoidanceSkill(skill);
             th.setTriggers(triggers);
-            th.setValue(value);
             th.setXp(xp);
             th.setDifficultyLevel(difficultyLevel);
             th.setCounterMeasureDescription(counterMeasureDescription);
             th.setType(type);
             th.setRole(role);
             th.setCounterMeasureSkill(counterMeasureSkill);
+            th.setAttack(attack);
+            attack.setTrap(th);
+            attack.setAttackType(atype);
+            atype.setAttack(attack);
             trapHazardID = (Integer) session.save(th);
             transaction.commit();
         	logger.info("TrapHazard " + name + " was successfully saved in the database.");
@@ -74,9 +79,10 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 	}
 
 	public void updateTrapHazard(int trapHazardId, String name, int avoidance,
-			int level, T_CounterMeasureSkill skill, String triggers, int value, int xp,
+			int level, T_CounterMeasureSkill skill, String triggers, int xp,
 			int difficultyLevel, String counterMeasureDescription, T_Type type,
-			T_Role role, T_CounterMeasureSkill counterMeasureSkill) {
+			T_Role role, T_CounterMeasureSkill counterMeasureSkill, 
+			Attack attack, Attack_Type atype) {
 
     	logger.debug("TrapHazard " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
@@ -87,15 +93,19 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             th.setName(name);
             th.setAvoidance(avoidance);
             th.setLevel(level);
-            th.setSkill(skill);
+            th.setAvoidanceSkill(skill);
             th.setTriggers(triggers);
-            th.setValue(value);
             th.setXp(xp);
             th.setDifficultyLevel(difficultyLevel);
             th.setCounterMeasureDescription(counterMeasureDescription);
             th.setType(type);
             th.setRole(role);
             th.setCounterMeasureSkill(counterMeasureSkill);
+            //TODO Make this work and test
+//            th.setAttack(attack);
+//            attack.setTrap(th);
+//            attack.setAttackType(atype);
+//            atype.setAttack(attack);
             transaction.commit();
         	logger.info("TrapHazard " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
