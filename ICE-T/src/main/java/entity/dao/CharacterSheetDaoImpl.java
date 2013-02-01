@@ -118,24 +118,28 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             cs.setMonsterType(monsterType);
             //Set the resistance(s)
             logger.debug("Setting character sheet's resistances");
-            for(Resistance r : resistances){
-            	cs.addResistance(r);
-            	r.setCharacterSheet(cs);
+            if(resistances != null && !resistances.isEmpty()){
+	            for(Resistance r : resistances){
+	            	cs.addResistance(r);
+	            	r.setCharacterSheet(cs);
+	            }
             }
             //Set the attack(s)
-            if(attacks.size() != attacksTypes.size()){
-                logger.fatal("The list attacks (" + attacks.size() +") does not have the same length than attacksTypes (" + attacksTypes.size() + ")");
-            	throw new DAOException();
+            if (attacks != null && !attacks.isEmpty()){
+	            if(attacks.size() != attacksTypes.size()){
+	                logger.fatal("The list attacks (" + attacks.size() +") does not have the same length than attacksTypes (" + attacksTypes.size() + ")");
+	            	throw new DAOException();
+	            }
+	            logger.debug("Setting character sheet's attacks");
+	            for (Attack a : attacks){
+	            	for (Attack_Type t : attacksTypes){
+	            		a.setAttackType(t);
+	            		t.setAttack(a);
+	            		cs.addAttack(a);
+	            		a.setCharacterSheet(cs);
+	            	}
+	            }  
             }
-            logger.debug("Setting character sheet's attacks");
-            for (Attack a : attacks){
-            	for (Attack_Type t : attacksTypes){
-            		a.setAttackType(t);
-            		t.setAttack(a);
-            		cs.addAttack(a);
-            		a.setCharacterSheet(cs);
-            	}
-            }            
             //Save the character Sheet
             characterSheetID = (Integer) session.save(cs);
             transaction.commit();

@@ -29,7 +29,7 @@ import entity.dao.ResistanceDao;
 import entity.dao.ResistanceDaoImpl;
 import entity.dao.TrapHazardDao;
 import entity.dao.TrapHazardDaoImpl;
-
+//TODO Drop table trapHazard and re create it
 
 public class HibernateTest {
 	
@@ -48,24 +48,24 @@ public class HibernateTest {
 //		thDao.deleteTrapHazard(2);
 		
 
-		List<Resistance> resistances = new ArrayList<Resistance>();
+//		List<Resistance> resistances = new ArrayList<Resistance>();
 //		Resistance r1 = new Resistance("ResistanceT1", EntityEnum.CS_Resistance_Type.cold, 0);
 //		Resistance r2 = new Resistance("ResistanceT3", EntityEnum.CS_Resistance_Type.lightning, 28);
 //		resistances.add(r1);
 //		resistances.add(r2);
 		
-		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
+//		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
 //		A_Area t = new A_Area();
 //		t.setPersonal(true);
 //		t.setArea_range(100);
 //		t.setArea_size(100);
 //		t.setArea_type(EntityEnum.A_Area_Type.wall);
 //		attacksTypes.add(t);
-		A_Close t = new A_Close();
-		t.setPersonal(false);
-		t.setCloseType(EntityEnum.A_Close_Type.blast);
-		t.setSize(15);
-		attacksTypes.add(t);
+//		A_Close t = new A_Close();
+//		t.setPersonal(false);
+//		t.setCloseType(EntityEnum.A_Close_Type.blast);
+//		t.setSize(15);
+//		attacksTypes.add(t);
 //		A_Area t2 = new A_Area();
 //		t2.setPersonal(false);
 //		t2.setArea_range(0);
@@ -73,25 +73,25 @@ public class HibernateTest {
 //		t2.setArea_type(EntityEnum.A_Area_Type.wall);
 //		attacksTypes.add(t2);
 		
-		List<Attack> attacks = new ArrayList<Attack>();
-		Attack a1 = new Attack("AttackT1");
-		a1.setPrimaryTarget("Bill");
-		a1.setSecondaryTarget("Jack");
-		a1.setAccessories("Gun");
-		a1.setPowerSource("Gun");
-		a1.setFrequency(10);
-		a1.setHit("2D16");
-		a1.setMiss("2D4");
-		a1.setBasic(true);
-		a1.setTrigger("The player can use that attack whenever");
-		a1.setEffectType(EntityEnum.A_Effect_Type.fear);
-		a1.setAbility(EntityEnum.A_Ability.STR);
-		a1.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
-		a1.setDefense(EntityEnum.A_Defense.REF);
-		a1.setSustain(EntityEnum.A_Sustain.standard);
-		a1.setAction(EntityEnum.A_Action.minor);
-		a1.setUseType(EntityEnum.A_Use_Type.atWill);
-		attacks.add(a1);
+//		List<Attack> attacks = new ArrayList<Attack>();
+//		Attack a1 = new Attack("AttackT1");
+//		a1.setPrimaryTarget("Bill");
+//		a1.setSecondaryTarget("Jack");
+//		a1.setAccessories("Gun");
+//		a1.setPowerSource("Gun");
+//		a1.setFrequency(10);
+//		a1.setHit("2D16");
+//		a1.setMiss("2D4");
+//		a1.setBasic(true);
+//		a1.setTrigger("The player can use that attack whenever");
+//		a1.setEffectType(EntityEnum.A_Effect_Type.fear);
+//		a1.setAbility(EntityEnum.A_Ability.STR);
+//		a1.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
+//		a1.setDefense(EntityEnum.A_Defense.REF);
+//		a1.setSustain(EntityEnum.A_Sustain.standard);
+//		a1.setAction(EntityEnum.A_Action.minor);
+//		a1.setUseType(EntityEnum.A_Use_Type.atWill);
+//		attacks.add(a1);
 //		Attack a2 = new Attack("AttackT2");
 //		a2.setPrimaryTarget("Bill");
 //		a2.setSecondaryTarget("Jack");
@@ -117,7 +117,7 @@ public class HibernateTest {
 //		csDao.saveCharacterSheet("Terminator", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
 //			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
-//			resistances, attacks, attacksTypes);
+//			null, null, null);
 //		
 		
 //		csDao.updateCharacterSheet(4, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
@@ -126,7 +126,8 @@ public class HibernateTest {
 //			resistances, attacks, attacksTypes);	
 		
 		
-//		csDao.deleteCharacterSheet(4);
+		csDao.deleteCharacterSheet(5);
+//		csDao.deleteCharacterSheet(6);
 		
 //		ResistanceDao resistanceDao = new ResistanceDaoImpl();
 //		resistanceDao.deleteResistance(5);

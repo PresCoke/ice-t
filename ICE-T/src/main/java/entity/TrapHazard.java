@@ -9,8 +9,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.TrapHazardDao;
+import entity.dao.TrapHazardDaoImpl;
 
 /**
  * TrapHazard Class
@@ -20,6 +24,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="TrapHazard")
 public class TrapHazard implements EntityM {
+	
+	private static final Logger logger = Logger.getLogger(TrapHazard.class);
 
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
@@ -38,9 +44,6 @@ public class TrapHazard implements EntityM {
 	
 	@Column(name="triggers")
 	private String triggers;
-	
-	@Column(name="valueTH")
-	private int value;
 	
 	@Column(name="xp")
 	private int xp;
@@ -90,7 +93,6 @@ public class TrapHazard implements EntityM {
 		this.role = EntityEnum.T_Role.blaster;
 		this.triggers = "";
 		this.type = EntityEnum.T_Type.hazard;
-		this.value = 0;
 		this.xp = 0;
 	}
 
@@ -123,12 +125,12 @@ public class TrapHazard implements EntityM {
 		this.level = level;
 	}
 
-	public EntityEnum.T_CounterMeasureSkill getSkill() {
+	public EntityEnum.T_CounterMeasureSkill getAvoidanceSkill() {
 		return avoidanceSkill;
 	}
 
-	public void setSkill(EntityEnum.T_CounterMeasureSkill skill) {
-		this.avoidanceSkill = skill;
+	public void setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill avoidanceSkill) {
+		this.avoidanceSkill = avoidanceSkill;
 	}
 
 	public String getTriggers() {
@@ -137,14 +139,6 @@ public class TrapHazard implements EntityM {
 
 	public void setTriggers(String triggers) {
 		this.triggers = triggers;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
 	}
 
 	public int getXp() {
@@ -243,8 +237,11 @@ public class TrapHazard implements EntityM {
 	 * Other functions
 	 */
 	public void save() {
-		// TODO Auto-generated method stub
-		
+		logger.debug("Saving TrapHazard");
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		thDao.saveTrapHazard(getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
+				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
+				getAttack(), getAttack().getAttackType());
 	}
 
 

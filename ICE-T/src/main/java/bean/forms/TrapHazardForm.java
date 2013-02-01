@@ -156,39 +156,39 @@ public class TrapHazardForm implements FormBean {
 				int index = ((JComboBox) ae.getSource()).getSelectedIndex();
 				switch(index) {
 				case 0:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.acrobatics); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.acrobatics); break;
 				case 1:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.athletics); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.athletics); break;
 				case 2:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.arcana); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.arcana); break;
 				case 3:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.bluff); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.bluff); break;
 				case 4:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.diplomacy); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.diplomacy); break;
 				case 5:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.dungeoneering); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.dungeoneering); break;
 				case 6:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.endurance); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.endurance); break;
 				case 7:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.heal); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.heal); break;
 				case 8:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.history); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.history); break;
 				case 9:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.insight); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.insight); break;
 				case 10:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.intimidate); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.intimidate); break;
 				case 11:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.nature); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.nature); break;
 				case 12:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.perception); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.perception); break;
 				case 13:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.religion); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.religion); break;
 				case 14:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.stealth); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.stealth); break;
 				case 15:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.streetwise); break;
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.streetwise); break;
 				case 16:
-					theTrap.setSkill(EntityEnum.T_CounterMeasureSkill.thievery); break;		
+					theTrap.setAvoidanceSkill(EntityEnum.T_CounterMeasureSkill.thievery); break;		
 				}
 			}
 		});
@@ -321,6 +321,7 @@ public class TrapHazardForm implements FormBean {
 					if (deleting.length() >= 1) {
 						deleting = deleting.substring(0, deleting.length() - 1);
 						trapXP_field.setText(deleting);
+						//TODO FIX Exception in thread "AWT-EventQueue-0" java.lang.NumberFormatException: For input string: ""
 						theTrap.setXp( Integer.parseInt(deleting) ); 
 						ke.consume();
 					}
@@ -442,7 +443,7 @@ public class TrapHazardForm implements FormBean {
 		trapLevel_field.setValue( theTrap.getLevel() );
 		
 		trapAvoidValue_field.setValue( theTrap.getAvoidance() );
-		trapAvoidSkill_field.setSelectedIndex( theTrap.getSkill().ordinal() );
+		trapAvoidSkill_field.setSelectedIndex( theTrap.getAvoidanceSkill().ordinal() );
 		
 		trapCounterSkill_field.setSelectedIndex( theTrap.getCounterMeasureSkill().ordinal() );
 		trapCounterDifficulty_field.setValue( theTrap.getDifficultyLevel() );

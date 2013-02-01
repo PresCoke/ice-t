@@ -11,8 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.CharacterSheetDao;
+import entity.dao.CharacterSheetDaoImpl;
 
 /**
  * CharacterSheet Class
@@ -22,6 +26,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="CharacterSheet")
 public class CharacterSheet implements EntityM {
+	
+	private static final Logger logger = Logger.getLogger(CharacterSheet.class);
 	
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
@@ -153,7 +159,7 @@ public class CharacterSheet implements EntityM {
 	 * Default constructor
 	 */
 	public CharacterSheet() {
-		this.name ="";
+		this.name= "";
 		/*Abilities*/
 		this.STR = 0;
 		this.CON = 0;
@@ -188,6 +194,7 @@ public class CharacterSheet implements EntityM {
 		this.setMaxHP(0);
 		this.surgesPerDay = 0;
 		/*Other*/
+		this.powerSource = "";
 		this.level = 0;
 		this.XP = 0;
 		this.raceFeatures = "";
@@ -205,7 +212,6 @@ public class CharacterSheet implements EntityM {
 	 */
 	public CharacterSheet(String name) {
 		this.name = name;
-		
 		/*Abilities*/
 		this.STR = 0;
 		this.CON = 0;
@@ -240,6 +246,7 @@ public class CharacterSheet implements EntityM {
 		this.setMaxHP(0);
 		this.surgesPerDay = 0;
 		/*Other*/
+		this.powerSource = "";
 		this.level = 0;
 		this.XP = 0;
 		this.raceFeatures = "";
@@ -612,21 +619,22 @@ public class CharacterSheet implements EntityM {
 		this.resistances = character_resistances;
 	}
 	
+	//TODO FIX this
 	public int getIndexOfResistance (Resistance resistance){
 		int index = 0;
 		for (Resistance r : resistances){
-			if (r.getName().equals(resistance.getName())){
+			if (r.getId() == resistance.getId()){
 				break;
 			}
 			index++;
 		}
 		return index;
 	}
-	
+	//TODO FIX this
 	public int compareResistanceNames(Resistance resistance){
 		int index = -1;
 		for (Resistance r : resistances){
-			if (r.getName().equals(resistance.getName())){
+			if (r.getId() == resistance.getId()){
 				index = this.getIndexOfResistance(r);
 			}
 		}
@@ -743,6 +751,14 @@ public class CharacterSheet implements EntityM {
 		return index;
 	}
 	
+	public List<Attack_Type> getAttacksTypes (List<Attack> attacks){
+		List<Attack_Type> types = new ArrayList<Attack_Type>();
+		for (Attack a : attacks){
+			types.add(a.getAttackType());
+		}
+		return types;
+	}
+	
 
 	/**
 	 * Other Functions
@@ -753,8 +769,15 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public void save() {
-		// TODO Auto-generated method stub
-		
+    	logger.debug("Saving Character Sheet");
+		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
+				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
+				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
+				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), getLevel(), getXP(), getRaceFeatures(),
+				getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(), getPowerSource(), getRole(), getSize(),
+				getMonsterOrigin(), getMonsterType(), getCharacter_resistances(), getAttacks(), getAttacksTypes(getAttacks())
+				);
 	}
 
 	public void edit() {
