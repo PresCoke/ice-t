@@ -2,14 +2,16 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -131,15 +133,21 @@ public class CharacterSheet implements EntityM {
 	private EntityEnum.CS_Monster_Type monsterType; 
 	
 	//Associations
-	@OneToMany(mappedBy = "characterSheet")
-	private Set<Creature> creatures;
+//	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet")
+//	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+//		org.hibernate.annotations.CascadeType.DELETE,
+//		org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+//	private Set<Creature> creatures;
 	
-	@OneToMany(mappedBy = "characterSheet")
-	private Set<Attack> attacks;
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Attack> attacks;
 		
-	/*In the database resistance will reference Character Sheet*/
-	@OneToMany(mappedBy = "characterSheet")
-	private List<Resistance> character_resistances;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Resistance> resistances;
 
 	/**
 	 * Default constructor
@@ -186,7 +194,8 @@ public class CharacterSheet implements EntityM {
 		this.initiative = 0;
 		this.languages = "";
 		this.misc = "";
-		this.character_resistances = new ArrayList<Resistance>();
+		this.resistances = new ArrayList<Resistance>();
+		this.attacks = new ArrayList<Attack>();
 	}
 	
 	/**
@@ -237,7 +246,8 @@ public class CharacterSheet implements EntityM {
 		this.initiative = 0;
 		this.languages = "";
 		this.misc = "";
-		this.character_resistances = new ArrayList<Resistance>();
+		this.resistances = new ArrayList<Resistance>();
+		this.attacks = new ArrayList<Attack>();
 	}
 	
 	/**
@@ -566,31 +576,60 @@ public class CharacterSheet implements EntityM {
 	}
 	
 	public void removeAllResistances() {
-		this.character_resistances.removeAll(character_resistances);
+		this.resistances.removeAll(resistances);
 	}
 	
 	public void addResistance(Resistance addThisResistance) {
-		this.character_resistances.add(addThisResistance);
+		this.resistances.add(addThisResistance);
 	}
 	
 	public Resistance getResistanceAt(int index) {
-		return this.character_resistances.get(index);
+		return this.resistances.get(index);
 	}
 	
 	public Resistance removeResistanceAt(int index) throws IndexOutOfBoundsException {
-		return this.character_resistances.remove(index);
+		return this.resistances.remove(index);
 	}
 	
 	public boolean removeResistance(Resistance thisResistance) {
-		return this.character_resistances.remove(thisResistance);
+		return this.resistances.remove(thisResistance);
 	}
 	
 	public List<Resistance> getRawResistanceList() {
-		return this.character_resistances;
+		return this.resistances;
 	}
 	
 	public int getNumberOfResistances() {
-		return this.character_resistances.size();
+		return this.resistances.size();
+	}
+	
+	public List<Resistance> getCharacter_resistances() {
+		return resistances;
+	}
+
+	public void setCharacter_resistances(List<Resistance> character_resistances) {
+		this.resistances = character_resistances;
+	}
+	
+	public int getIndexOfResistance (Resistance resistance){
+		int index = 0;
+		for (Resistance r : resistances){
+			if (r.getName().equals(resistance.getName())){
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+	
+	public int compareResistanceNames(Resistance resistance){
+		int index = -1;
+		for (Resistance r : resistances){
+			if (r.getName().equals(resistance.getName())){
+				index = this.getIndexOfResistance(r);
+			}
+		}
+		return index;
 	}
 	
 	public String getPowerSource() {
@@ -609,7 +648,6 @@ public class CharacterSheet implements EntityM {
 		this.id = id;
 	}
 	
-
 	public String getName() {
 		return name;
 	}
@@ -642,29 +680,68 @@ public class CharacterSheet implements EntityM {
 		this.keywords = keywords;
 	}
 
-	public List<Resistance> getCharacter_resistances() {
-		return character_resistances;
-	}
-
-	public void setCharacter_resistances(List<Resistance> character_resistances) {
-		this.character_resistances = character_resistances;
-	}
 	
-	public Set<Creature> getCreatures() {
-		return creatures;
-	}
-
-	public void setCreatures(Set<Creature> creatures) {
-		this.creatures = creatures;
-	}
+//	public Set<Creature> getCreatures() {
+//		return creatures;
+//	}
+//
+//	public void setCreatures(Set<Creature> creatures) {
+//		this.creatures = creatures;
+//	}
 	
-	public Set<Attack> getAttacks() {
+	public List<Attack> getAttacks() {
 		return attacks;
 	}
 
-	public void setAttacks(Set<Attack> attacks) {
+	public void setAttacks(List<Attack> attacks) {
 		this.attacks = attacks;
 	}
+	
+	public void removeAllAttacks() {
+		this.attacks.removeAll(attacks);
+	}
+	
+	public void addAttack(Attack addThisAttack) {
+		this.attacks.add(addThisAttack);
+	}
+	
+	public Attack getAttackAt(int index) {
+		return this.attacks.get(index);
+	}
+	
+	public Attack removeAttackAt(int index) throws IndexOutOfBoundsException {
+		return this.attacks.remove(index);
+	}
+	
+	public boolean removeAttack(Attack thisAttack) {
+		return this.attacks.remove(thisAttack);
+	}
+	
+	public int getNumberOfAttacks() {
+		return this.attacks.size();
+	}
+	
+	public int getIndexOf (Attack thisAttack){
+		int index = 0;
+		for (Attack a : attacks){
+			if (a.getAttackName().equals(thisAttack.getAttackName())){
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+	
+	public int compareAttacksNames(Attack attack){
+		int index = -1;
+		for (Attack a : attacks){
+			if (a.getAttackName().equals(attack.getAttackName())){
+				index = this.getIndexOf(a);
+			}
+		}
+		return index;
+	}
+	
 
 	/**
 	 * Other Functions
