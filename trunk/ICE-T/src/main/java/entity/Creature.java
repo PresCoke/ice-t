@@ -2,16 +2,19 @@ package entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -52,14 +55,21 @@ public class Creature {
 	@JoinColumn (name="Team_id")
 	private Team team;
 	
-	@OneToOne(mappedBy = "creature")
+	@OneToOne(cascade=CascadeType.ALL, mappedBy = "creature")
 	private Stats stats;
 	
 	@ManyToOne
-	@JoinColumn (name="CharacterSheet_id")
+    @JoinColumn(name="CharacterSheet_id", referencedColumnName="CharacterSheet_id")
+//    @JoinColumns({
+//        @JoinColumn(name="CharacterSheet_id", referencedColumnName="CharacterSheet_id"),
+//        @JoinColumn(name="CharacterSheet_name", referencedColumnName="CharacterSheet_name")
+//    })
 	private CharacterSheet characterSheet;
 	
-	@OneToMany(mappedBy = "creature")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "creature")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.DELETE,
+		org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	private Set<Effect> effects;
 
 

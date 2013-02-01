@@ -62,11 +62,11 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             th.setCounterMeasureSkill(counterMeasureSkill);
             trapHazardID = (Integer) session.save(th);
             transaction.commit();
+        	logger.info("TrapHazard " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving TrapHazard " + name + " in the database", e.getCause());
+            logger.fatal("Error while saving TrapHazard " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("TrapHazard " + name + " was successfully saved in the database.");
             session.close();
         }
         return trapHazardID;
@@ -96,11 +96,11 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             th.setRole(role);
             th.setCounterMeasureSkill(counterMeasureSkill);
             transaction.commit();
+        	logger.info("TrapHazard " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating TrapHazard " + name + " in the database", e.getCause());
+            logger.fatal("Error while updating TrapHazard " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("TrapHazard " + name + " was successfully updated in the database.");
             session.close();
         }
 	}
@@ -115,11 +115,11 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             logger.info("Deletion of trapHazard " + th.getName() + " associated to the combat encounter " + th.getCombatEncounter().getName());
             session.delete(th);
             transaction.commit();
+        	logger.info("TrapHazard " + trapHazardId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting TrapHazard " + trapHazardId + " in the database", e.getCause());
+            logger.fatal("Error while deleting TrapHazard " + trapHazardId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("TrapHazard " + trapHazardId + " was successfully removed from the database.");
             session.close();
         }
 		

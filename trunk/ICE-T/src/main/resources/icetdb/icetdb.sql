@@ -46,7 +46,6 @@ CREATE TABLE CharacterSheet (
 	XP INTEGER,
 	raceFeatures VARCHAR(1000),
 	speed INTEGER,
-	resistanceValue INTEGER,
 	initiative INTEGER,
 	languages VARCHAR(1000),
 	misc VARCHAR(1000),
@@ -59,9 +58,9 @@ CREATE TABLE CharacterSheet (
 	CONSTRAINT PK_CharacterSheet PRIMARY KEY (CharacterSheet_id, CharacterSheet_name)
 )
 
-INSERT INTO CharacterSheet VALUES (1, 'Nemo', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'big', 1, 2, 3, 'french, english', 'misc', 'hi, hello', 'earth', 0, 1, 0, 2); 
-INSERT INTO CharacterSheet VALUES (2, 'Ratatouille', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'spiky', 1, 2, 3, 'japonese, chinese', 'misc', 'hey', 'fire', 5, 4, 1, 0); 
-INSERT INTO CharacterSheet VALUES (3, 'JCVD', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'small', 1, 2, 3, 'no language', 'misc', 'lol', 'wind', 8, 5, 2, 3); 
+INSERT INTO CharacterSheet VALUES (1, 'Nemo', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'big', 1, 3, 'french, english', 'misc', 'hi, hello', 'earth', 0, 1, 0, 2); 
+INSERT INTO CharacterSheet VALUES (2, 'Ratatouille', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'spiky', 1, 3, 'japonese, chinese', 'misc', 'hey', 'fire', 5, 4, 1, 0); 
+INSERT INTO CharacterSheet VALUES (3, 'JCVD', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 'small', 1, 3, 'no language', 'misc', 'lol', 'wind', 8, 5, 2, 3); 
 
 CREATE TABLE Resistance (
 	Resistance_id INTEGER NOT NULL,
@@ -175,8 +174,8 @@ INSERT INTO Effect VALUES (5, 'Effect5', 4, 'Jack', 'The effect lasts as long as
 CREATE TABLE Attack (
 	Attack_id INTEGER NOT NULL,
 	Attack_name VARCHAR(50) NOT NULL,
-	Creature_id INTEGER,
-	player_name VARCHAR(50),
+	CharacterSheet_id INTEGER,
+	CharacterSheet_name VARCHAR(50),
 	primaryTarget VARCHAR(50),
 	secondaryTarget VARCHAR(50),
 	accessories VARCHAR(1000),
@@ -194,18 +193,18 @@ CREATE TABLE Attack (
 	action INTEGER,
 	useType INTEGER,
 	CONSTRAINT PK_Attack PRIMARY KEY (Attack_id, Attack_name),
-	CONSTRAINT FK_Attack_Creature FOREIGN KEY (Creature_id, player_name) REFERENCES Creature (Creature_id, player_name)
+	CONSTRAINT FK_Attack_CharacterSheet FOREIGN KEY (CharacterSheet_id, CharacterSheet_name) REFERENCES CharacterSheet (CharacterSheet_id, CharacterSheet_name)
 )
 
-INSERT INTO Attack VALUES (1, 'Attack1', 1, 'Tim', 'James', 'Bill', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 0, 0, 10, 0, 3, 2, 0);
-INSERT INTO Attack VALUES (2, 'Attack2', 2, 'James', 'Bill', 'Tim', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 1, 1, 0, 1, 2, 0, 2);
-INSERT INTO Attack VALUES (3, 'Attack3', 2, 'James', 'Tim', 'Jack', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 2, 2, 1, 3, 1, 1, 3);
-INSERT INTO Attack VALUES (4, 'Attack4', 3, 'Bill', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 3, 3, 2, 2, 2, 3, 1);
-INSERT INTO Attack VALUES (5, 'Attack5', 1, 'Tim', 'Bill', 'James', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 4, 4, 3, 2, 3, 1, 3);
-INSERT INTO Attack VALUES (6, 'Attack6', 3, 'Bill', 'Tim', 'James', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 5, 5, 4, 2, 2, 0, 2);
-INSERT INTO Attack VALUES (7, 'Attack7', 1, 'Tim', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 6, 2, 5, 3, 0, 2, 0);
-INSERT INTO Attack VALUES (8, 'Attack8', 2, 'James', 'Bill', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 7, 0, 8, 0, 1, 3, 1);
-INSERT INTO Attack VALUES (9, 'Attack9', 3, 'Bill', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 8, 3, 7, 3, 1, 1, 0);
+INSERT INTO Attack VALUES (1, 'Attack1', 1, 'Nemo', 'James', 'Bill', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 0, 0, 10, 0, 3, 2, 0);
+INSERT INTO Attack VALUES (2, 'Attack2', 2, 'Ratatouille', 'Bill', 'Tim', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 1, 1, 0, 1, 2, 0, 2);
+INSERT INTO Attack VALUES (3, 'Attack3', 2, 'Ratatouille', 'Tim', 'Jack', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 2, 2, 1, 3, 1, 1, 3);
+INSERT INTO Attack VALUES (4, 'Attack4', 3, 'JCVD', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 3, 3, 2, 2, 2, 3, 1);
+INSERT INTO Attack VALUES (5, 'Attack5', 1, 'Nemo', 'Bill', 'James', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 4, 4, 3, 2, 3, 1, 3);
+INSERT INTO Attack VALUES (6, 'Attack6', 3, 'JCVD', 'Tim', 'James', 'MachineGun', 'martial', 1000, '2D16 & 2D6', '1D32 & 1D6', FALSE, 'the player cannot use that attack on his/her first turn', 5, 5, 4, 2, 2, 0, 2);
+INSERT INTO Attack VALUES (7, 'Attack7', 1, 'Nemo', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 6, 2, 5, 3, 0, 2, 0);
+INSERT INTO Attack VALUES (8, 'Attack8', 2, 'Ratatouille', 'Bill', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 7, 0, 8, 0, 1, 3, 1);
+INSERT INTO Attack VALUES (9, 'Attack9', 3, 'JCVD', 'James', 'Tim', 'knife & gun', 'arcane', 2, '2D16', '1D32', TRUE, 'the player cannot use that attack on his/her first turn', 8, 3, 7, 3, 1, 1, 0);
 
 CREATE TABLE Attack_Type (
 	Attack_Type_id INTEGER NOT NULL PRIMARY KEY,

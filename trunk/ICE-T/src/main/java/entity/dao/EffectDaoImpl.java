@@ -57,11 +57,11 @@ public class EffectDaoImpl implements EffectDao {
             e.setDuration(duration);
             effectId = (Integer) session.save(e);
             transaction.commit();
+        	logger.info("Effect " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving Effect " + name + " in the database", e.getCause());
+            logger.fatal("Error while saving Effect " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Effect " + name + " was successfully saved in the database.");
             session.close();
         }
         return effectId;
@@ -82,11 +82,11 @@ public class EffectDaoImpl implements EffectDao {
             e.setDuration(duration);
             effectId = (Integer) session.save(e);
             transaction.commit();
+        	logger.info("Effect " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Effect " + name + " in the database", e.getCause());
+            logger.fatal("Error while updating Effect " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Effect " + name + " was successfully updated in the database.");
             session.close();
         }		
 	}
@@ -101,11 +101,11 @@ public class EffectDaoImpl implements EffectDao {
             logger.info("Deletion of Effect " + e.getName() + "associated to the creature " + e.getCreature().getPlayerName());
             session.delete(e);
             transaction.commit();
+        	logger.info("Effect " + effectId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting Effect " + effectId + " in the database", e.getCause());
+            logger.fatal("Error while deleting Effect " + effectId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Effect " + effectId + " was successfully removed from the database.");
             session.close();
         }
 	}

@@ -50,11 +50,11 @@ public class TeamDaoImpl implements TeamDao {
             Creature c = new Creature(name);
             teamID = (Integer) session.save(c);
             transaction.commit();
+        	logger.info("Team " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving Team " + name + " in the database", e.getCause());
+            logger.fatal("Error while saving Team " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Team " + name + " was successfully saved in the database.");
             session.close();
         }
         return teamID;
@@ -69,11 +69,11 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
             transaction.commit();
+        	logger.info("Team " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Team " + name + " in the database", e.getCause());
+            logger.fatal("Error while updating Team " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Team " + name + " was successfully updated in the database.");
             session.close();
         }
 	}
@@ -88,11 +88,11 @@ public class TeamDaoImpl implements TeamDao {
             logger.info("Deletion of team " + t.getName() + " associated to the combat encounter " + t.getCombatEncounter().getName());
             session.delete(t);
             transaction.commit();
+        	logger.info("Team " + teamId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting Team " + teamId + " in the database", e.getCause());
+            logger.fatal("Error while deleting Team " + teamId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Team " + teamId + " was successfully removed from the database.");
             session.close();
         }		
 	}

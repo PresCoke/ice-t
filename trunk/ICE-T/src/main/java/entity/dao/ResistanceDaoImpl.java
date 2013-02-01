@@ -35,11 +35,11 @@ public class ResistanceDaoImpl implements ResistanceDao {
         	r.setCharacterSheet(cs);
             resistanceID = (Integer) session.save(r);
             transaction.commit();
+        	logger.info("Resistance" + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving Resistance " + name + " in the database", e.getCause());
+            logger.fatal("Error while saving Resistance " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Resistance" + name + " was successfully saved in the database.");
             session.close();
         }
         return resistanceID;
@@ -62,11 +62,11 @@ public class ResistanceDaoImpl implements ResistanceDao {
             logger.debug("CharacterSheet name = " + cs.getName());
         	r.setCharacterSheet(cs);
             transaction.commit();
+        	logger.info("Resistance " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Resistance " + name + " in the database", e.getCause());
+            logger.fatal("Error while updating Resistance " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Resistance " + name + " was successfully updated in the database.");
             session.close();
         }
 		
@@ -79,14 +79,17 @@ public class ResistanceDaoImpl implements ResistanceDao {
         try {
             transaction = session.beginTransaction();
             Resistance r = (Resistance) session.get(Resistance.class, resistanceId);
+            CharacterSheet cs = r.getCharacterSheet();
             logger.info("Deletion of resistance " + r.getName() + " associated to the character sheet " + r.getCharacterSheet().getName());
             session.delete(r);
+            logger.info("Updtate of the Character Sheet associated to the resistance removed.");
+            session.saveOrUpdate(cs);
             transaction.commit();
+        	logger.info("Resistance " + resistanceId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting Resistance " + resistanceId + " in the database", e.getCause());
+            logger.fatal("Error while deleting Resistance " + resistanceId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Resistance " + resistanceId + " was successfully removed from the database.");
             session.close();
         }			
 	}
