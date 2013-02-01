@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -32,13 +33,14 @@ public class Attack_Type {
 	private boolean isPersonal;
 	
 	//Associations
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn (name="Attack_id")
 	private Attack attack;
 	
 	public Attack_Type() {
 		isPersonal = true;
 	}
+
 
 	/**
 	 * Getters & Setters
@@ -57,5 +59,13 @@ public class Attack_Type {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Attack getAttack() {
+		return attack;
+	}
+
+	public void setAttack(Attack attack) {
+		this.attack = attack;
 	}
 }
