@@ -19,8 +19,9 @@ import entity.*;
 
 public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 /*TODO: make window close with cmd+w*/
+	JFrame newEntity_window;
 	private JPanel newEntity_panel;
-	private JButton save_button, cancel_button;
+	private JButton next_button, save_button, cancel_button;
 	private JPanel entityCreation_pane;
 	//private JList item_list;
 	private NewEntity controller_reference;
@@ -45,7 +46,7 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 		JScrollPane scrollable = new JScrollPane(newEntity_panel);
 		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		JFrame newEntity_window = new JFrame(entityType);
+		newEntity_window = new JFrame(entityType);
 		
 		newEntity_window.setContentPane(scrollable);
 		newEntity_window.pack();
@@ -62,6 +63,7 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 		
 		ResourceBundle new_tab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
 		
+		next_button = new JButton();
 		save_button = new JButton();
 		cancel_button = new JButton();
 		
@@ -70,6 +72,9 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 		
 		cancel_button.setText(new_tab_l10n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
+		
+//		next_button.setText(new_tab_l10n.getString("Next_button"));
+//		next_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
@@ -176,8 +181,11 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 		if ( (JButton) evt.getSource() == save_button ) {
 			saveNewEntity();
 		} else if ( (JButton) evt.getSource() == cancel_button ) {
-			wipeEditorPane();
-		}
+			newEntity_window.setVisible(false);
+			newEntity_window.dispose();
+		}/* else if ( (JButton) evt.getSource() == next_button) {
+			
+		}*/
 	}
 	
 	private void saveNewEntity() {

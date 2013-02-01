@@ -11,14 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import entity.EntityEnum.A_Ability;
-import entity.EntityEnum.A_Action;
-import entity.EntityEnum.A_Defense;
-import entity.EntityEnum.A_Effect_Type;
-import entity.EntityEnum.A_Sustain;
-import entity.EntityEnum.A_Use_Type;
-import entity.EntityEnum.CS_Resistance_Type;
-
 /**
  * Attack Class
  * @author TimHP
@@ -59,6 +51,19 @@ public class Attack {
 	@Column(name="triggers")
 	private String trigger;
 	
+	//Associations
+<<<<<<< .mine
+	@OneToOne(cascade = CascadeType.ALL)
+	private Attack_Type attackType;
+=======
+	@ManyToOne
+	@JoinColumn (name="Creature_id")
+	private Creature creature;
+	
+	@OneToOne(mappedBy="attack")
+	private Attack_Type attackType;
+>>>>>>> .r34
+	
 	//Enum
 	@Column(name="effectType")
 	private EntityEnum.A_Effect_Type effectType;
@@ -75,45 +80,12 @@ public class Attack {
 	@Column(name="useType")
 	private EntityEnum.A_Use_Type useType;
 	
-	//Associations
-	@ManyToOne
-	@JoinColumn (name="CharacterSheet_id")
-	private CharacterSheet characterSheet;
-	
-	@OneToOne(mappedBy="attack")
-	private Attack_Type attackType;
-	
 	
 	/**
 	 * Default constructor
 	 */
 	public Attack() {
-		this.attackName = "";
-		this.ability = A_Ability.STR;
-		this.accessories = "";
-		this.action = A_Action.standard;
-		this.attackType = new Attack_Type();
-		this.basic = false;
-		this.damageType = CS_Resistance_Type.acid;
-		this.defense = A_Defense.AC;
-		this.effectType = A_Effect_Type.charm;
-		this.frequency = 0;
-		this.hit = "";
-		this.miss = "";
-		this.powerSource = "";
-		this.primaryTarget = "";
-		this.secondaryTarget = "";
-		this.sustain = A_Sustain.NONE;
-		this.trigger = "";
-		this.useType = A_Use_Type.atWill;
-	}
-	
-	/**
-	 * Constructor
-	 * @param attackName
-	 */
-	public Attack(String attackName) {
-		this.attackName = attackName;
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -247,6 +219,14 @@ public class Attack {
 		this.trigger = trigger;
 	}
 	
+	public Attack_Type getAttackType() {
+		return attackType;
+	}
+
+	public void setAttackType(Attack_Type attackType) {
+		this.attackType = attackType;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -254,15 +234,15 @@ public class Attack {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public Creature getCreature() {
+		return creature;
+	}
+
+	public void setCreature(Creature creature) {
+		this.creature = creature;
+	}
 	
-	public CharacterSheet getCharacterSheet() {
-		return characterSheet;
-	}
-
-	public void setCharacterSheet(CharacterSheet characterSheet) {
-		this.characterSheet = characterSheet;
-	}
-
 	public String getAttackName() {
 		return attackName;
 	}

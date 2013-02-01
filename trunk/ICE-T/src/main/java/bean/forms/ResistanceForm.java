@@ -119,10 +119,6 @@ public class ResistanceForm implements FormBean {
 		return theResistance;
 	}
 	
-	/*
-	 * TODO: I'm thinking this form will be embedded inside a character sheet and when the "add" button is pressed this form will return
-	 * 		 the resistance which can be stored inside the character and rendered by another resistance class.
-	 */
 	private void createPanel() {
 
 		if (theResistance.getResistanceType() != null) {
