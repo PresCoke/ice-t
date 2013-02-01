@@ -171,7 +171,7 @@ public class Root_Window {
 				public void actionPerformed(ActionEvent ae) {
 					//TODO create edit entity frame from following string
 					String entityToBeEdited = ((JMenuItem) ae.getSource()).getText();
-					Edit_Tab aEditEntityTab = new Edit_Tab(App_Root.editEntity_controller, entityToBeEdited);
+					Edit_Tab aEditEntityTab = new Edit_Tab(App_Root.editEntity_controller);
 				}
 			});
 			edit_menu.add(aMenuItem);
