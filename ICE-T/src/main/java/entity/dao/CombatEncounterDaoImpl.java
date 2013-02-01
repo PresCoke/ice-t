@@ -44,11 +44,11 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             ce.setNotes(notes);
             combatEncounterID = (Integer) session.save(ce);
             transaction.commit();
+        	logger.info("CombatEncounter " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving CombatEncounter " + name + " in the database", e.getCause());
+            logger.fatal("Error while saving CombatEncounter " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("CombatEncounter " + name + " was successfully saved in the database.");
             session.close();
         }
         return combatEncounterID;
@@ -65,11 +65,11 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             ce.setName(name);
             ce.setNotes(notes);
             transaction.commit();
+        	logger.info("CombatEncounter " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating CombatEncounter " + name + " in the database", e.getCause());
+            logger.fatal("Error while updating CombatEncounter " + name + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("CombatEncounter " + name + " was successfully updated in the database.");
             session.close();
         }		
 	}
@@ -84,11 +84,11 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             logger.info("Deletion of Combat encounter " + ce.getName());
             session.delete(ce);
             transaction.commit();
+        	logger.info("CombatEncounter " + combatEncounterId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting CombatEncounter " + combatEncounterId + " in the database", e.getCause());
+            logger.fatal("Error while deleting CombatEncounter " + combatEncounterId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("CombatEncounter " + combatEncounterId + " was successfully removed from the database.");
             session.close();
         }	
 	}

@@ -1,16 +1,21 @@
 package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -33,8 +38,8 @@ public class Resistance {
 	private int resistanceValue;
 	
 	//Associations
-	@ManyToOne
-	@JoinColumn (name="CharacterSheet_id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	
 	/**
@@ -45,6 +50,12 @@ public class Resistance {
 	
 	public Resistance(String name) {
 		this.name=name;
+	}
+	
+	public Resistance(String name, EntityEnum.CS_Resistance_Type resistanceType, int resistanceValue) {
+		this.name=name;
+		this.resistanceType=resistanceType;
+		this.resistanceValue=resistanceValue;
 	}
 	
 	/**

@@ -46,11 +46,11 @@ public class CreatureDaoImpl implements CreatureDao {
             c.setTempHP(tempHP);
             creatureID = (Integer) session.save(c);
             transaction.commit();
+        	logger.info("Creature " + playerName + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving creature " + playerName + " in the database", e.getCause());
+            logger.fatal("Error while saving creature " + playerName + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Creature " + playerName + " was successfully saved in the database.");
             session.close();
         }
         return creatureID;
@@ -71,11 +71,11 @@ public class CreatureDaoImpl implements CreatureDao {
             c.setSecondWind(secondWind);
             c.setTempHP(tempHP);
             transaction.commit();
+        	logger.info("Creature " + playerName + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating creature " + playerName + " in the database", e.getCause());
+            logger.fatal("Error while updating creature " + playerName + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Creature " + playerName + " was successfully updated in the database.");
             session.close();
         }
     }
@@ -90,11 +90,11 @@ public class CreatureDaoImpl implements CreatureDao {
             logger.info("Deletion of Creature " + c.getPlayerName());
             session.delete(c);
             transaction.commit();
+        	logger.info("Creature " + creatureId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting creature " + creatureId + " in the database", e.getCause());
+            logger.fatal("Error while deleting creature " + creatureId + " in the database --- " + e.getMessage());
         } finally {
-        	logger.info("Creature " + creatureId + " was successfully removed from the database.");
             session.close();
         }
     }

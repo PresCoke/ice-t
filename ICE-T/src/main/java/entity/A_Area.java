@@ -2,7 +2,11 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -15,6 +19,8 @@ import javax.persistence.Table;
 @Table(name="A_ARea")
 public class A_Area extends Attack_Type {
 
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(strategy=GenerationType.IDENTITY) 
     @Column(name="A_ARea_id")
     private int id;
 

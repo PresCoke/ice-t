@@ -2,7 +2,10 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Attack Range Class
@@ -13,6 +16,8 @@ import javax.persistence.Table;
 @Table(name="A_Range")
 public class A_Range extends Attack_Type {
 
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
     @Column(name="A_Range_id")
     private int id;
 	
