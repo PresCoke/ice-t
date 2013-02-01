@@ -16,6 +16,8 @@ import entity.EntityM;
 import entity.Resistance;
 import entity.TrapHazard;
 
+//TODO: value gets fucked up in GUI probably from typing in it!
+//TODO: cannot delete fields LOL
 public class TrapHazardForm implements FormBean {
 	
 	private TrapHazard theTrap;

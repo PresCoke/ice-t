@@ -25,7 +25,8 @@ import entity.Resistance;
  * 		add resistances and get them out. 
  */
 public class CharacterSheetForm implements FormBean, KeyListener, ActionListener {
-	
+	//TODO: XP field, speed, initiative is wonky, lost a decimal place
+	//TODO: remove player_name?
 	private JPanel totalBean_panel;
 	GroupLayout totalBean_layout;
 	JButton next_button;
