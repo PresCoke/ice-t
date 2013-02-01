@@ -153,6 +153,7 @@ public class CharacterSheet implements EntityM {
 	 * Default constructor
 	 */
 	public CharacterSheet() {
+		this.name ="";
 		/*Abilities*/
 		this.STR = 0;
 		this.CON = 0;

@@ -12,7 +12,8 @@ public class AttackBean implements Bean {
 	public AttackBean() {
 		
 	}
-	
+	//TODO missing primary and secondary targets and sustain
+	//TODO Tim suggests second way
 	public Component getListCellRendererComponent(JList theList, Object theValue,
 			int index, boolean isSelected, boolean cellHasFocus) {
 		//TODO: add html code to make look good!!

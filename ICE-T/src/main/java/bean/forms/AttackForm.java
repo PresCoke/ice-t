@@ -19,7 +19,9 @@ import entity.EntityEnum;
 
 public class AttackForm implements FormBean {
 
-	/*TODO: for whatever reason the hit field screws up and doesn't actually delete stuff*/
+	/*TODO: for whatever reason attack name the hit field screws up and doesn't actually delete stuff
+	 *  so does the power field and attack name*/
+	//TODO: starting to think my algorithm is wrong!!!!!!
 	private Attack theAttack;
 	private Attack_Type theAttackType;
 	private JPanel attack_panel;
