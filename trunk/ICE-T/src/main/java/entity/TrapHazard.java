@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -33,9 +36,6 @@ public class TrapHazard implements EntityM {
 	@Column(name="levelTH")
 	private int level;
 	
-	@Column(name="skill")
-	private String skill;
-	
 	@Column(name="triggers")
 	private String triggers;
 	
@@ -61,16 +61,37 @@ public class TrapHazard implements EntityM {
 	@Column(name="counterMeasureSkillTH")
 	private EntityEnum.T_CounterMeasureSkill counterMeasureSkill;
 	
+	@Column(name="avoidanceSkill")
+	private EntityEnum.T_CounterMeasureSkill avoidanceSkill;
+	
 	//Associations
 	@ManyToOne
 	@JoinColumn (name="CombatEncounter_id")
 	private CombatEncounter combatEncounter;
+	
+	@OneToOne(mappedBy="trap")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private Attack attack;
 
 
 	/**
 	 * Default constructor
 	 */
 	public TrapHazard() {
+		this.name="";
+		this.avoidance=0;
+		this.attack = new Attack();
+		this.avoidanceSkill = EntityEnum.T_CounterMeasureSkill.acrobatics;
+		this.counterMeasureDescription = "";
+		this.counterMeasureSkill = EntityEnum.T_CounterMeasureSkill.acrobatics;
+		this.difficultyLevel = 0;
+		this.level = 0;
+		this.role = EntityEnum.T_Role.blaster;
+		this.triggers = "";
+		this.type = EntityEnum.T_Type.hazard;
+		this.value = 0;
+		this.xp = 0;
 	}
 
 	
@@ -102,12 +123,12 @@ public class TrapHazard implements EntityM {
 		this.level = level;
 	}
 
-	public String getSkill() {
-		return skill;
+	public EntityEnum.T_CounterMeasureSkill getSkill() {
+		return avoidanceSkill;
 	}
 
-	public void setSkill(String skill) {
-		this.skill = skill;
+	public void setSkill(EntityEnum.T_CounterMeasureSkill skill) {
+		this.avoidanceSkill = skill;
 	}
 
 	public String getTriggers() {
@@ -198,6 +219,16 @@ public class TrapHazard implements EntityM {
 	}
 	
 	
+	public Attack getAttack() {
+		return attack;
+	}
+
+
+	public void setAttack(Attack attack) {
+		this.attack = attack;
+	}
+
+
 	public String getName() {
 		return name;
 	}

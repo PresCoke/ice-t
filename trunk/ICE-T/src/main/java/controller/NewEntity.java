@@ -27,13 +27,15 @@ public class NewEntity {
 			empty_entity = new CharacterSheetForm();
 			break;
 		case 2://Team
-			empty_entity = new TeamForm();
+			empty_entity = new TrapHazardForm();
 			break;
-		case 3://Effect
+		case 3://Combat Encounter
+			empty_entity = null; break;
+		case 4://Effect
 			empty_entity = new EffectForm();
 			break;
-		case 4://Trap/Hazard
-			empty_entity = new TrapHazardForm();
+		case 5://Trap/Hazard
+			empty_entity = new TeamForm();
 			break;
 		}
 		

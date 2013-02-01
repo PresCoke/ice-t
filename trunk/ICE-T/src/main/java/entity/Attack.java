@@ -87,6 +87,10 @@ public class Attack {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack_Type attackType;
 	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn (name="TrapHazard_id")
+	private TrapHazard trap;
+	
 	
 	/**
 	 * Default constructor
