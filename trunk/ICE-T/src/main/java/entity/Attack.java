@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import entity.EntityEnum.A_Ability;
@@ -76,11 +78,13 @@ public class Attack {
 	private EntityEnum.A_Use_Type useType;
 	
 	//Associations
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	
-	@OneToOne(mappedBy="attack")
+	@OneToOne(mappedBy="attack", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack_Type attackType;
 	
 	
