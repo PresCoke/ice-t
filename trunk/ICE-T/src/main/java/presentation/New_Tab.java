@@ -112,11 +112,5 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 		newEntity_window.setVisible(false);
 		newEntity_window.dispose();
 	}
-
-	private boolean wipeEditorPane() {
-		//TODO: wipe editor pane
-		entityCreation_pane.removeAll();
-		return true;
-	}
 	
 }
