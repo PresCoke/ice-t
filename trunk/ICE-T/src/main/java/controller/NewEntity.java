@@ -26,7 +26,7 @@ public class NewEntity {
 			empty_entity = new CharacterSheetForm();
 			break;
 		case 1://Monster
-			empty_entity = new CharacterSheetForm();
+			empty_entity = new MonsterSheetForm();
 			break;
 		case 2://Team
 			empty_entity = new TrapHazardForm();
