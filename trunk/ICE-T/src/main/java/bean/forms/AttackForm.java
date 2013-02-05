@@ -54,7 +54,7 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackName_label = new JLabel(entity_l10n.getString("Name_attack"));
 		attackName_field = new JTextField();
-		attackName_field.addKeyListener( new KeyListener() {
+		/*attackName_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -77,11 +77,11 @@ public class AttackForm implements FormBean {
 				theAttack.setAttackName(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackPrimary_label = new JLabel(entity_l10n.getString("Primary_attack"));
 		attackPrimary_field = new JTextField();
-		attackPrimary_field.addKeyListener( new KeyListener() {
+		/*attackPrimary_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -104,11 +104,11 @@ public class AttackForm implements FormBean {
 				theAttack.setPrimaryTarget(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackSecondary_label = new JLabel(entity_l10n.getString("Secondary_attack"));
 		attackSecondary_field = new JTextField();
-		attackSecondary_field.addKeyListener( new KeyListener() {
+		/*attackSecondary_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -131,11 +131,11 @@ public class AttackForm implements FormBean {
 				theAttack.setSecondaryTarget(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackAccessories_label = new JLabel(entity_l10n.getString("Accessories_attack"));
 		attackAccessories_field = new JTextField();
-		attackAccessories_field.addKeyListener( new KeyListener() {
+		/*attackAccessories_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -158,11 +158,11 @@ public class AttackForm implements FormBean {
 				theAttack.setAccessories(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackPwr_label = new JLabel(entity_l10n.getString("Power_entity"));
 		attackPwr_field = new JTextField();
-		attackPwr_field.addKeyListener( new KeyListener() {
+		/*attackPwr_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -185,7 +185,7 @@ public class AttackForm implements FormBean {
 				theAttack.setPowerSource(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackEffect_label = new JLabel(entity_l10n.getString("Effect_attack"));
 		String[] attack_effect = { entity_l10n.getString("Charm_attack"),
@@ -331,7 +331,7 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackHit_label = new JLabel(entity_l10n.getString("Hit_attack"));
 		attackHit_field = new JTextField();
-		attackHit_field.addKeyListener( new KeyListener() {
+		/*attackHit_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -354,11 +354,11 @@ public class AttackForm implements FormBean {
 				theAttack.setHit(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackMiss_label = new JLabel(entity_l10n.getString("Miss_attack"));
 		attackMiss_field = new JTextField();
-		attackMiss_field.addKeyListener( new KeyListener() {
+		/*attackMiss_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -381,7 +381,7 @@ public class AttackForm implements FormBean {
 				theAttack.setMiss(current);
 			}
 			
-		});
+		});*/
 		
 		JLabel attackAction_label = new JLabel(entity_l10n.getString("Action_attack"));
 		String[] attackAction = { entity_l10n.getString("Standard_attack"),
@@ -464,7 +464,7 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackTrigger_label = new JLabel(entity_l10n.getString("Trigger_attack"));
 		attackTrigger_field = new JTextField();
-		attackTrigger_field.addKeyListener( new KeyListener() {
+		/*attackTrigger_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -487,7 +487,7 @@ public class AttackForm implements FormBean {
 				theAttack.setTrigger(current);
 			}
 			
-		});
+		});*/
 		
 		attackType_form = new AttackTypeForm();
 		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
@@ -707,6 +707,46 @@ public class AttackForm implements FormBean {
 	}
 
 	public Object getEntity() {
+		if (this.attackName_field.getText() != "") {
+			theAttack.setAttackName(this.attackName_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackPrimary_field.getText() != "") {
+			theAttack.setPrimaryTarget(this.attackPrimary_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackSecondary_field.getText() != "") {
+			theAttack.setSecondaryTarget(this.attackSecondary_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackAccessories_field.getText() != "") {
+			theAttack.setAccessories(this.attackAccessories_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackPwr_field.getText() != "") {
+			theAttack.setPowerSource(this.attackPwr_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackHit_field.getText() != "") {
+			theAttack.setHit(this.attackHit_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackMiss_field.getText() != "") {
+			theAttack.setMiss(this.attackMiss_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.attackTrigger_field.getText() != "") {
+			theAttack.setTrigger(this.attackTrigger_field.getText());
+		} else {
+			//TODO: do something
+		}
 		theAttackType = (Attack_Type) attackType_form.getEntity();
 		theAttack.setAttackType(theAttackType);
 		return theAttack;

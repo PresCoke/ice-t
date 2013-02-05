@@ -12,8 +12,7 @@ public class AttackBean implements Bean {
 	public AttackBean() {
 		
 	}
-	//TODO missing primary and secondary targets and sustain
-	//TODO Tim suggests second way
+	
 	public Component getListCellRendererComponent(JList theList, Object theValue,
 			int index, boolean isSelected, boolean cellHasFocus) {
 		//TODO: add html code to make look good!!
@@ -41,6 +40,7 @@ public class AttackBean implements Bean {
 		String action = "", use = "", pwr_src = "", effect = "", damage = "", accessories = "";
 		String attackType = "", ability = "", defense = "";
 		String hit = "", miss = "";
+		String sustain = "";
 		
 		JEditorPane theAttackBean = new JEditorPane();
 		name = theAttack.getAttackName();
@@ -60,6 +60,16 @@ public class AttackBean implements Bean {
 			action = "Free"; break;
 		default:
 			action = "";
+		}
+		switch (theAttack.getSustain()) {
+		case standard:
+			action = "Standard"; break;
+		case move:
+			action = "Move"; break;
+		case minor:
+			action = "Minor"; break;
+		case NONE:
+			action = ""; break;
 		}
 		switch (theAttack.getUseType()) {
 		case atWill:
@@ -189,13 +199,24 @@ public class AttackBean implements Bean {
 		}
 		hit = theAttack.getHit();
 		miss = theAttack.getMiss();
-		
-		theAttackBean.setText(
-				name+" - "+basic+"\n"+
-				"("+action+", "+use+") "+pwr_src+" "+effect+" "+damage+" "+accessories+"\n"+
-				attackType+ " "+ ability + " vs. "+ defense+"\n"+
-				hit+"\n"+miss
-				);
+		String fullText = name+" - "+basic+"\n"+
+				use + " * "+pwr_src+" "+effect+" "+damage+" "+accessories+"\n"+
+				action+attackType+ "\n"+
+				"Target: " + theAttack.getPrimaryTarget()+"\n"+ 
+				"Attack: " + ability + " vs. "+ defense+"\n"+
+				"Hit: "+hit+"\nMiss: "+miss;
+		//Need to do something about missing fields
+		if (theAttack.getSecondaryTarget() != "") {
+			fullText+= "Secondary Target: "+theAttack.getSecondaryTarget();
+		}
+		if (theAttack.getTrigger() != "") {
+			fullText+= "Trigger: "+theAttack.getTrigger();
+		}
+		if (theAttack.getSustain() != EntityEnum.A_Sustain.NONE ) {
+			fullText+= "Sustain " + sustain;
+		}
+				
+		theAttackBean.setText(fullText);
 		
 		return theAttackBean;
 	}

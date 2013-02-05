@@ -25,7 +25,6 @@ import entity.Resistance;
  * 		add resistances and get them out. 
  */
 public class CharacterSheetForm implements FormBean, KeyListener, ActionListener {
-	//TODO: XP field, speed, initiative is wonky, lost a decimal place
 	//TODO: remove player_name?
 	private JPanel totalBean_panel;
 	GroupLayout totalBean_layout;
@@ -33,7 +32,15 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	
 	private CharacterSheet theCharacter;
 	private JPanel characterForm_panel;
-	private JTextField maxHP_field, bloodied_field, surgeValue_field;
+	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
+	private JTextField name_field, playerName_field;
+	private JTextField xp_field;
+	private JTextField speed_field;
+	private JTextField init_field;
+	private JTextField pwr_field;
+	private JTextField lang_field;
+	private JEditorPane racef_field;
+	private JEditorPane misc_field;
 	
 	private ResistanceForm resistanceForm_bean;
 	private JPanel resistanceForm_panel;
@@ -47,7 +54,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	DefaultListModel attack_list_model;
 	
 	public CharacterSheetForm() {
-		
+		name_field = new JTextField();
+		playerName_field = new JTextField();
+		xp_field = new JTextField();
+		speed_field = new JTextField();
+		init_field = new JTextField();
+		pwr_field = new JTextField();
+		maxHP_field = new JTextField();
+		bloodied_field = new JTextField(); bloodied_field.setEditable(false);
+		surgeValue_field = new JTextField(); surgeValue_field.setEditable(false);
+		surgeNum_field = new JTextField();
+		lang_field = new JTextField();
+		racef_field = new JEditorPane();
+		misc_field = new JEditorPane();
 	}
 	
 	
@@ -71,6 +90,63 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 
 	public Object getEntity() {
 	
+		//TODO: this must be more robust!!!
+		if (name_field.getText() != "") {
+			theCharacter.setName(name_field.getText());
+		} else {
+			
+		}
+		if (playerName_field.getText() != "") {
+			/*theCharacter.setPlayerName(playerName_field.getText());*/
+			//lol what!?
+		} else {
+			
+		}
+		if (xp_field.getText() != "") {
+			theCharacter.setXP( Integer.parseInt(xp_field.getText()) );
+		} else {
+			
+		}
+		if (speed_field.getText() != "") {
+			theCharacter.setSpeed( Integer.parseInt(speed_field.getText()) );
+		} else {
+			
+		}
+		if (init_field.getText() != "") {
+			theCharacter.setInitiative( Integer.parseInt(init_field.getText()) );
+		} else {
+			
+		}
+		if (pwr_field.getText() != "") {
+			theCharacter.setPowerSource(pwr_field.getText());
+		} else {
+			
+		}
+		if (maxHP_field.getText() != "") {
+			theCharacter.setMaxHP( Integer.parseInt(maxHP_field.getText()) );
+		} else {
+			
+		}
+		if (surgeNum_field.getText() != "") {
+			theCharacter.setSurgesPerDay( Integer.parseInt(surgeNum_field.getText()) );
+		} else {
+			
+		}
+		if (lang_field.getText() != "") {
+			theCharacter.setLanguages(lang_field.getText());
+		} else {
+			
+		}
+		if (racef_field.getText() != "") {
+			theCharacter.setRaceFeatures(racef_field.getText());
+		} else {
+			
+		}
+		if (misc_field.getText() != "") {
+			theCharacter.setMisc(misc_field.getText());
+		} else {
+			
+		}
 		return theCharacter;
 	}
 	
@@ -90,61 +166,11 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		//Character Name
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
 		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField name_field = new JTextField();
-		name_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getName();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setName(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getName();
-				current += ke.getKeyChar();
-				theCharacter.setName(current);
-			}
-			
-		});
 		name_field.setText(theCharacter.getName());
 		
 		//Player Name
 		JLabel playerName_label = new JLabel( entity_l10n.getString("PlayerName_entity") );
 		playerName_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField playerName_field = new JTextField();
-		playerName_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getName();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setName(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getName();
-				current += ke.getKeyChar();
-				theCharacter.setName(current);
-			}
-			
-		});
 		playerName_field.setText(theCharacter.getName());		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
@@ -159,114 +185,54 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		//surge_num
 		JLabel xp_label = new JLabel(entity_l10n.getString("XP_entity") );
 		xp_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField xp_field = new JTextField();
 		xp_field.addKeyListener( new KeyListener(){
 			public void keyPressed(KeyEvent ke) {
-				int xp = 0;
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					xp = theCharacter.getXP();
-					String deleted_string = Integer.toString(xp);
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						xp = Integer.parseInt(deleted_string);
-						theCharacter.setXP(xp);
-					} else {
-						theCharacter.setXP(0);
-					}
-				}
 			}
 
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void keyTyped(KeyEvent ke) {
-					int xp = ke.getKeyChar() - '0';
-					if (xp >= 0 && xp <= 9) { // ensure health is an integer
-						xp += theCharacter.getXP() * 10;
-						theCharacter.setXP(xp);
-					} else {
-						ke.consume();
-					}
-				
+				int xp = ke.getKeyChar() - '0';
+				if (xp < 0 || xp > 9) { // ensure health is an integer
+					ke.consume();
+				}
 			}
 		});
 		xp_field.setText( Integer.toString(theCharacter.getSurgesPerDay()) );		
 		//speed
 		JLabel speed_label = new JLabel(entity_l10n.getString("Speed_entity"));
 		speed_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField speed_field = new JTextField();
 		speed_field.addKeyListener( new KeyListener(){
 			public void keyPressed(KeyEvent ke) {
-				int speed = 0;
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					speed = theCharacter.getSpeed();
-					String deleted_string = Integer.toString(speed);
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						speed = Integer.parseInt(deleted_string);
-						theCharacter.setSpeed(speed);
-					} else {
-						theCharacter.setSpeed(0);
-					}
-				}
 			}
 
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void keyTyped(KeyEvent ke) {
-					int speed = ke.getKeyChar() - '0';
-					if (speed >= 0 && speed <= 9) { // ensure health is an integer
-						speed += theCharacter.getSpeed() * 10;
-						theCharacter.setSpeed(speed);
-					} else {
-						ke.consume();
-					}
-				
+				int speed = ke.getKeyChar() - '0';
+				if (speed < 0 || speed > 9) { // ensure health is an integer
+					ke.consume();
+				}
 			}
 		});
 		speed_field.setText( Integer.toString(theCharacter.getSpeed()) );
 		//initiative
 		JLabel init_label = new JLabel(entity_l10n.getString("Init_entity"));
 		init_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField init_field = new JTextField();
 		init_field.addKeyListener( new KeyListener(){
 			public void keyPressed(KeyEvent ke) {
-				int initiative = 0;
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					initiative = theCharacter.getInitiative();
-					String deleted_string = Integer.toString(initiative);
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						initiative = Integer.parseInt(deleted_string);
-						theCharacter.setInitiative(initiative);
-					} else {
-						theCharacter.setInitiative(0);
-					}
-				}
 			}
 
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void keyTyped(KeyEvent ke) {
-					int initiative = ke.getKeyChar() - '0';
-					if (initiative >= 0 && initiative <= 9) { // ensure health is an integer
-						initiative += theCharacter.getInitiative() * 10;
-						theCharacter.setInitiative(initiative);
-					} else {
-						ke.consume();
-					}
-				
+				int initiative = ke.getKeyChar() - '0';
+				if (initiative < 0 || initiative > 9) { // ensure health is an integer
+					ke.consume();
+				}
 			}
 		});
 		init_field.setText( Integer.toString(theCharacter.getInitiative()) );
@@ -348,32 +314,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		//power source
 		JLabel pwr_label = new JLabel(entity_l10n.getString("Power_entity"));
 		pwr_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JTextField pwr_field = new JTextField();
-		pwr_field.addKeyListener( new KeyListener() {
-
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getPowerSource();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setPowerSource(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getPowerSource();
-				current += ke.getKeyChar();
-				theCharacter.setPowerSource(current);
-			}
-			
-		});
 		pwr_field.setText(theCharacter.getPowerSource());
 		
 		GroupLayout generalInfo_layout = new GroupLayout(generalInfo_panel);
@@ -663,13 +603,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 						.addComponent(will_field))
 				);
 		defense_layout.linkSize(SwingConstants.VERTICAL, ac_field, ac_label);
-		//defense_layout.linkSize(SwingConstants.HORIZONTAL, ac_field, ac_label);
 		defense_layout.linkSize(SwingConstants.VERTICAL, ref_field, ref_label);
-		//defense_layout.linkSize(SwingConstants.HORIZONTAL, ref_field, ref_label);
 		defense_layout.linkSize(SwingConstants.VERTICAL, fort_field, fort_label);
-		//defense_layout.linkSize(SwingConstants.HORIZONTAL, fort_field, fort_label);
 		defense_layout.linkSize(SwingConstants.VERTICAL, will_field, will_label);
-		//defense_layout.linkSize(SwingConstants.HORIZONTAL, will_field, will_label);
 		
 		defense_panel.setLayout(defense_layout);
 		
@@ -876,54 +812,30 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		 */
 		JPanel health_panel = new JPanel();
 		GroupLayout health_layout = new GroupLayout(health_panel);
-		//health_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		//maxHP
 		JLabel maxHP_label = new JLabel(entity_l10n.getString("MAXHP_entity"));
-		maxHP_field = new JTextField();
 		maxHP_field.addKeyListener(this);
 		maxHP_field.setText( Integer.toString(theCharacter.getMaxHP()) );
 		//bloodied
 		JLabel bloodied_label = new JLabel(entity_l10n.getString("Bloodied_entity"));
-		bloodied_field = new JTextField(); bloodied_field.setEditable(false);
 		bloodied_field.setText( Integer.toString(theCharacter.getBloodied()) );
 		//surge value
 		JLabel surgeValue_label = new JLabel(entity_l10n.getString("SurgeValue_entity"));
-		surgeValue_field = new JTextField(); surgeValue_field.setEditable(false);
 		surgeValue_field.setText( Integer.toString(theCharacter.getSurgesValue()) );
 		//surges/day
 		JLabel surgeNum_label = new JLabel(entity_l10n.getString("SurgeNum_entity"));
-		JTextField surgeNum_field = new JTextField();
 		surgeNum_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int surge_num = 0;
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					surge_num = theCharacter.getSurgesPerDay();
-					String deleted_string = Integer.toString(surge_num);
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						surge_num = Integer.parseInt(deleted_string);
-						theCharacter.setSurgesPerDay(surge_num);
-					} else {
-						theCharacter.setSurgesPerDay(0);
-					}
-				}
 			}
 
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void keyTyped(KeyEvent ke) {
-					int surge_num = ke.getKeyChar() - '0';
-					if (surge_num >= 0 && surge_num <= 9) { // ensure health is an integer
-						surge_num += theCharacter.getSurgesPerDay() * 10;
-						theCharacter.setSurgesPerDay(surge_num);
-					} else {
-						ke.consume();
-					}
-				
+				int surge_num = ke.getKeyChar() - '0';
+				if (surge_num < 0 || surge_num > 9) { // ensure health is an integer
+					ke.consume();
+				}	
 			}
 		});
 		surgeNum_field.setText( Integer.toString(theCharacter.getSurgesPerDay()) );
@@ -974,35 +886,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		GroupLayout otherInfo_layout = new GroupLayout(otherInfo_panel);
 		//race features
 		JLabel racef_label = new JLabel(entity_l10n.getString("RaceF_entity"));
-		JEditorPane racef_field = new JEditorPane();
-		//TODO: remove hard-coding
-		//TODO: line in JTextField begins in middle of the box
 		racef_field.setPreferredSize( new Dimension(50, 50) );
-		racef_field.addKeyListener( new KeyListener() {
-
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getRaceFeatures();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setRaceFeatures(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getRaceFeatures();
-				current += ke.getKeyChar();
-				theCharacter.setRaceFeatures(current);
-			}
-			
-		});
 		racef_field.setText( theCharacter.getRaceFeatures() );
 		//resistances
 		resistanceForm_bean = new ResistanceForm();
@@ -1045,100 +929,16 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		resistance_list.setLayoutOrientation(JList.VERTICAL);
 		resistance_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		resistance_list.setCellRenderer(new ResistanceBean());
-	/*	resistance_list.addListSelectionListener( new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent lse) {
-				if (lse.getValueIsAdjusting() == false && resistance_list.getSelectedIndex() != -1) {
-					//Object forTesting = resistance_list.getSelectedValue();
-					Resistance createFrom = (Resistance) resistance_list.getSelectedValue();
-					//resistanceForm_bean = new ResistanceForm();
-					resistanceForm_panel = resistanceForm_bean.createPanelFromExistingEntity(createFrom);
-					characterForm_panel.repaint();
-				}
-			}
-		});*/
-		
 		JScrollPane resistance_pane = new JScrollPane(resistance_list);
-		/*resistance_pane.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if ( key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE && ((JScrollPane) ke.getSource()).hasFocus() ) {
-					int index = resistance_list.getSelectedIndex();
-					if (index != -1) {
-						Resistance temp_resistance = ( (Resistance) ( (ResistanceBean) resistance_list_model.getElementAt(index) ).getEntity() );
-						resistance_list_model.removeElementAt(index);
-						theCharacter.removeResistance(temp_resistance);						
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				ke.consume();
-			}
-		});*/
 		
 		//languages
 		JLabel lang_label = new JLabel(entity_l10n.getString("Lang_entity"));
-		JTextField lang_field = new JTextField();
 		lang_field.setPreferredSize( new Dimension(50, 50) );
-		lang_field.addKeyListener( new KeyListener() {
-
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getLanguages();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setLanguages(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getLanguages();
-				current += ke.getKeyChar();
-				theCharacter.setLanguages(current);
-			}
-			
-		});
 		lang_field.setText( theCharacter.getLanguages() );		
 		
 		JLabel misc_label = new JLabel(entity_l10n.getString("Misc_entity"));
-		JEditorPane misc_field = new JEditorPane();
+		//TODO: for easy finding
 		misc_field.setPreferredSize( new Dimension(50, 50) );
-		misc_field.addKeyListener( new KeyListener() {
-
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theCharacter.getMisc();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theCharacter.setMisc(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theCharacter.getMisc();
-				current += ke.getKeyChar();
-				theCharacter.setMisc(current);
-			}
-			
-		});
 		misc_field.setText( theCharacter.getMisc() );
 		
 		otherInfo_layout.setAutoCreateGaps(true);
@@ -1284,6 +1084,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	}
 
 	public void keyPressed(KeyEvent ke) {
+		//TODO: something has to be done about this.
 		int health = 0;
 		int key_press = ke.getKeyCode();
 		if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
@@ -1304,11 +1105,11 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	}
 
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		// TODO Something has to be done about this
 	}
 
 	public void keyTyped(KeyEvent ke) {
+		//TODO Something has to be done about this
 			int health = ke.getKeyChar() - '0';
 			if (health >= 0 && health <= 9) { // ensure health is an integer
 				health += theCharacter.getMaxHP() * 10;
@@ -1317,8 +1118,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				surgeValue_field.setText( ((Integer) theCharacter.getSurgesValue()).toString() );
 			} else {
 				ke.consume();
-			}
-		
+			}	
 	}
 
 	public void actionPerformed(ActionEvent e) {

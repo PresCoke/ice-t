@@ -58,7 +58,7 @@ public class AttackTypeForm implements FormBean {
 		shortRange_field = new JTextField();
 		shortRange_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int range = 0;
+				/*int range = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					range = range_hidden.getS_range();
@@ -70,7 +70,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						range_hidden.setS_range(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -80,10 +80,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int range = ke.getKeyChar() - '0';
-				if (range >= 0 && range <= 9) { // ensure health is an integer
-					range += range_hidden.getS_range() * 10;
+				if (range < 0 || range > 9) { // ensure health is an integer
+					/*range += range_hidden.getS_range() * 10;
 					range_hidden.setS_range(range);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -93,7 +93,7 @@ public class AttackTypeForm implements FormBean {
 		longRange_field = new JTextField();
 		longRange_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int range = 0;
+				/*int range = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					range = range_hidden.getL_range();
@@ -105,7 +105,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						range_hidden.setL_range(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -115,10 +115,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int range = ke.getKeyChar() - '0';
-				if (range >= 0 && range <= 9) { // ensure health is an integer
-					range += range_hidden.getL_range() * 10;
+				if (range < 0 || range > 9) { // ensure health is an integer
+					/*range += range_hidden.getL_range() * 10;
 					range_hidden.setL_range(range);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -148,7 +148,7 @@ public class AttackTypeForm implements FormBean {
 		reach_field = new JTextField();
 		reach_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int range = 0;
+				/*int range = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					range = melee_hidden.getReach();
@@ -160,7 +160,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						melee_hidden.setReach(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -170,10 +170,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int range = ke.getKeyChar() - '0';
-				if (range >= 0 && range <= 9) { // ensure health is an integer
-					range += melee_hidden.getReach() * 10;
+				if (range < 0 || range > 9) { // ensure health is an integer
+					/*range += melee_hidden.getReach() * 10;
 					melee_hidden.setReach(range);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -197,7 +197,7 @@ public class AttackTypeForm implements FormBean {
 		areaRange_field = new JTextField();
 		areaRange_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int range = 0;
+				/*int range = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					range = area_hidden.getArea_range();
@@ -209,7 +209,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						area_hidden.setArea_range(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -219,10 +219,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int range = ke.getKeyChar() - '0';
-				if (range >= 0 && range <= 9) { // ensure health is an integer
-					range += area_hidden.getArea_range() * 10;
+				if (range < 0 || range > 9) { // ensure health is an integer
+					/*range += area_hidden.getArea_range() * 10;
 					area_hidden.setArea_range(range);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -232,7 +232,7 @@ public class AttackTypeForm implements FormBean {
 		areaSize_field = new JTextField();
 		areaSize_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int size = 0;
+				/*int size = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					size = area_hidden.getArea_size();
@@ -244,7 +244,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						area_hidden.setArea_size(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -254,10 +254,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int size = ke.getKeyChar() - '0';
-				if (size >= 0 && size <= 9) { // ensure health is an integer
-					size += area_hidden.getArea_size() * 10;
+				if (size < 0 || size > 9) { // ensure health is an integer
+				/*	size += area_hidden.getArea_size() * 10;
 					area_hidden.setArea_size(size);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -309,7 +309,7 @@ public class AttackTypeForm implements FormBean {
 		closeSize_field = new JTextField();
 		closeSize_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				int size = 0;
+				/*int size = 0;
 				int key_press = ke.getKeyCode();
 				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
 					size = close_hidden.getSize();
@@ -321,7 +321,7 @@ public class AttackTypeForm implements FormBean {
 					} else {
 						close_hidden.setSize(0);
 					}
-				}
+				}*/
 			}
 
 			public void keyReleased(KeyEvent ke) {
@@ -331,10 +331,10 @@ public class AttackTypeForm implements FormBean {
 
 			public void keyTyped(KeyEvent ke) {
 				int size = ke.getKeyChar() - '0';
-				if (size >= 0 && size <= 9) { // ensure health is an integer
-					size += close_hidden.getSize() * 10;
+				if (size < 0 || size > 9) { // ensure health is an integer
+					/*size += close_hidden.getSize() * 10;
 					close_hidden.setSize(size);
-				} else {
+				} else {*/
 					ke.consume();
 				}
 			}
@@ -458,12 +458,42 @@ public class AttackTypeForm implements FormBean {
 		String selection = (String) attackType_selection.getSelectedItem();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 		if ( selection.equals(entity_l10n.getString("Ranged_attack")) ) {
+			if (this.longRange_field.getText() != "") {
+				range_hidden.setL_range( Integer.parseInt(this.longRange_field.getText()) );
+			} else {
+				
+			}
+			if (this.shortRange_field.getText() != "") {
+				range_hidden.setS_range( Integer.parseInt(this.shortRange_field.getText()) );
+			} else {
+				
+			}
 			return range_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Melee_attack")) ) {
+			if (this.reach_field.getText() != "") {
+				melee_hidden.setReach( Integer.parseInt(this.reach_field.getText()) );
+			} else {
+				
+			}
 			return melee_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Area_attack")) ) {
+			if (this.areaRange_field.getText() != "") {
+				area_hidden.setArea_range( Integer.parseInt(this.areaRange_field.getText()) ); 
+			} else {
+				
+			}
+			if (this.areaSize_field.getText() != "") {
+				area_hidden.setArea_size( Integer.parseInt(this.areaSize_field.getText()) );
+			} else {
+				
+			}
 			return area_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Close_attack")) ) {
+			if (this.closeSize_field.getText() != "") {
+				close_hidden.setSize( Integer.parseInt(this.closeSize_field.getText()) );
+			} else {
+				
+			}
 			return close_hidden;
 		} else {
 			return theAttackType;
