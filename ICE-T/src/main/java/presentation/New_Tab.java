@@ -19,7 +19,7 @@ import entity.*;
 
 public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 /*TODO: make window close with cmd+w*/
-	JFrame newEntity_window;
+	private JFrame newEntity_window;
 	private JPanel newEntity_panel;
 	private JButton save_button, cancel_button;
 	private JPanel entityCreation_pane;

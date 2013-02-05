@@ -50,31 +50,6 @@ public class TrapHazardForm implements FormBean {
 		
 		JLabel trapName_label = new JLabel(entity_l10n.getString("Name_trap"));
 		trapName_field = new JTextField();
-		/*trapName_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-					String delete = trapName_field.getText();
-					if (delete.length() > 0) {
-						delete = delete.substring(0, delete.length() -1);
-						trapName_field.setText(delete);
-						theTrap.setName(delete);
-						ke.consume();
-					}
-				}
-			}
-			public void keyReleased(KeyEvent ke) {
-				
-			}
-			public void keyTyped(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				String current = theTrap.getName();
-				current+=key;
-				theTrap.setName(current);
-				trapName_field.setText(current);
-				ke.consume();
-			}
-		});*/
 		
 		JLabel trapLevel_label = new JLabel(entity_l10n.getString("Level_trap"));
 		//TODO: perhaps add key listener to ensure that value is 0 <= x <= 100
@@ -257,87 +232,21 @@ public class TrapHazardForm implements FormBean {
 		});
 		JLabel trapCounterText_label = new JLabel(entity_l10n.getString("CounterText_trap"));
 		trapCounterText_field = new JEditorPane();
-		/*trapCounterText_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-					String delete = trapCounterText_field.getText();
-					if (delete.length() > 0) {
-						delete = delete.substring(0, delete.length() -1);
-						trapCounterText_field.setText(delete);
-						theTrap.setCounterMeasureDescription(delete);
-						ke.consume();
-					}
-				}
-			}
-			public void keyReleased(KeyEvent ke) {
-				
-			}
-			public void keyTyped(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				String current = theTrap.getCounterMeasureDescription();
-				current+=key;
-				theTrap.setCounterMeasureDescription(current);
-				trapCounterText_field.setText(current);
-				ke.consume();
-			}
-		});*/
+
 		JLabel trapTriggers_label = new JLabel(entity_l10n.getString("Trigger_trap"));
 		trapTriggers_field = new JTextField();
-		/*trapTriggers_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-					String deleting = trapTriggers_field.getText();
-					if (deleting.length() >= 1) {
-						deleting = deleting.substring(0, deleting.length() - 1);
-						trapTriggers_field.setText(deleting);
-						theTrap.setTriggers(deleting);
-						ke.consume();
-					}
-				}
-				
-			}
-
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				char key = ke.getKeyChar();
-				String current = theTrap.getTriggers();
-				current += key;
-				trapTriggers_field.setText(current);
-				theTrap.setTriggers(current);
-				ke.consume();
-			}
-		});*/
+	
 		JLabel trapXP_label = new JLabel(entity_l10n.getString("XP_entity"));
 		trapXP_field = new JTextField();
 		trapXP_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				/*char key = ke.getKeyChar();
-				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-					String deleting = trapXP_field.getText();
-					if (deleting.length() >= 1) {
-						deleting = deleting.substring(0, deleting.length() - 1);
-						trapXP_field.setText(deleting);
-						//TODO FIX Exception in thread "AWT-EventQueue-0" java.lang.NumberFormatException: For input string: ""
-						theTrap.setXp( Integer.parseInt(deleting) ); 
-						ke.consume();
-					}
-				}*/
 			}
 			public void keyReleased(KeyEvent ke) {
 				
 			}
 			public void keyTyped(KeyEvent ke) {
 				int key = ke.getKeyChar() - '0';
-				if ( key < 0 || key > 9 ) {
-					/*key += 10 * theTrap.getXp();
-					trapXP_field.setText( Integer.toString(key) );
-					theTrap.setXp(key);*/
+				if (key < 0 || key > 9) {
 					ke.consume();
 				}
 			}
@@ -410,8 +319,6 @@ public class TrapHazardForm implements FormBean {
 				.addComponent(trapCounterText_field)
 				.addComponent(attackForm_panel)
 				);
-		/*traphazardForm_layout.linkSize(SwingConstants.VERTICAL, traphazardValue_field, traphazardValue_label);*/
-		// what's the issue here?
 		trapForm_panel.setLayout(trapForm_layout);
 	}
 

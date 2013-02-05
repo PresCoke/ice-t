@@ -18,30 +18,33 @@ import controller.*;
 //TODO: enable tab switching between lists... dat classy.
 public class Edit_Tab implements ListSelectionListener, ActionListener {
 
+	private JFrame editEntity_window;
+	private String entityName, entityType;
 	private JPanel editEntity_panel;
-	private JList entityType_list, entityName_list;
-	private DefaultListModel type_list, name_list;
+	private JList entityName_list;
+	private DefaultListModel name_list;
 	private JEditorPane entityEdit_pane;
 	private JButton save_button, remove_button, cancel_button;
 	private EditEntity controller_reference;
 	
-	public Edit_Tab(EditEntity edit_controller) {
-		// TODO Auto-generated constructor stub
+	public Edit_Tab(EditEntity edit_controller, String entity_type) {
 		controller_reference = edit_controller;
 	}
 
-	public Component getPanel() {
-		/* Start Hack
-		 * - this behaviour may be better implemented by inheriting from component
-		 *   or creating a custom class with a super getPanel() method.
-		 */
-		
-//		editEntity_panel = new JPanel();
-//		editEntity_panel.add( new JTextField("Edit Entity") );
+	public void showFrame() {
 		
 		this.createPanel();
 		
-		return editEntity_panel;
+		JScrollPane scrollable = new JScrollPane(editEntity_panel);
+		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		editEntity_window = new JFrame(entityName);
+		
+		editEntity_window.setContentPane(scrollable);
+		editEntity_window.pack();
+		editEntity_window.validate();
+		editEntity_window.setVisible(true);
+		
 	}
 
 	private void createPanel() {
@@ -52,16 +55,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		
 		ResourceBundle editTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
 		
-		type_list = new DefaultListModel();
-		populateEntityTypeList();
-		entityType_list = new JList(type_list);
-		entityType_list.addListSelectionListener(this);
-		JScrollPane type_pane = new JScrollPane(entityType_list);
-		type_pane.setBorder( BorderFactory.createEtchedBorder() );
-		type_pane.setPreferredSize( new Dimension(150, 0) );
-		type_pane.setMinimumSize( new Dimension(150, 0) );
-		
-		name_list = new DefaultListModel();
+		this.getEntityNamesOfType(entityType);
 		entityName_list = new JList(name_list);
 		entityName_list.addListSelectionListener(this);
 		JScrollPane name_pane = new JScrollPane(entityName_list);
@@ -72,8 +66,6 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
 		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
-		listSelection_panel.add(type_pane);
-		listSelection_panel.add( Box.createRigidArea( new Dimension(5, 0) ) );
 		listSelection_panel.add(name_pane);
 		
 		save_button = new JButton(editTab_l10n.getString("Save_Button"));
@@ -96,32 +88,6 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),
 				BorderFactory.createLineBorder(Color.GRAY) )
 				);
-		
-		GridBagConstraints list_constraints = new GridBagConstraints();
-		list_constraints.fill = GridBagConstraints.BOTH;
-		list_constraints.gridx = 0;
-		list_constraints.gridy = 0;
-		list_constraints.gridheight = 2;
-		list_constraints.weightx = 0.5;
-		list_constraints.weighty = 1.0;
-		editEntity_panel.add(listSelection_panel, list_constraints);
-		
-		GridBagConstraints edit_constraints = new GridBagConstraints();
-		edit_constraints.fill = GridBagConstraints.BOTH;
-		edit_constraints.gridx = 1;
-		edit_constraints.gridy = 0;
-		edit_constraints.gridheight = 2;
-		edit_constraints.gridwidth = 2;
-		edit_constraints.weightx = 0.5;
-		edit_constraints.weighty = 1.0;
-		editEntity_panel.add(entityEdit_pane, edit_constraints);
-		
-		GridBagConstraints button_constraints = new GridBagConstraints();
-		button_constraints.gridx = 2;
-		button_constraints.gridy = 2;
-		button_constraints.anchor = GridBagConstraints.SOUTHEAST;
-		editEntity_panel.add(button_panel, button_constraints);
-		
 	}
 
 	public void actionPerformed(ActionEvent evt) {
@@ -137,70 +103,44 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 
 	public void valueChanged(ListSelectionEvent evt) {
 		if (evt.getValueIsAdjusting() == false) {
-			if ( (JList) evt.getSource() == this.entityType_list && this.entityType_list.getSelectedIndex() != -1) {
-				this.getEntityNamesOfType( (String) this.entityType_list.getSelectedValue() );
-//				entityName_list.repaint();
-				
-			} else if ( (JList) evt.getSource() == this.entityName_list && this.entityName_list.getSelectedIndex() != -1) {
+			if ( (JList) evt.getSource() == this.entityName_list && this.entityName_list.getSelectedIndex() != -1) {
 				this.getEntityInfoFor( (String) this.entityName_list.getSelectedValue() );
 			}
 		}
 	}
 	
-	
-	private void populateEntityTypeList() {
-		String[] entityTypeNames = controller_reference.getEntityTypeNames();
-		
-		for (int index = 0; index < entityTypeNames.length; index++) {
-			type_list.addElement(entityTypeNames[index]);
-		}
-	}
-	
 	private void getEntityInfoFor(String selectedEntityName) {
-		// TODO Auto-generated method stub
 		this.entityEdit_pane.setText(selectedEntityName);
+		
+		JPanel formPanel = this.controller_reference.getEntityPanelOfName(selectedEntityName);
 		
 		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		temp_border.setTitle(selectedEntityName);
 		temp_border.setTitleJustification(TitledBorder.CENTER);
 		
 		entityEdit_pane.setBorder(temp_border);
-//		entityEdit_pane.repaint();
 	}
 
 	private void getEntityNamesOfType(String selectedEntityType) {
-		// TODO implement correctly
-		
-		if (selectedEntityType == "Creature") {
-			name_list.removeAllElements();
-			name_list.addElement("Jaks");
-			name_list.addElement("Garthorp");
-			name_list.addElement("Tevish");
-			
-		} else if (selectedEntityType == "Trap") {
-			name_list.removeAllElements();
-			name_list.addElement("Crossbow");
-			name_list.addElement("Trap Door");
-			name_list.addElement("Giant Rolling Rock");			
-			
-		} else if (selectedEntityType == "etc...") {
-			name_list.removeAllElements();
-			name_list.addElement("etc...");
+		this.name_list = new DefaultListModel();
+		String[] entityNames = this.controller_reference.getEntityNamesOfType(selectedEntityType);
+		for (int index = 0; index < entityNames.length; index++) {
+			this.name_list.addElement(entityNames[index]);
 		}
 	}
 
 	private boolean removeSelectedEntity() {
-		//TODO: implement
+		this.controller_reference.removeEntity();
 		return true;
 	}
 	
 	private boolean saveChanges() {
-		//TODO: implement
+		this.controller_reference.saveEntity();
 		return true;
 	}
 	
 	private boolean cancelChanges() {
-		//TODO: implement
+		editEntity_panel.removeAll();
 		return true;
 	}
 

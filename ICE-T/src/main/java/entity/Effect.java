@@ -16,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="Effect")
+//TODO: add effect type... maybe...
 public class Effect implements EntityM {
 
 	@Id

@@ -34,13 +34,23 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
 	private JTextField name_field, playerName_field;
+	private JComboBox role_list, size_list; 
 	private JTextField xp_field;
+	private JSpinner lvl_field;
 	private JTextField speed_field;
 	private JTextField init_field;
 	private JTextField pwr_field;
-	private JTextField lang_field;
-	private JEditorPane racef_field;
-	private JEditorPane misc_field;
+	private JSpinner str_field, con_field, dex_field,
+					 int_field, wis_field, cha_field;
+	private JSpinner ac_field, ref_field, fort_field, will_field;
+	private JSpinner acro_field, athl_field, arca_field, bluf_field, 
+					 dipl_field, dung_field, endu_field, heal_field, 
+					 hist_field, insi_field, inti_field, natu_field, 
+					 perc_field, reli_field, stea_field, stre_field, 
+					 thie_field;
+	
+	
+	private JEditorPane lang_field, racef_field, misc_field;
 	
 	private ResistanceForm resistanceForm_bean;
 	private JPanel resistanceForm_panel;
@@ -64,7 +74,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		bloodied_field = new JTextField(); bloodied_field.setEditable(false);
 		surgeValue_field = new JTextField(); surgeValue_field.setEditable(false);
 		surgeNum_field = new JTextField();
-		lang_field = new JTextField();
+		lang_field = new JEditorPane();
 		racef_field = new JEditorPane();
 		misc_field = new JEditorPane();
 	}
@@ -175,7 +185,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
 		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
-		JSpinner lvl_field = new JSpinner(lvl_model);
+		lvl_field = new JSpinner(lvl_model);
 		lvl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int lvl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -249,7 +259,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 							entity_l10n.getString("Lurker_role"),
 							entity_l10n.getString("Skirmisher_role"),
 							entity_l10n.getString("Soldier_role")};
-		JComboBox role_list = new JComboBox(roles);
+		role_list = new JComboBox(roles);
 		role_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = ((JComboBox) arg0.getSource()).getSelectedIndex();
@@ -288,7 +298,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 							entity_l10n.getString("Large_size"),
 							entity_l10n.getString("Huge_size"),
 							entity_l10n.getString("Gargantuan_size") };
-		JComboBox size_list = new JComboBox(sizes);
+		size_list = new JComboBox(sizes);
 		size_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = ((JComboBox) arg0.getSource()).getSelectedIndex();
@@ -395,7 +405,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		ability_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Ability_title")) );
 		//STR
 		JLabel str_label = new JLabel(entity_l10n.getString("STR_entity"));
-		JSpinner str_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		str_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		str_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -406,7 +416,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//CON
 		JLabel con_label = new JLabel(entity_l10n.getString("CON_entity"));
-		JSpinner con_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		con_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		con_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -417,7 +427,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//INT
 		JLabel int_label = new JLabel(entity_l10n.getString("INT_entity"));
-		JSpinner int_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		int_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		int_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -428,7 +438,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//DEX
 		JLabel dex_label = new JLabel(entity_l10n.getString("DEX_entity"));
-		JSpinner dex_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		dex_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		dex_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -439,7 +449,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//WIS
 		JLabel wis_label = new JLabel(entity_l10n.getString("WIS_entity"));
-		JSpinner wis_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		wis_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		wis_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -450,7 +460,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//CHA
 		JLabel cha_label = new JLabel(entity_l10n.getString("CHA_entity"));
-		JSpinner cha_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		cha_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		cha_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -531,7 +541,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		defense_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Defense_title")) );
 		//AC
 		JLabel ac_label = new JLabel(entity_l10n.getString("AC_entity"));
-		JSpinner ac_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		ac_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		ac_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -542,7 +552,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 
 		//REF
 		JLabel ref_label = new JLabel(entity_l10n.getString("REF_entity"));
-		JSpinner ref_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		ref_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		ref_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -553,7 +563,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//FORT
 		JLabel fort_label = new JLabel(entity_l10n.getString("FORT_entity"));
-		JSpinner fort_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		fort_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		fort_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -564,7 +574,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//WILL
 		JLabel will_label = new JLabel(entity_l10n.getString("WILL_entity"));
-		JSpinner will_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		will_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		will_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -619,7 +629,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Skill_title")) );
 		//acrobatics
 		JLabel acro_label = new JLabel(entity_l10n.getString("ACRO_entity"));
-		JSpinner acro_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		acro_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		acro_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -630,7 +640,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(acro_label); skill_panel.add(acro_field);
 		//athletics
 		JLabel athl_label = new JLabel(entity_l10n.getString("ATHL_entity"));
-		JSpinner athl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		athl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		athl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -641,7 +651,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(athl_label); skill_panel.add(athl_field);
 		//arcana
 		JLabel arca_label = new JLabel(entity_l10n.getString("ARCA_entity"));
-		JSpinner arca_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		arca_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		arca_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -652,7 +662,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(arca_label); skill_panel.add(arca_field);
 		//bluff
 		JLabel bluf_label = new JLabel(entity_l10n.getString("BLUF_entity"));
-		JSpinner bluf_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		bluf_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		bluf_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -663,7 +673,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(bluf_label); skill_panel.add(bluf_field);
 		//diplomacy
 		JLabel dipl_label = new JLabel(entity_l10n.getString("DIPL_entity"));
-		JSpinner dipl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		dipl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		dipl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -674,7 +684,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(dipl_label); skill_panel.add(dipl_field);
 		//dungeoneering
 		JLabel dung_label = new JLabel(entity_l10n.getString("DUNG_entity"));
-		JSpinner dung_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		dung_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		dung_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -685,7 +695,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(dung_label); skill_panel.add(dung_field);
 		//endurance
 		JLabel endu_label = new JLabel(entity_l10n.getString("ENDU_entity"));
-		JSpinner endu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		endu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		endu_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -696,7 +706,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(endu_label); skill_panel.add(endu_field);
 		//heal
 		JLabel heal_label = new JLabel(entity_l10n.getString("HEAL_entity"));
-		JSpinner heal_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		heal_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		heal_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -707,7 +717,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(heal_label); skill_panel.add(heal_field);
 		//history
 		JLabel hist_label = new JLabel(entity_l10n.getString("HIST_entity"));
-		JSpinner hist_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		hist_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		hist_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -718,7 +728,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(hist_label); skill_panel.add(hist_field);
 		//insight
 		JLabel insi_label = new JLabel(entity_l10n.getString("INSI_entity"));
-		JSpinner insi_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		insi_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		insi_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -729,7 +739,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(insi_label); skill_panel.add(insi_field);
 		//intimidate
 		JLabel inti_label = new JLabel(entity_l10n.getString("INTI_entity"));
-		JSpinner inti_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		inti_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		inti_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -740,7 +750,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(inti_label); skill_panel.add(inti_field);
 		//nature
 		JLabel natu_label = new JLabel(entity_l10n.getString("NATU_entity"));
-		JSpinner natu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		natu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		natu_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -751,7 +761,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(natu_label); skill_panel.add(natu_field);
 		//perception
 		JLabel perc_label = new JLabel(entity_l10n.getString("PERC_entity"));
-		JSpinner perc_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		perc_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		perc_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -762,7 +772,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(perc_label); skill_panel.add(perc_field);
 		//religion
 		JLabel reli_label = new JLabel(entity_l10n.getString("RELI_entity"));
-		JSpinner reli_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		reli_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		reli_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -773,7 +783,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(reli_label); skill_panel.add(reli_field);
 		//stealth
 		JLabel stea_label = new JLabel(entity_l10n.getString("STEA_entity"));
-		JSpinner stea_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		stea_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		stea_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -784,7 +794,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(stea_label); skill_panel.add(stea_field);
 		//streetwise
 		JLabel stre_label = new JLabel(entity_l10n.getString("STRE_entity"));
-		JSpinner stre_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		stre_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		stre_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -795,7 +805,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		skill_panel.add(stre_label); skill_panel.add(stre_field);
 		//theivery
 		JLabel thie_label = new JLabel(entity_l10n.getString("THIE_entity"));
-		JSpinner thie_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		thie_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		thie_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -937,7 +947,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		lang_field.setText( theCharacter.getLanguages() );		
 		
 		JLabel misc_label = new JLabel(entity_l10n.getString("Misc_entity"));
-		//TODO: for easy finding
 		misc_field.setPreferredSize( new Dimension(50, 50) );
 		misc_field.setText( theCharacter.getMisc() );
 		
