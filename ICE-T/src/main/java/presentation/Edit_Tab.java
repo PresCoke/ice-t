@@ -96,7 +96,8 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		} else if ( (JButton) evt.getSource() == this.remove_button ) {
 			this.removeSelectedEntity();
 		} else if ( (JButton) evt.getSource() == this.cancel_button ) {
-			this.cancelChanges();
+			this.editEntity_window.setVisible(false);
+			this.editEntity_window.dispose();
 		}
 		
 	}
@@ -136,11 +137,6 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	
 	private boolean saveChanges() {
 		this.controller_reference.saveEntity();
-		return true;
-	}
-	
-	private boolean cancelChanges() {
-		editEntity_panel.removeAll();
 		return true;
 	}
 
