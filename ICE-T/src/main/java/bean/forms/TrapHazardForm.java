@@ -16,8 +16,7 @@ import entity.EntityM;
 import entity.Resistance;
 import entity.TrapHazard;
 
-//TODO: value gets fucked up in GUI probably from typing in it!
-//TODO: cannot delete fields LOL
+//TODO: add clear button for attack
 public class TrapHazardForm implements FormBean {
 	
 	private TrapHazard theTrap;
@@ -51,7 +50,7 @@ public class TrapHazardForm implements FormBean {
 		
 		JLabel trapName_label = new JLabel(entity_l10n.getString("Name_trap"));
 		trapName_field = new JTextField();
-		trapName_field.addKeyListener( new KeyListener() {
+		/*trapName_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				char key = ke.getKeyChar();
 				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
@@ -75,9 +74,10 @@ public class TrapHazardForm implements FormBean {
 				trapName_field.setText(current);
 				ke.consume();
 			}
-		});
+		});*/
 		
 		JLabel trapLevel_label = new JLabel(entity_l10n.getString("Level_trap"));
+		//TODO: perhaps add key listener to ensure that value is 0 <= x <= 100
 		trapLevel_field = new JSpinner( new SpinnerNumberModel(0, 0, 30, 1) );
 		trapLevel_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent ce) {
@@ -85,6 +85,7 @@ public class TrapHazardForm implements FormBean {
 				theTrap.setLevel(level);
 			}
 		});
+		
 		
 		JLabel trapRole_label = new JLabel(entity_l10n.getString("Role_trap"));
 		String[] trapRole = { entity_l10n.getString("Blaster_trap"),
@@ -194,6 +195,7 @@ public class TrapHazardForm implements FormBean {
 		});
 	
 		JLabel trapAvoidValue_label = new JLabel(entity_l10n.getString("AvoidValue_trap"));
+		//TODO: perhaps add key listener to ensure that value is 0 <= x <= 100
 		trapAvoidValue_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		trapAvoidValue_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -255,7 +257,7 @@ public class TrapHazardForm implements FormBean {
 		});
 		JLabel trapCounterText_label = new JLabel(entity_l10n.getString("CounterText_trap"));
 		trapCounterText_field = new JEditorPane();
-		trapCounterText_field.addKeyListener( new KeyListener() {
+		/*trapCounterText_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				char key = ke.getKeyChar();
 				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
@@ -279,10 +281,10 @@ public class TrapHazardForm implements FormBean {
 				trapCounterText_field.setText(current);
 				ke.consume();
 			}
-		});
+		});*/
 		JLabel trapTriggers_label = new JLabel(entity_l10n.getString("Trigger_trap"));
 		trapTriggers_field = new JTextField();
-		trapTriggers_field.addKeyListener( new KeyListener() {
+		/*trapTriggers_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
 				char key = ke.getKeyChar();
 				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
@@ -310,12 +312,12 @@ public class TrapHazardForm implements FormBean {
 				theTrap.setTriggers(current);
 				ke.consume();
 			}
-		});
+		});*/
 		JLabel trapXP_label = new JLabel(entity_l10n.getString("XP_entity"));
 		trapXP_field = new JTextField();
 		trapXP_field.addKeyListener( new KeyListener() {
 			public void keyPressed(KeyEvent ke) {
-				char key = ke.getKeyChar();
+				/*char key = ke.getKeyChar();
 				if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
 					String deleting = trapXP_field.getText();
 					if (deleting.length() >= 1) {
@@ -325,17 +327,17 @@ public class TrapHazardForm implements FormBean {
 						theTrap.setXp( Integer.parseInt(deleting) ); 
 						ke.consume();
 					}
-				}
+				}*/
 			}
 			public void keyReleased(KeyEvent ke) {
 				
 			}
 			public void keyTyped(KeyEvent ke) {
 				int key = ke.getKeyChar() - '0';
-				if (key >= 0 && key <= 9) {
-					key += 10 * theTrap.getXp();
+				if ( key < 0 || key > 9 ) {
+					/*key += 10 * theTrap.getXp();
 					trapXP_field.setText( Integer.toString(key) );
-					theTrap.setXp(key);
+					theTrap.setXp(key);*/
 					ke.consume();
 				}
 			}
@@ -431,6 +433,27 @@ public class TrapHazardForm implements FormBean {
 	}
 
 	public Object getEntity() {
+		
+		if ( this.trapName_field.getText() != "" ){
+			theTrap.setName(this.trapName_field.getText());
+		} else {
+			//TODO: do something
+		}
+		if (this.trapCounterText_field.getText() != "") {
+			theTrap.setCounterMeasureDescription( this.trapCounterText_field.getText() );
+		} else {
+			//TODO: do something
+		}
+		if (this.trapTriggers_field.getText() != "") {
+			theTrap.setTriggers( this.trapTriggers_field.getText() );
+		} else {
+			//TODO: do something
+		}
+		if (this.trapXP_field.getText() != "") {
+			theTrap.setXp( Integer.parseInt( this.trapXP_field.getText() ) );
+		} else {
+			//TODO: do something
+		}
 		
 		Attack aAttack = (Attack) attackForm_bean.getEntity();
 		theTrap.setAttack(aAttack);
