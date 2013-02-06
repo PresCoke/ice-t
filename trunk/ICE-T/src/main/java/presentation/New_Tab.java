@@ -8,14 +8,10 @@ package presentation;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
-
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.*;
 
 import controller.App_Root;
 import controller.NewEntity;
-import entity.*;
 
 public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 /*TODO: make window close with cmd+w*/

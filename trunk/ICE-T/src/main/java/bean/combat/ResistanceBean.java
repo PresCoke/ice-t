@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.*;
 
-import entity.EntityM;
 import entity.Resistance;
 
 public class ResistanceBean implements Bean {

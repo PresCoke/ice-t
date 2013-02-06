@@ -1,6 +1,5 @@
 package bean.forms;
 
-import entity.EntityM;
 import javax.swing.*;
 
 public interface FormBean {

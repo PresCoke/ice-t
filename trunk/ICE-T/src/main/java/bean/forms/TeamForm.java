@@ -2,8 +2,6 @@ package bean.forms;
 
 import javax.swing.JPanel;
 
-import entity.EntityM;
-
 public class TeamForm implements FormBean {
 
 	public JPanel createEntityPanel() {

@@ -4,8 +4,6 @@ package controller;
 import java.util.Locale;
 
 import mediator.*;
-import entity.*;
-import bean.combat.*;
 import presentation.*;
 
 /**

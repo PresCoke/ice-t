@@ -1,20 +1,11 @@
 package bean.forms;
 
 import java.util.ResourceBundle;
-
-import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.event.*;
 
-import bean.combat.AttackBean;
-
-import entity.Attack;
-import entity.EntityEnum;
-import entity.EntityM;
-import entity.Resistance;
-import entity.TrapHazard;
+import entity.*;
 
 //TODO: add clear button for attack
 public class TrapHazardForm implements FormBean {

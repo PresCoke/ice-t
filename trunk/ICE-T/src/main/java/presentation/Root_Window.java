@@ -2,13 +2,11 @@ package presentation;
 
 //-- Project Imports --//
 import controller.*;
-import bean.combat.*;
 //-- Class Imports --//
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 
@@ -172,6 +170,7 @@ public class Root_Window {
 					//TODO create edit entity frame from following string
 					String entityTypeToBeEdited = ((JMenuItem) ae.getSource()).getText();
 					Edit_Tab aEditEntityTab = new Edit_Tab(App_Root.editEntity_controller, entityTypeToBeEdited);
+					aEditEntityTab.showFrame();
 				}
 			});
 			edit_menu.add(aMenuItem);
