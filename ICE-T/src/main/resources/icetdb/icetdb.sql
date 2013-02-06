@@ -148,7 +148,7 @@ CREATE TABLE Stats (
 )
 
 INSERT INTO Stats VALUES (1, 1, 'Tim', 5, 8, 10, 12, 19); 
-INSERT INTO Stats VALUES (2, 2, 'James', 9, 14, 1, 5, 8); 
+INSERT INTO Stats VALUES (2, 2, 'James', 99, 0, 99, 0, 1); 
 INSERT INTO Stats VALUES (3, 3, 'Bill', 7, 22, 10, 6, 0); 
 INSERT INTO Stats VALUES (4, 4, 'Jack', 49, 0, 5, 1, 0); 
 
