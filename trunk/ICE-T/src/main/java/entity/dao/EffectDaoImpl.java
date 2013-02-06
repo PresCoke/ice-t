@@ -33,7 +33,7 @@ public class EffectDaoImpl implements EffectDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Effect");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<Effect> effects = q.list();
 		
 		for (Effect e : effects) {

@@ -32,7 +32,7 @@ public class TeamDaoImpl implements TeamDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Team");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<Team> teams = q.list();
 		
 		for (Team t : teams) {

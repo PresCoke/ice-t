@@ -27,15 +27,15 @@ public class EffectForm implements FormBean {
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
 		
 		String[] resist = { entity_l10n.getString("Acid_resist"),
-				entity_l10n.getString("Cold_resist"),
-				entity_l10n.getString("Fire_resist"),
-				entity_l10n.getString("Force_resist"),
-				entity_l10n.getString("Lightning_resist"),
-				entity_l10n.getString("Necrotic_resist"),
-				entity_l10n.getString("Poison_resist"),
-				entity_l10n.getString("Psychic_resist"),
-				entity_l10n.getString("Radiant_resist"),
-				entity_l10n.getString("Thunder_resist")};
+							entity_l10n.getString("Cold_resist"),
+							entity_l10n.getString("Fire_resist"),
+							entity_l10n.getString("Force_resist"),
+							entity_l10n.getString("Lightning_resist"),
+							entity_l10n.getString("Necrotic_resist"),
+							entity_l10n.getString("Poison_resist"),
+							entity_l10n.getString("Psychic_resist"),
+							entity_l10n.getString("Radiant_resist"),
+							entity_l10n.getString("Thunder_resist")};
 		effectType_List = new JComboBox(resist);
 		
 		effectValue_field.addChangeListener( new ChangeListener() {

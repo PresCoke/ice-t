@@ -3,7 +3,7 @@ package resource;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
  
-@SuppressWarnings("deprecation")
+/*-- WTF @SuppressWarnings("deprecation") --*/
 public class HibernateUtil {
   
   

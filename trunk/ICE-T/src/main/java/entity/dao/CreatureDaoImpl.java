@@ -23,7 +23,7 @@ public class CreatureDaoImpl implements CreatureDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Creature");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<Creature> creatures = q.list();
 		
 		for (Creature c : creatures) {

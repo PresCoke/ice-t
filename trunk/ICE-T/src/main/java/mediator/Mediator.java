@@ -45,4 +45,14 @@ public class Mediator {
 		return -1;
 	
 	}
+
+	public String[] getUniqueEntityIDsForType(String selectedEntityType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getEntityOfID(String selectedEntityName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

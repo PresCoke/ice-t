@@ -114,6 +114,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		this.entityEdit_pane.setText(selectedEntityName);
 		
 		JPanel formPanel = this.controller_reference.getEntityPanelOfName(selectedEntityName);
+		entityEdit_pane.add(formPanel);
 		
 		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		temp_border.setTitle(selectedEntityName);

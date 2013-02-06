@@ -43,7 +43,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from CharacterSheet");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<CharacterSheet> characterSheets = q.list();
 		
 		for (CharacterSheet cs : characterSheets) {
