@@ -1,18 +1,10 @@
 package bean.forms;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
 import controller.App_Root;
-
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
 
-import entity.A_Area;
-import entity.A_Close;
-import entity.A_Melee;
-import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
 import entity.EntityEnum;

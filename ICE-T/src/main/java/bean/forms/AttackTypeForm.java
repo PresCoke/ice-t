@@ -3,12 +3,9 @@ package bean.forms;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
-
 import javax.swing.*;
-import javax.swing.event.*;
 
 import controller.App_Root;
-
 import entity.*;
 
 public class AttackTypeForm implements FormBean {

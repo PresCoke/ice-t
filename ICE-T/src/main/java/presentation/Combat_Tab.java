@@ -1,16 +1,14 @@
 package presentation;
 
-import entity.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
-
 import javax.swing.*;
 import javax.swing.event.*;
 
 import controller.App_Root;
 import controller.Combat;
+import entity.*;
 
 public class Combat_Tab implements ActionListener, ListSelectionListener {
 
@@ -27,27 +25,6 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 	private JTable gmTally_table;
 	private Object[][] table_data;
 	private Combat controller_reference;
-	
-	/* THIS IS A JPANEL THAT CAN BE RENDERED IN A LIST!!*/
-	public class creatureCell_renderer extends JPanel implements ListCellRenderer {
-		
-		public creatureCell_renderer() {
-			
-		}
-
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
-			//TODO: implement this further
-			if (/*value instanceof entity.Creature*/ true) {
-				/*Do drawing of creature*/
-			} else/* if (value instanceof entity.Effect)*/ {
-				/*Do drawing of effect*/
-			}
-			
-			return null;
-		}
-		
-	}
 	
 	public Combat_Tab(Combat combat_controller) {
 		// TODO Auto-generated constructor stub

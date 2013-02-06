@@ -3,7 +3,6 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 import entity.CharacterSheet;
-import entity.EntityM;
 import entity.TrapHazard;
 import bean.forms.*;
 
@@ -61,7 +60,7 @@ public class NewEntity {
 		// TODO HARD-CODED SIZE!!!!!
 		entity_names = new String[6];
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
-		Enumeration entityName_keys = entityNames.getKeys();
+		Enumeration<String> entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
 			String key = (String) entityName_keys.nextElement();
 			entity_names[index] = entityNames.getString(key);
