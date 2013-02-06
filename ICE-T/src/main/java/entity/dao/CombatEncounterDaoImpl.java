@@ -25,7 +25,7 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from CombatEncounter");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<CombatEncounter> ces = q.list();
 		
 		for (CombatEncounter ce : ces) {

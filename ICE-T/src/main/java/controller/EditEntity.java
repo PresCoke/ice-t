@@ -27,12 +27,13 @@ public class EditEntity {
 
 	public String[] getEntityNamesOfType(String selectedEntityType) {
 		//TODO: I'm thinking going through App_Root then to the mediator and making the request to the database like that
-		return null;
+		return App_Root.resource_mediator.getUniqueEntityIDsForType(selectedEntityType);
 	}
 
 	public JPanel getEntityPanelOfName(String selectedEntityName) {
 		//TODO: I'm thinking going through App_Root then to the mediator and making the request to the database like that
-		Object theEntity = new Object();
+		
+		Object theEntity = App_Root.resource_mediator.getEntityOfID(selectedEntityName);
 		return editableEntity.createPanelFromExistingEntity(theEntity);
 	}
 

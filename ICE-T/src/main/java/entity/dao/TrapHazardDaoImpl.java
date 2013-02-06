@@ -31,7 +31,7 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 		Session session = sf.openSession();
 		Query q = session.createQuery("from TrapHazard");
 		
-		@SuppressWarnings("unchecked")
+		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<TrapHazard> ths = q.list();
 		
 		for (TrapHazard th : ths) {
