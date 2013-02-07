@@ -48,28 +48,29 @@ public class EffectForm implements FormBean {
 		effectType_List.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = ((JComboBox) arg0.getSource()).getSelectedIndex();
-				switch(index) {
-				case 0:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.acid); break;
-				case 1:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.cold); break;
-				case 2:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.fire); break;
-				case 3:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.force); break;
-				case 4:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.lightning); break;
-				case 5:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.necrotic); break;
-				case 6:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.poison); break;
-				case 7:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.psychic); break;
-				case 8:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.radiant); break;
-				case 9:
-					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.thunder); break;
-				}
+				//TODO JAMES
+//				switch(index) {
+//				case 0:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.acid); break;
+//				case 1:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.cold); break;
+//				case 2:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.fire); break;
+//				case 3:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.force); break;
+//				case 4:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.lightning); break;
+//				case 5:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.necrotic); break;
+//				case 6:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.poison); break;
+//				case 7:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.psychic); break;
+//				case 8:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.radiant); break;
+//				case 9:
+//					theEffect.setResistanceType(entity.EntityEnum.CS_Resistance_Type.thunder); break;
+//				}
 			}
 			});
 		JLabel effectType_label = new JLabel(entity_l10n.getString("EffectType_entity"));
@@ -124,14 +125,14 @@ public class EffectForm implements FormBean {
 	}
 	
 	private void createPanel() {
-
-		if (theEffect.something() != null) {
-			effectType_List.setSelectedItem( theEffect.something );
-		} else {
-			effectType_List.setSelectedItem( theEffect.something );
-		}
-		
-		effectValue_field.setValue(theEffect.something);
+//TODO JAMES
+//		if (theEffect.something() != null) {
+//			effectType_List.setSelectedItem( theEffect.something );
+//		} else {
+//			effectType_List.setSelectedItem( theEffect.something );
+//		}
+//		
+//		effectValue_field.setValue(theEffect.something);
 		
 	}
 

@@ -10,6 +10,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
+import entity.A_Area;
+import entity.A_Close;
+import entity.A_Melee;
+import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
 import entity.EntityEnum.T_CounterMeasureSkill;
@@ -90,6 +94,7 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
         try {
             transaction = session.beginTransaction();
             TrapHazard th = (TrapHazard) session.get(TrapHazard.class, trapHazardId); 
+            logger.debug("Setting trap's attributes");
             th.setName(name);
             th.setAvoidance(avoidance);
             th.setLevel(level);
@@ -101,11 +106,59 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
             th.setType(type);
             th.setRole(role);
             th.setCounterMeasureSkill(counterMeasureSkill);
-            //TODO Make this work and test
-//            th.setAttack(attack);
-//            attack.setTrap(th);
-//            attack.setAttackType(atype);
-//            atype.setAttack(attack);
+            logger.debug("Setting trap's attack");
+            Attack a = th.getAttack();
+            a.setAttackName(attack.getAttackName());
+    		a.setPrimaryTarget(attack.getPrimaryTarget());
+    		a.setSecondaryTarget(attack.getSecondaryTarget());
+    		a.setAccessories(attack.getAccessories());
+    		a.setPowerSource(attack.getPowerSource());
+    		a.setFrequency(attack.getFrequency());
+    		a.setHit(attack.getHit());
+    		a.setMiss(attack.getMiss());
+    		a.setBasic(attack.isBasic());
+    		a.setTrigger(attack.getTrigger());
+    		a.setEffectType(attack.getEffectType());
+    		a.setAbility(attack.getAbility());
+    		a.setDamageType(attack.getDamageType());
+    		a.setDefense(attack.getDefense());
+    		a.setSustain(attack.getSustain());
+    		a.setAction(attack.getAction());
+    		a.setUseType(attack.getUseType());
+            logger.debug("Setting trap's attack type");
+    		if (a.getAttackType() instanceof A_Area && atype instanceof A_Area){
+    			A_Area previousType = (A_Area) a.getAttackType();
+    			A_Area newType = (A_Area) atype;
+    			previousType.setPersonal(newType.isPersonal());
+    			previousType.setArea_range(newType.getArea_range());
+    			previousType.setArea_size(newType.getArea_size());
+    			previousType.setArea_type(newType.getArea_type());
+    		} else if (a.getAttackType() instanceof A_Close && atype instanceof A_Close){
+    			A_Close previousType = (A_Close) a.getAttackType();
+    			A_Close newType = (A_Close) atype;
+    			previousType.setPersonal(newType.isPersonal());
+    			previousType.setCloseType(newType.getCloseType());
+    			previousType.setSize(newType.getSize());
+    		} else if (a.getAttackType() instanceof A_Melee && atype instanceof A_Melee){
+    			A_Melee previousType = (A_Melee) a.getAttackType();
+    			A_Melee newType = (A_Melee) atype;
+    			previousType.setPersonal(newType.isPersonal());
+    			previousType.setReach(newType.getReach());
+    		} else if (a.getAttackType() instanceof A_Range && atype instanceof A_Range){
+    			A_Range previousType = (A_Range) a.getAttackType();
+    			A_Range newType = (A_Range) atype;
+    			previousType.setPersonal(newType.isPersonal());
+    			previousType.setL_range(newType.getL_range());
+    			previousType.setS_range(newType.getS_range());
+    		} else {
+    			Attack_TypeDAO attacktypeDao = new Attack_TypeDAOImpl();
+    			attacktypeDao.deleteAttackType(a.getAttackType().getId());
+    			atype.setAttack(a);
+    			attacktypeDao.saveAttackType(atype);
+    			session.flush();
+    			session.evict(a.getAttackType());
+    			a.setAttackType(atype);
+    		}
             transaction.commit();
         	logger.info("TrapHazard " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
@@ -123,7 +176,7 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
         try {
             transaction = session.beginTransaction();
             TrapHazard th = (TrapHazard) session.get(TrapHazard.class, trapHazardId);
-            logger.info("Deletion of trapHazard " + th.getName() + " associated to the combat encounter " + th.getCombatEncounter().getName());
+            logger.info("Deletion of trapHazard " + th.getName());
             session.delete(th);
             transaction.commit();
         	logger.info("TrapHazard " + trapHazardId + " was successfully removed from the database.");

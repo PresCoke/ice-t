@@ -45,7 +45,7 @@ public class Resistance {
 	public Resistance() {
 	}
 	
-	public Resistance(String name, EntityEnum.CS_Resistance_Type resistanceType, int resistanceValue) {
+	public Resistance(EntityEnum.CS_Resistance_Type resistanceType, int resistanceValue) {
 		this.resistanceType=resistanceType;
 		this.resistanceValue=resistanceValue;
 	}

@@ -125,19 +125,20 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            }
             }
             //Set the attack(s)
-            if (attacks != null && !attacks.isEmpty()){
+            if (attacks != null && attacksTypes != null){
 	            if(attacks.size() != attacksTypes.size()){
 	                logger.fatal("The list attacks (" + attacks.size() +") does not have the same length than attacksTypes (" + attacksTypes.size() + ")");
 	            	throw new DAOException();
 	            }
 	            logger.debug("Setting character sheet's attacks");
+	            int i = 0;
 	            for (Attack a : attacks){
-	            	for (Attack_Type t : attacksTypes){
-	            		a.setAttackType(t);
-	            		t.setAttack(a);
-	            		cs.addAttack(a);
-	            		a.setCharacterSheet(cs);
-	            	}
+	            	Attack_Type t = attacksTypes.get(i);
+            		a.setAttackType(t);
+            		a.setCharacterSheet(cs);
+            		t.setAttack(a);
+            		cs.addAttack(a);
+            		i++;
 	            }  
             }
             //Save the character Sheet
@@ -223,8 +224,8 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             //Set the resistance(s)
             logger.debug("Setting character sheet's resistances");
             for(Resistance r : resistances){
-            	if (cs.compareResistanceNames(r) != -1){
-            		Resistance resistance = cs.getCharacter_resistances().get(cs.compareResistanceNames(r));
+            	if (cs.compareResistanceTypes(r) != -1){
+            		Resistance resistance = cs.getCharacter_resistances().get(cs.compareResistanceTypes(r));
             		resistance.setResistanceType(r.getResistanceType());
             		resistance.setResistanceValue(r.getResistanceValue());
             		resistance.setCharacterSheet(cs);
@@ -234,15 +235,18 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             	}
             }
             //Set the attack(s)
-            if(attacks.size() != attacksTypes.size()){
-                logger.fatal("The list attacks (" + attacks.size() +") does not have the same length than attacksTypes (" + attacksTypes.size() + ")");
-            	throw new DAOException();
-            }
-            logger.debug("Setting character sheet's attacks");
-            for(Attack a : attacks){
-            	for (Attack_Type t : attacksTypes){
-	            	if (cs.compareAttacksNames(a) != -1){
-	            		Attack attack = cs.getAttacks().get(cs.compareAttacksNames(a));          		
+            if (attacks != null && attacksTypes != null){
+	            if(attacks.size() != attacksTypes.size()){
+	                logger.fatal("The list attacks (" + attacks.size() +") does not have the same length than attacksTypes (" + attacksTypes.size() + ")");
+	            	throw new DAOException();
+	            }
+	            logger.debug("Setting character sheet's attacks");
+	            int i = 0;
+	            for(Attack a : attacks){
+	            	Attack_Type t = attacksTypes.get(i);
+	            	if (cs.compareAttacksID(a) != -1){
+	            		Attack attack = cs.getAttacks().get(cs.compareAttacksID(a));   
+	            		attack.setAttackName(a.getAttackName());
 	            		attack.setPrimaryTarget(a.getPrimaryTarget());
 	            		attack.setSecondaryTarget(a.getSecondaryTarget());
 	            		attack.setAccessories(a.getAccessories());
@@ -286,27 +290,21 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            		} else {
 	            			Attack_TypeDAO attacktypeDao = new Attack_TypeDAOImpl();
 	            			attacktypeDao.deleteAttackType(attack.getAttackType().getId());
-		            		logger.debug("coucou");
+	            			t.setAttack(attack);
+	            			attacktypeDao.saveAttackType(t);
 	            			session.flush();
-		            		logger.debug("coucou2");
 	            			session.evict(attack.getAttackType());
-		            		logger.debug("coucou3");
-	            			session.update(attack.getAttackType());
-		            		logger.debug("coucou4");
 	            			attack.setAttackType(t);
-		            		logger.debug("coucou5");
-		            		t.setAttack(attack);
-		            		logger.debug("coucou6");
 	            		}
 	            		attack.setCharacterSheet(cs);
 	            	} else {       		
 	            		a.setAttackType(t);
+	            		a.setCharacterSheet(cs);
 	            		t.setAttack(a);
 	            		cs.addAttack(a);
-	            		a.setCharacterSheet(cs);
 	            	}
-            
-            	}
+	            	i++;
+	            }
             }
             transaction.commit();
         	logger.info("Character Sheet " + name + " was successfully updated in the database.");

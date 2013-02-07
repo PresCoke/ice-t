@@ -162,6 +162,9 @@ public class AttackBean implements Bean {
 		} else if (attack_type instanceof A_Close) {
 			A_Close close = (A_Close) attack_type;
 			attackType = "Close ";
+			//TODO FIX that : 
+			//Exception in thread "AWT-EventQueue-0" java.lang.NullPointerException
+			//at bean.combat.AttackBean.getListCellRendererComponent(AttackBean.java:165)
 			switch (close.getCloseType()) {
 			case blast:
 				attackType += "Blast "; break;

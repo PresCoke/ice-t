@@ -3,6 +3,7 @@ package entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -16,8 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="A_Close")
 public class A_Close extends Attack_Type {
 
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="A_Close_id")
     private int id;
     
