@@ -6,10 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
-import entity.A_Area;
-import entity.A_Close;
-import entity.A_Melee;
-import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
 import entity.CharacterSheet;
@@ -114,15 +110,8 @@ public class AttackDaoImpl implements AttackDao {
             a.setAction(action);
             a.setUseType(useType);
             //Set Attack's type
-            if (attack_type instanceof A_Area){
-            	
-            } else if (attack_type instanceof A_Close){
-            	
-            } else if (attack_type instanceof A_Melee){
-            	
-            } else {
-            	
-            }
+            //TODO
+            
             //Set the characterSheet
             CharacterSheet cs = (CharacterSheet) session.load(CharacterSheet.class, characterSheetId);
             a.setCharacterSheet(cs);

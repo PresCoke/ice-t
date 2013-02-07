@@ -16,8 +16,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="A_Melee")
 public class A_Melee extends Attack_Type {
 
-    @GenericGenerator(name="generator", strategy="increment")
-    @GeneratedValue(generator="generator")
+//    @GenericGenerator(name="generator", strategy="increment")
+//    @GeneratedValue(generator="generator")
     @Column(name="A_Melee_id")
     private int id;
 	

@@ -48,7 +48,7 @@ public class TrapHazard implements EntityM {
 	@Column(name="xp")
 	private int xp;
 	
-	@Column(name="difficultyLevel")
+	@Column(name="counterMeasuredifficultyLevel")
 	private int difficultyLevel;
 	
 	@Column(name="counterMeasureDescription")
@@ -72,7 +72,7 @@ public class TrapHazard implements EntityM {
 	@JoinColumn (name="CombatEncounter_id")
 	private CombatEncounter combatEncounter;
 	
-	@OneToOne(mappedBy="trap")
+	@OneToOne(mappedBy="trap", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack attack;
@@ -237,7 +237,7 @@ public class TrapHazard implements EntityM {
 	 * Other functions
 	 */
 	public void save() {
-		logger.debug("Saving TrapHazard");
+		logger.info("Saving TrapHazard " + this.getName());
 		TrapHazardDao thDao = new TrapHazardDaoImpl();
 		thDao.saveTrapHazard(getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
 				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
@@ -246,14 +246,18 @@ public class TrapHazard implements EntityM {
 
 
 	public void edit() {
-		// TODO Auto-generated method stub
+		logger.info("Editing TrapHazard " + this.getName());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		thDao.updateTrapHazard(getId(), getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
+				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
+				getAttack(), getAttack().getAttackType());
 		
 	}
 
-
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+		logger.info("Removing TrapHazard " + this.getName());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		thDao.deleteTrapHazard(getId());		
 	}
 
 }

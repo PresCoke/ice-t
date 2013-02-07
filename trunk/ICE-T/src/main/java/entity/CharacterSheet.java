@@ -619,7 +619,6 @@ public class CharacterSheet implements EntityM {
 		this.resistances = character_resistances;
 	}
 	
-	//TODO FIX this
 	public int getIndexOfResistance (Resistance resistance){
 		int index = 0;
 		for (Resistance r : resistances){
@@ -630,11 +629,11 @@ public class CharacterSheet implements EntityM {
 		}
 		return index;
 	}
-	//TODO FIX this
-	public int compareResistanceNames(Resistance resistance){
+
+	public int compareResistanceTypes(Resistance resistance){
 		int index = -1;
 		for (Resistance r : resistances){
-			if (r.getId() == resistance.getId()){
+			if (r.getResistanceType() == resistance.getResistanceType()){
 				index = this.getIndexOfResistance(r);
 			}
 		}
@@ -741,10 +740,10 @@ public class CharacterSheet implements EntityM {
 		return index;
 	}
 	
-	public int compareAttacksNames(Attack attack){
+	public int compareAttacksID(Attack attack){
 		int index = -1;
 		for (Attack a : attacks){
-			if (a.getAttackName().equals(attack.getAttackName())){
+			if (a.getId() == attack.getId()){
 				index = this.getIndexOf(a);
 			}
 		}
@@ -769,7 +768,7 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public void save() {
-    	logger.debug("Saving Character Sheet");
+    	logger.info("Saving Character Sheet " + getName());
 		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
@@ -781,12 +780,21 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public void edit() {
-		// TODO Auto-generated method stub
+    	logger.info("Editing Character Sheet " + getName());
+		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
+				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
+				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
+				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), getLevel(), getXP(), getRaceFeatures(),
+				getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(), getPowerSource(), getRole(), getSize(),
+				getMonsterOrigin(), getMonsterType(), getCharacter_resistances(), getAttacks(), getAttacksTypes(getAttacks())
+				);
 		
 	}
 
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+    	logger.info("Removing Character Sheet " + getName());
+		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		csDao.deleteCharacterSheet(getId());		
 	}
 }

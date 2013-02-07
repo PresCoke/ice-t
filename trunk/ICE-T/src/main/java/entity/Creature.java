@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -66,11 +67,10 @@ public class Creature {
 //    })
 	private CharacterSheet characterSheet;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy = "creature")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "creature", orphanRemoval = true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
-		org.hibernate.annotations.CascadeType.DELETE,
-		org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	private Set<Effect> effects;
+		org.hibernate.annotations.CascadeType.DELETE})
+	private List<Effect> effects;
 
 
 	/**
@@ -176,11 +176,11 @@ public class Creature {
 		this.stats = stats;
 	}
 	
-	public Set<Effect> getEffects() {
+	public List<Effect> getEffects() {
 		return effects;
 	}
 
-	public void setEffects(Set<Effect> effects) {
+	public void setEffects(List<Effect> effects) {
 		this.effects = effects;
 	}
 
