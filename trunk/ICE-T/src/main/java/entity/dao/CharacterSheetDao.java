@@ -4,6 +4,7 @@ import java.util.List;
 
 import entity.Attack;
 import entity.Attack_Type;
+import entity.CharacterSheet;
 import entity.EntityEnum;
 import entity.Resistance;
 
@@ -14,7 +15,9 @@ import entity.Resistance;
  */
 public interface CharacterSheetDao {
 	
-	public void readAllCharacterSheets();
+	public List<CharacterSheet> readAllCharacterSheets();
+	
+	public CharacterSheet getCharacterSheets(int characterSheetId);
 	
 	public int saveCharacterSheet(String name, int acrobatics, int athletics, int arcana, int bluff, int diplomacy, int dungeoneering,
 			int endurance, int heal, int history, int insight, int intimidate, int nature, int perception, int religion, int stealth,

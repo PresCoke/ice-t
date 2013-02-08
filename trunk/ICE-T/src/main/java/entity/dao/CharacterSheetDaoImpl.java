@@ -36,20 +36,22 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	public CharacterSheetDaoImpl() {
 		// TODO Auto-generated constructor stub
 	}
+	
 
-	public void readAllCharacterSheets() {
+	public CharacterSheet getCharacterSheets(int characterSheetId) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();		
+		CharacterSheet cs = (CharacterSheet) session.get(CharacterSheet.class, characterSheetId);
+		return cs;
+	}
+
+	public List<CharacterSheet> readAllCharacterSheets() {
     	logger.info("Retrieval of all character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from CharacterSheet");
-		
-		/*-- WTF @SuppressWarnings("unchecked") --*/
-		List<CharacterSheet> characterSheets = q.list();
-		
-		for (CharacterSheet cs : characterSheets) {
-			logger.info("Character Sheet Name = " + cs.getName());
-		}
-		
+		List<CharacterSheet> characterSheets = q.list();		
+		return characterSheets;
 	}
 
 	public int saveCharacterSheet(String name, int acrobatics, int athletics,
@@ -339,5 +341,4 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
         }
 	
 	}
-
 }
