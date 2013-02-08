@@ -30,17 +30,12 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 
 	private static final Logger logger = Logger.getLogger(TrapHazardDaoImpl.class);
 	
-	public void readAllTrapHazards() {
+	public List<TrapHazard> readAllTrapHazards() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from TrapHazard");
-		
-		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<TrapHazard> ths = q.list();
-		
-		for (TrapHazard th : ths) {
-			logger.debug("Name = " + th.getName() + " - DifficultyLevel = " + th.getDifficultyLevel());
-		}		
+		return ths;
 	}
 
 	public int saveTrapHazard(String name, int avoidance, int level,

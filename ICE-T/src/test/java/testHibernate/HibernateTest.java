@@ -3,6 +3,7 @@ package testHibernate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 
 import entity.A_Area;
@@ -11,11 +12,14 @@ import entity.A_Melee;
 import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
+import entity.CharacterSheet;
+import entity.Creature;
 import entity.EntityEnum;
 import entity.EntityEnum.CS_Monster_Origin;
 import entity.EntityEnum.CS_Monster_Type;
 import entity.EntityEnum.CS_Role;
 import entity.EntityEnum.CS_Size;
+import entity.EntityEnum.E_Duration;
 import entity.EntityEnum.T_CounterMeasureSkill;
 import entity.EntityEnum.T_Role;
 import entity.EntityEnum.T_Type;
@@ -30,13 +34,19 @@ import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
 import entity.dao.CreatureDao;
 import entity.dao.CreatureDaoImpl;
+import entity.dao.EffectDao;
+import entity.dao.EffectDaoImpl;
 import entity.dao.ResistanceDao;
 import entity.dao.ResistanceDaoImpl;
+import entity.dao.TeamDao;
+import entity.dao.TeamDaoImpl;
 import entity.dao.TrapHazardDao;
 import entity.dao.TrapHazardDaoImpl;
 //TODO Drop table trapHazard and re create it
 
 public class HibernateTest {
+	
+	private static final Logger logger = Logger.getLogger(HibernateTest.class);
 	
 	public static void main(String[] args) throws HibernateException {
 
@@ -47,12 +57,12 @@ public class HibernateTest {
 		resistances.add(r2);
 		
 		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
-//		A_Area t = new A_Area();
-//		t.setPersonal(true);
-//		t.setArea_range(100);
-//		t.setArea_size(100);
-//		t.setArea_type(EntityEnum.A_Area_Type.burst);
-//		attacksTypes.add(t);
+		A_Area t = new A_Area();
+		t.setPersonal(true);
+		t.setArea_range(100);
+		t.setArea_size(100);
+		t.setArea_type(EntityEnum.A_Area_Type.burst);
+		attacksTypes.add(t);
 //		A_Area t2 = new A_Area();
 //		t2.setPersonal(true);
 //		t2.setArea_range(0);
@@ -69,16 +79,15 @@ public class HibernateTest {
 //		t2.setCloseType(EntityEnum.A_Close_Type.blast);
 //		t2.setSize(1);
 //		attacksTypes.add(t2);
-		A_Melee t = new A_Melee();
-		t.setPersonal(true);
-		t.setReach(100);
+//		A_Melee t = new A_Melee();
+//		t.setPersonal(true);
+//		t.setReach(100);
 //		attacksTypes.add(t);
 //		A_Range t2 = new A_Range();
 //		t2.setPersonal(true);
 //		t2.setL_range(50);
 //		t2.setS_range(10);
 //		attacksTypes.add(t2);
-		
 		
 		List<Attack> attacks = new ArrayList<Attack>();
 		Attack a1 = new Attack("AttackT1");
@@ -119,12 +128,10 @@ public class HibernateTest {
 //		attacks.add(a2);
 		
 
-//		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-
 //		csDao.saveCharacterSheet("Terminator", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
 //			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
-//			null, attacks, attacksTypes);
+//			resistances, attacks, attacksTypes);
 		
 		
 //		csDao.updateCharacterSheet(4, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
@@ -154,6 +161,38 @@ public class HibernateTest {
 //				"none", EntityEnum.T_Type.trap, EntityEnum.T_Role.obstacle, EntityEnum.T_CounterMeasureSkill.heal,
 //				a1, t);
 //		thDao.deleteTrapHazard(3);
+		
+		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		CreatureDao cDao = new CreatureDaoImpl();
+		
+		List<Creature> creatures = cDao.readAllCreatures();
+//		creatures.remove(0);
+//		for(Creature c : creatures){
+//			logger.debug("Creature's name = " + c.getPlayerName() + " - Creature's CS = " + c.getCharacterSheet().getName());
+//		}
+//		
+//		CharacterSheet cs = csDao.getCharacterSheets(1);
+//		cDao.saveCreature("Tim", 100, 10, 1, true, 10, cs);
+//		cDao.saveCreature("James", 100, 10, 1, true, 10, cs);
+
+//		cDao.updateCreature(1, "James", 0, 100, 10, false, 100);
+//		cDao.deleteCreature(1);
+		
+//		TeamDao teamDao = new TeamDaoImpl();
+//		teamDao.saveTeam("IceTeam", creatures);
+//		teamDao.updateTeam(1, "IceTeam", creatures);
+//		teamDao.deleteTeam(1);
+		
+		EffectDao effectDao = new EffectDaoImpl();
+//		effectDao.saveEffect("EffectForTimAndJames", "Fuck that shit", "Fuck that man", E_Duration.endOfTheEncounter, creatures);
+		
+//		effectDao.deleteEffect(2);
+		
+		List<Integer> effectsIds = new ArrayList<Integer>();
+		effectsIds.add(1);
+		effectsIds.add(2);
+		
+		effectDao.deleteEffects(effectsIds);
 
 	}
 	
