@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -52,24 +53,22 @@ public class Creature {
 	private int tempHP;
 	
 	//Associations
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="Team_id")
 	private Team team;
 	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy = "creature")
+	@OneToOne(mappedBy = "creature", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
 	private Stats stats;
 	
-	@ManyToOne
-    @JoinColumn(name="CharacterSheet_id", referencedColumnName="CharacterSheet_id")
-//    @JoinColumns({
-//        @JoinColumn(name="CharacterSheet_id", referencedColumnName="CharacterSheet_id"),
-//        @JoinColumn(name="CharacterSheet_name", referencedColumnName="CharacterSheet_name")
-//    })
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy = "creature", orphanRemoval = true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
-		org.hibernate.annotations.CascadeType.DELETE})
+		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Effect> effects;
 
 
