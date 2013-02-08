@@ -1,5 +1,9 @@
 package entity.dao;
 
+import java.util.List;
+
+import entity.Creature;
+import entity.Effect;
 import entity.EntityEnum.E_Duration;
 
 /**
@@ -9,9 +13,9 @@ import entity.EntityEnum.E_Duration;
  */
 public interface EffectDao {
 
-	public void readAllEffects();
-	public int saveEffect(String name, String changes, int damage, String metrics, E_Duration duration);
-	public void updateTrapHazard(int effectId, String name,String changes, int damage, String metrics, E_Duration duration);
-	public void deleteTrapHazard(int effectId);
+	public List<Effect> readAllEffects();
+	public List<Integer> saveEffect(String name, String changes, String metrics, E_Duration duration, List<Creature> creatures);
+	public void deleteEffects(List<Integer> effectsIds);
+	public void deleteEffect(int effectId);
 
 }

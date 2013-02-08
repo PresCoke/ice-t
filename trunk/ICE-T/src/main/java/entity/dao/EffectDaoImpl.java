@@ -1,5 +1,6 @@
 package entity.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
 
+import entity.Creature;
 import entity.Effect;
 import entity.EntityEnum.E_Duration;
 
@@ -27,35 +29,41 @@ public class EffectDaoImpl implements EffectDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void readAllEffects() {
+	public List<Effect> readAllEffects() {
 		logger.info("Retrieval of all effects in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Effect");
 		
-		/*-- WTF @SuppressWarnings("unchecked") --*/
 		List<Effect> effects = q.list();
-		
-		for (Effect e : effects) {
-			logger.info("Effect Name = " + e.getName() + " - Damage = "+ e.getDamage());
-		}
-		
+
+		return effects;
 	}
 
-	public int saveEffect(String name, String changes, int damage,
-			String metrics, E_Duration duration) {
+	public List<Integer> saveEffect(String name, String changes, String metrics,
+			E_Duration duration, List<Creature> creatures) {
     	logger.debug("Effect " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
-        int effectId = -1;
+        List<Integer> effectsIds = new ArrayList<Integer>();
         try {
             transaction = session.beginTransaction();
-            Effect e = new Effect(name);
-            e.setChanges(changes);
-            e.setDamage(damage);
-            e.setMetrics(metrics);
-            e.setDuration(duration);
-            effectId = (Integer) session.save(e);
+            for (Creature c : creatures){
+                int effectId = -1;
+	        	logger.debug("Setting the effect's attributes");
+	            Effect e = new Effect(name);
+	            e.setChanges(changes);
+	            e.setMetrics(metrics);
+	            e.setDuration(duration);
+	        	logger.debug("Setting the effect's creatures");
+	            Creature creature = (Creature) session.get(Creature.class, c.getId());
+	            e.setCreature(creature);
+	            effectId = (Integer) session.save(e);
+	            effectsIds.add(effectId);
+	        	logger.debug("Setting the creatures' effect");
+	        	creature.addEffect(e);
+	        	session.update(creature);
+            }
             transaction.commit();
         	logger.info("Effect " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
@@ -64,41 +72,37 @@ public class EffectDaoImpl implements EffectDao {
         } finally {
             session.close();
         }
-        return effectId;
+        return effectsIds;
 	}
-
-	public void updateTrapHazard(int effectId, String name, String changes,
-			int damage, String metrics, E_Duration duration) {
-    	logger.debug("Effect " + name + " is about to be updated in the database.");
-    	Session session = HibernateUtil.getSessionFactory().openSession();
+	
+	public void deleteEffects(List<Integer> effectsIds) {
+		logger.debug("Effects whose ids are " + effectsIds.toString() + " are about to be deleted from the database.");
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Effect e = (Effect) session.get(Effect.class, effectId);
-            e.setName(name);
-            e.setChanges(changes);
-            e.setDamage(damage);
-            e.setMetrics(metrics);
-            e.setDuration(duration);
-            effectId = (Integer) session.save(e);
+            for (int i : effectsIds){
+	            Effect effect = (Effect) session.get(Effect.class, i);
+	            session.delete(effect);
+            }
             transaction.commit();
-        	logger.info("Effect " + name + " was successfully updated in the database.");
+        	logger.info("Effects whose ids are " + effectsIds.toString() + " were successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Effect " + name + " in the database --- " + e.getMessage());
+            logger.fatal("Error while removing effects whose ids are " + effectsIds.toString() + " in the database --- " + e.getMessage());
         } finally {
             session.close();
-        }		
+        }	
 	}
 
-	public void deleteTrapHazard(int effectId) {
+	public void deleteEffect(int effectId) {
 		logger.debug("Effect " + effectId + " is about to be deleted from the database.");
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
             Effect e = (Effect) session.get(Effect.class, effectId);
-            logger.info("Deletion of Effect " + e.getName() + "associated to the creature " + e.getCreature().getPlayerName());
+            logger.info("Deletion of Effect " + e.getName() + " number " + e.getId());
             session.delete(e);
             transaction.commit();
         	logger.info("Effect " + effectId + " was successfully removed from the database.");
@@ -109,5 +113,4 @@ public class EffectDaoImpl implements EffectDao {
             session.close();
         }
 	}
-
 }

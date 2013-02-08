@@ -26,31 +26,39 @@ public class TeamDaoImpl implements TeamDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void readAllTeams() {
+	public List<Team> readAllTeams() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Team");
-		
-		/*-- WTF @SuppressWarnings("unchecked") --*/
+
 		List<Team> teams = q.list();
-		
-		for (Team t : teams) {
-			logger.info("Team Name = " + t.getName());
-		}		
+
+		return teams;
 	}
 
-	public int saveTeam(String name) {
+	public int saveTeam(String name, List<Creature> creatures) {
     	logger.debug("Team " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         int teamID = -1;
         try {
             transaction = session.beginTransaction();
-            Creature c = new Creature(name);
-            teamID = (Integer) session.save(c);
-            transaction.commit();
+            Team t = new Team(name);
+            for (Creature c : creatures){
+                Creature creature = (Creature) session.get(Creature.class, c.getId());
+                t.addCreature(creature);
+            }
+            teamID = (Integer) session.save(t);
         	logger.info("Team " + name + " was successfully saved in the database.");
+        	logger.debug("Setting creatures' team");
+        	Team team = (Team) session.get(Team.class, teamID);
+        	for (Creature c : creatures){
+                Creature creature = (Creature) session.get(Creature.class, c.getId());
+                creature.setTeam(team);
+                session.update(creature);
+            }
+            transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving Team " + name + " in the database --- " + e.getMessage());
@@ -60,7 +68,7 @@ public class TeamDaoImpl implements TeamDao {
         return teamID;
 	}
 
-	public void updateTeam(int teamId, String name) {
+	public void updateTeam(int teamId, String name, List<Creature> creatures) {
     	logger.debug("Team " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -68,6 +76,23 @@ public class TeamDaoImpl implements TeamDao {
             transaction = session.beginTransaction();
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
+            logger.debug("Modifying previous creatures' team");
+            List<Creature> creaturesDB = t.getCreatures();
+            for (Creature c : creaturesDB){
+                Creature creature = (Creature) session.get(Creature.class, c.getId());
+                creature.setTeam(null);
+                session.update(creature);
+            } 
+            logger.debug("Modifying previous creatures' team done");
+            t.removeAllCreatures();
+            session.update(t);
+            logger.debug("Setting team's creatures and creatures' team");
+            for (Creature c : creatures){
+                Creature creature = (Creature) session.get(Creature.class, c.getId());
+                t.addCreature(creature);
+                creature.setTeam(t);
+                session.update(creature);
+            }
             transaction.commit();
         	logger.info("Team " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
@@ -85,7 +110,12 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = (Team) session.get(Team.class, teamId);
-            logger.info("Deletion of team " + t.getName() + " associated to the combat encounter " + t.getCombatEncounter().getName());
+            for (Creature c : t.getCreatures()){
+                Creature creature = (Creature) session.get(Creature.class, c.getId());
+                creature.setTeam(null);
+                session.update(creature);
+            }
+            logger.info("Deletion of team " + t.getName());
             session.delete(t);
             transaction.commit();
         	logger.info("Team " + teamId + " was successfully removed from the database.");

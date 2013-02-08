@@ -113,12 +113,11 @@ public class Effect implements EntityM {
 		return creature;
 	}
 
-
 	public void setCreature(Creature creature) {
 		this.creature = creature;
 	}
 
-
+	
 	/**
 	 * Other functions
 	 */

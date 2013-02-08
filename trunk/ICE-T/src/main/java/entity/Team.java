@@ -1,9 +1,10 @@
 package entity;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -36,15 +38,18 @@ public class Team implements EntityM {
 	@JoinColumn (name="CombatEncounter_id")
 	private CombatEncounter combatEncounter;
 
-	@OneToMany(mappedBy = "team")
-	private Set<Creature> creatures;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Creature> creatures;
 	
 	
 	/**
 	 * Default constructor
 	 */
 	public Team() {
-		super();
+		this.name= "";
+		this.creatures = new ArrayList<Creature>();
 	}
 	
 	/**
@@ -53,6 +58,7 @@ public class Team implements EntityM {
 	 */
 	public Team(String name) {
 		this.name=name;
+		this.creatures = new ArrayList<Creature>();
 	}
 
 	/**
@@ -82,12 +88,47 @@ public class Team implements EntityM {
 		this.name = name;
 	}
 	
-	public Set<Creature> getCreatures() {
+	public List<Creature> getCreatures() {
 		return creatures;
 	}
 
-	public void setCreatures(Set<Creature> creatures) {
+	public void setCreatures(List<Creature> creatures) {
 		this.creatures = creatures;
+	}
+	
+	public void removeAllCreatures() {
+		this.creatures.removeAll(creatures);
+	}
+	
+	public void addCreature(Creature addThisCreature) {
+		this.creatures.add(addThisCreature);
+	}
+	
+	public Creature getCreatureAt(int index) {
+		return this.creatures.get(index);
+	}
+	
+	public Creature removeCreatureAt(int index) throws IndexOutOfBoundsException {
+		return this.creatures.remove(index);
+	}
+	
+	public boolean removeCreature(Creature thisCreature) {
+		return this.creatures.remove(thisCreature);
+	}
+	
+	public int getNumberOfCreatures() {
+		return this.creatures.size();
+	}
+	
+	public int getIndexOf (Creature thisCreature){
+		int index = 0;
+		for (Creature c : creatures){
+			if (c.getPlayerName().equals(thisCreature.getPlayerName())){
+				break;
+			}
+			index++;
+		}
+		return index;
 	}
 	
 

@@ -1,8 +1,6 @@
 package entity;
 
 import java.util.List;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -202,6 +199,42 @@ public class Creature {
 	public void setEffects(List<Effect> effects) {
 		this.effects = effects;
 	}
+	
+	public void removeAllEffects() {
+		this.effects.removeAll(effects);
+	}
+	
+	public void addEffect(Effect addThisEffect) {
+		this.effects.add(addThisEffect);
+	}
+	
+	public Effect getEffectAt(int index) {
+		return this.effects.get(index);
+	}
+	
+	public Effect removeEffectAt(int index) throws IndexOutOfBoundsException {
+		return this.effects.remove(index);
+	}
+	
+	public boolean removeEffect(Effect thisEffect) {
+		return this.effects.remove(thisEffect);
+	}
+	
+	public int getNumberOfEffects() {
+		return this.effects.size();
+	}
+	
+	public int getIndexOf (Effect thisEffect){
+		int index = 0;
+		for (Effect e : effects){
+			if (e.getName().equals(thisEffect.getName())){
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+	
 
 	public CharacterSheet getCharacterSheet() {
 		return characterSheet;

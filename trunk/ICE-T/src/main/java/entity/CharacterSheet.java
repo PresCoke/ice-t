@@ -139,11 +139,10 @@ public class CharacterSheet implements EntityM {
 	private EntityEnum.CS_Monster_Type monsterType; 
 	
 	//Associations
-//	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet")
-//	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
-//		org.hibernate.annotations.CascadeType.DELETE,
-//		org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-//	private Set<Creature> creatures;
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Creature> creatures;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 

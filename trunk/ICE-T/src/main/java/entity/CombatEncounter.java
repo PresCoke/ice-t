@@ -1,7 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -35,17 +36,25 @@ public class CombatEncounter {
 	private String notes;
 	
 	//Associations
-	@OneToMany(mappedBy = "combatEncounter")
-	private Set<Rewards> rewards;
+	@OneToMany(mappedBy = "combatEncounter", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Rewards> rewards;
 	
 	@OneToMany(mappedBy = "combatEncounter")
-	private Set<TrapHazard> traphazards;
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<TrapHazard> traphazards;
 
-	@OneToOne(mappedBy = "combatEncounter")
+	@OneToOne(mappedBy = "combatEncounter", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
 	private Tally tally;
 	
 	@OneToMany(mappedBy = "combatEncounter")
-	private Set<Team> teams;
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Team> teams;
 
 
 	/**
@@ -90,19 +99,19 @@ public class CombatEncounter {
 		this.notes = notes;
 	}
 	
-	public Set<TrapHazard> getTraphazards() {
+	public List<TrapHazard> getTraphazards() {
 		return traphazards;
 	}
 
-	public void setTraphazards(Set<TrapHazard> traphazards) {
+	public void setTraphazards(List<TrapHazard> traphazards) {
 		this.traphazards = traphazards;
 	}
 	
-	public Set<Rewards> getRewards() {
+	public List<Rewards> getRewards() {
 		return rewards;
 	}
 
-	public void setRewards(Set<Rewards> rewards) {
+	public void setRewards(List<Rewards> rewards) {
 		this.rewards = rewards;
 	}
 	
@@ -114,11 +123,11 @@ public class CombatEncounter {
 		this.tally = tally;
 	}
 	
-	public Set<Team> getTeams() {
+	public List<Team> getTeams() {
 		return teams;
 	}
 
-	public void setTeams(Set<Team> teams) {
+	public void setTeams(List<Team> teams) {
 		this.teams = teams;
 	}
 
