@@ -192,6 +192,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setLevel(lvl);
 			}
 		});
+		((JSpinner.DefaultEditor) lvl_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		//surge_num
 		JLabel xp_label = new JLabel(entity_l10n.getString("XP_entity") );
 		xp_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -412,6 +425,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setSTR(abl);
 			}
 		});
+		((JSpinner.DefaultEditor) str_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		str_field.setValue(theCharacter.getSTR());
 		
 		//CON
@@ -421,6 +447,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setCON(abl);
+			}
+		});
+		((JSpinner.DefaultEditor) con_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		con_field.setValue(theCharacter.getCON());
@@ -434,6 +473,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setINT(abl);
 			}
 		});
+		((JSpinner.DefaultEditor) int_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		int_field.setValue(theCharacter.getINT());
 		
 		//DEX
@@ -443,6 +495,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setDEX(abl);
+			}
+		});
+		((JSpinner.DefaultEditor) dex_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		dex_field.setValue(theCharacter.getDEX());
@@ -456,6 +521,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setWIS(abl);
 			}
 		});
+		((JSpinner.DefaultEditor) wis_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		wis_field.setValue(theCharacter.getWIS());
 		
 		//CHA
@@ -465,6 +543,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int abl = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setCHAR(abl);
+			}
+		});
+		((JSpinner.DefaultEditor) cha_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		cha_field.setValue(theCharacter.getCHAR());
@@ -548,6 +639,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setAC(def);
 			}
 		});
+		((JSpinner.DefaultEditor) ac_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		ac_field.setValue(theCharacter.getAC());
 
 		//REF
@@ -557,6 +661,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setREF(def);
+			}
+		});
+		((JSpinner.DefaultEditor) ref_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		ref_field.setValue(theCharacter.getREF());
@@ -570,6 +687,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setFORT(def);
 			}
 		});
+		((JSpinner.DefaultEditor) fort_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		fort_field.setValue(theCharacter.getFORT());
 		
 		//WILL
@@ -579,6 +709,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int def = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setWILL(def);
+			}
+		});
+		((JSpinner.DefaultEditor) will_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		will_field.setValue(theCharacter.getWILL());
@@ -636,6 +779,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setAcrobatics(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) acro_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		acro_field.setValue(theCharacter.getAcrobatics());
 		skill_panel.add(acro_label); skill_panel.add(acro_field);
 		//athletics
@@ -645,6 +801,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setAthletics(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) athl_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		athl_field.setValue(theCharacter.getAthletics());
@@ -658,6 +827,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setArcana(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) arca_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		arca_field.setValue(theCharacter.getArcana());
 		skill_panel.add(arca_label); skill_panel.add(arca_field);
 		//bluff
@@ -667,6 +849,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setBluff(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) bluf_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		bluf_field.setValue(theCharacter.getBluff());
@@ -680,6 +875,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setDiplomacy(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) dipl_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		dipl_field.setValue(theCharacter.getDiplomacy());
 		skill_panel.add(dipl_label); skill_panel.add(dipl_field);
 		//dungeoneering
@@ -689,6 +897,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setDungeoneering(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) dung_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		dung_field.setValue(theCharacter.getDungeoneering());
@@ -702,6 +923,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setEndurance(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) endu_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		endu_field.setValue(theCharacter.getEndurance());
 		skill_panel.add(endu_label); skill_panel.add(endu_field);
 		//heal
@@ -711,6 +945,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setHeal(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) heal_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		heal_field.setValue(theCharacter.getHeal());
@@ -724,6 +971,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setHistory(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) hist_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		hist_field.setValue(theCharacter.getHistory());
 		skill_panel.add(hist_label); skill_panel.add(hist_field);
 		//insight
@@ -733,6 +993,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setInsight(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) insi_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		insi_field.setValue(theCharacter.getInsight());
@@ -746,6 +1019,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setIntimidate(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) inti_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		inti_field.setValue(theCharacter.getIntimidate());
 		skill_panel.add(inti_label); skill_panel.add(inti_field);
 		//nature
@@ -755,6 +1041,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setNature(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) natu_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		natu_field.setValue(theCharacter.getNature());
@@ -768,6 +1067,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setPerception(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) perc_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		perc_field.setValue(theCharacter.getPerception());
 		skill_panel.add(perc_label); skill_panel.add(perc_field);
 		//religion
@@ -777,6 +1089,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setReligion(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) reli_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		reli_field.setValue(theCharacter.getReligion());
@@ -790,6 +1115,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setStealth(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) stea_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		stea_field.setValue(theCharacter.getStealth());
 		skill_panel.add(stea_label); skill_panel.add(stea_field);
 		//streetwise
@@ -801,6 +1139,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				theCharacter.setStreetwise(skill);
 			}
 		});
+		((JSpinner.DefaultEditor) stre_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		stre_field.setValue(theCharacter.getStreetwise());
 		skill_panel.add(stre_label); skill_panel.add(stre_field);
 		//theivery
@@ -810,6 +1161,19 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void stateChanged(ChangeEvent arg0) {
 				int skill = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				theCharacter.setThievery(skill);
+			}
+		});
+		((JSpinner.DefaultEditor) thie_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		thie_field.setValue(theCharacter.getThievery());

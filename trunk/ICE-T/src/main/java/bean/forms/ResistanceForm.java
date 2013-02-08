@@ -42,6 +42,19 @@ public class ResistanceForm implements FormBean {
 				theResistance.setResistanceValue(resistValue);
 			}
 		});
+		((JSpinner.DefaultEditor) resistValue_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		
 		resistType_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
