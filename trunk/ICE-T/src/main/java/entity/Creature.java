@@ -76,6 +76,12 @@ public class Creature {
 	 * Default constructor
 	 */
 	public Creature() {
+		playerName = "";
+		currentHP = 0;
+		currentHealSurges = 0;
+		currentLevel = 0;
+		secondWind = false;
+		tempHP = 0;
 	}
 
 	/**
@@ -84,8 +90,22 @@ public class Creature {
 	 */
 	public Creature(String playerName) {
 		this.playerName = playerName;
+		currentHP = 0;
+		currentHealSurges = 0;
+		currentLevel = 0;
+		secondWind = false;
+		tempHP = 0;
 	}
-
+	
+	public Creature(String name, CharacterSheet sheet) {
+		playerName = name;
+		characterSheet = sheet;
+		currentHP = characterSheet.getMaxHP();
+		currentHealSurges = characterSheet.getSurgesPerDay();
+		currentLevel = characterSheet.getLevel();
+		secondWind = false;
+		tempHP = 0;
+	}
 	/**
 	 * Getters & Setters
 	 */
