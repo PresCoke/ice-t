@@ -31,9 +31,9 @@ public class ResistanceBean implements Bean {
 		
 		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
-		theResistance = (Resistance) value;
+		Resistance aResistance = (Resistance) value;
 		JLabel resistanceType_label;
-		switch (theResistance.getResistanceType()) {
+		switch (aResistance.getResistanceType()) {
 		case acid:
 			resistanceType_label = new JLabel(entity_l10n.getString("Acid_resist")); break;
 		case cold:
@@ -58,7 +58,7 @@ public class ResistanceBean implements Bean {
 			resistanceType_label = new JLabel();
 		}
 		
-		JLabel resistanceValue_label = new JLabel( Integer.toString(theResistance.getResistanceValue()) );
+		JLabel resistanceValue_label = new JLabel( Integer.toString(aResistance.getResistanceValue()) );
 		
 		JPanel resistance_panel = new JPanel();
 		if (isSelected) {

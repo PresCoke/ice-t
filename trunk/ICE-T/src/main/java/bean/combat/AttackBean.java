@@ -1,6 +1,7 @@
 package bean.combat;
 
 import javax.swing.*;
+
 import java.awt.*;
 
 import entity.*;
@@ -33,7 +34,8 @@ public class AttackBean implements Bean {
 		//Secondary Hit: [TODO: this is missing]
 		//Effect: [Effect String]
 		//Sustain [sustain use]: [//TODO missing string]
-		theAttack = (Attack) theValue;
+		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
+		Attack aAttack = (Attack) theValue;
 			
 		
 		String name = "", basic = "";
@@ -43,13 +45,16 @@ public class AttackBean implements Bean {
 		String sustain = "";
 		
 		JEditorPane theAttackBean = new JEditorPane();
-		name = theAttack.getAttackName();
-		if (theAttack.isBasic()) {
+		if (isSelected) {
+			theAttackBean.setBackground( system_defaults.getColor("List.selectionBackground") );
+		}
+		name = aAttack.getAttackName();
+		if (aAttack.isBasic()) {
 			basic = "BASIC";
 		} else {
 			basic = "";
 		}
-		switch (theAttack.getAction()) {
+		switch (aAttack.getAction()) {
 		case standard:
 			action = "Standard"; break;
 		case move:
@@ -61,7 +66,7 @@ public class AttackBean implements Bean {
 		default:
 			action = "";
 		}
-		switch (theAttack.getSustain()) {
+		switch (aAttack.getSustain()) {
 		case standard:
 			action = "Standard"; break;
 		case move:
@@ -71,7 +76,7 @@ public class AttackBean implements Bean {
 		case NONE:
 			action = ""; break;
 		}
-		switch (theAttack.getUseType()) {
+		switch (aAttack.getUseType()) {
 		case atWill:
 			use = "At Will"; break;
 		case encounter:
@@ -83,8 +88,8 @@ public class AttackBean implements Bean {
 		default:
 			use = "";
 		}
-		pwr_src = theAttack.getPowerSource();
-		switch (theAttack.getEffectType()) {
+		pwr_src = aAttack.getPowerSource();
+		switch (aAttack.getEffectType()) {
 		case charm:
 			effect = "Charm"; break;
 		case conjuration:
@@ -113,7 +118,7 @@ public class AttackBean implements Bean {
 			effect = ""; break;
 				
 		}
-		switch (theAttack.getDamageType()) {
+		switch (aAttack.getDamageType()) {
 		case acid:
 			damage = "Acid"; break;
 		case cold:
@@ -137,8 +142,8 @@ public class AttackBean implements Bean {
 		default:
 			damage = "";
 		}
-		accessories = theAttack.getAccessories();
-		Attack_Type attack_type = theAttack.getAttackType();
+		accessories = aAttack.getAccessories();
+		Attack_Type attack_type = aAttack.getAttackType();
 		if (attack_type instanceof A_Range) {
 			A_Range range = (A_Range) attack_type;
 			attackType = "Ranged "+range.getS_range()+" - "+range.getL_range();
@@ -176,7 +181,7 @@ public class AttackBean implements Bean {
 			attackType = "Personal";
 		}
 		
-		switch (theAttack.getAbility()) {
+		switch (aAttack.getAbility()) {
 		case STR:
 			ability = "Strength"; break;
 		case CON:
@@ -190,7 +195,7 @@ public class AttackBean implements Bean {
 		case CHAR:
 			ability = "Charisma"; break;
 		}
-		switch (theAttack.getDefense()) {
+		switch (aAttack.getDefense()) {
 		case AC:
 			defense = "Armour Class"; break;
 		case REF:
@@ -200,22 +205,22 @@ public class AttackBean implements Bean {
 		case WILL:
 			defense = "Will"; break;
 		}
-		hit = theAttack.getHit();
-		miss = theAttack.getMiss();
+		hit = aAttack.getHit();
+		miss = aAttack.getMiss();
 		String fullText = name+" - "+basic+"\n"+
 				use + " * "+pwr_src+" "+effect+" "+damage+" "+accessories+"\n"+
 				action+attackType+ "\n"+
-				"Target: " + theAttack.getPrimaryTarget()+"\n"+ 
+				"Target: " + aAttack.getPrimaryTarget()+"\n"+ 
 				"Attack: " + ability + " vs. "+ defense+"\n"+
 				"Hit: "+hit+"\nMiss: "+miss;
 		//Need to do something about missing fields
-		if (theAttack.getSecondaryTarget() != "") {
-			fullText+= "Secondary Target: "+theAttack.getSecondaryTarget();
+		if (aAttack.getSecondaryTarget() != "") {
+			fullText+= "Secondary Target: "+aAttack.getSecondaryTarget();
 		}
-		if (theAttack.getTrigger() != "") {
-			fullText+= "Trigger: "+theAttack.getTrigger();
+		if (aAttack.getTrigger() != "") {
+			fullText+= "Trigger: "+aAttack.getTrigger();
 		}
-		if (theAttack.getSustain() != EntityEnum.A_Sustain.NONE ) {
+		if (aAttack.getSustain() != EntityEnum.A_Sustain.NONE ) {
 			fullText+= "Sustain " + sustain;
 		}
 				
