@@ -256,11 +256,7 @@ public class AttackForm implements FormBean {
 		attackBasic_field.setSelected(false);
 		attackBasic_field.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				if ( ((JCheckBox) ae.getSource()).isSelected() ) {
-					theAttack.setBasic(true);
-				} else {
-					theAttack.setBasic(false);
-				}
+				theAttack.setBasic( ((JCheckBox) ae.getSource()).isSelected() );
 			}
 		});
 		
