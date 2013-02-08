@@ -1,13 +1,10 @@
 package entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
@@ -31,12 +28,8 @@ public class Effect implements EntityM {
 	@Column(name="Effect_name")
 	private String name;
 	
-	//TODO Maybe remove it
 	@Column(name="changes")
 	private String changes;
-	
-	@Column(name="damage")
-	private int damage;
 	
 	@Column(name="metrics")
 	private String metrics;
@@ -55,6 +48,10 @@ public class Effect implements EntityM {
 	 * Default constructor
 	 */
 	public Effect() {
+		this.name="";
+		this.changes="";
+		this.metrics="";
+		this.duration = EntityEnum.E_Duration.endOfTheEncounter;
 	}
 	
 	/**
@@ -63,6 +60,9 @@ public class Effect implements EntityM {
 	 */
 	public Effect(String name) {
 		this.name=name;
+		this.changes="";
+		this.metrics="";
+		this.duration = EntityEnum.E_Duration.endOfTheEncounter;
 	}
 
 	
@@ -83,14 +83,6 @@ public class Effect implements EntityM {
 
 	public void setChanges(String changes) {
 		this.changes = changes;
-	}
-
-	public int getDamage() {
-		return damage;
-	}
-
-	public void setDamage(int damage) {
-		this.damage = damage;
 	}
 
 	public String getMetrics() {
