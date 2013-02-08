@@ -46,139 +46,19 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackName_label = new JLabel(entity_l10n.getString("Name_attack"));
 		attackName_field = new JTextField();
-		/*attackName_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getAttackName();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setAttackName(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getAttackName();
-				current += ke.getKeyChar();
-				theAttack.setAttackName(current);
-			}
-			
-		});*/
 		
 		JLabel attackPrimary_label = new JLabel(entity_l10n.getString("Primary_attack"));
 		attackPrimary_field = new JTextField();
-		/*attackPrimary_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getPrimaryTarget();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setPrimaryTarget(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
 				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getPrimaryTarget();
-				current += ke.getKeyChar();
-				theAttack.setPrimaryTarget(current);
-			}
-			
-		});*/
-		
 		JLabel attackSecondary_label = new JLabel(entity_l10n.getString("Secondary_attack"));
 		attackSecondary_field = new JTextField();
-		/*attackSecondary_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getSecondaryTarget();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setSecondaryTarget(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getSecondaryTarget();
-				current += ke.getKeyChar();
-				theAttack.setSecondaryTarget(current);
-			}
-			
-		});*/
 		
 		JLabel attackAccessories_label = new JLabel(entity_l10n.getString("Accessories_attack"));
 		attackAccessories_field = new JTextField();
-		/*attackAccessories_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getAccessories();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setAccessories(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getAccessories();
-				current += ke.getKeyChar();
-				theAttack.setAccessories(current);
-			}
-			
-		});*/
 		
 		JLabel attackPwr_label = new JLabel(entity_l10n.getString("Power_entity"));
 		attackPwr_field = new JTextField();
-		/*attackPwr_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getPowerSource();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setPowerSource(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
 				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getPowerSource();
-				current += ke.getKeyChar();
-				theAttack.setPowerSource(current);
-			}
-			
-		});*/
-		
 		JLabel attackEffect_label = new JLabel(entity_l10n.getString("Effect_attack"));
 		String[] attack_effect = { entity_l10n.getString("Charm_attack"),
 								   entity_l10n.getString("Conjuration_attack"),
@@ -323,57 +203,9 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackHit_label = new JLabel(entity_l10n.getString("Hit_attack"));
 		attackHit_field = new JTextField();
-		/*attackHit_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getHit();
-					if (deleted_string.length() >= 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setHit(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
 				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getHit();
-				current += ke.getKeyChar();
-				theAttack.setHit(current);
-			}
-			
-		});*/
-		
 		JLabel attackMiss_label = new JLabel(entity_l10n.getString("Miss_attack"));
 		attackMiss_field = new JTextField();
-		/*attackMiss_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getMiss();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setMiss(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getMiss();
-				current += ke.getKeyChar();
-				theAttack.setMiss(current);
-			}
-			
-		});*/
 		
 		JLabel attackAction_label = new JLabel(entity_l10n.getString("Action_attack"));
 		String[] attackAction = { entity_l10n.getString("Standard_attack"),
@@ -456,79 +288,11 @@ public class AttackForm implements FormBean {
 		
 		JLabel attackTrigger_label = new JLabel(entity_l10n.getString("Trigger_attack"));
 		attackTrigger_field = new JTextField();
-		/*attackTrigger_field.addKeyListener( new KeyListener() {
-			public void keyPressed(KeyEvent ke) {
-				int key_press = ke.getKeyCode();
-				if (key_press == KeyEvent.VK_BACK_SPACE || key_press == KeyEvent.VK_DELETE) {
-					String deleted_string = theAttack.getTrigger();
-					if (deleted_string.length() > 1) {
-						deleted_string = deleted_string.substring(0, deleted_string.length() - 1);
-						theAttack.setTrigger(deleted_string);
-					}
-				}
-			}
-
-			public void keyReleased(KeyEvent ke) {
-				
-				
-			}
-
-			public void keyTyped(KeyEvent ke) {
-				String current = theAttack.getTrigger();
-				current += ke.getKeyChar();
-				theAttack.setTrigger(current);
-			}
-			
-		});*/
 		
 		attackType_form = new AttackTypeForm();
 		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-/*		ButtonGroup attackType_buttongroup = new ButtonGroup();
-		attackTypeRange_button = new JRadioButton(entity_l10n.getString("Ranged_attack"));
-		attackTypeRange_button.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theAttackType = new A_Range();
-				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-			}
-		});
-		attackTypeMelee_button = new JRadioButton(entity_l10n.getString("Melee_attack"));
-		attackTypeMelee_button.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theAttackType = new A_Melee();
-				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-			}
-		});
-		attackTypeClose_button = new JRadioButton(entity_l10n.getString("Close_attack"));
-		attackTypeClose_button.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theAttackType = new A_Close();
-				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-			}
-		});
-		attackTypeArea_button  = new JRadioButton(entity_l10n.getString("Area_attack"));
-		attackTypeArea_button.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theAttackType = new A_Area();
-				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-			}
-		});
-		attackTypePrsnl_button = new JRadioButton(entity_l10n.getString("Personal_attack"));
-		attackTypePrsnl_button.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				theAttackType = new Attack_Type();
-				attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
-			}
-		});
-		attackTypePrsnl_button.setSelected(true);
-		
-		attackType_buttongroup.add(attackTypeRange_button);
-		attackType_buttongroup.add(attackTypeMelee_button);
-		attackType_buttongroup.add(attackTypeClose_button);
-		attackType_buttongroup.add(attackTypeArea_button);
-		attackType_buttongroup.add(attackTypePrsnl_button);*/
-		
+
 		GroupLayout attack_layout = new GroupLayout(attack_panel);
-		
 		attack_layout.setHorizontalGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup( attack_layout.createSequentialGroup()
 						.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -588,12 +352,6 @@ public class AttackForm implements FormBean {
 								.addComponent(attackAccessories_field))
 						)
 				.addGroup( attack_layout.createSequentialGroup()
-						/*.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(attackTypePrsnl_button)
-								.addComponent(attackTypeRange_button)
-								.addComponent(attackTypeMelee_button)
-								.addComponent(attackTypeArea_button)
-								.addComponent(attackTypeClose_button))*/
 						.addComponent(attackType_panel)		
 						)
 				);
@@ -657,12 +415,6 @@ public class AttackForm implements FormBean {
 								.addComponent(attackAccessories_field))
 						)
 				.addGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						/*.addGroup( attack_layout.createSequentialGroup()
-								.addComponent(attackTypePrsnl_button)
-								.addComponent(attackTypeRange_button)
-								.addComponent(attackTypeMelee_button)
-								.addComponent(attackTypeArea_button)
-								.addComponent(attackTypeClose_button))*/
 						.addComponent(attackType_panel)		
 						)
 				);

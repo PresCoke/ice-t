@@ -2,6 +2,7 @@ package bean.forms;
 
 import java.util.ResourceBundle;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -49,6 +50,19 @@ public class TrapHazardForm implements FormBean {
 			public void stateChanged(ChangeEvent ce) {
 				int level = (Integer) ((JSpinner) ce.getSource()).getValue();
 				theTrap.setLevel(level);
+			}
+		});
+		((JSpinner.DefaultEditor) trapLevel_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
 			}
 		});
 		
@@ -169,6 +183,19 @@ public class TrapHazardForm implements FormBean {
 				theTrap.setAvoidance(avoidValue);
 			}
 		});
+		((JSpinner.DefaultEditor) trapAvoidValue_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
 		
 		JLabel trapCounterSkill_label = new JLabel(entity_l10n.getString("CounterSkill_trap"));
 		trapCounterSkill_field = new JComboBox(trapAvoidSkills);
@@ -221,6 +248,20 @@ public class TrapHazardForm implements FormBean {
 				theTrap.setDifficultyLevel(difficulty);
 			}
 		});
+		((JSpinner.DefaultEditor) trapCounterDifficulty_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				int key = ke.getKeyChar() - '0';
+				if (key < 0 || key > 9) {
+					ke.consume();
+				}
+			}
+		});
+		
 		JLabel trapCounterText_label = new JLabel(entity_l10n.getString("CounterText_trap"));
 		trapCounterText_field = new JEditorPane();
 
@@ -354,7 +395,11 @@ public class TrapHazardForm implements FormBean {
 		}
 		
 		Attack aAttack = (Attack) attackForm_bean.getEntity();
-		theTrap.setAttack(aAttack);
+		if (aAttack != null) {
+			theTrap.setAttack(aAttack);
+		} else {
+			//TODO: do something
+		}
 		return theTrap;
 	}
 	
