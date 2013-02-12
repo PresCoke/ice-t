@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -35,7 +36,7 @@ public class Tuple {
 	private int value2;
 	
 	//Associations
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="Tally_id")
 	private Tally tally;
 	
@@ -44,16 +45,25 @@ public class Tuple {
 	 * Default constructor
 	 */
 	public Tuple() {
+		this.name = "";
+		this.value1 = 0;
+		this.value2 = 0;
 	}
 	
 	/**
-	 * Constructor
-	 * @param name
+	 * Constructors
 	 */
 	public Tuple(String name) {
 		this.name = name;
+		this.value1 = 0;
+		this.value2 = 0;
 	}
 
+	public Tuple(String name, int value1, int value2) {
+		this.name = name;
+		this.value1 = value1;
+		this.value2 = value2;
+	}
 	
 	/**
 	 * Getters & Setters

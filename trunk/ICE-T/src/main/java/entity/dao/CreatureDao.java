@@ -8,7 +8,9 @@ import entity.Team;
 
 public interface CreatureDao {
 
-	public List<Creature> readAllCreatures();
+	public List<String> readAllCreatures();
+	
+	public List<Creature> readAllCreatures(int nothing);
 	
 	public int saveCreature(String playerName, int currentHP, int currentHealSurges, int currentLevel,
 			boolean secondWind, int tempHP, CharacterSheet characterSheet);

@@ -26,13 +26,13 @@ public class TeamDaoImpl implements TeamDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Team> readAllTeams() {
+	public List<String> readAllTeams() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("from Team");
+		Query q = session.createQuery("Select Team_name from Team");
 
-		List<Team> teams = q.list();
+		List<String> teams = q.list();
 
 		return teams;
 	}
@@ -126,5 +126,24 @@ public class TeamDaoImpl implements TeamDao {
             session.close();
         }		
 	}
+	
+	public Team getTeam(int teamId){
+		logger.debug("Team " + teamId + " is about to be retrieved from the database.");
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        Team t = null;
+        try {
+            transaction = session.beginTransaction();
+            t = (Team) session.get(Team.class, teamId);
+        	logger.info("Team " + teamId + " was successfully retrieved from the database.");
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.fatal("Error while retrieving Team " + teamId + " in the database --- " + e.getMessage());
+        } finally {
+            session.close();
+        }
+		return t;
+	}
+
 
 }

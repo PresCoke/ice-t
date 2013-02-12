@@ -45,12 +45,12 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		return cs;
 	}
 
-	public List<CharacterSheet> readAllCharacterSheets() {
+	public List<String> readAllCharacterSheets() {
     	logger.info("Retrieval of all character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("from CharacterSheet");
-		List<CharacterSheet> characterSheets = q.list();		
+		Query q = session.createSQLQuery("Select CharacterSheet_name from CharacterSheet");
+		List<String> characterSheets = q.list();		
 		return characterSheets;
 	}
 
@@ -290,7 +290,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            			previousType.setL_range(newType.getL_range());
 	            			previousType.setS_range(newType.getS_range());
 	            		} else {
-	            			Attack_TypeDAO attacktypeDao = new Attack_TypeDAOImpl();
+	            			Attack_TypeDao attacktypeDao = new Attack_TypeDaoImpl();
 	            			attacktypeDao.deleteAttackType(attack.getAttackType().getId());
 	            			t.setAttack(attack);
 	            			attacktypeDao.saveAttackType(t);

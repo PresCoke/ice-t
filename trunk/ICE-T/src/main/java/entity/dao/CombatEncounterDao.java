@@ -1,5 +1,13 @@
 package entity.dao;
 
+import java.util.List;
+
+import entity.Rewards;
+import entity.Tally;
+import entity.Team;
+import entity.TrapHazard;
+import entity.Tuple;
+
 /**
  * DAO of a combat encounter
  * @author TimHP
@@ -7,9 +15,11 @@ package entity.dao;
  */
 public interface CombatEncounterDao {
 
-	public void readAllCombatEncounters();
-	public int saveCombatEncounter(String name, String notes);
-	public void updateCombatEncounter(int combatEncounterId, String name, String notes);
+	public List<String> readAllCombatEncounters();
+	public int saveCombatEncounter(String name, String notes, List<Rewards> rewards, Tally tally, List<Tuple> tuples,
+			List<Team> teams, List<TrapHazard> trapHazards);
+	public void updateCombatEncounter(int combatEncounterId, String name, String notes, List<Rewards> rewards,
+			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards);
 	public void deleteCombatEncounter(int combatEncounterId);
 
 }

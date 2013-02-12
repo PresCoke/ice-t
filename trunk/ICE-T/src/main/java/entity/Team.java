@@ -34,7 +34,7 @@ public class Team implements EntityM {
 	private String name;
 
 	//Associations
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="CombatEncounter_id")
 	private CombatEncounter combatEncounter;
 

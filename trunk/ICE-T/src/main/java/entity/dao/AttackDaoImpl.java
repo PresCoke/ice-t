@@ -138,7 +138,7 @@ public class AttackDaoImpl implements AttackDao {
             CharacterSheet cs = a.getCharacterSheet();
             logger.info("Deletion of Attack " + a.getAttackName() + "associated to the character sheet " + a.getCharacterSheet().getName());
             session.delete(a);
-            logger.info("Updtate of the Character Sheet associated to the attack deleted.");
+            logger.info("Update of the Character Sheet associated to the attack deleted.");
             session.saveOrUpdate(cs);
             transaction.commit();
         	logger.info("Attack " + attackId + " was successfully removed from the database.");

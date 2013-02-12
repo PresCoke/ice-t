@@ -20,17 +20,26 @@ public class CreatureDaoImpl implements CreatureDao {
 
 	private static final Logger logger = Logger.getLogger(CreatureDaoImpl.class);
 	
-	public List<Creature> readAllCreatures() {
+	public List<String> readAllCreatures() {
+    	logger.info("Retrieval of all creatures in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createSQLQuery("Select player_name from Creature");
+		
+		List<String> creatures = q.list();
+		
+		return creatures;
+	}
+	
+	public List<Creature> readAllCreatures(int nothing) {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Creature");
-		
 		List<Creature> creatures = q.list();
-		
 		return creatures;
 	}
-
+	
     public int saveCreature(String playerName, int currentHP, int currentHealSurges, 
     		int currentLevel, boolean secondWind, int tempHP, CharacterSheet characterSheet){
     	logger.debug("Creature " + playerName + " is about to be created in the database.");

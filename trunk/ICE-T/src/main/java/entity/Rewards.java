@@ -44,6 +44,16 @@ public class Rewards {
 	}
 
 	/**
+	 * Constructor
+	 * @param XP
+	 * @param treasure
+	 */
+	public Rewards(int XP, String treasure) {
+		this.XP = XP;
+		this.treasure = treasure;
+	}
+	
+	/**
 	 * Getters & Setters
 	 */
 	public int getXP() {
