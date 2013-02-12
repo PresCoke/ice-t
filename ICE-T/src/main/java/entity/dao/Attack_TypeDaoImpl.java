@@ -11,11 +11,11 @@ import entity.CharacterSheet;
 import entity.Effect;
 import entity.EntityEnum.E_Duration;
 
-public class Attack_TypeDAOImpl implements Attack_TypeDAO {
+public class Attack_TypeDaoImpl implements Attack_TypeDao {
 
 	private static final Logger logger = Logger.getLogger(CharacterSheetDaoImpl.class);
 	
-	public Attack_TypeDAOImpl() {
+	public Attack_TypeDaoImpl() {
 		// TODO Auto-generated constructor stub
 	}
 

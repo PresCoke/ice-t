@@ -1,16 +1,21 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -32,12 +37,15 @@ public class Tally {
 	private String name;
 	
 	//Associations
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn (name="CombatEncounter_id")
 	private CombatEncounter combatEncounter;
 	
-	@OneToMany(mappedBy = "tally")
-	private Set<Tuple> tuples;
+	@OneToMany(mappedBy = "tally", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.DELETE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Tuple> tuples;
 
 
 	/**
@@ -52,6 +60,7 @@ public class Tally {
 	 */
 	public Tally(String name) {
 		this.name = name;
+		this.tuples = new ArrayList<Tuple>();
 	}
 
 	/**
@@ -81,11 +90,11 @@ public class Tally {
 		this.combatEncounter = combatEncounter;
 	}
 	
-	public Set<Tuple> getTuples() {
+	public List<Tuple> getTuples() {
 		return tuples;
 	}
 
-	public void setTuples(Set<Tuple> tuples) {
+	public void setTuples(List<Tuple> tuples) {
 		this.tuples = tuples;
 	}
 }

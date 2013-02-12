@@ -15,7 +15,7 @@ import entity.Resistance;
  */
 public interface CharacterSheetDao {
 	
-	public List<CharacterSheet> readAllCharacterSheets();
+	public List<String> readAllCharacterSheets();
 	
 	public CharacterSheet getCharacterSheets(int characterSheetId);
 	

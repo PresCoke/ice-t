@@ -30,11 +30,11 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 
 	private static final Logger logger = Logger.getLogger(TrapHazardDaoImpl.class);
 	
-	public List<TrapHazard> readAllTrapHazards() {
+	public List<String> readAllTrapHazards() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("from TrapHazard");
-		List<TrapHazard> ths = q.list();
+		Query q = session.createQuery("Select TrapHazard_name from TrapHazard");
+		List<String> ths = q.list();
 		return ths;
 	}
 
@@ -146,7 +146,7 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
     			previousType.setL_range(newType.getL_range());
     			previousType.setS_range(newType.getS_range());
     		} else {
-    			Attack_TypeDAO attacktypeDao = new Attack_TypeDAOImpl();
+    			Attack_TypeDao attacktypeDao = new Attack_TypeDaoImpl();
     			attacktypeDao.deleteAttackType(a.getAttackType().getId());
     			atype.setAttack(a);
     			attacktypeDao.saveAttackType(atype);
@@ -183,5 +183,24 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
         }
 		
 	}
+	
+	public TrapHazard getTrapHazard(int trapHazardId){
+		logger.debug("TrapHazard " + trapHazardId + " is about to be retrieved from the database.");
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        TrapHazard th = null;
+        try {
+            transaction = session.beginTransaction();
+            th = (TrapHazard) session.get(TrapHazard.class, trapHazardId);
+        	logger.info("TrapHazard " + trapHazardId + " was successfully retrieved from the database.");
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.fatal("Error while retrieving TrapHazard " + trapHazardId + " in the database --- " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return th;
+	}
+
 
 }
