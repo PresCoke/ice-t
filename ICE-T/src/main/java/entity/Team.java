@@ -49,9 +49,6 @@ public class Team implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Creature> creatures;
 	
-	//DAO
-	TeamDao tDao = new TeamDaoImpl();
-	
 	
 	/**
 	 * Default constructor
@@ -146,21 +143,25 @@ public class Team implements EntityM {
 	 */
 	public void save() {
     	logger.info("Saving Team " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
 		tDao.saveTeam(getName(), getCreatures());
 	}
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateTeam(getId(), getName(), getCreatures());
 	}
 
 	public void remove() {
     	logger.info("Removing Combat Encounter " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
 		tDao.deleteTeam(getId());
 	}
 
 	public List<Object[]> getAll() {
     	logger.info("Getting all teams in database");
+    	TeamDao tDao = new TeamDaoImpl();
 		return tDao.readAllTeams();
 	}
 

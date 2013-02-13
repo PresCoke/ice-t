@@ -153,9 +153,7 @@ public class CharacterSheet implements EntityM {
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Resistance> resistances;
-	
-	//DAO
-	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+
 
 
 	/**
@@ -691,15 +689,6 @@ public class CharacterSheet implements EntityM {
 		this.keywords = keywords;
 	}
 
-	
-//	public Set<Creature> getCreatures() {
-//		return creatures;
-//	}
-//
-//	public void setCreatures(Set<Creature> creatures) {
-//		this.creatures = creatures;
-//	}
-	
 	public List<Attack> getAttacks() {
 		return attacks;
 	}
@@ -761,6 +750,21 @@ public class CharacterSheet implements EntityM {
 		return types;
 	}
 	
+	public List<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public void setCreatures(List<Creature> creatures) {
+		this.creatures = creatures;
+	}
+
+	public List<Resistance> getResistances() {
+		return resistances;
+	}
+
+	public void setResistances(List<Resistance> resistances) {
+		this.resistances = resistances;
+	}
 
 	/**
 	 * Other Functions
@@ -772,6 +776,7 @@ public class CharacterSheet implements EntityM {
 
 	public void save() {
     	logger.info("Saving Character Sheet " + getName());
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
@@ -783,6 +788,7 @@ public class CharacterSheet implements EntityM {
 
 	public void edit() {
     	logger.info("Editing Character Sheet " + getName());
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
@@ -795,11 +801,13 @@ public class CharacterSheet implements EntityM {
 
 	public void remove() {
     	logger.info("Removing Character Sheet " + getName());
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.deleteCharacterSheet(getId());		
 	}
 
 	public List<Object[]> getAll() {
     	logger.info("Getting all Character Sheets in database");
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
     	return csDao.readAllCharacterSheets();
 	}
 }

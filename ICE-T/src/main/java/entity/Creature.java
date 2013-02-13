@@ -74,8 +74,7 @@ public class Creature implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Effect> effects;
 
-	//DAO
-	CreatureDao cDao = new CreatureDaoImpl();
+
 
 	/**
 	 * Default constructor
@@ -257,24 +256,28 @@ public class Creature implements EntityM {
 	 */
 	public void save() {
     	logger.info("Saving Creature " + getPlayerName());
-		cDao.saveCreature(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+    	CreatureDao cDao = new CreatureDaoImpl();
+    	cDao.saveCreature(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
 		
 	}
 
 	public void edit() {
     	logger.info("Editing Creature " + getPlayerName());
-		cDao.updateCreature(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+    	CreatureDao cDao = new CreatureDaoImpl();
+    	cDao.updateCreature(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
 				isSecondWind(), getTempHP());
 	}
 
 	public void remove() {
     	logger.info("Removing Creature " + getPlayerName());
+    	CreatureDao cDao = new CreatureDaoImpl();
     	cDao.deleteCreature(getId());		
 	}
 
 	public List<Object[]> getAll() {
     	logger.info("Getting all Combats Encounters in database");
-		return cDao.readAllCreatures();
+    	CreatureDao cDao = new CreatureDaoImpl();
+    	return cDao.readAllCreatures();
 	}	
 }

@@ -66,8 +66,6 @@ public class CombatEncounter implements EntityM{
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Team> teams;
 
-	//DAO
-	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
 	
 
 	/**
@@ -233,25 +231,29 @@ public class CombatEncounter implements EntityM{
 
 	public void save() {
     	logger.info("Saving Combat Encounter " + getName());
-		ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
+    	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+    	ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
 				getTally(), getTally().getTuples(), getTeams(), getTraphazards());
 		
 	}
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());
-		ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId(), getRewards(),
+    	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+    	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId(), getRewards(),
 				getTally(), getTally().getTuples(), getTeams(), getTraphazards());		
 	}
 
 	public void remove() {
     	logger.info("Removing Combat Encounter " + getName());
-		ceDao.deleteCombatEncounter(getId());			
+    	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+    	ceDao.deleteCombatEncounter(getId());			
 	}
 
 	public List<Object[]> getAll() {
     	logger.info("Getting all Combats Encounters in database");
-		return ceDao.readAllCombatEncounters();
+    	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+    	return ceDao.readAllCombatEncounters();
 	}
 
 }
