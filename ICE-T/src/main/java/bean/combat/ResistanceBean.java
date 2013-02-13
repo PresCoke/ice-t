@@ -31,7 +31,12 @@ public class ResistanceBean implements Bean {
 		
 		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
-		Resistance aResistance = (Resistance) value;
+		Resistance aResistance = null;
+		if (value instanceof ResistanceBean) {
+			aResistance = (Resistance)((ResistanceBean) value).getEntity();
+		} else if (value instanceof Resistance) {
+			aResistance = (Resistance) value;
+		}
 		JLabel resistanceType_label;
 		switch (aResistance.getResistanceType()) {
 		case acid:

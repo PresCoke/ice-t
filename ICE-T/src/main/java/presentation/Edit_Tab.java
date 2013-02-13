@@ -23,12 +23,14 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	private JPanel editEntity_panel;
 	private JList entityName_list;
 	private DefaultListModel name_list;
-	private JEditorPane entityEdit_pane;
+	private JPanel entityEdit_pane;
 	private JButton save_button, remove_button, cancel_button;
 	private EditEntity controller_reference;
+	private GroupLayout editEntity_layout;
 	
 	public Edit_Tab(EditEntity edit_controller, String entity_type) {
 		controller_reference = edit_controller;
+		entityType = entity_type;
 	}
 
 	public void showFrame() {
@@ -50,7 +52,6 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	private void createPanel() {
 		
 		editEntity_panel = new JPanel();
-		editEntity_panel.setLayout( new GridBagLayout() );
 		editEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) );
 		
 		ResourceBundle editTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
@@ -82,19 +83,40 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		button_panel.add(remove_button);
 		button_panel.add(cancel_button);
 		
-		entityEdit_pane = new JEditorPane();
+		entityEdit_pane = new JPanel();
 		entityEdit_pane.setOpaque(false);
 		entityEdit_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),
 				BorderFactory.createLineBorder(Color.GRAY) )
 				);
+		
+		editEntity_layout = new GroupLayout(editEntity_panel);
+		editEntity_layout.setHorizontalGroup( editEntity_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(button_panel)
+				.addGroup( editEntity_layout.createSequentialGroup()
+						.addComponent(listSelection_panel)
+						.addComponent(entityEdit_pane))
+				
+				);
+		editEntity_layout.setVerticalGroup( editEntity_layout.createSequentialGroup()
+				.addComponent(button_panel)
+				.addGroup( editEntity_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addComponent(listSelection_panel)
+					.addComponent(entityEdit_pane))
+				);
+		editEntity_layout.setAutoCreateContainerGaps(true);
+		editEntity_panel.setLayout(editEntity_layout);
 	}
 
 	public void actionPerformed(ActionEvent evt) {
 		if ( (JButton) evt.getSource() == this.save_button ) {
 			this.saveChanges();
+			this.editEntity_window.setVisible(false);
+			this.editEntity_window.dispose();
 		} else if ( (JButton) evt.getSource() == this.remove_button ) {
 			this.removeSelectedEntity();
+			this.editEntity_window.setVisible(false);
+			this.editEntity_window.dispose();
 		} else if ( (JButton) evt.getSource() == this.cancel_button ) {
 			this.editEntity_window.setVisible(false);
 			this.editEntity_window.dispose();
@@ -111,16 +133,51 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	}
 	
 	private void getEntityInfoFor(String selectedEntityName) {
-		this.entityEdit_pane.setText(selectedEntityName);
-		
-		JPanel formPanel = this.controller_reference.getEntityPanelOfName(selectedEntityName);
-		entityEdit_pane.add(formPanel);
+		entityEdit_pane = this.controller_reference.getEntityPanelOfName(selectedEntityName, entityType);
 		
 		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		temp_border.setTitle(selectedEntityName);
 		temp_border.setTitleJustification(TitledBorder.CENTER);
-		
 		entityEdit_pane.setBorder(temp_border);
+		
+		JPanel button_panel = new JPanel();
+		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
+		button_panel.add( Box.createHorizontalGlue() );
+		button_panel.add(save_button);
+		button_panel.add(remove_button);
+		button_panel.add(cancel_button);
+		
+		JScrollPane name_pane = new JScrollPane(entityName_list);
+		name_pane.setBorder( BorderFactory.createEtchedBorder() );
+		name_pane.setPreferredSize( new Dimension(150, 0) ); //TODO: find better way then specifying exact sizes
+		name_pane.setMinimumSize( new Dimension(150, 0) );
+		JPanel listSelection_panel = new JPanel();
+		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
+		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
+		listSelection_panel.add(name_pane);
+		
+		editEntity_panel.removeAll();
+		
+		editEntity_layout = new GroupLayout(editEntity_panel);
+		editEntity_layout.setHorizontalGroup( editEntity_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(button_panel)
+				.addGroup( editEntity_layout.createSequentialGroup()
+						.addComponent(listSelection_panel)
+						.addComponent(entityEdit_pane))
+				
+				);
+		editEntity_layout.setVerticalGroup( editEntity_layout.createSequentialGroup()
+				.addComponent(button_panel)
+				.addGroup( editEntity_layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+					.addComponent(listSelection_panel)
+					.addComponent(entityEdit_pane))
+				);
+		editEntity_layout.setAutoCreateContainerGaps(true);
+		editEntity_panel.setLayout(editEntity_layout);
+	
+		editEntity_window.pack();
+		editEntity_window.validate();
+		editEntity_window.setVisible(true);
 	}
 
 	private void getEntityNamesOfType(String selectedEntityType) {

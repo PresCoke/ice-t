@@ -205,6 +205,8 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				}
 			}
 		});
+		
+		lvl_field.setValue(theCharacter.getLevel());
 		//surge_num
 		JLabel xp_label = new JLabel(entity_l10n.getString("XP_entity") );
 		xp_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -222,7 +224,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				}
 			}
 		});
-		xp_field.setText( Integer.toString(theCharacter.getSurgesPerDay()) );		
+		xp_field.setText( Integer.toString(theCharacter.getXP()) );		
 		//speed
 		JLabel speed_label = new JLabel(entity_l10n.getString("Speed_entity"));
 		speed_label.setAlignmentX(Component.CENTER_ALIGNMENT);
