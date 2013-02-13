@@ -246,8 +246,9 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            int i = 0;
 	            for(Attack a : attacks){
 	            	Attack_Type t = attacksTypes.get(i);
-	            	if (cs.compareAttacksID(a) != -1){
-	            		Attack attack = cs.getAttacks().get(cs.compareAttacksID(a));   
+	            	if (cs.compareAttacksNames(a) != -1){
+	    	            logger.debug("The attack already exists, let's update it.");
+	            		Attack attack = cs.getAttacks().get(cs.compareAttacksNames(a));   
 	            		attack.setAttackName(a.getAttackName());
 	            		attack.setPrimaryTarget(a.getPrimaryTarget());
 	            		attack.setSecondaryTarget(a.getSecondaryTarget());
@@ -299,7 +300,8 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            			attack.setAttackType(t);
 	            		}
 	            		attack.setCharacterSheet(cs);
-	            	} else {       		
+	            	} else {  
+	    	            logger.debug("The attack does not exist, let's create it.");
 	            		a.setAttackType(t);
 	            		a.setCharacterSheet(cs);
 	            		t.setAttack(a);

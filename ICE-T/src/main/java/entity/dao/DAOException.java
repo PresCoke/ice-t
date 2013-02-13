@@ -1,7 +1,5 @@
 package entity.dao;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 public class DAOException extends Exception {

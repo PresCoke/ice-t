@@ -3,7 +3,6 @@ package entity.dao;
 import java.util.List;
 
 import entity.Creature;
-import entity.Effect;
 import entity.EntityEnum.E_Duration;
 
 /**
@@ -13,7 +12,7 @@ import entity.EntityEnum.E_Duration;
  */
 public interface EffectDao {
 
-	public List<String> readAllEffects();
+	public List<Object[]> readAllEffects();
 	public List<Integer> saveEffect(String name, String changes, String metrics, E_Duration duration, List<Creature> creatures);
 	public void deleteEffects(List<Integer> effectsIds);
 	public void deleteEffect(int effectId);

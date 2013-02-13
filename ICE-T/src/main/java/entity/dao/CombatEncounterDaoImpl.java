@@ -1,6 +1,5 @@
 package entity.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -27,16 +26,17 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	private static final Logger logger = Logger.getLogger(CombatEncounterDaoImpl.class);
 	
 	//TODO FIX that to get the names of the Combat Encounters only
-	public List<String> readAllCombatEncounters() {
+	public List<Object[]>readAllCombatEncounters() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("Select CombatEncounter_name from CombatEncounter");
-		List<String> ces = q.list();
+		Query q = session.createSQLQuery("Select CombatEncounter_id, CombatEncounter_name from CombatEncounter");
+		List<Object[]> ces = q.list();
 		return ces;
 	}
 
-	public int saveCombatEncounter(String name, String notes, List<Rewards> rewards,
-			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards) {
+	public int saveCombatEncounter(String name, String notes, int currentCreatureId,
+			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams,
+			List<TrapHazard> trapHazards) {
     	logger.debug("CombatEncounter " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -44,7 +44,7 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
         try {
             transaction = session.beginTransaction();
             logger.debug("Setting CE's attributes");
-            CombatEncounter ce = new CombatEncounter(name, notes);
+            CombatEncounter ce = new CombatEncounter(name, notes, currentCreatureId);
             //Set the rewards
             logger.debug("Setting CE's rewards");
             if(rewards != null && !rewards.isEmpty()){
@@ -88,8 +88,8 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	}
 
 	public void updateCombatEncounter(int combatEncounterId, String name,
-			String notes, List<Rewards> rewards, Tally tally, List<Tuple> tuples,
-			List<Team> teams, List<TrapHazard> trapHazards) {
+			String notes, int currentCreatureId, List<Rewards> rewards, 
+			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards) {
     	logger.debug("CombatEncounter " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -98,6 +98,7 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             CombatEncounter ce = (CombatEncounter) session.get(CombatEncounter.class, combatEncounterId);
             ce.setName(name);
             ce.setNotes(notes);
+            ce.setCurrentCreatureId(currentCreatureId);
             //Set the rewards
             logger.debug("Deleting previous CE's rewards");
             for (Rewards r : ce.getRewards()){

@@ -66,18 +66,18 @@ public class HibernateTest {
 		resistances.add(r2);
 		
 		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
-		A_Area t = new A_Area();
-		t.setPersonal(true);
-		t.setArea_range(100);
-		t.setArea_size(100);
-		t.setArea_type(EntityEnum.A_Area_Type.burst);
-		attacksTypes.add(t);
-		A_Area t2 = new A_Area();
-		t2.setPersonal(true);
-		t2.setArea_range(0);
-		t2.setArea_size(0);
-		t2.setArea_type(EntityEnum.A_Area_Type.wall);
-		attacksTypes.add(t2);
+//		A_Area t = new A_Area();
+//		t.setPersonal(true);
+//		t.setArea_range(100);
+//		t.setArea_size(100);
+//		t.setArea_type(EntityEnum.A_Area_Type.burst);
+//		attacksTypes.add(t);
+//		A_Area t2 = new A_Area();
+//		t2.setPersonal(true);
+//		t2.setArea_range(0);
+//		t2.setArea_size(0);
+//		t2.setArea_type(EntityEnum.A_Area_Type.wall);
+//		attacksTypes.add(t2);
 //		A_Close t = new A_Close();
 //		t.setPersonal(false);
 //		t.setCloseType(EntityEnum.A_Close_Type.burst);
@@ -88,18 +88,18 @@ public class HibernateTest {
 //		t2.setCloseType(EntityEnum.A_Close_Type.blast);
 //		t2.setSize(1);
 //		attacksTypes.add(t2);
-//		A_Melee t = new A_Melee();
-//		t.setPersonal(true);
-//		t.setReach(100);
-//		attacksTypes.add(t);
-//		A_Range t2 = new A_Range();
-//		t2.setPersonal(true);
-//		t2.setL_range(50);
-//		t2.setS_range(10);
-//		attacksTypes.add(t2);
+		A_Melee t = new A_Melee();
+		t.setPersonal(true);
+		t.setReach(100);
+		attacksTypes.add(t);
+		A_Range t2 = new A_Range();
+		t2.setPersonal(true);
+		t2.setL_range(50);
+		t2.setS_range(10);
+		attacksTypes.add(t2);
 		
 		List<Attack> attacks = new ArrayList<Attack>();
-		Attack a1 = new Attack("AttackT1");
+		Attack a1 = new Attack("AttackT3");
 		a1.setPrimaryTarget("Bill");
 		a1.setSecondaryTarget("Jack");
 		a1.setAccessories("Gun");
@@ -117,7 +117,7 @@ public class HibernateTest {
 		a1.setAction(EntityEnum.A_Action.minor);
 		a1.setUseType(EntityEnum.A_Use_Type.atWill);
 		attacks.add(a1);
-		Attack a2 = new Attack("AttackT2");
+		Attack a2 = new Attack("AttackT4");
 		a2.setPrimaryTarget("Bill");
 		a2.setSecondaryTarget("Jack");
 		a2.setAccessories("Gun");
@@ -142,15 +142,15 @@ public class HibernateTest {
 //			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes);
-		
-		
-//		csDao.updateCharacterSheet(4, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//		
+//		
+//		csDao.updateCharacterSheet(1, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
 //			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes);	
 //		
 //		
-//		csDao.deleteCharacterSheet(1);
+		csDao.deleteCharacterSheet(1);
 //		csDao.deleteCharacterSheet(6);
 //		
 //		ResistanceDao resistanceDao = new ResistanceDaoImpl();
@@ -208,48 +208,48 @@ public class HibernateTest {
 //		effectDao.deleteEffects(effectsIds);
 //		
 //		
-		List<Rewards> rewards = new ArrayList<Rewards>();
-		Rewards rew1 = new Rewards(20, "Gold");
-		Rewards rew2 = new Rewards(50, "Gold & Silver");
-		Rewards rew3 = new Rewards(110, "Sword");
-		rewards.add(rew1);
-		rewards.add(rew2);
-		rewards.add(rew3);
-
-		Tally tally = new Tally("Score");
-		List<Tuple> tuples = new ArrayList<Tuple>();
-		Tuple tuple1 = new Tuple("tuple4", 5, 6);
-		Tuple tuple2 = new Tuple("tuple2", 15, 8);
-		tuples.add(tuple1);
-		tuples.add(tuple2);
-
-		CreatureDao cDao = new CreatureDaoImpl();
-		List<Creature> creatures = new ArrayList<Creature>();
-		creatures = cDao.readAllCreatures(0);
-		creatures.remove(0);
-		
+//		List<Rewards> rewards = new ArrayList<Rewards>();
+//		Rewards rew1 = new Rewards(20, "Gold");
+//		Rewards rew2 = new Rewards(50, "Gold & Silver");
+//		Rewards rew3 = new Rewards(110, "Sword");
+//		rewards.add(rew1);
+//		rewards.add(rew2);
+//		rewards.add(rew3);
+//
+//		Tally tally = new Tally("Score");
+//		List<Tuple> tuples = new ArrayList<Tuple>();
+//		Tuple tuple1 = new Tuple("tuple4", 5, 6);
+//		Tuple tuple2 = new Tuple("tuple2", 15, 8);
+//		tuples.add(tuple1);
+//		tuples.add(tuple2);
+//
+//		CreatureDao cDao = new CreatureDaoImpl();
+//		List<Creature> creatures = new ArrayList<Creature>();
+//		creatures = cDao.readAllCreatures(0);
+//		creatures.remove(0);
+//		
 //		teamDao.saveTeam("IceTeam1", creatures);
 //		teamDao.saveTeam("IceTeam2", creatures);
-		
-		List<Team> teams = new ArrayList<Team>();
-		TeamDao teamDao = new TeamDaoImpl();
-		Team team1 = teamDao.getTeam(1);
-		Team team2 = teamDao.getTeam(2);
-		teams.add(team1);
-		teams.add(team2);
-		List<TrapHazard> traphazards = new ArrayList<TrapHazard>();
-		TrapHazardDao thDao = new TrapHazardDaoImpl();
+//		
+//		List<Team> teams = new ArrayList<Team>();
+//		TeamDao teamDao = new TeamDaoImpl();
+//		Team team1 = teamDao.getTeam(1);
+//		Team team2 = teamDao.getTeam(2);
+//		teams.add(team1);
+//		teams.add(team2);
+//		List<TrapHazard> traphazards = new ArrayList<TrapHazard>();
+//		TrapHazardDao thDao = new TrapHazardDaoImpl();
 //		TrapHazard th1 = thDao.getTrapHazard(1);
-		TrapHazard th2 = thDao.getTrapHazard(2);
+//		TrapHazard th2 = thDao.getTrapHazard(2);
 //		traphazards.add(th1);
-		traphazards.add(th2);
-
-		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
-//		ceDao.saveCombatEncounter("CE1", "Game almost over", rewards, tally, tuples, teams, traphazards);
-		ceDao.updateCombatEncounter(1,"CE2", "Game almost over", rewards, tally, tuples, teams, traphazards);
+//		traphazards.add(th2);
+//
+//		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+//		ceDao.saveCombatEncounter("CE1", "Game almost over", 1, rewards, tally, tuples, teams, traphazards);
+//		ceDao.updateCombatEncounter(1,"CE2", "Game almost over", 2, rewards, tally, tuples, teams, traphazards);
 //		ceDao.deleteCombatEncounter(1);
 //		ceDao.readAllCombatEncounters();
-		
+//		
 //		TallyDao tallyDao = new TallyDaoImpl();
 //		tallyDao.deleteTally(1);
 		

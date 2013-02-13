@@ -26,14 +26,12 @@ public class TeamDaoImpl implements TeamDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<String> readAllTeams() {
+	public List<Object[]> readAllTeams() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("Select Team_name from Team");
-
-		List<String> teams = q.list();
-
+		Query q = session.createQuery("Select Team_id, Team_name from Team");
+		List<Object[]> teams = q.list();
 		return teams;
 	}
 

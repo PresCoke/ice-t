@@ -30,11 +30,11 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 
 	private static final Logger logger = Logger.getLogger(TrapHazardDaoImpl.class);
 	
-	public List<String> readAllTrapHazards() {
+	public List<Object[]> readAllTrapHazards() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("Select TrapHazard_name from TrapHazard");
-		List<String> ths = q.list();
+		Query q = session.createQuery("Select TrapHazard_id, TrapHazard_name from TrapHazard");
+		List<Object[]> ths = q.list();
 		return ths;
 	}
 

@@ -8,7 +8,7 @@ import entity.Team;
 
 public interface CreatureDao {
 
-	public List<String> readAllCreatures();
+	public List<Object[]> readAllCreatures();
 	
 	public List<Creature> readAllCreatures(int nothing);
 	

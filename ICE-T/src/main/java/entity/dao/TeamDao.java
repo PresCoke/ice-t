@@ -12,7 +12,7 @@ import entity.Team;
  *
  */
 public interface TeamDao {
-	public List<String> readAllTeams();
+	public List<Object[]> readAllTeams();
 	public int saveTeam(String name, List<Creature> creatures);
 	public void updateTeam(int teamId, String name, List<Creature> creatures);
 	public void deleteTeam(int teamId);
