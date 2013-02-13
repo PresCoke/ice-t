@@ -16,7 +16,7 @@ import entity.TrapHazard;
  */
 public interface TrapHazardDao {
 
-	public List<String> readAllTrapHazards();
+	public List<Object[]> readAllTrapHazards();
 	public int saveTrapHazard(String name, int avoidance, int level, T_CounterMeasureSkill skill, String triggers,
 			int xp, int difficultyLevel, String counterMeasureDescription, T_Type type, T_Role role, 
 			T_CounterMeasureSkill counterMeasureSkill, Attack attack, Attack_Type atype);

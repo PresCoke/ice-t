@@ -29,14 +29,12 @@ public class EffectDaoImpl implements EffectDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<String> readAllEffects() {
+	public List<Object[]> readAllEffects() {
 		logger.info("Retrieval of all effects in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("Select Effect_name from Effect");
-		
-		List<String> effects = q.list();
-
+		Query q = session.createSQLQuery("Select Effect_id, Effect_name from Effect");
+		List<Object[]> effects = q.list();
 		return effects;
 	}
 

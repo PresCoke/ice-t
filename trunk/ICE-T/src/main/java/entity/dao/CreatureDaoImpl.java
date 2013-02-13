@@ -20,14 +20,12 @@ public class CreatureDaoImpl implements CreatureDao {
 
 	private static final Logger logger = Logger.getLogger(CreatureDaoImpl.class);
 	
-	public List<String> readAllCreatures() {
+	public List<Object[]> readAllCreatures() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("Select player_name from Creature");
-		
-		List<String> creatures = q.list();
-		
+		Query q = session.createSQLQuery("Select Creature_id, player_name from Creature");
+		List<Object[]> creatures = q.list();
 		return creatures;
 	}
 	

@@ -15,11 +15,11 @@ import entity.Tuple;
  */
 public interface CombatEncounterDao {
 
-	public List<String> readAllCombatEncounters();
-	public int saveCombatEncounter(String name, String notes, List<Rewards> rewards, Tally tally, List<Tuple> tuples,
-			List<Team> teams, List<TrapHazard> trapHazards);
-	public void updateCombatEncounter(int combatEncounterId, String name, String notes, List<Rewards> rewards,
+	public List<Object[]> readAllCombatEncounters();
+	public int saveCombatEncounter(String name, String notes, int currentCreatureId, List<Rewards> rewards,
 			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards);
+	public void updateCombatEncounter(int combatEncounterId, String name, String notes, int currentCreatureId,
+			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards);
 	public void deleteCombatEncounter(int combatEncounterId);
 
 }

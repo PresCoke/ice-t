@@ -13,8 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.CreatureDao;
+import entity.dao.CreatureDaoImpl;
 
 /**
  * Creature Class
@@ -23,7 +27,9 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="Creature")
-public class Creature {
+public class Creature implements EntityM {
+	
+	private static final Logger logger = Logger.getLogger(Creature.class);
 
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
@@ -68,6 +74,8 @@ public class Creature {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Effect> effects;
 
+	//DAO
+	CreatureDao cDao = new CreatureDaoImpl();
 
 	/**
 	 * Default constructor
@@ -242,5 +250,31 @@ public class Creature {
 
 	public void setCharacterSheet(CharacterSheet characterSheet) {
 		this.characterSheet = characterSheet;
+	}
+
+	/**
+	 * Other functions
+	 */
+	public void save() {
+    	logger.info("Saving Creature " + getPlayerName());
+		cDao.saveCreature(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+				isSecondWind(), getTempHP(), getCharacterSheet());
+		
+	}
+
+	public void edit() {
+    	logger.info("Editing Creature " + getPlayerName());
+		cDao.updateCreature(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+				isSecondWind(), getTempHP());
+	}
+
+	public void remove() {
+    	logger.info("Removing Creature " + getPlayerName());
+    	cDao.deleteCreature(getId());		
+	}
+
+	public List<Object[]> getAll() {
+    	logger.info("Getting all Combats Encounters in database");
+		return cDao.readAllCreatures();
 	}	
 }

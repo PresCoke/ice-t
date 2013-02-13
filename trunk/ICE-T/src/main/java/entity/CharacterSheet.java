@@ -153,6 +153,10 @@ public class CharacterSheet implements EntityM {
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Resistance> resistances;
+	
+	//DAO
+	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+
 
 	/**
 	 * Default constructor
@@ -739,10 +743,10 @@ public class CharacterSheet implements EntityM {
 		return index;
 	}
 	
-	public int compareAttacksID(Attack attack){
+	public int compareAttacksNames(Attack attack){
 		int index = -1;
 		for (Attack a : attacks){
-			if (a.getId() == attack.getId()){
+			if (a.getAttackName().equals(attack.getAttackName())){
 				index = this.getIndexOf(a);
 			}
 		}
@@ -768,7 +772,6 @@ public class CharacterSheet implements EntityM {
 
 	public void save() {
     	logger.info("Saving Character Sheet " + getName());
-		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
@@ -780,7 +783,6 @@ public class CharacterSheet implements EntityM {
 
 	public void edit() {
     	logger.info("Editing Character Sheet " + getName());
-		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
@@ -793,7 +795,11 @@ public class CharacterSheet implements EntityM {
 
 	public void remove() {
     	logger.info("Removing Character Sheet " + getName());
-		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		csDao.deleteCharacterSheet(getId());		
+	}
+
+	public List<Object[]> getAll() {
+    	logger.info("Getting all Character Sheets in database");
+    	return csDao.readAllCharacterSheets();
 	}
 }

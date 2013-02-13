@@ -2,11 +2,12 @@ CREATE TABLE CombatEncounter (
 	CombatEncounter_id INTEGER NOT NULL,
 	CombatEncounter_name VARCHAR(50) NOT NULL UNIQUE,
 	notes VARCHAR(5000),
+	currentCreatureId INTEGER,
 	CONSTRAINT PK_CombatEncounter PRIMARY KEY (CombatEncounter_id)
 )
 
-INSERT INTO CombatEncounter VALUES (1,'CE1', 'Game almost over'); 
-INSERT INTO CombatEncounter VALUES (2,'CE2', 'Game has just started'); 
+INSERT INTO CombatEncounter VALUES (1,'CE1', 1, 'Game almost over'); 
+INSERT INTO CombatEncounter VALUES (2,'CE2', 1, 'Game has just started'); 
 
 CREATE TABLE CharacterSheet (
 	CharacterSheet_id INTEGER NOT NULL,
@@ -146,20 +147,19 @@ INSERT INTO Stats VALUES (4, 4, 49, 0, 5, 1, 0);
 
 CREATE TABLE Effect (
 	Effect_id INTEGER NOT NULL,
-	Effect_name VARCHAR(50) NOT NULL UNIQUE,
+	Effect_name VARCHAR(50) NOT NULL,
 	Creature_id INTEGER NOT NULL,
 	changes VARCHAR(5000),
-	damage INTEGER,
 	metrics VARCHAR(5000),
 	duration INTEGER,
 	CONSTRAINT PK_Effect PRIMARY KEY (Effect_id),
 	CONSTRAINT FK_Effect_Creature FOREIGN KEY (Creature_id) REFERENCES Creature (Creature_id)
 )
 
-INSERT INTO Effect VALUES (1, 'Effect1', 1, 'Damage value rises for every player by 1', 10, 'cool', 0); 
-INSERT INTO Effect VALUES (2, 'Effect2', 3, 'The effect lasts 10 turns', 15, 'not so long', 1);
-INSERT INTO Effect VALUES (3, 'Effect3', 2, 'The effect lasts 10 turns', 15, 'long', 2);
-INSERT INTO Effect VALUES (4, 'Effect4', 1, 'The effect lasts 10 turns', 15, 'not so long', 3);
+INSERT INTO Effect VALUES (1, 'Effect1', 1, 'Damage value rises for every player by 1', 'cool', 0); 
+INSERT INTO Effect VALUES (2, 'Effect2', 3, 'The effect lasts 10 turns', 'not so long', 1);
+INSERT INTO Effect VALUES (3, 'Effect3', 2, 'The effect lasts 10 turns', 'long', 2);
+INSERT INTO Effect VALUES (4, 'Effect4', 1, 'The effect lasts 10 turns', 'not so long', 3);
 INSERT INTO Effect VALUES (5, 'Effect5', 4, 'The effect lasts as long as the GM decides', 26, 'good for the GM', 2);
 
 CREATE TABLE Attack (

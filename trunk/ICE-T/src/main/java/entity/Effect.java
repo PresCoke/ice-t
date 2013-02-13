@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.EffectDao;
+import entity.dao.EffectDaoImpl;
 
 /**
  * Effect Class
@@ -17,7 +24,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="Effect")
 //TODO: add effect type... maybe...
-public class Effect implements EntityM {
+public class Effect {
+	
+	private static final Logger logger = Logger.getLogger(Effect.class);
 
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
@@ -42,6 +51,9 @@ public class Effect implements EntityM {
 	@ManyToOne
 	@JoinColumn (name="Creature_id")
 	private Creature creature;
+	
+	//DAO
+	EffectDao eDao = new EffectDaoImpl();
 
 
 	/**
@@ -121,20 +133,20 @@ public class Effect implements EntityM {
 	/**
 	 * Other functions
 	 */
-	public void save() {
-		// TODO Auto-generated method stub
-		
+	public void save(List<Creature> creatures) {
+    	logger.info("Saving Effect " + getName());
+    	eDao.saveEffect(getName(), getChanges(), getMetrics(), getDuration(), creatures);
 	}
 
-	public void edit() {
-		// TODO Auto-generated method stub
-		
+	public void remove(List<Integer> ids) {
+    	logger.info("Removing Effect " + getName());
+    	eDao.deleteEffects(ids);	
 	}
-
-	public void remove() {
-		// TODO Auto-generated method stub
-		
+	
+	public List<Object[]> getAll(){
+    	logger.info("Getting all effects in database");
+    	return eDao.readAllEffects();
 	}
-
+	
 	
 }

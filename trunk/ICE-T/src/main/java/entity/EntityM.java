@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 
 /**
  * EntityM Interface
@@ -21,4 +23,9 @@ public interface EntityM {
 	 * Remove an entity
 	 */
 	public abstract void remove();
+	
+	/**
+	 * Read all
+	 */
+	public abstract List<Object[]> getAll();
 }

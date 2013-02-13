@@ -12,8 +12,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.CombatEncounterDao;
+import entity.dao.CombatEncounterDaoImpl;
 
 /**
  * CombatEncounter Class
@@ -22,7 +26,9 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="CombatEncounter")
-public class CombatEncounter {
+public class CombatEncounter implements EntityM{
+	
+	private static final Logger logger = Logger.getLogger(CombatEncounter.class);
 
 	@Id
     @GenericGenerator(name="generator", strategy="increment")
@@ -35,6 +41,9 @@ public class CombatEncounter {
 	
 	@Column(name="notes")
 	private String notes;
+	
+	@Column(name="currentCreatureId")
+	private int currentCreatureId;
 	
 	//Associations
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter", orphanRemoval=true)
@@ -57,6 +66,9 @@ public class CombatEncounter {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Team> teams;
 
+	//DAO
+	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+	
 
 	/**
 	 * Default constructor
@@ -68,10 +80,11 @@ public class CombatEncounter {
 	 * Constructor
 	 * @param name
 	 */
-	public CombatEncounter(String name, String notes) {
+	public CombatEncounter(String name, String notes, int currentCreatureId) {
 		this.name = name;
 		this.notes = notes;
 		this.rewards = new ArrayList<Rewards>();
+		this.currentCreatureId = currentCreatureId;
 	}
 	
 	
@@ -194,6 +207,13 @@ public class CombatEncounter {
 		return this.teams.remove(thisTeam);
 	}
 	
+	public int getCurrentCreatureId() {
+		return currentCreatureId;
+	}
+
+	public void setCurrentCreatureId(int currentCreatureId) {
+		this.currentCreatureId = currentCreatureId;
+	}
 
 	/**
 	 * Other functions
@@ -209,6 +229,29 @@ public class CombatEncounter {
 	public ArrayList<Creature> generateRandomEncounter(){
 		//TODO
 		return null;
+	}
+
+	public void save() {
+    	logger.info("Saving Combat Encounter " + getName());
+		ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
+				getTally(), getTally().getTuples(), getTeams(), getTraphazards());
+		
+	}
+
+	public void edit() {
+    	logger.info("Editing Combat Encounter " + getName());
+		ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId(), getRewards(),
+				getTally(), getTally().getTuples(), getTeams(), getTraphazards());		
+	}
+
+	public void remove() {
+    	logger.info("Removing Combat Encounter " + getName());
+		ceDao.deleteCombatEncounter(getId());			
+	}
+
+	public List<Object[]> getAll() {
+    	logger.info("Getting all Combats Encounters in database");
+		return ceDao.readAllCombatEncounters();
 	}
 
 }

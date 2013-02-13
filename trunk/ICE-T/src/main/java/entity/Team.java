@@ -12,8 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+
+import entity.dao.TeamDao;
+import entity.dao.TeamDaoImpl;
 
 /**
  * Team Class
@@ -24,6 +28,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="Team")
 public class Team implements EntityM {
 
+	private static final Logger logger = Logger.getLogger(Team.class);
+	
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
 	@GeneratedValue(generator="generator")
@@ -42,6 +48,9 @@ public class Team implements EntityM {
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Creature> creatures;
+	
+	//DAO
+	TeamDao tDao = new TeamDaoImpl();
 	
 	
 	/**
@@ -132,23 +141,27 @@ public class Team implements EntityM {
 	}
 	
 
-
 	/**
 	 * Other functions
 	 */
 	public void save() {
-		// TODO Auto-generated method stub
-		
+    	logger.info("Saving Team " + getName());
+		tDao.saveTeam(getName(), getCreatures());
 	}
 
 	public void edit() {
-		// TODO Auto-generated method stub
-		
+    	logger.info("Editing Combat Encounter " + getName());
+		tDao.updateTeam(getId(), getName(), getCreatures());
 	}
 
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+    	logger.info("Removing Combat Encounter " + getName());
+		tDao.deleteTeam(getId());
+	}
+
+	public List<Object[]> getAll() {
+    	logger.info("Getting all teams in database");
+		return tDao.readAllTeams();
 	}
 
 }
