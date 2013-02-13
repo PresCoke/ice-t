@@ -4,7 +4,7 @@ CREATE TABLE CombatEncounter (
 	notes VARCHAR(5000),
 	currentCreatureId INTEGER,
 	CONSTRAINT PK_CombatEncounter PRIMARY KEY (CombatEncounter_id)
-)
+);
 
 CREATE TABLE CharacterSheet (
 	CharacterSheet_id INTEGER NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE CharacterSheet (
 	monsterOriginCS INTEGER,
 	monsterTypeCS INTEGER,
 	CONSTRAINT PK_CharacterSheet PRIMARY KEY (CharacterSheet_id)
-)
+);
 
 CREATE TABLE Resistance (
 	Resistance_id INTEGER NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE Resistance (
 	resistanceValue INTEGER NOT NULL,
 	CONSTRAINT PK_Resistance PRIMARY KEY (Resistance_id),
 	CONSTRAINT FK_Resistance_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id)
-)
+);
 
 CREATE TABLE Team (
 	Team_id INTEGER NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE Team (
 	CombatEncounter_id INTEGER,
 	CONSTRAINT PK_Team PRIMARY KEY (Team_id),
 	CONSTRAINT FK_Team_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id)
-)
+);
 
 CREATE TABLE TrapHazard (
 	TrapHazard_id INTEGER NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE TrapHazard (
 	counterMeasureSkillTH INTEGER,
 	CONSTRAINT PK_TrapHazard PRIMARY KEY (TrapHazard_id),
 	CONSTRAINT FK_TrapHazard_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id)
-)
+);
 
 CREATE TABLE Creature (
 	Creature_id INTEGER NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE Creature (
 	CONSTRAINT PK_Creature PRIMARY KEY (Creature_id),
 	CONSTRAINT FK_Creature_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id),
 	CONSTRAINT FK_Creature_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
-)
+);
 
 CREATE TABLE Stats (
 	Stats_id INTEGER NOT NULL PRIMARY KEY,
@@ -115,7 +115,7 @@ CREATE TABLE Stats (
 	misses INTEGER NOT NULL,
 	assists INTEGER NOT NULL,
 	CONSTRAINT FK_Stats_Creature FOREIGN KEY (Creature_id) REFERENCES Creature (Creature_id)
-)
+);
 
 CREATE TABLE Effect (
 	Effect_id INTEGER NOT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE Effect (
 	duration INTEGER,
 	CONSTRAINT PK_Effect PRIMARY KEY (Effect_id),
 	CONSTRAINT FK_Effect_Creature FOREIGN KEY (Creature_id) REFERENCES Creature (Creature_id)
-)
+);
 
 CREATE TABLE Attack (
 	Attack_id INTEGER NOT NULL,
@@ -152,14 +152,14 @@ CREATE TABLE Attack (
 	CONSTRAINT PK_Attack PRIMARY KEY (Attack_id),
 	CONSTRAINT FK_Attack_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id),
 	CONSTRAINT FK_Attack_TrapHazard FOREIGN KEY (TrapHazard_id) REFERENCES TrapHazard (TrapHazard_id)
-)
+);
 
 CREATE TABLE Attack_Type (
 	Attack_Type_id INTEGER NOT NULL PRIMARY KEY,
 	Attack_id INTEGER NOT NULL UNIQUE,
 	isPersonal BOOLEAN NOT NULL,
 	CONSTRAINT FK_Attack_Type_Attack FOREIGN KEY (Attack_id) REFERENCES Attack (Attack_id)
-)
+);
 
 CREATE TABLE A_Area (
 	A_Area_id INTEGER NOT NULL PRIMARY KEY,
@@ -167,27 +167,27 @@ CREATE TABLE A_Area (
 	area_range INTEGER NOT NULL,
 	area_size INTEGER NOT NULL,
 	area_type INTEGER NOT NULL
-)
+);
 
 CREATE TABLE A_Close (
 	A_Close_id INTEGER NOT NULL PRIMARY KEY,
 	Attack_Type_id INTEGER NOT NULL FOREIGN KEY REFERENCES Attack_Type (Attack_Type_id),
 	close_size INTEGER NOT NULL,
 	closeType INTEGER NOT NULL
-)
+);
 
 CREATE TABLE A_Melee (
 	A_Melee_id INTEGER NOT NULL PRIMARY KEY,
 	Attack_Type_id INTEGER NOT NULL FOREIGN KEY REFERENCES Attack_Type (Attack_Type_id),
 	melee_reach INTEGER NOT NULL,
-)
+);
 
 CREATE TABLE A_Range (
 	A_Range_id INTEGER NOT NULL PRIMARY KEY,
 	Attack_Type_id INTEGER NOT NULL FOREIGN KEY REFERENCES Attack_Type (Attack_Type_id),
 	L_range INTEGER NOT NULL,
 	S_range INTEGER NOT NULL
-)
+);
 
 CREATE TABLE Rewards (
 	Rewards_id INTEGER NOT NULL PRIMARY KEY,
@@ -195,7 +195,7 @@ CREATE TABLE Rewards (
 	XP INTEGER,
 	treasure VARCHAR(2000),
 	CONSTRAINT FK_Rewards_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id) 
-)
+);
 
 CREATE TABLE Tally (
 	Tally_id INTEGER NOT NULL,
@@ -203,7 +203,7 @@ CREATE TABLE Tally (
 	CombatEncounter_id INTEGER NOT NULL UNIQUE,
 	CONSTRAINT PK_Tally PRIMARY KEY (Tally_id),
 	CONSTRAINT FK_Tally_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id) 
-)
+);
 
 CREATE TABLE Tuple (
 	Tuple_id INTEGER NOT NULL,
@@ -213,4 +213,4 @@ CREATE TABLE Tuple (
 	value2 INTEGER NOT NULL,
 	CONSTRAINT PK_Tuple PRIMARY KEY (Tuple_id),
 	CONSTRAINT FK_Tuple_Tally FOREIGN KEY (Tally_id) REFERENCES Tally (Tally_id)
-)
+);
