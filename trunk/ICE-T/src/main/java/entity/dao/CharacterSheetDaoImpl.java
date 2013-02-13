@@ -45,12 +45,12 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		return cs;
 	}
 
-	public List<String> readAllCharacterSheets() {
+	public List<Object[]> readAllCharacterSheets() {
     	logger.info("Retrieval of all character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("Select CharacterSheet_name from CharacterSheet");
-		List<String> characterSheets = q.list();		
+		Query q = session.createSQLQuery("Select CharacterSheet_id, CharacterSheet_name from CharacterSheet");
+		List<Object[]> characterSheets = q.list();		
 		return characterSheets;
 	}
 
