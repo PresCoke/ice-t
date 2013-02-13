@@ -1,1 +1,0 @@
-java -cp ./hsqldb-2.2.9.jar org.hsqldb.Server
