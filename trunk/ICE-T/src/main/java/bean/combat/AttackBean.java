@@ -35,9 +35,12 @@ public class AttackBean implements Bean {
 		//Effect: [Effect String]
 		//Sustain [sustain use]: [//TODO missing string]
 		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
-		Attack aAttack = (Attack) theValue;
-			
-		
+		Attack aAttack = null;
+		if (theValue instanceof AttackBean) {
+			aAttack = (Attack) ( (AttackBean) theValue ).getEntity();
+		} else if (theValue instanceof Attack) {
+			aAttack = (Attack) theValue;
+		}
 		String name = "", basic = "";
 		String action = "", use = "", pwr_src = "", effect = "", damage = "", accessories = "";
 		String attackType = "", ability = "", defense = "";
