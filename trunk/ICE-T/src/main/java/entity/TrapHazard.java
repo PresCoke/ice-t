@@ -80,10 +80,7 @@ public class TrapHazard implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack attack;
 
-	//DAO
-	TrapHazardDao thDao = new TrapHazardDaoImpl();
-
-
+	
 	/**
 	 * Default constructor
 	 */
@@ -244,6 +241,7 @@ public class TrapHazard implements EntityM {
 	 */
 	public void save() {
 		logger.info("Saving TrapHazard " + this.getName());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
 		thDao.saveTrapHazard(getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
 				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
 				getAttack(), getAttack().getAttackType());
@@ -252,6 +250,7 @@ public class TrapHazard implements EntityM {
 
 	public void edit() {
 		logger.info("Editing TrapHazard " + this.getName());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
 		thDao.updateTrapHazard(getId(), getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
 				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
 				getAttack(), getAttack().getAttackType());
@@ -260,12 +259,14 @@ public class TrapHazard implements EntityM {
 
 	public void remove() {
 		logger.info("Removing TrapHazard " + this.getName());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
 		thDao.deleteTrapHazard(getId());		
 	}
 
 
 	public List<Object[]> getAll() {
     	logger.info("Getting all traps in database");
+    	TrapHazardDao thDao = new TrapHazardDaoImpl();
 		return thDao.readAllTrapHazards();
 	}
 

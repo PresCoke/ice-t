@@ -51,9 +51,7 @@ public class Effect {
 	@ManyToOne
 	@JoinColumn (name="Creature_id")
 	private Creature creature;
-	
-	//DAO
-	EffectDao eDao = new EffectDaoImpl();
+
 
 
 	/**
@@ -135,16 +133,19 @@ public class Effect {
 	 */
 	public void save(List<Creature> creatures) {
     	logger.info("Saving Effect " + getName());
+    	EffectDao eDao = new EffectDaoImpl();
     	eDao.saveEffect(getName(), getChanges(), getMetrics(), getDuration(), creatures);
 	}
 
 	public void remove(List<Integer> ids) {
     	logger.info("Removing Effect " + getName());
+    	EffectDao eDao = new EffectDaoImpl();
     	eDao.deleteEffects(ids);	
 	}
 	
 	public List<Object[]> getAll(){
     	logger.info("Getting all effects in database");
+    	EffectDao eDao = new EffectDaoImpl();
     	return eDao.readAllEffects();
 	}
 	
