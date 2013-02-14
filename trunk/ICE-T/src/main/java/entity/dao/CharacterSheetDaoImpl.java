@@ -234,18 +234,15 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             cs.setMonsterType(monsterType); 
             cs.setNPC(isNPC);
             //Set the resistance(s)
+            logger.debug("Deleting previous character sheet's resistances");
+            for(Resistance r : cs.getResistances()){
+            	session.delete(r);
+            }
             logger.debug("Setting character sheet's resistances");
             for(Resistance r : resistances){
-            	if (cs.compareResistanceTypes(r) != -1){
-            		Resistance resistance = cs.getCharacter_resistances().get(cs.compareResistanceTypes(r));
-            		resistance.setResistanceType(r.getResistanceType());
-            		resistance.setResistanceValue(r.getResistanceValue());
-            		resistance.setCharacterSheet(cs);
-            	} else {
-            		cs.addResistance(r);
-            		r.setCharacterSheet(cs);
-            	}
-            }
+        		cs.addResistance(r);
+        		r.setCharacterSheet(cs);
+        	}
             //Set the attack(s)
             if (attacks != null && attacksTypes != null){
 	            if(attacks.size() != attacksTypes.size()){

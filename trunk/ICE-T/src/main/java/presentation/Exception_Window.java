@@ -13,7 +13,7 @@ import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.log4j.Logger;
 
 import controller.App_Root;
-import entity.dao.CreatureDaoImpl;
+import entity.dao.PlayerDaoImpl;
 
 import java.awt.*;
 import java.awt.event.*;

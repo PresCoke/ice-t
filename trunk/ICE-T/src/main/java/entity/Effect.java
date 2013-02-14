@@ -49,10 +49,12 @@ public class Effect {
 	
 	//Associations
 	@ManyToOne
-	@JoinColumn (name="Creature_id")
-	private Player creature;
+	@JoinColumn (name="Player_id")
+	private Player player;
 
-
+	@ManyToOne
+	@JoinColumn (name="Monster_id")
+	private Monster monster;
 
 	/**
 	 * Default constructor
@@ -119,12 +121,12 @@ public class Effect {
 		this.name = name;
 	}
 	
-	public Player getCreature() {
-		return creature;
+	public Player getPlayer() {
+		return player;
 	}
 
-	public void setCreature(Player creature) {
-		this.creature = creature;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	

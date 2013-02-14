@@ -21,8 +21,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
-import entity.dao.CreatureDao;
-import entity.dao.CreatureDaoImpl;
+import entity.dao.PlayerDao;
+import entity.dao.PlayerDaoImpl;
 import entity.dao.TrapHazardDao;
 import entity.dao.TrapHazardDaoImpl;
 
@@ -210,9 +210,9 @@ public class CombatEncounter implements EntityM{
 		//Retrieving all the creatures in the combat encounter
 		creaturesInCE = new ArrayList<Player>();
 		List<Team> teams = this.getTeams();
-		CreatureDao cDao = new CreatureDaoImpl();
+		PlayerDao cDao = new PlayerDaoImpl();
 		for (Team t : teams){
-			List<Player> creatures = cDao.getCreaturesInTeam(t.getId());
+			List<Player> creatures = cDao.getPlayersInTeam(t.getId());
 			for (Player c : creatures){
 				creaturesInCE.add(c);
 			}
@@ -281,32 +281,32 @@ public class CombatEncounter implements EntityM{
 		//Getting all NPC creatures and traps in database that would suit the XPbudget
 		List<Object> npcs = new ArrayList<Object>();
     	logger.info("Getting all NPC creatures that would suit the XP budget");
-		CreatureDao cDao = new CreatureDaoImpl();
-		List<Player> npCreatures = new ArrayList<Player>();
-		List<Player> creatures = cDao.getAllCreatures();
-		for (Player c : creatures){
-			if(c.getCharacterSheet().isNPC() && c.getCharacterSheet().getXP()<=XPbudget){
-				npCreatures.add(c);
-			}
-		}
-    	logger.info("Getting all traps that would suit the XP budget");
-		TrapHazardDao thDao = new TrapHazardDaoImpl();
-		List<TrapHazard> trapHazards = new ArrayList<TrapHazard>();
-		List<TrapHazard> trapHazardsAll = thDao.getAllTrapHazards();
-		for (TrapHazard th : trapHazardsAll){
-			if(th.getXp()<=XPbudget){
-				trapHazards.add(th);
-			}
-		}
-		
-		//Creating the list
-    	logger.info("Adding the NPC creatures and the traps in the list");
-    	for (Player c : npCreatures){
-    		npcs.add(c);
-    	}
-    	for (TrapHazard th : trapHazards){
-    		npcs.add(th);
-    	}				
+		PlayerDao cDao = new PlayerDaoImpl();
+//		List<Monster> npCreatures = new ArrayList<Monster>();
+//		List<Monster> creatures = cDao.getAllPlayers();
+//		for (Player p : creatures){
+//			if(c.getCharacterSheet().isNPC() && c.getCharacterSheet().getXP()<=XPbudget){
+//				npCreatures.add(c);
+//			}
+//		}
+//    	logger.info("Getting all traps that would suit the XP budget");
+//		TrapHazardDao thDao = new TrapHazardDaoImpl();
+//		List<TrapHazard> trapHazards = new ArrayList<TrapHazard>();
+//		List<TrapHazard> trapHazardsAll = thDao.getAllTrapHazards();
+//		for (TrapHazard th : trapHazardsAll){
+//			if(th.getXp()<=XPbudget){
+//				trapHazards.add(th);
+//			}
+//		}
+//		
+//		//Creating the list
+//    	logger.info("Adding the NPC creatures and the traps in the list");
+//    	for (Player c : npCreatures){
+//    		npcs.add(c);
+//    	}
+//    	for (TrapHazard th : trapHazards){
+//    		npcs.add(th);
+//    	}				
 		return npcs;
 	}
 
