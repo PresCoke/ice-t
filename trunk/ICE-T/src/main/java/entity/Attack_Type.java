@@ -33,7 +33,7 @@ public class Attack_Type {
 	private boolean isPersonal;
 	
 	//Associations
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="Attack_id")
 	private Attack attack;
 	

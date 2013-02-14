@@ -73,7 +73,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 			String keywords, String powerSource, CS_Role role, CS_Size size,
 			CS_Monster_Origin monsterOrigin, CS_Monster_Type monsterType,
 			List<Resistance> resistances, List<Attack> attacks, 
-			List<Attack_Type> attacksTypes) {
+			List<Attack_Type> attacksTypes, boolean isNPC) {
 		
 		logger.debug("Character Sheet " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
@@ -126,6 +126,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             cs.setSize(size);
             cs.setMonsterOrigin(monsterOrigin);
             cs.setMonsterType(monsterType);
+            cs.setNPC(isNPC);
             //Set the resistance(s)
             logger.debug("Setting character sheet's resistances");
             if(resistances != null && !resistances.isEmpty()){
@@ -178,7 +179,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 			String powerSource, CS_Role role, CS_Size size,
 			CS_Monster_Origin monsterOrigin, CS_Monster_Type monsterType,
 			List<Resistance> resistances, List<Attack> attacks,
-			List<Attack_Type> attacksTypes) {
+			List<Attack_Type> attacksTypes, boolean isNPC) {
 
 		logger.debug("Character Sheet " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
@@ -231,6 +232,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             cs.setSize(size);
             cs.setMonsterOrigin(monsterOrigin);
             cs.setMonsterType(monsterType); 
+            cs.setNPC(isNPC);
             //Set the resistance(s)
             logger.debug("Setting character sheet's resistances");
             for(Resistance r : resistances){

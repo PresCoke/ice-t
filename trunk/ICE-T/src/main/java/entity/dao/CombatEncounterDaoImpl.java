@@ -35,8 +35,7 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	}
 
 	public int saveCombatEncounter(String name, String notes, int currentCreatureId,
-			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams,
-			List<TrapHazard> trapHazards) {
+			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams) {
     	logger.debug("CombatEncounter " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -68,13 +67,6 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             	t.setCombatEncounter(ce);
             }  
             logger.debug("Teams updated");
-            //Set the trapHazards
-            logger.debug("Setting CE's traps");
-            ce.setTraphazards(trapHazards);
-            for (TrapHazard th : trapHazards){
-            	th.setCombatEncounter(ce);
-            }
-            logger.debug("Traps updated");
             combatEncounterID = (Integer) session.save(ce);
             transaction.commit();
         	logger.info("CombatEncounter " + name + " was successfully saved in the database.");
@@ -89,7 +81,7 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 
 	public void updateCombatEncounter(int combatEncounterId, String name,
 			String notes, int currentCreatureId, List<Rewards> rewards, 
-			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards) {
+			Tally tally, List<Tuple> tuples, List<Team> teams) {
     	logger.debug("CombatEncounter " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -134,12 +126,6 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             for (Team t : teams){
             	t.setCombatEncounter(ce);
             }  
-            //Set the trapHazards
-            logger.debug("Setting CE's traps");
-            ce.setTraphazards(trapHazards);
-            for (TrapHazard th : trapHazards){
-            	th.setCombatEncounter(ce);
-            }
             transaction.commit();
         	logger.info("CombatEncounter " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
@@ -158,15 +144,11 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             transaction = session.beginTransaction();
             CombatEncounter ce = (CombatEncounter) session.get(CombatEncounter.class, combatEncounterId);
             List<Team> teams = ce.getTeams();
-            List<TrapHazard> trapHazards = ce.getTraphazards();
             logger.info("Deletion of Combat encounter " + ce.getName());
             session.delete(ce);
             logger.debug("Update of teams and traps");
             for (Team t : teams){
                 t.setCombatEncounter(null);
-            }
-            for (TrapHazard th : trapHazards){
-                th.setCombatEncounter(null);
             }
             transaction.commit();
         	logger.info("CombatEncounter " + combatEncounterId + " was successfully removed from the database.");

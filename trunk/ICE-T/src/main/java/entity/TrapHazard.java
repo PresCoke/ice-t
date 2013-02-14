@@ -71,18 +71,14 @@ public class TrapHazard implements EntityM {
 	private EntityEnum.T_CounterMeasureSkill avoidanceSkill;
 	
 	//Associations
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn (name="CombatEncounter_id")
-	private CombatEncounter combatEncounter;
-	
 	@OneToOne(mappedBy="trap", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack attack;
 	
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn (name="Team_id")
-//	private Team team;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn (name="Team_id")
+	private Team team;
 
 	
 	/**
@@ -113,7 +109,7 @@ public class TrapHazard implements EntityM {
 	}
 
 	
-	/**
+	/*
 	 * Getters & Setters
 	 */
 	public int getAvoidance() {
@@ -206,37 +202,32 @@ public class TrapHazard implements EntityM {
 		return id;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public CombatEncounter getCombatEncounter() {
-		return combatEncounter;
-	}
-
-	public void setCombatEncounter(CombatEncounter combatEncounter) {
-		this.combatEncounter = combatEncounter;
-	}
-	
-	
 	public Attack getAttack() {
 		return attack;
 	}
-
 
 	public void setAttack(Attack attack) {
 		this.attack = attack;
 	}
 
-
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 

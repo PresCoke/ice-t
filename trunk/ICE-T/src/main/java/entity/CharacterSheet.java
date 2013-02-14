@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.log4j.Logger;
@@ -127,8 +128,8 @@ public class CharacterSheet implements EntityM {
 	private String keywords;
 	@Column(name="powerSource")
 	private String powerSource;
-//	@Column(name="isNPC")
-//	private boolean isNPC;
+	@Column(name="isNPC")
+	private boolean isNPC;
 
 	//Enum
 	@Column(name="roleCS")
@@ -141,10 +142,10 @@ public class CharacterSheet implements EntityM {
 	private EntityEnum.CS_Monster_Type monsterType; 
 	
 	//Associations
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
-	private List<Creature> creatures;
+	private Creature creature;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
@@ -207,7 +208,7 @@ public class CharacterSheet implements EntityM {
 		this.misc = "";
 		this.resistances = new ArrayList<Resistance>();
 		this.attacks = new ArrayList<Attack>();
-//		this.isNPC = false;
+		this.isNPC = false;
 	}
 	
 	/**
@@ -260,7 +261,7 @@ public class CharacterSheet implements EntityM {
 		this.misc = "";
 		this.resistances = new ArrayList<Resistance>();
 		this.attacks = new ArrayList<Attack>();
-//		this.isNPC = false;
+		this.isNPC = false;
 	}
 	
 	/**
@@ -754,12 +755,12 @@ public class CharacterSheet implements EntityM {
 		return types;
 	}
 	
-	public List<Creature> getCreatures() {
-		return creatures;
+	public Creature getCreature() {
+		return creature;
 	}
 
-	public void setCreatures(List<Creature> creatures) {
-		this.creatures = creatures;
+	public void setCreature(Creature creature) {
+		this.creature = creature;
 	}
 
 	public List<Resistance> getResistances() {
@@ -768,6 +769,14 @@ public class CharacterSheet implements EntityM {
 
 	public void setResistances(List<Resistance> resistances) {
 		this.resistances = resistances;
+	}
+
+	public boolean isNPC() {
+		return isNPC;
+	}
+
+	public void setNPC(boolean isNPC) {
+		this.isNPC = isNPC;
 	}
 
 	/**
@@ -784,10 +793,10 @@ public class CharacterSheet implements EntityM {
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
-				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), getLevel(), getXP(), getRaceFeatures(),
-				getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(), getPowerSource(), getRole(), getSize(),
-				getMonsterOrigin(), getMonsterType(), getCharacter_resistances(), getAttacks(), getAttacksTypes(getAttacks())
-				);
+				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
+				getLevel(), getXP(), getRaceFeatures(), getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(),
+				getPowerSource(), getRole(), getSize(), getMonsterOrigin(), getMonsterType(), getCharacter_resistances(),
+				getAttacks(), getAttacksTypes(getAttacks()), isNPC());
 	}
 
 	public void edit() {
@@ -796,10 +805,10 @@ public class CharacterSheet implements EntityM {
 		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
-				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), getLevel(), getXP(), getRaceFeatures(),
-				getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(), getPowerSource(), getRole(), getSize(),
-				getMonsterOrigin(), getMonsterType(), getCharacter_resistances(), getAttacks(), getAttacksTypes(getAttacks())
-				);
+				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
+				getLevel(), getXP(), getRaceFeatures(), getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(),
+				getPowerSource(), getRole(), getSize(), getMonsterOrigin(), getMonsterType(), getCharacter_resistances(),
+				getAttacks(), getAttacksTypes(getAttacks()), isNPC());
 		
 	}
 

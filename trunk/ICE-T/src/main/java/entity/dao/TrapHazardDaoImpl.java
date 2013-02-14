@@ -33,8 +33,16 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
 	public List<Object[]> readAllTrapHazards() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("Select TrapHazard_id, TrapHazard_name from TrapHazard");
+		Query q = session.createSQLQuery("Select TrapHazard_id, TrapHazard_name from TrapHazard");
 		List<Object[]> ths = q.list();
+		return ths;
+	}
+	
+	public List<TrapHazard> getAllTrapHazards() {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("from TrapHazard");
+		List<TrapHazard> ths = q.list();
 		return ths;
 	}
 
