@@ -79,6 +79,10 @@ public class TrapHazard implements EntityM {
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Attack attack;
+	
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn (name="Team_id")
+//	private Team team;
 
 	
 	/**

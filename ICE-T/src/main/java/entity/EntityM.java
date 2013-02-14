@@ -25,7 +25,7 @@ public interface EntityM {
 	public abstract void remove();
 	
 	/**
-	 * Read all
+	 * Read all entities of one type in DB
 	 */
 	public abstract List<Object[]> getAll();
 }

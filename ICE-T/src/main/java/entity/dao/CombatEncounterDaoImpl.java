@@ -177,4 +177,22 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             session.close();
         }	
 	}
+	
+	public CombatEncounter getCombatEncounter(int combatEncounterId){
+		logger.debug("CombatEncounter " + combatEncounterId + " is about to be retrieved from the database.");
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        CombatEncounter ce = null;
+        try {
+            transaction = session.beginTransaction();
+            ce = (CombatEncounter) session.get(CombatEncounter.class, combatEncounterId);
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.fatal("Error while retrieving CombatEncounter " + combatEncounterId + " in the database --- " + e.getMessage());
+        } finally {
+            session.close();
+        }	
+        return ce;
+	}
+
 }

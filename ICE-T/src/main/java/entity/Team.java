@@ -49,6 +49,11 @@ public class Team implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Creature> creatures;
 	
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+//	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+//		org.hibernate.annotations.CascadeType.PERSIST})
+//	private List<TrapHazard> trapHazards;
+	
 	
 	/**
 	 * Default constructor

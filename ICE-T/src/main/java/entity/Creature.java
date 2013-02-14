@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ import entity.dao.CreatureDaoImpl;
  */
 @Entity
 @Table(name="Creature")
-public class Creature implements EntityM {
+public class Creature implements EntityM, Comparable<Creature> {
 	
 	private static final Logger logger = Logger.getLogger(Creature.class);
 
@@ -46,8 +47,8 @@ public class Creature implements EntityM {
 	@Column(name="currentHealSurges")
 	private int currentHealSurges;
 	
-	@Column(name="currentLevel")
-	private int currentLevel;
+	@Column(name="initiative")
+	private int initiative;
 	
 	@Column(name="secondWind")
 	private boolean secondWind;
@@ -83,7 +84,7 @@ public class Creature implements EntityM {
 		playerName = "";
 		currentHP = 0;
 		currentHealSurges = 0;
-		currentLevel = 0;
+		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
 	}
@@ -96,7 +97,7 @@ public class Creature implements EntityM {
 		this.playerName = playerName;
 		currentHP = 0;
 		currentHealSurges = 0;
-		currentLevel = 0;
+		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
 	}
@@ -106,7 +107,7 @@ public class Creature implements EntityM {
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
-		currentLevel = characterSheet.getLevel();
+		initiative = characterSheet.getLevel();
 		secondWind = false;
 		tempHP = 0;
 	}
@@ -143,13 +144,13 @@ public class Creature implements EntityM {
 	}
 
 
-	public int getCurrentLevel() {
-		return currentLevel;
+	public int getInitiative() {
+		return initiative;
 	}
 
 
-	public void setCurrentLevel(int currentLevel) {
-		this.currentLevel = currentLevel;
+	public void setInitiative(int initiative) {
+		this.initiative = initiative;
 	}
 
 
@@ -257,7 +258,7 @@ public class Creature implements EntityM {
 	public void save() {
     	logger.info("Saving Creature " + getPlayerName());
     	CreatureDao cDao = new CreatureDaoImpl();
-    	cDao.saveCreature(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+    	cDao.saveCreature(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
 		
 	}
@@ -265,7 +266,7 @@ public class Creature implements EntityM {
 	public void edit() {
     	logger.info("Editing Creature " + getPlayerName());
     	CreatureDao cDao = new CreatureDaoImpl();
-    	cDao.updateCreature(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getCurrentLevel(),
+    	cDao.updateCreature(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP());
 	}
 
@@ -279,5 +280,18 @@ public class Creature implements EntityM {
     	logger.info("Getting all Combats Encounters in database");
     	CreatureDao cDao = new CreatureDaoImpl();
     	return cDao.readAllCreatures();
-	}	
+	}
+
+	public int compareTo(Creature other) {
+        //Descending sorting
+		int initiativeOther = other.getInitiative(); 
+		int initiativeThis = this.getInitiative(); 
+		if (initiativeOther < initiativeThis){
+			return -1; 
+		} else if(initiativeOther == initiativeThis){
+			return 0; 
+		} else {
+			return 1; 
+		}
+	}
 }

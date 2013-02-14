@@ -34,7 +34,6 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	private static final Logger logger = Logger.getLogger(CharacterSheetDaoImpl.class);
 	
 	public CharacterSheetDaoImpl() {
-		// TODO Auto-generated constructor stub
 	}
 	
 
@@ -51,6 +50,15 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		Session session = sf.openSession();
 		Query q = session.createSQLQuery("Select CharacterSheet_id, CharacterSheet_name from CharacterSheet");
 		List<Object[]> characterSheets = q.list();		
+		return characterSheets;
+	}
+	
+	public List<CharacterSheet> getAllCharacterSheets(){
+    	logger.info("Retrieval of all character sheets in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("from CharacterSheet");
+		List<CharacterSheet> characterSheets = q.list();		
 		return characterSheets;
 	}
 
