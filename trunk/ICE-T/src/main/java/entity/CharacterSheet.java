@@ -145,7 +145,7 @@ public class CharacterSheet implements EntityM {
 	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
-	private Creature creature;
+	private Player creature;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
@@ -755,11 +755,11 @@ public class CharacterSheet implements EntityM {
 		return types;
 	}
 	
-	public Creature getCreature() {
+	public Player getCreature() {
 		return creature;
 	}
 
-	public void setCreature(Creature creature) {
+	public void setCreature(Player creature) {
 		this.creature = creature;
 	}
 

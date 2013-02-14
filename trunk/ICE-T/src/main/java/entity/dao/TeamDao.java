@@ -2,7 +2,7 @@ package entity.dao;
 
 import java.util.List;
 
-import entity.Creature;
+import entity.Player;
 import entity.Team;
 import entity.TrapHazard;
 
@@ -26,7 +26,7 @@ public interface TeamDao {
 	 * @param creatures
 	 * @return team's id stored in the database
 	 */
-	public int saveTeam(String name, List<Creature> creatures);
+	public int saveTeam(String name, List<Player> creatures);
 	
 	/**
 	 * Update a team in the database
@@ -34,7 +34,7 @@ public interface TeamDao {
 	 * @param name
 	 * @param creatures
 	 */
-	public void updateTeam(int teamId, String name, List<Creature> creatures);
+	public void updateTeam(int teamId, String name, List<Player> creatures);
 	
 	/**
 	 * Save a team in the database
@@ -43,7 +43,7 @@ public interface TeamDao {
 	 * @param traphazards
 	 * @return team's id stored in the database
 	 */
-	public int saveNPCteam(String name, List<Creature> creatures, List<TrapHazard> traphazards);
+	public int saveNPCteam(String name, List<Player> creatures, List<TrapHazard> traphazards);
 	
 	/**
 	 * Update a team in the database
@@ -52,7 +52,7 @@ public interface TeamDao {
 	 * @param creatures
 	 * @param traphazards
 	 */
-	public void updateNPCteam(int teamId, String name, List<Creature> creatures, List<TrapHazard> traphazards);
+	public void updateNPCteam(int teamId, String name, List<Player> creatures, List<TrapHazard> traphazards);
 		
 	/**
 	 * Delete a team from the database

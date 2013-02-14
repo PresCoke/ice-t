@@ -70,7 +70,7 @@ public class CombatEncounter implements EntityM{
 
 	//Other
 	@Transient
-	private List<Creature> creaturesInCE;
+	private List<Player> creaturesInCE;
 	
 
 	/**
@@ -190,11 +190,11 @@ public class CombatEncounter implements EntityM{
 		this.currentCreatureId = currentCreatureId;
 	}	
 
-	public List<Creature> getCreaturesInCE() {
+	public List<Player> getCreaturesInCE() {
 		return creaturesInCE;
 	}
 
-	public void setCreaturesInCE(List<Creature> creaturesInCE) {
+	public void setCreaturesInCE(List<Player> creaturesInCE) {
 		this.creaturesInCE = creaturesInCE;
 	}
 
@@ -206,14 +206,14 @@ public class CombatEncounter implements EntityM{
 	 * Get all the creatures in the combat encounter and sort them out descending
 	 * @return list of creatures sorted
 	 */
-	public List<Creature> organizeCreaturesByInitiative(){	
+	public List<Player> organizeCreaturesByInitiative(){	
 		//Retrieving all the creatures in the combat encounter
-		creaturesInCE = new ArrayList<Creature>();
+		creaturesInCE = new ArrayList<Player>();
 		List<Team> teams = this.getTeams();
 		CreatureDao cDao = new CreatureDaoImpl();
 		for (Team t : teams){
-			List<Creature> creatures = cDao.getCreaturesInTeam(t.getId());
-			for (Creature c : creatures){
+			List<Player> creatures = cDao.getCreaturesInTeam(t.getId());
+			for (Player c : creatures){
 				creaturesInCE.add(c);
 			}
 		}
@@ -227,12 +227,12 @@ public class CombatEncounter implements EntityM{
 	 * the CE was played
 	 * @return list of creatures sorted
 	 */
-	public List<Creature> organizeCreaturesAfterLoad(){	
+	public List<Player> organizeCreaturesAfterLoad(){	
 		//Retrieving all the creatures in the combat encounter and sort them out
 		this.organizeCreaturesByInitiative();
 		
 		//Sort the creatures to get them the way they were last time
-		for (Creature c : creaturesInCE){
+		for (Player c : creaturesInCE){
 			if (c.getId() == currentCreatureId){
 				break;
 			} else {
@@ -247,7 +247,7 @@ public class CombatEncounter implements EntityM{
 	 * Take the first creature in the list of creatures playing and put it at the end of the list
 	 */
 	public void finishTurn(){
-		Creature current = creaturesInCE.get(0);
+		Player current = creaturesInCE.get(0);
 		creaturesInCE.remove(0);
 		creaturesInCE.add(current);	
 	}
@@ -262,7 +262,7 @@ public class CombatEncounter implements EntityM{
 		//Retrieving all the creatures' level in the combat encounter
     	logger.info("Retrieving all the creatures in the CE");
 		List<Integer> levels = new ArrayList<Integer>();
-		for (Creature c : creaturesInCE){
+		for (Player c : creaturesInCE){
 			levels.add(c.getCharacterSheet().getId());
 		}
 		
@@ -282,9 +282,9 @@ public class CombatEncounter implements EntityM{
 		List<Object> npcs = new ArrayList<Object>();
     	logger.info("Getting all NPC creatures that would suit the XP budget");
 		CreatureDao cDao = new CreatureDaoImpl();
-		List<Creature> npCreatures = new ArrayList<Creature>();
-		List<Creature> creatures = cDao.getAllCreatures();
-		for (Creature c : creatures){
+		List<Player> npCreatures = new ArrayList<Player>();
+		List<Player> creatures = cDao.getAllCreatures();
+		for (Player c : creatures){
 			if(c.getCharacterSheet().isNPC() && c.getCharacterSheet().getXP()<=XPbudget){
 				npCreatures.add(c);
 			}
@@ -301,7 +301,7 @@ public class CombatEncounter implements EntityM{
 		
 		//Creating the list
     	logger.info("Adding the NPC creatures and the traps in the list");
-    	for (Creature c : npCreatures){
+    	for (Player c : npCreatures){
     		npcs.add(c);
     	}
     	for (TrapHazard th : trapHazards){

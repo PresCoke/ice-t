@@ -8,11 +8,11 @@ import javax.swing.event.*;
 
 import java.awt.event.*;
 
-import entity.Creature;
+import entity.Player;
 
 public class CreatureCombat implements Bean {
 
-	private Creature theCreature;
+	private Player theCreature;
 	private JSpinner currentHealth_field;
 	private JSpinner currentSurge_field;
 	private JSpinner tempHP_field;
@@ -20,7 +20,7 @@ public class CreatureCombat implements Bean {
 	private JCheckBox secondWind_field;
 	
 	public CreatureCombat() {
-		theCreature = new Creature();
+		theCreature = new Player();
 		currentHealth_field = new JSpinner (new SpinnerNumberModel(
 						theCreature.getCurrentHP(), //current
 						-1 * theCreature.getCharacterSheet().getBloodied(),//min
@@ -135,7 +135,7 @@ public class CreatureCombat implements Bean {
 			int index, boolean isSelected, boolean cellHasFocus) {
 		UIDefaults system_defaults = javax.swing.UIManager.getDefaults();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
-		Creature aCreature = (Creature) value;
+		Player aCreature = (Player) value;
 		
 		JPanel creaturePanel = new JPanel();
 		if (isSelected) {
@@ -195,8 +195,8 @@ public class CreatureCombat implements Bean {
 	}
 
 	public void createPanelFrom(Object thisEntity) {
-		if (thisEntity instanceof Creature) {
-			theCreature = (Creature) thisEntity;
+		if (thisEntity instanceof Player) {
+			theCreature = (Player) thisEntity;
 			currentHealth_field.setModel( new SpinnerNumberModel(
 						theCreature.getCurrentHP(),
 						-1 * theCreature.getCharacterSheet().getBloodied(),
