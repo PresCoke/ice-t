@@ -105,7 +105,7 @@ public class CreatureCombat implements Bean {
 		currentInit_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent ce) {
 				int value = (Integer) ((JSpinner) ce.getSource()).getValue();
-				theCreature.setCurrentLevel(value);
+				theCreature.setInitiative(value);
 			}
 		});
 		currentInit_field.addKeyListener( new KeyListener() {
@@ -211,7 +211,7 @@ public class CreatureCombat implements Bean {
 						1
 					));
 			tempHP_field.setValue(theCreature.getTempHP());
-			currentInit_field.setValue(theCreature.getCurrentLevel());
+			currentInit_field.setValue(theCreature.getInitiative());
 			secondWind_field.setSelected(theCreature.isSecondWind());
 		}
 	}

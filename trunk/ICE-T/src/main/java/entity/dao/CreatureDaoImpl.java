@@ -29,7 +29,7 @@ public class CreatureDaoImpl implements CreatureDao {
 		return creatures;
 	}
 	
-	public List<Creature> readAllCreatures(int nothing) {
+	public List<Creature> getAllCreatures() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -38,8 +38,17 @@ public class CreatureDaoImpl implements CreatureDao {
 		return creatures;
 	}
 	
+	public List<Creature> getCreaturesInTeam(int teamId) {
+    	logger.info("Retrieval of all creatures in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("from Creature where Team_id="+teamId);
+		List<Creature> creatures = q.list();
+		return creatures;
+	}
+	
     public int saveCreature(String playerName, int currentHP, int currentHealSurges, 
-    		int currentLevel, boolean secondWind, int tempHP, CharacterSheet characterSheet){
+    		int initiative, boolean secondWind, int tempHP, CharacterSheet characterSheet){
     	logger.debug("Creature " + playerName + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -50,7 +59,7 @@ public class CreatureDaoImpl implements CreatureDao {
             Creature c = new Creature(playerName);
             c.setCurrentHP(currentHP);
             c.setCurrentHealSurges(currentHealSurges);
-            c.setCurrentLevel(currentLevel);
+            c.setInitiative(initiative);
             c.setSecondWind(secondWind);
             c.setTempHP(tempHP);
             c.setCharacterSheet(characterSheet);
@@ -77,7 +86,7 @@ public class CreatureDaoImpl implements CreatureDao {
  
  
     public void updateCreature(int creatureId, String playerName, int currentHP, int currentHealSurges,
-    		int currentLevel, boolean secondWind, int tempHP){
+    		int initiative, boolean secondWind, int tempHP){
     	logger.debug("Creature " + playerName + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -87,7 +96,7 @@ public class CreatureDaoImpl implements CreatureDao {
             c.setPlayerName(playerName);
             c.setCurrentHP(currentHP);
             c.setCurrentHealSurges(currentHealSurges);
-            c.setCurrentLevel(currentLevel);
+            c.setInitiative(initiative);
             c.setSecondWind(secondWind);
             c.setTempHP(tempHP);
             transaction.commit();
@@ -110,7 +119,7 @@ public class CreatureDaoImpl implements CreatureDao {
             c.setPlayerName(creature.getPlayerName());
             c.setCurrentHP(creature.getCurrentHP());
             c.setCurrentHealSurges(creature.getCurrentHealSurges());
-            c.setCurrentLevel(creature.getCurrentLevel());
+            c.setInitiative(creature.getInitiative());
             c.setSecondWind(creature.isSecondWind());
             c.setTempHP(creature.getTempHP());
             c.setTeam(team);

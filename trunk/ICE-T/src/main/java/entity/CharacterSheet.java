@@ -127,6 +127,8 @@ public class CharacterSheet implements EntityM {
 	private String keywords;
 	@Column(name="powerSource")
 	private String powerSource;
+//	@Column(name="isNPC")
+//	private boolean isNPC;
 
 	//Enum
 	@Column(name="roleCS")
@@ -205,6 +207,7 @@ public class CharacterSheet implements EntityM {
 		this.misc = "";
 		this.resistances = new ArrayList<Resistance>();
 		this.attacks = new ArrayList<Attack>();
+//		this.isNPC = false;
 	}
 	
 	/**
@@ -257,6 +260,7 @@ public class CharacterSheet implements EntityM {
 		this.misc = "";
 		this.resistances = new ArrayList<Resistance>();
 		this.attacks = new ArrayList<Attack>();
+//		this.isNPC = false;
 	}
 	
 	/**

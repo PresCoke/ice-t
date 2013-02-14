@@ -98,7 +98,7 @@ CREATE TABLE Creature (
 	Team_id INTEGER,
 	currentHP INTEGER NOT NULL,
 	currentHealSurges INTEGER NOT NULL,
-	currentLevel INTEGER NOT NULL,
+	initiative INTEGER NOT NULL,
 	secondWind BOOLEAN NOT NULL,
 	tempHP INTEGER,
 	CONSTRAINT PK_Creature PRIMARY KEY (Creature_id),

@@ -12,9 +12,39 @@ import entity.Team;
  *
  */
 public interface TeamDao {
+	
+	/**
+	 * Get a list containing the ids and names of all the teams in the database
+	 * @return a list of Object array, each array containing an int (id) and a String (name)
+	 */
 	public List<Object[]> readAllTeams();
+	
+	/**
+	 * Save a team in the database
+	 * @param name
+	 * @param creatures
+	 * @return team's id stored in the database
+	 */
 	public int saveTeam(String name, List<Creature> creatures);
+	
+	/**
+	 * Update a team in the database
+	 * @param teamId
+	 * @param name
+	 * @param creatures
+	 */
 	public void updateTeam(int teamId, String name, List<Creature> creatures);
+	
+	/**
+	 * Delete a team from the database
+	 * @param team's id
+	 */
 	public void deleteTeam(int teamId);
+	
+	/**
+	 * Get a specific team from the database
+	 * @param team's id
+	 * @return team associated to the team's id
+	 */
 	public Team getTeam(int teamId);
 }

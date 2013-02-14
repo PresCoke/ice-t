@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,13 +12,18 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import entity.dao.CharacterSheetDao;
+import entity.dao.CharacterSheetDaoImpl;
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
+import entity.dao.CreatureDao;
+import entity.dao.CreatureDaoImpl;
 
 /**
  * CombatEncounter Class
@@ -61,11 +67,14 @@ public class CombatEncounter implements EntityM{
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Tally tally;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "combatEncounter")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Team> teams;
 
+	//Other
+	@Transient
+	private List<Creature> creaturesInCE;
 	
 
 	/**
@@ -86,7 +95,7 @@ public class CombatEncounter implements EntityM{
 	}
 	
 	
-	/**
+	/*
 	 * Getters & Setters
 	 */
 	public int getId() {
@@ -211,30 +220,112 @@ public class CombatEncounter implements EntityM{
 
 	public void setCurrentCreatureId(int currentCreatureId) {
 		this.currentCreatureId = currentCreatureId;
+	}	
+
+	public List<Creature> getCreaturesInCE() {
+		return creaturesInCE;
+	}
+
+	public void setCreaturesInCE(List<Creature> creaturesInCE) {
+		this.creaturesInCE = creaturesInCE;
 	}
 
 	/**
 	 * Other functions
 	 */
-	public void organizeCreaturesByInitiative(){
-		//TODO
+	
+	/**
+	 * Get all the creatures in the combat encounter and sort them out descending
+	 * @return list of creatures sorted
+	 */
+	public List<Creature> organizeCreaturesByInitiative(){	
+		//Retrieving all the creatures in the combat encounter
+		creaturesInCE = new ArrayList<Creature>();
+		List<Team> teams = this.getTeams();
+		CreatureDao cDao = new CreatureDaoImpl();
+		for (Team t : teams){
+			List<Creature> creatures = cDao.getCreaturesInTeam(t.getId());
+			for (Creature c : creatures){
+				creaturesInCE.add(c);
+			}
+		}
+		//Sorting
+		Collections.sort(creaturesInCE);
+		return creaturesInCE;
 	}
 
-	public void finishTurn(){
-		//TODO
+	/**
+	 * Organize the creatures in the way they were the last time 
+	 * the CE was played
+	 * @return list of creatures sorted
+	 */
+	public List<Creature> organizeCreaturesAfterLoad(){	
+		//Retrieving all the creatures in the combat encounter and sort them out
+		this.organizeCreaturesByInitiative();
+		
+		//Sort the creatures to get them the way they were last time
+		for (Creature c : creaturesInCE){
+			if (c.getId() == currentCreatureId){
+				break;
+			} else {
+				this.finishTurn();
+			}
+		}
+		
+		return creaturesInCE;
 	}
 	
-	public ArrayList<Creature> generateRandomEncounter(){
-		//TODO
-		return null;
+	/**
+	 * Take the first creature in the list of creatures playing and put it at the end of the list
+	 */
+	public void finishTurn(){
+		Creature current = creaturesInCE.get(0);
+		creaturesInCE.remove(0);
+		creaturesInCE.add(current);	
+	}
+	
+	/**
+	 * Generate a random encounter, that is to say a random team of monsters
+	 * @return list of character sheets
+	 */
+	public List<CharacterSheet> generateRandomEncounter(){
+		
+		//Retrieving all the creatures' level in the combat encounter
+		List<Integer> levels = new ArrayList<Integer>();
+		for (Creature c : creaturesInCE){
+			levels.add(c.getCharacterSheet().getId());
+		}
+		
+		//Choosing Encounter level
+		int creaturesNumber = levels.size();
+		int sum = 0;
+		for (int level : levels){
+			sum += level;
+		}
+		int random = 0; //TODO
+		int levelEncounter = sum/creaturesNumber + random;
+		int XPbudget = levelEncounter*250;
+		
+		//Getting all NPC creatures in database that would suit the XPbudget
+		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		List<CharacterSheet> npcs = csDao.getAllCharacterSheets();
+		for (int i = 0; i<=npcs.size(); i++){
+			if(npcs.get(i).getXP()>XPbudget){
+				npcs.remove(i);
+			}
+		}
+				
+		return npcs;
 	}
 
+	/*
+	 * Methods save, edit, remove and getAll
+	 */
 	public void save() {
     	logger.info("Saving Combat Encounter " + getName());
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
     	ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
 				getTally(), getTally().getTuples(), getTeams(), getTraphazards());
-		
 	}
 
 	public void edit() {
