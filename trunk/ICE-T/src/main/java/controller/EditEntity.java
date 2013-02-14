@@ -35,6 +35,9 @@ public class EditEntity {
 		List<Object[]> temp = App_Root.resource_mediator.getUniqueEntityIDsForType(selectedEntityType);
 		List<String> names = new ArrayList<String>();
 		entityID_list = new HashMap<String, Integer>();
+		if (temp == null) {
+			return(new String[0]);
+		}
 		for (int index = 0; index < temp.size(); index++) {
 			int value = (Integer) temp.get(index)[0];
 			String key = (String) temp.get(index)[1];

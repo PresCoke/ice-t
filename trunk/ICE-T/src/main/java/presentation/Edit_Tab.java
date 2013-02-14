@@ -41,7 +41,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		editEntity_window = new JFrame(entityName);
-		
+		editEntity_window.setPreferredSize( scrollable.getPreferredSize() );
 		editEntity_window.setContentPane(scrollable);
 		editEntity_window.pack();
 		editEntity_window.validate();
@@ -68,6 +68,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
 		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
+		listSelection_panel.setPreferredSize( new Dimension(150, 100) );
 		listSelection_panel.add(name_pane);
 		
 		save_button = new JButton(editTab_l10n.getString("Save_Button"));
@@ -85,6 +86,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		button_panel.add(cancel_button);
 		
 		entityEdit_pane = new JPanel();
+		entityEdit_pane.setPreferredSize( new Dimension(300, 300) );
 		entityEdit_pane.setOpaque(false);
 		entityEdit_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),

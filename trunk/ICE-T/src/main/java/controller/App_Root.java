@@ -1,6 +1,7 @@
 package controller;
 
 //-- Project Imports --//
+import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -28,15 +29,34 @@ public class App_Root
 	public static EditEntity editEntity_controller;
 	public static NewEntity newEntity_controller;
 	public static Welcome welcome_controller;
-	public static GenerateRandomEncounter gre_controller; //TODO: not currently instantiated
+	public static GenerateRandomEncounter gre_controller;
 	public static Locale language_locale;
+	private static String dbPath;
 	private static Root_Window mainWindow;
 	
 	public static void main(String[] args) {
 		
-		language_locale = new Locale("en_CA");
+		try {
+			java.util.Properties props = new java.util.Properties();       
+			java.io.File f = new java.io.File("src/main/resources/filters/ApplicationSettings.properties"); 
+			java.io.FileInputStream fis;
+			fis = new java.io.FileInputStream(f);
+			
+			props.load(fis);
+			language_locale = new Locale(props.getProperty("Language"));
+			dbPath = props.getProperty("DbPath");
+			
+			fis.close();
+			
+		} catch (Exception e) {
+			Exception_Window.showException(e);
+			language_locale = new Locale("en_CA");
+			dbPath = "";
+		}
+
 		
-		resource_mediator = new Mediator("filters/ApplicationSettings");
+		
+		resource_mediator = new Mediator(dbPath);
 		resource_mediator.start();
 		
 		help_controller = new Help();
@@ -45,7 +65,8 @@ public class App_Root
 		newEntity_controller = new NewEntity();
 		welcome_controller = new Welcome();
 		
-		changePreferences();
+		mainWindow = new Root_Window();
+		mainWindow.start();
 		
 	}
 	
@@ -63,10 +84,9 @@ public class App_Root
 			java.io.File f = new java.io.File("src/main/resources/filters/ApplicationSettings.properties"); 
 			java.io.FileInputStream fis = new java.io.FileInputStream(f);
 			props.load(fis);
-			
-//			java.net.URL url = ClassLoader.getSystemResource("filters.ApplicationSettings.properties");
-//			props.load(url.openStream());
+
 			language_locale = new Locale(props.getProperty("Language"));
+			dbPath = props.getProperty("DbPath");
 			
 			fis.close();
 			
@@ -76,8 +96,12 @@ public class App_Root
 			mainWindow = new Root_Window();
 			mainWindow.start();
 			
+			resource_mediator.close();
+			resource_mediator = new Mediator(dbPath);
+			resource_mediator.start();
+			
 		} catch (Exception e) {
-			//Exception_Window.showException(e);	
+			Exception_Window.showException(e);	
 		}
 	}
 
