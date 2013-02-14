@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -20,6 +19,7 @@ public class Prefs_Window implements ActionListener {
 	private JButton save_button, cancel_button;
 	private JFrame prefs_frame;
 	private JPanel prefs_panel;
+	private JTextField dbPath_field;
 	private DefaultListModel language_model;
 	private JList language_list;
 	
@@ -31,12 +31,10 @@ public class Prefs_Window implements ActionListener {
 		this.createPanel();
 		
 		ResourceBundle prefs_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.PrefsWindow", App_Root.language_locale);
-		JScrollPane scrollable = new JScrollPane(prefs_panel);
-		scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		prefs_frame = new JFrame(prefs_l10n.getString("Prefs_title"));
-		
-		prefs_frame.setContentPane(scrollable);
+		prefs_frame.setPreferredSize( prefs_panel.getPreferredSize() );
+		prefs_frame.setContentPane(prefs_panel);
 		prefs_frame.pack();
 		prefs_frame.validate();
 		prefs_frame.setVisible(true);
@@ -46,12 +44,17 @@ public class Prefs_Window implements ActionListener {
 		ResourceBundle prefs_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.PrefsWindow", App_Root.language_locale);
 		
 		prefs_panel = new JPanel();
-		
+				
 		save_button = new JButton(prefs_l10n.getString("Save_button"));
 		save_button.addActionListener(this);
 		cancel_button = new JButton(prefs_l10n.getString("Cancel_button"));
 		cancel_button.addActionListener(this);
 		
+		JLabel dbPath_label = new JLabel(prefs_l10n.getString("dbPath_label"));
+		dbPath_label.setBorder( BorderFactory.createEmptyBorder(0, 8, 0, 0) );
+		dbPath_field = new JTextField();
+		dbPath_field.setPreferredSize( new Dimension(200, 0) );
+			
 		this.getSupportedLanguages();
 		language_list = new JList(language_model);
 		language_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -62,25 +65,36 @@ public class Prefs_Window implements ActionListener {
 		
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.PAGE_AXIS) );
-		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
-		listSelection_panel.add( new JLabel(prefs_l10n.getString("langauge_label")));
+		javax.swing.border.TitledBorder title = BorderFactory.createTitledBorder( 
+				BorderFactory.createEmptyBorder(), 
+				prefs_l10n.getString("langauge_label"));
+		title.setTitleJustification(javax.swing.border.TitledBorder.LEFT);
+		listSelection_panel.setBorder(title);
 		listSelection_panel.add(name_pane);
+		listSelection_panel.setPreferredSize( new Dimension(200, 100) );
 		
 		GroupLayout prefs_layout = new GroupLayout(prefs_panel);
 		prefs_layout.setAutoCreateGaps(true);
+		prefs_layout.setAutoCreateContainerGaps(true);
 		prefs_layout.setHorizontalGroup( prefs_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup( prefs_layout.createSequentialGroup()
 						.addComponent(save_button)
 						.addComponent(cancel_button))
+				.addGroup( prefs_layout.createSequentialGroup()
+						.addComponent(dbPath_label)
+						.addComponent(dbPath_field))
 				.addComponent(listSelection_panel)
 				);
 		prefs_layout.setVerticalGroup( prefs_layout.createSequentialGroup()
 				.addGroup( prefs_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(save_button)
 						.addComponent(cancel_button))
+				.addGroup( prefs_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(dbPath_label)
+						.addComponent(dbPath_field))
 				.addComponent(listSelection_panel)
 				);
-		
+		prefs_layout.linkSize(SwingConstants.VERTICAL, dbPath_label, dbPath_field);
 		prefs_panel.setLayout(prefs_layout);
 		
 	}
@@ -113,12 +127,13 @@ public class Prefs_Window implements ActionListener {
 			
 			int index = language_list.getSelectedIndex(); 
 			if (index != -1) {
-				if (index == 0) { //English
+				if (index == 0) { //francais
 					properties.setProperty("Language", "fr_CA");
-				} else if (index == 1) {
+				} else if (index == 1) {//english
 					properties.setProperty("Language", "en_CA");
 				}
 			}
+			properties.setProperty("DbPath", dbPath_field.getText());
 			fis.close();
 			
 			FileOutputStream fos = new FileOutputStream(f);
