@@ -1,9 +1,9 @@
 package controller;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-import entity.CharacterSheet;
-import entity.TrapHazard;
+import entity.*;
 import bean.forms.*;
 
 public class NewEntity {
@@ -45,26 +45,32 @@ public class NewEntity {
 
 	public void saveEntity() {
 		//TODO: FIX THIS
-		if (empty_entity.getEntity() instanceof CharacterSheet) {
-			CharacterSheet cs = (CharacterSheet) empty_entity.getEntity();
+		Object theEntity = empty_entity.getEntity();
+		if (theEntity instanceof CharacterSheet) {
+			CharacterSheet cs = (CharacterSheet) theEntity;
 			cs.save();
-		} else if (empty_entity.getEntity() instanceof TrapHazard) {
-			TrapHazard th = (TrapHazard) empty_entity.getEntity();
+		} else if (theEntity instanceof TrapHazard) {
+			TrapHazard th = (TrapHazard) theEntity;
 			th.save();
+		} else if (theEntity instanceof Effect) {
+			/*TODO: lol what about this: ie. the need for a list of creatures*/
+			Effect ef = (Effect) theEntity;
+			ef.save(null);
 		}
 		
 	}
 
 
 	public String[] getEntityTypeNames() {
-		// TODO HARD-CODED SIZE!!!!!
-		entity_names = new String[6];
+		ArrayList<String> entities = new ArrayList<String>();
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		Enumeration<String> entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
 			String key = (String) entityName_keys.nextElement();
-			entity_names[index] = entityNames.getString(key);
+			entities.add(entityNames.getString(key));
 		}
+		
+		entity_names = entities.toArray(new String[0]);
 		
 		return entity_names;
 	}

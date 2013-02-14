@@ -58,6 +58,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		
 		this.getEntityNamesOfType(entityType);
 		entityName_list = new JList(name_list);
+		entityName_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		entityName_list.addListSelectionListener(this);
 		JScrollPane name_pane = new JScrollPane(entityName_list);
 		name_pane.setBorder( BorderFactory.createEtchedBorder() );

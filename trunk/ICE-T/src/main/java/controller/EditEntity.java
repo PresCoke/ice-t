@@ -19,16 +19,15 @@ public class EditEntity {
 	
 
 	public String[] getEntityTypeNames() {
-		//TODO: remove hard-coded size
-		String[] entity_names = new String[6];
-		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
+		ArrayList<String> entity_names = new ArrayList<String>();
+		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityEditTypes", App_Root.language_locale);
 		Enumeration<String> entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
 			String key = (String) entityName_keys.nextElement();
-			entity_names[index] = entityNames.getString(key);
+			entity_names.add(entityNames.getString(key));
 		}
 		
-		return entity_names;
+		return entity_names.toArray(new String[0]);
 	}
 
 	public String[] getEntityNamesOfType(String selectedEntityType) {
@@ -53,27 +52,37 @@ public class EditEntity {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		if (entityType == entityNames.getString("CharacterSheet_entity")) {
 			editableEntity = new CharacterSheetForm();
+		} else if (entityType == entityNames.getString("Monster_entity")) {
+			editableEntity = new CharacterSheetForm();
+		} else if (entityType == entityNames.getString("TrapHazard_entity")) {
+			editableEntity = new TrapHazardForm();
+		} else if (entityType == entityNames.getString("Effect_entity")) {
+			editableEntity = new EffectForm();
+		} else if (entityType == entityNames.getString("Team_entity")) {
+			editableEntity = new TeamForm();
 		}
 		
 		return editableEntity.createPanelFromExistingEntity(theEntity);
 	}
 
 	public void saveEntity() {
-		if (editableEntity.getEntity() instanceof CharacterSheet) {
-			CharacterSheet cs = (CharacterSheet) editableEntity.getEntity();
+		Object theEntity = editableEntity.getEntity();
+		if (theEntity instanceof CharacterSheet) {
+			CharacterSheet cs = (CharacterSheet) theEntity;
 			cs.edit();
-		} else if (editableEntity.getEntity() instanceof TrapHazard) {
-			TrapHazard th = (TrapHazard) editableEntity.getEntity();
-			th.save();
-		}
+		} else if (theEntity instanceof TrapHazard) {
+			TrapHazard th = (TrapHazard) theEntity;
+			th.edit();
+		} 
 	}
 
 	public void removeEntity() {
-		if (editableEntity.getEntity() instanceof CharacterSheet) {
-			CharacterSheet cs = (CharacterSheet) editableEntity.getEntity();
+		Object theEntity = editableEntity.getEntity();
+		if (theEntity instanceof CharacterSheet) {
+			CharacterSheet cs = (CharacterSheet) theEntity;
 			cs.remove();
-		} else if (editableEntity.getEntity() instanceof TrapHazard) {
-			TrapHazard th = (TrapHazard) editableEntity.getEntity();
+		} else if (theEntity instanceof TrapHazard) {
+			TrapHazard th = (TrapHazard) theEntity;
 			th.remove();
 		}
 	}

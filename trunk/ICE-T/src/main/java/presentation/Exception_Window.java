@@ -10,8 +10,10 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.log4j.Logger;
 
 import controller.App_Root;
+import entity.dao.CreatureDaoImpl;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,9 +21,12 @@ import java.util.ResourceBundle;
 
 public final class Exception_Window {
 	
+	private static final Logger logger = Logger.getLogger(Exception_Window.class);
+	
 	static Exception exc;
 	static JButton moveOn, logEx, showTrace;
-	static JLabel message, stack_trace;
+	static JLabel message;
+	static JEditorPane stack_trace;
 	
 	public static void showException(Exception e) {
 		
@@ -43,7 +48,7 @@ public final class Exception_Window {
 		logEx.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				writeExceptionToLog(exc);
+				writeExceptionToLog(stack_trace.getText());
 				exceptionFrame.dispose();
 			}
 			
@@ -66,12 +71,13 @@ public final class Exception_Window {
 		buttonPanel.add(showTrace);
 		//buttonPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		
-		JPanel messagePanel = new JPanel();
+		JScrollPane messagePanel = new JScrollPane();
 		messagePanel.setBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED) );
 		messagePanel.setLayout( new BoxLayout(messagePanel, BoxLayout.PAGE_AXIS) );
 		message = new JLabel( exc.getMessage() );
 		messagePanel.add(message);
-		stack_trace = new JLabel( exc.getStackTrace().toString() );
+		stack_trace = new JEditorPane();
+		stack_trace.setText( exc.getStackTrace().toString() );
 		stack_trace.setVisible(false);
 		messagePanel.add(stack_trace);
 		
@@ -94,8 +100,8 @@ public final class Exception_Window {
 		
 	}
 	
-	private static void writeExceptionToLog(Exception e) {
-		// TODO: implement this to write to log4j.xml
+	private static void writeExceptionToLog(String exc) {
+		logger.debug(exc);
 	}
 	
 }
