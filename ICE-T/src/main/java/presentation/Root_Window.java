@@ -64,7 +64,7 @@ public class Root_Window {
 			}
 
 			public void windowClosing(WindowEvent arg0) {
-				main_window.setVisible(false);
+				close();
 				App_Root.exit();
 			}
 
@@ -116,7 +116,8 @@ public class Root_Window {
 		prefs_item = new JMenuItem(root_window_l10n.getString("Preferences_menuitem"));
 		prefs_item.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//TODO: get app to open new preferneces JFrame pop-up
+				Prefs_Window aPreferencesWindow = new Prefs_Window();
+				aPreferencesWindow.showFrame();
 			}
 		});
 		file_menu.add(prefs_item);
@@ -193,5 +194,10 @@ public class Root_Window {
 		main_window.setVisible(true);
 		
 		return 1;// I'm not sure what this value means
+	}
+	
+	public void close() {
+		main_window.setVisible(false);
+		main_window.dispose();
 	}
 }

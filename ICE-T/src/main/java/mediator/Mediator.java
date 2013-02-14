@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import controller.App_Root;
+import entity.dao.EffectDaoImpl;
 
 import resource.*;
 
@@ -17,6 +18,13 @@ import resource.*;
  */
 
 public class Mediator {
+	
+	/*
+	 * 
+	 * MAJOR TODO: make sure app handles when there is no DB present and tells user about it!
+	 * 
+	 */
+	
 	
 	String propertiesURL;
 	EmbeddedDBManager dbMgr;
@@ -61,9 +69,20 @@ public class Mediator {
 			
 			return cs_dao.readAllCharacterSheets();
 			
+		} else if (selectedEntityType == entityNames.getString("Monster_entity")) {
+			
+			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
+			return cs_dao.readAllCharacterSheets();
+			
+		} else if (selectedEntityType == entityNames.getString("Team_entity")) {
+			
+			entity.dao.TeamDaoImpl te_dao = new entity.dao.TeamDaoImpl();
+			return te_dao.readAllTeams();
+		} else if (selectedEntityType == entityNames.getString("TrapHazard_entity")) {
+			
+			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
+			return th_dao.readAllTrapHazards();
 		} else {
-			/*String [] empty = {"Puppies", "Kittens", "Rainbows" };//{"Shit", "Fuck", "Cunt"}; 
-			return (empty);*/
 			return null;
 		}
 	}
@@ -71,9 +90,26 @@ public class Mediator {
 	public Object getEntityOfID(int selectedEntityId, String selectedEntityType) {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		if (selectedEntityType == entityNames.getString("CharacterSheet_entity")) {
+			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
 			return cs;
+		} else if (selectedEntityType == entityNames.getString("Monster_entity")) {
+			
+			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
+			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
+			return cs;
+			
+		} else if (selectedEntityType == entityNames.getString("Team_entity")) {
+			
+			entity.dao.TeamDaoImpl te_dao = new entity.dao.TeamDaoImpl();
+			entity.Team te = te_dao.getTeam(selectedEntityId);
+			return te;
+		} else if (selectedEntityType == entityNames.getString("TrapHazard_entity")) {
+			
+			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
+			entity.TrapHazard th = th_dao.getTrapHazard(selectedEntityId);
+			return th;
 		} else {
 			return null;
 		}
