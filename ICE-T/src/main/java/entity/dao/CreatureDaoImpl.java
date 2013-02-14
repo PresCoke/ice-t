@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 import resource.HibernateUtil;
 
 import entity.CharacterSheet;
-import entity.Creature;
+import entity.Player;
 import entity.Stats;
 import entity.Team;
 
@@ -29,21 +29,21 @@ public class CreatureDaoImpl implements CreatureDao {
 		return creatures;
 	}
 	
-	public List<Creature> getAllCreatures() {
+	public List<Player> getAllCreatures() {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Creature");
-		List<Creature> creatures = q.list();
+		List<Player> creatures = q.list();
 		return creatures;
 	}
 	
-	public List<Creature> getCreaturesInTeam(int teamId) {
+	public List<Player> getCreaturesInTeam(int teamId) {
     	logger.info("Retrieval of all creatures in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Query q = session.createQuery("from Creature where Team_id="+teamId);
-		List<Creature> creatures = q.list();
+		List<Player> creatures = q.list();
 		return creatures;
 	}
 	
@@ -56,7 +56,7 @@ public class CreatureDaoImpl implements CreatureDao {
         try {
             transaction = session.beginTransaction();
             logger.debug("Setting creature's attributes");
-            Creature c = new Creature(playerName);
+            Player c = new Player(playerName);
             c.setCurrentHP(currentHP);
             c.setCurrentHealSurges(currentHealSurges);
             c.setInitiative(initiative);
@@ -92,7 +92,7 @@ public class CreatureDaoImpl implements CreatureDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Creature c = (Creature) session.get(Creature.class, creatureId);
+            Player c = (Player) session.get(Player.class, creatureId);
             c.setPlayerName(playerName);
             c.setCurrentHP(currentHP);
             c.setCurrentHealSurges(currentHealSurges);
@@ -109,13 +109,13 @@ public class CreatureDaoImpl implements CreatureDao {
         }
     }
     
-    public void updateCreature(Creature creature, Team team){
+    public void updateCreature(Player creature, Team team){
     	logger.debug("Creature " + creature.getPlayerName() + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Creature c = (Creature) session.get(Creature.class, creature.getId());
+            Player c = (Player) session.get(Player.class, creature.getId());
             c.setPlayerName(creature.getPlayerName());
             c.setCurrentHP(creature.getCurrentHP());
             c.setCurrentHealSurges(creature.getCurrentHealSurges());
@@ -139,7 +139,7 @@ public class CreatureDaoImpl implements CreatureDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Creature c = (Creature) session.get(Creature.class, creatureId);
+            Player c = (Player) session.get(Player.class, creatureId);
             logger.info("Deletion of Creature " + c.getPlayerName());
             session.delete(c);
             transaction.commit();

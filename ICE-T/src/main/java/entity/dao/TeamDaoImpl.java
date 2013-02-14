@@ -10,7 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
-import entity.Creature;
+import entity.Player;
 import entity.Team;
 import entity.TrapHazard;
 
@@ -36,7 +36,7 @@ public class TeamDaoImpl implements TeamDao {
 		return teams;
 	}
 
-	public int saveTeam(String name, List<Creature> creatures) {
+	public int saveTeam(String name, List<Player> creatures) {
     	logger.debug("Team " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -44,16 +44,16 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = new Team(name);
-            for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 t.addCreature(creature);
             }
             teamID = (Integer) session.save(t);
         	logger.info("Team " + name + " was successfully saved in the database.");
         	logger.debug("Setting creatures' team");
         	Team team = (Team) session.get(Team.class, teamID);
-        	for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+        	for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 creature.setTeam(team);
                 session.update(creature);
             }
@@ -67,7 +67,7 @@ public class TeamDaoImpl implements TeamDao {
         return teamID;
 	}
 
-	public void updateTeam(int teamId, String name, List<Creature> creatures) {
+	public void updateTeam(int teamId, String name, List<Player> creatures) {
     	logger.debug("Team " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -76,9 +76,9 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
             logger.debug("Modifying previous creatures' team");
-            List<Creature> creaturesDB = t.getCreatures();
-            for (Creature c : creaturesDB){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            List<Player> creaturesDB = t.getCreatures();
+            for (Player c : creaturesDB){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 creature.setTeam(null);
                 session.update(creature);
             } 
@@ -86,8 +86,8 @@ public class TeamDaoImpl implements TeamDao {
             t.removeAllCreatures();
             session.update(t);
             logger.debug("Setting team's creatures and creatures' team");
-            for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 t.addCreature(creature);
                 creature.setTeam(t);
                 session.update(creature);
@@ -103,7 +103,7 @@ public class TeamDaoImpl implements TeamDao {
 	}
 	
 	
-	public int saveNPCteam(String name, List<Creature> creatures,
+	public int saveNPCteam(String name, List<Player> creatures,
 			List<TrapHazard> traphazards) {
     	logger.debug("NPC Team " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
@@ -112,8 +112,8 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = new Team(name);
-            for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 t.addCreature(creature);
             }
             teamID = (Integer) session.save(t);
@@ -121,8 +121,8 @@ public class TeamDaoImpl implements TeamDao {
             //Set the creatures
         	logger.debug("Setting creatures");
         	Team team = (Team) session.get(Team.class, teamID);
-        	for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+        	for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 creature.setTeam(team);
                 session.update(creature);
             }
@@ -144,7 +144,7 @@ public class TeamDaoImpl implements TeamDao {
 	}
 
 	public void updateNPCteam(int teamId, String name,
-			List<Creature> creatures, List<TrapHazard> traphazards) {
+			List<Player> creatures, List<TrapHazard> traphazards) {
     	logger.debug("NPC Team " + name + " is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -154,9 +154,9 @@ public class TeamDaoImpl implements TeamDao {
             t.setName(name);
             //Set the creatures
             logger.debug("Modifying previous creatures' team");
-            List<Creature> creaturesDB = t.getCreatures();
-            for (Creature c : creaturesDB){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            List<Player> creaturesDB = t.getCreatures();
+            for (Player c : creaturesDB){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 creature.setTeam(null);
                 session.update(creature);
             } 
@@ -164,8 +164,8 @@ public class TeamDaoImpl implements TeamDao {
             t.removeAllCreatures();
             session.update(t);
             logger.debug("Setting NPC team's creatures and creatures' team");
-            for (Creature c : creatures){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            for (Player c : creatures){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 t.addCreature(creature);
                 creature.setTeam(t);
                 session.update(creature);
@@ -207,8 +207,8 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             //Update creatures
             logger.info("Update of creatures");
-            for (Creature c : t.getCreatures()){
-                Creature creature = (Creature) session.get(Creature.class, c.getId());
+            for (Player c : t.getCreatures()){
+                Player creature = (Player) session.get(Player.class, c.getId());
                 creature.setTeam(null);
                 session.update(creature);
             }

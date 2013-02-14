@@ -47,7 +47,7 @@ public class Team implements EntityM {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
-	private List<Creature> creatures;
+	private List<Player> creatures;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
@@ -60,7 +60,7 @@ public class Team implements EntityM {
 	 */
 	public Team() {
 		this.name= "";
-		this.creatures = new ArrayList<Creature>();
+		this.creatures = new ArrayList<Player>();
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class Team implements EntityM {
 	 */
 	public Team(String name) {
 		this.name=name;
-		this.creatures = new ArrayList<Creature>();
+		this.creatures = new ArrayList<Player>();
 	}
 
 	/**
@@ -99,11 +99,11 @@ public class Team implements EntityM {
 		this.name = name;
 	}
 	
-	public List<Creature> getCreatures() {
+	public List<Player> getCreatures() {
 		return creatures;
 	}
 
-	public void setCreatures(List<Creature> creatures) {
+	public void setCreatures(List<Player> creatures) {
 		this.creatures = creatures;
 	}
 	
@@ -111,19 +111,19 @@ public class Team implements EntityM {
 		this.creatures.removeAll(creatures);
 	}
 	
-	public void addCreature(Creature addThisCreature) {
+	public void addCreature(Player addThisCreature) {
 		this.creatures.add(addThisCreature);
 	}
 	
-	public Creature getCreatureAt(int index) {
+	public Player getCreatureAt(int index) {
 		return this.creatures.get(index);
 	}
 	
-	public Creature removeCreatureAt(int index) throws IndexOutOfBoundsException {
+	public Player removeCreatureAt(int index) throws IndexOutOfBoundsException {
 		return this.creatures.remove(index);
 	}
 	
-	public boolean removeCreature(Creature thisCreature) {
+	public boolean removeCreature(Player thisCreature) {
 		return this.creatures.remove(thisCreature);
 	}
 	
@@ -131,9 +131,9 @@ public class Team implements EntityM {
 		return this.creatures.size();
 	}
 	
-	public int getIndexOf (Creature thisCreature){
+	public int getIndexOf (Player thisCreature){
 		int index = 0;
-		for (Creature c : creatures){
+		for (Player c : creatures){
 			if (c.getPlayerName().equals(thisCreature.getPlayerName())){
 				break;
 			}

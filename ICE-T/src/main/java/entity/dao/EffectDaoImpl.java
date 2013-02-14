@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
 
-import entity.Creature;
+import entity.Player;
 import entity.Effect;
 import entity.EntityEnum.E_Duration;
 
@@ -39,14 +39,14 @@ public class EffectDaoImpl implements EffectDao {
 	}
 
 	public List<Integer> saveEffect(String name, String changes, String metrics,
-			E_Duration duration, List<Creature> creatures) {
+			E_Duration duration, List<Player> creatures) {
     	logger.debug("Effect " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         List<Integer> effectsIds = new ArrayList<Integer>();
         try {
             transaction = session.beginTransaction();
-            for (Creature c : creatures){
+            for (Player c : creatures){
                 int effectId = -1;
 	        	logger.debug("Setting the effect's attributes");
 	            Effect e = new Effect(name);
@@ -54,7 +54,7 @@ public class EffectDaoImpl implements EffectDao {
 	            e.setMetrics(metrics);
 	            e.setDuration(duration);
 	        	logger.debug("Setting the effect's creatures");
-	            Creature creature = (Creature) session.get(Creature.class, c.getId());
+	            Player creature = (Player) session.get(Player.class, c.getId());
 	            e.setCreature(creature);
 	            effectId = (Integer) session.save(e);
 	            effectsIds.add(effectId);

@@ -53,6 +53,7 @@ CREATE TABLE CharacterSheet (
 	sizeCS INTEGER NOT NULL,
 	monsterOriginCS INTEGER,
 	monsterTypeCS INTEGER,
+	isNPC BOOLEAN DEFAULT FALSE,
 	CONSTRAINT PK_CharacterSheet PRIMARY KEY (CharacterSheet_id)
 );
 
@@ -76,7 +77,7 @@ CREATE TABLE Team (
 CREATE TABLE TrapHazard (
 	TrapHazard_id INTEGER NOT NULL,
 	TrapHazard_name VARCHAR(50) NOT NULL UNIQUE,
-	CombatEncounter_id INTEGER,
+	Team_id INTEGER,
 	avoidance INTEGER,
 	levelTH INTEGER NOT NULL,
 	avoidanceSkill INTEGER,
@@ -88,13 +89,13 @@ CREATE TABLE TrapHazard (
 	roleTH INTEGER,
 	counterMeasureSkillTH INTEGER,
 	CONSTRAINT PK_TrapHazard PRIMARY KEY (TrapHazard_id),
-	CONSTRAINT FK_TrapHazard_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id)
+	CONSTRAINT FK_TrapHazard_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
 );
 
 CREATE TABLE Creature (
 	Creature_id INTEGER NOT NULL,
 	player_name VARCHAR(50) NOT NULL UNIQUE,
-	CharacterSheet_id INTEGER NOT NULL,
+	CharacterSheet_id INTEGER NOT NULL UNIQUE,
 	Team_id INTEGER,
 	currentHP INTEGER NOT NULL,
 	currentHealSurges INTEGER NOT NULL,

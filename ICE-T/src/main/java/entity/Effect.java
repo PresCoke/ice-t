@@ -50,7 +50,7 @@ public class Effect {
 	//Associations
 	@ManyToOne
 	@JoinColumn (name="Creature_id")
-	private Creature creature;
+	private Player creature;
 
 
 
@@ -119,11 +119,11 @@ public class Effect {
 		this.name = name;
 	}
 	
-	public Creature getCreature() {
+	public Player getCreature() {
 		return creature;
 	}
 
-	public void setCreature(Creature creature) {
+	public void setCreature(Player creature) {
 		this.creature = creature;
 	}
 
@@ -131,7 +131,7 @@ public class Effect {
 	/**
 	 * Other functions
 	 */
-	public void save(List<Creature> creatures) {
+	public void save(List<Player> creatures) {
     	logger.info("Saving Effect " + getName());
     	EffectDao eDao = new EffectDaoImpl();
     	eDao.saveEffect(getName(), getChanges(), getMetrics(), getDuration(), creatures);

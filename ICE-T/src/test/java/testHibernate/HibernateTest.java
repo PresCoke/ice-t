@@ -17,7 +17,7 @@ import entity.Attack;
 import entity.Attack_Type;
 import entity.CharacterSheet;
 import entity.CombatEncounter;
-import entity.Creature;
+import entity.Player;
 import entity.EntityEnum;
 import entity.EntityEnum.CS_Monster_Origin;
 import entity.EntityEnum.CS_Monster_Type;

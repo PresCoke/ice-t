@@ -3,7 +3,7 @@ package entity.dao;
 import java.util.List;
 
 import entity.CharacterSheet;
-import entity.Creature;
+import entity.Player;
 import entity.Team;
 
 public interface CreatureDao {
@@ -18,14 +18,14 @@ public interface CreatureDao {
 	 * Get all the creatures in the database
 	 * @return list of creatures which are in the dabase
 	 */
-	public List<Creature> getAllCreatures();
+	public List<Player> getAllCreatures();
 	
 	/**
 	 * Get the creatures which are in a given team
 	 * @param id of the team
 	 * @return list of the creatures in the team
 	 */
-	public List<Creature> getCreaturesInTeam(int teamId);
+	public List<Player> getCreaturesInTeam(int teamId);
 	
 	/**
 	 * Save a creature in the database
@@ -59,7 +59,7 @@ public interface CreatureDao {
 	 * @param creature
 	 * @param team
 	 */
-	public void updateCreature(Creature creature, Team team);
+	public void updateCreature(Player creature, Team team);
 	
 	/**
 	 * Delete a creature from the database

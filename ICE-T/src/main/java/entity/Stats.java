@@ -39,7 +39,7 @@ public class Stats {
 	//Associations
 	@OneToOne
 	@JoinColumn (name="Creature_id")
-	private Creature creature;
+	private Player creature;
 	
 	/**
 	 * Default constructor
@@ -99,11 +99,11 @@ public class Stats {
 		this.id = id;
 	}
 	
-	public Creature getCreature() {
+	public Player getCreature() {
 		return creature;
 	}
 
-	public void setCreature(Creature creature) {
+	public void setCreature(Player creature) {
 		this.creature = creature;
 	}
 }

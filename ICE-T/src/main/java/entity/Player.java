@@ -28,9 +28,9 @@ import entity.dao.CreatureDaoImpl;
  */
 @Entity
 @Table(name="Creature")
-public class Creature implements EntityM, Comparable<Creature> {
+public class Player implements EntityM, Comparable<Player> {
 	
-	private static final Logger logger = Logger.getLogger(Creature.class);
+	private static final Logger logger = Logger.getLogger(Player.class);
 
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
@@ -80,7 +80,7 @@ public class Creature implements EntityM, Comparable<Creature> {
 	/**
 	 * Default constructor
 	 */
-	public Creature() {
+	public Player() {
 		playerName = "";
 		currentHP = 0;
 		currentHealSurges = 0;
@@ -93,7 +93,7 @@ public class Creature implements EntityM, Comparable<Creature> {
 	 * Constructors
 	 * @param name
 	 */
-	public Creature(String playerName) {
+	public Player(String playerName) {
 		this.playerName = playerName;
 		currentHP = 0;
 		currentHealSurges = 0;
@@ -102,7 +102,7 @@ public class Creature implements EntityM, Comparable<Creature> {
 		tempHP = 0;
 	}
 	
-	public Creature(String name, CharacterSheet sheet) {
+	public Player(String name, CharacterSheet sheet) {
 		playerName = name;
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
@@ -282,7 +282,7 @@ public class Creature implements EntityM, Comparable<Creature> {
     	return cDao.readAllCreatures();
 	}
 
-	public int compareTo(Creature other) {
+	public int compareTo(Player other) {
         //Descending sorting
 		int initiativeOther = other.getInitiative(); 
 		int initiativeThis = this.getInitiative(); 
