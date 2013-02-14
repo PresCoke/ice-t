@@ -53,15 +53,15 @@ public class EditEntity {
 		Object theEntity = App_Root.resource_mediator.getEntityOfID(entityID, entityType);
 		
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
-		if (entityType == entityNames.getString("CharacterSheet_entity")) {
+		if (entityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			editableEntity = new CharacterSheetForm();
-		} else if (entityType == entityNames.getString("Monster_entity")) {
+		} else if (entityType.equals(entityNames.getString("Monster_entity"))) {
 			editableEntity = new CharacterSheetForm();
-		} else if (entityType == entityNames.getString("TrapHazard_entity")) {
+		} else if (entityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			editableEntity = new TrapHazardForm();
-		} else if (entityType == entityNames.getString("Effect_entity")) {
+		} else if (entityType.equals(entityNames.getString("Effect_entity"))) {
 			editableEntity = new EffectForm();
-		} else if (entityType == entityNames.getString("Team_entity")) {
+		} else if (entityType.equals(entityNames.getString("Team_entity"))) {
 			editableEntity = new TeamForm();
 		}
 		
@@ -88,6 +88,10 @@ public class EditEntity {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.remove();
 		}
+	}
+
+	public boolean validateEntity() {
+		return editableEntity.validateEntity();
 	}
 
 }
