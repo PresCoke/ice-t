@@ -6,7 +6,6 @@ import entity.CombatEncounter;
 import entity.Rewards;
 import entity.Tally;
 import entity.Team;
-import entity.TrapHazard;
 import entity.Tuple;
 
 /**
@@ -35,7 +34,7 @@ public interface CombatEncounterDao {
 	 * @return combat encounter's id stored in the database
 	 */
 	public int saveCombatEncounter(String name, String notes, int currentCreatureId, List<Rewards> rewards,
-			Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards);
+			Tally tally, List<Tuple> tuples, List<Team> teams);
 	
 	/**
 	 * Update a combat encounter in the database
@@ -47,10 +46,14 @@ public interface CombatEncounterDao {
 	 * @param tally
 	 * @param tuples
 	 * @param teams
-	 * @param trapHazards
 	 */
 	public void updateCombatEncounter(int combatEncounterId, String name, String notes, int currentCreatureId,
-			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams, List<TrapHazard> trapHazards);
+			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams);
+	
+	/**
+	 * Delete a Combat Encounter from the database
+	 * @param combatEncounterId
+	 */
 	public void deleteCombatEncounter(int combatEncounterId);
 	
 	/**

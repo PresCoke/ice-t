@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class DBManagerTest {
 //		manager.connect();
 //		HibernateTest.main(null);
 //		manager.close();
-
+		
 	}
 
 }

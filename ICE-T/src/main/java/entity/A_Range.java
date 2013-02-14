@@ -13,8 +13,6 @@ import javax.persistence.Table;
 @Table(name="A_Range")
 public class A_Range extends Attack_Type {
 
-//    @GenericGenerator(name="generator", strategy="increment")
-//    @GeneratedValue(generator="generator")
     @Column(name="A_Range_id")
     private int id;
 	

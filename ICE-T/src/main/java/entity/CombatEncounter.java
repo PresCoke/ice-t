@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +19,12 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
-import entity.dao.CharacterSheetDao;
-import entity.dao.CharacterSheetDaoImpl;
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
 import entity.dao.CreatureDao;
 import entity.dao.CreatureDaoImpl;
+import entity.dao.TrapHazardDao;
+import entity.dao.TrapHazardDaoImpl;
 
 /**
  * CombatEncounter Class
@@ -57,11 +58,6 @@ public class CombatEncounter implements EntityM{
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Rewards> rewards;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter")
-	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
-		org.hibernate.annotations.CascadeType.PERSIST})
-	private List<TrapHazard> traphazards;
-
 	@OneToOne(mappedBy = "combatEncounter", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
@@ -120,34 +116,6 @@ public class CombatEncounter implements EntityM{
 
 	public void setNotes(String notes) {
 		this.notes = notes;
-	}
-	
-	public List<TrapHazard> getTraphazards() {
-		return traphazards;
-	}
-
-	public void setTraphazards(List<TrapHazard> traphazards) {
-		this.traphazards = traphazards;
-	}
-	
-	public void removeAllTrapHazards() {
-		this.traphazards.removeAll(traphazards);
-	}
-	
-	public void addTrapHazard(TrapHazard addThisTrapHazard) {
-		this.traphazards.add(addThisTrapHazard);
-	}
-	
-	public TrapHazard getTrapHazardAt(int index) {
-		return this.traphazards.get(index);
-	}
-	
-	public TrapHazard removeTrapHazardAt(int index) throws IndexOutOfBoundsException {
-		return this.traphazards.remove(index);
-	}
-	
-	public boolean removeTrapHazard(TrapHazard thisTrapHazard) {
-		return this.traphazards.remove(thisTrapHazard);
 	}
 		
 	public List<Rewards> getRewards() {
@@ -286,35 +254,59 @@ public class CombatEncounter implements EntityM{
 	
 	/**
 	 * Generate a random encounter, that is to say a random team of monsters
-	 * @return list of character sheets
+	 * @return list of creatures and traps
 	 */
-	public List<CharacterSheet> generateRandomEncounter(){
+	//TODO Test
+	public List<Object> generateRandomEncounter(){
 		
 		//Retrieving all the creatures' level in the combat encounter
+    	logger.info("Retrieving all the creatures in the CE");
 		List<Integer> levels = new ArrayList<Integer>();
 		for (Creature c : creaturesInCE){
 			levels.add(c.getCharacterSheet().getId());
 		}
 		
 		//Choosing Encounter level
+    	logger.info("Choosing a level for the random encounter");
 		int creaturesNumber = levels.size();
 		int sum = 0;
 		for (int level : levels){
 			sum += level;
 		}
-		int random = 0; //TODO
-		int levelEncounter = sum/creaturesNumber + random;
+		Random random = new Random();
+		int r = random.nextInt(3) - random.nextInt(3);
+		int levelEncounter = sum/creaturesNumber + r;
 		int XPbudget = levelEncounter*250;
 		
-		//Getting all NPC creatures in database that would suit the XPbudget
-		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-		List<CharacterSheet> npcs = csDao.getAllCharacterSheets();
-		for (int i = 0; i<=npcs.size(); i++){
-			if(npcs.get(i).getXP()>XPbudget){
-				npcs.remove(i);
+		//Getting all NPC creatures and traps in database that would suit the XPbudget
+		List<Object> npcs = new ArrayList<Object>();
+    	logger.info("Getting all NPC creatures that would suit the XP budget");
+		CreatureDao cDao = new CreatureDaoImpl();
+		List<Creature> npCreatures = new ArrayList<Creature>();
+		List<Creature> creatures = cDao.getAllCreatures();
+		for (Creature c : creatures){
+			if(c.getCharacterSheet().isNPC() && c.getCharacterSheet().getXP()<=XPbudget){
+				npCreatures.add(c);
 			}
 		}
-				
+    	logger.info("Getting all traps that would suit the XP budget");
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		List<TrapHazard> trapHazards = new ArrayList<TrapHazard>();
+		List<TrapHazard> trapHazardsAll = thDao.getAllTrapHazards();
+		for (TrapHazard th : trapHazardsAll){
+			if(th.getXp()<=XPbudget){
+				trapHazards.add(th);
+			}
+		}
+		
+		//Creating the list
+    	logger.info("Adding the NPC creatures and the traps in the list");
+    	for (Creature c : npCreatures){
+    		npcs.add(c);
+    	}
+    	for (TrapHazard th : trapHazards){
+    		npcs.add(th);
+    	}				
 		return npcs;
 	}
 
@@ -325,14 +317,14 @@ public class CombatEncounter implements EntityM{
     	logger.info("Saving Combat Encounter " + getName());
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
     	ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
-				getTally(), getTally().getTuples(), getTeams(), getTraphazards());
+				getTally(), getTally().getTuples(), getTeams());
 	}
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
     	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId(), getRewards(),
-				getTally(), getTally().getTuples(), getTeams(), getTraphazards());		
+				getTally(), getTally().getTuples(), getTeams());		
 	}
 
 	public void remove() {

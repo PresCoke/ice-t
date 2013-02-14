@@ -23,6 +23,12 @@ public interface TrapHazardDao {
 	public List<Object[]> readAllTrapHazards();
 	
 	/**
+	 * Get all traps/hazards from the database
+	 * @return list of Traps/Hazards
+	 */
+	public List<TrapHazard> getAllTrapHazards();
+	
+	/**
 	 * Save a trap/hazard in the database
 	 * @param name
 	 * @param avoidance

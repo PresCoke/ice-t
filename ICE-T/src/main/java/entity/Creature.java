@@ -66,7 +66,7 @@ public class Creature implements EntityM, Comparable<Creature> {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Stats stats;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	

@@ -49,10 +49,10 @@ public class Team implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Creature> creatures;
 	
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
-//	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
-//		org.hibernate.annotations.CascadeType.PERSIST})
-//	private List<TrapHazard> trapHazards;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<TrapHazard> traphazards;
 	
 	
 	/**
@@ -140,6 +140,34 @@ public class Team implements EntityM {
 			index++;
 		}
 		return index;
+	}
+	
+	public List<TrapHazard> getTraphazards() {
+		return traphazards;
+	}
+
+	public void setTraphazards(List<TrapHazard> traphazards) {
+		this.traphazards = traphazards;
+	}
+	
+	public void removeAllTrapHazards() {
+		this.traphazards.removeAll(traphazards);
+	}
+	
+	public void addTrapHazard(TrapHazard addThisTrapHazard) {
+		this.traphazards.add(addThisTrapHazard);
+	}
+	
+	public TrapHazard getTrapHazardAt(int index) {
+		return this.traphazards.get(index);
+	}
+	
+	public TrapHazard removeTrapHazardAt(int index) throws IndexOutOfBoundsException {
+		return this.traphazards.remove(index);
+	}
+	
+	public boolean removeTrapHazard(TrapHazard thisTrapHazard) {
+		return this.traphazards.remove(thisTrapHazard);
 	}
 	
 
