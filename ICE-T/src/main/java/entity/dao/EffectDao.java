@@ -24,10 +24,10 @@ public interface EffectDao {
 	 * @param changes
 	 * @param metrics
 	 * @param duration
-	 * @param creatures
+	 * @param players
 	 * @return effect's id stored in the database
 	 */
-	public List<Integer> saveEffect(String name, String changes, String metrics, E_Duration duration, List<Player> creatures);
+	public List<Integer> saveEffect(String name, String changes, String metrics, E_Duration duration, List<Player> players);
 	
 	/**
 	 * Delete a list of effect from the database

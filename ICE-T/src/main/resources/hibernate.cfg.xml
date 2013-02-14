@@ -38,7 +38,8 @@
       	<mapping class="entity.TrapHazard"/>
   		<mapping class="entity.CharacterSheet"/>
   		<mapping class="entity.Resistance"/>
-  		<mapping class="entity.Creature"/>
+  		<mapping class="entity.Player"/>
+  		<mapping class="entity.Monster"/>
   		<mapping class="entity.Stats"/>	
   		<mapping class="entity.Effect"/> 
   		<mapping class="entity.Attack"/>

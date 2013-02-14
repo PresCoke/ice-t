@@ -770,7 +770,7 @@ public class CharacterSheet implements EntityM {
 	public void setResistances(List<Resistance> resistances) {
 		this.resistances = resistances;
 	}
-
+	
 	public boolean isNPC() {
 		return isNPC;
 	}
@@ -808,8 +808,7 @@ public class CharacterSheet implements EntityM {
 				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
 				getLevel(), getXP(), getRaceFeatures(), getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(),
 				getPowerSource(), getRole(), getSize(), getMonsterOrigin(), getMonsterType(), getCharacter_resistances(),
-				getAttacks(), getAttacksTypes(getAttacks()), isNPC());
-		
+				getAttacks(), getAttacksTypes(getAttacks()),isNPC());
 	}
 
 	public void remove() {

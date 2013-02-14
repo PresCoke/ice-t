@@ -92,8 +92,8 @@ CREATE TABLE TrapHazard (
 	CONSTRAINT FK_TrapHazard_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
 );
 
-CREATE TABLE Creature (
-	Creature_id INTEGER NOT NULL,
+CREATE TABLE Player (
+	Player_id INTEGER NOT NULL,
 	player_name VARCHAR(50) NOT NULL UNIQUE,
 	CharacterSheet_id INTEGER NOT NULL UNIQUE,
 	Team_id INTEGER,
@@ -102,31 +102,48 @@ CREATE TABLE Creature (
 	initiative INTEGER NOT NULL,
 	secondWind BOOLEAN NOT NULL,
 	tempHP INTEGER,
-	CONSTRAINT PK_Creature PRIMARY KEY (Creature_id),
-	CONSTRAINT FK_Creature_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id),
-	CONSTRAINT FK_Creature_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
+	CONSTRAINT PK_Player PRIMARY KEY (Player_id),
+	CONSTRAINT FK_Player_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id),
+	CONSTRAINT FK_Player_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
+);
+
+CREATE TABLE Monster (
+	Monster_id INTEGER NOT NULL,
+	monster_name VARCHAR(50) NOT NULL UNIQUE,
+	CharacterSheet_id INTEGER NOT NULL UNIQUE,
+	Team_id INTEGER,
+	currentHP INTEGER NOT NULL,
+	currentHealSurges INTEGER NOT NULL,
+	initiative INTEGER NOT NULL,
+	secondWind BOOLEAN NOT NULL,
+	tempHP INTEGER,
+	CONSTRAINT PK_Monster PRIMARY KEY (Monster_id),
+	CONSTRAINT FK_Monster_CharacterSheet FOREIGN KEY (CharacterSheet_id) REFERENCES CharacterSheet (CharacterSheet_id),
+	CONSTRAINT FK_Monster_Team FOREIGN KEY (Team_id) REFERENCES Team (Team_id)
 );
 
 CREATE TABLE Stats (
 	Stats_id INTEGER NOT NULL PRIMARY KEY,
-	Creature_id INTEGER NOT NULL,
+	Player_id INTEGER NOT NULL,
 	kills INTEGER NOT NULL,
 	deaths INTEGER NOT NULL,
 	hits INTEGER NOT NULL,
 	misses INTEGER NOT NULL,
 	assists INTEGER NOT NULL,
-	CONSTRAINT FK_Stats_Creature FOREIGN KEY (Creature_id) REFERENCES Creature (Creature_id)
+	CONSTRAINT FK_Stats_Player FOREIGN KEY (Player_id) REFERENCES Player (Player_id)
 );
 
 CREATE TABLE Effect (
 	Effect_id INTEGER NOT NULL,
 	Effect_name VARCHAR(50) NOT NULL,
-	Creature_id INTEGER NOT NULL,
+	Player_id INTEGER,
+	Monster_id INTEGER ,
 	changes VARCHAR(5000),
 	metrics VARCHAR(5000),
 	duration INTEGER,
 	CONSTRAINT PK_Effect PRIMARY KEY (Effect_id),
-	CONSTRAINT FK_Effect_Creature FOREIGN KEY (Creature_id) REFERENCES Creature (Creature_id)
+	CONSTRAINT FK_Effect_Player FOREIGN KEY (Player_id) REFERENCES Player (Player_id),
+	CONSTRAINT FK_Effect_Monster FOREIGN KEY (Monster_id) REFERENCES Monster (Monster_id)
 );
 
 CREATE TABLE Attack (

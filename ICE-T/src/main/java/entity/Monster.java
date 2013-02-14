@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,28 +18,28 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
-import entity.dao.PlayerDao;
-import entity.dao.PlayerDaoImpl;
+import entity.dao.MonsterDao;
+import entity.dao.MonsterDaoImpl;
 
 /**
- * Creature Class
+ * Monster class (NPC)
  * @author TimHP
  *
  */
 @Entity
-@Table(name="Player")
-public class Player implements EntityM, Comparable<Player> {
-	
+@Table(name="Monster")
+public class Monster implements EntityM, Comparable<Monster> {
+
 	private static final Logger logger = Logger.getLogger(Player.class);
 
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
 	@GeneratedValue(generator="generator")
-    @Column(name="Player_id")
+    @Column(name="Monster_id")
     private int id;
 	
-	@Column(name="player_name")
-	private String playerName;
+	@Column(name="monster_name")
+	private String monsterName;
 	
 	@Column(name="currentHP")
 	private int currentHP;
@@ -60,16 +61,11 @@ public class Player implements EntityM, Comparable<Player> {
 	@JoinColumn (name="Team_id")
 	private Team team;
 	
-	@OneToOne(mappedBy = "player", orphanRemoval=true)
-	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
-		org.hibernate.annotations.CascadeType.PERSIST})
-	private Stats stats;
-	
 	@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy = "player", orphanRemoval = true)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "monster", orphanRemoval = true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Effect> effects;
@@ -79,8 +75,8 @@ public class Player implements EntityM, Comparable<Player> {
 	/**
 	 * Default constructor
 	 */
-	public Player() {
-		playerName = "";
+	public Monster() {
+		monsterName = "";
 		currentHP = 0;
 		currentHealSurges = 0;
 		initiative = 0;
@@ -92,8 +88,8 @@ public class Player implements EntityM, Comparable<Player> {
 	 * Constructors
 	 * @param name
 	 */
-	public Player(String playerName) {
-		this.playerName = playerName;
+	public Monster(String monsterName) {
+		this.monsterName = monsterName;
 		currentHP = 0;
 		currentHealSurges = 0;
 		initiative = 0;
@@ -101,8 +97,8 @@ public class Player implements EntityM, Comparable<Player> {
 		tempHP = 0;
 	}
 	
-	public Player(String name, CharacterSheet sheet) {
-		playerName = name;
+	public Monster(String monsterName, CharacterSheet sheet) {
+		this.monsterName = monsterName;
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
@@ -113,13 +109,13 @@ public class Player implements EntityM, Comparable<Player> {
 	/**
 	 * Getters & Setters
 	 */
-	public String getPlayerName() {
-		return playerName;
+	public String getMonsterName() {
+		return monsterName;
 	}
 
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
+	public void setMonsterName(String monsterName) {
+		this.monsterName = monsterName;
 	}
 
 
@@ -191,14 +187,6 @@ public class Player implements EntityM, Comparable<Player> {
 		this.team = team;
 	}
 	
-	public Stats getStats() {
-		return stats;
-	}
-
-	public void setStats(Stats stats) {
-		this.stats = stats;
-	}
-	
 	public List<Effect> getEffects() {
 		return effects;
 	}
@@ -242,7 +230,6 @@ public class Player implements EntityM, Comparable<Player> {
 		return index;
 	}
 	
-
 	public CharacterSheet getCharacterSheet() {
 		return characterSheet;
 	}
@@ -251,37 +238,36 @@ public class Player implements EntityM, Comparable<Player> {
 		this.characterSheet = characterSheet;
 	}
 
-	/**
+	/*
 	 * Other functions
 	 */
 	public void save() {
-    	logger.info("Saving Creature " + getPlayerName());
-    	PlayerDao pDao = new PlayerDaoImpl();
-    	pDao.savePlayer(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
+    	logger.info("Saving Monster " + getMonsterName());
+    	MonsterDao mDao = new MonsterDaoImpl();
+    	mDao.saveMonster(getMonsterName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
-		
 	}
 
 	public void edit() {
-    	logger.info("Editing Creature " + getPlayerName());
-    	PlayerDao pDao = new PlayerDaoImpl();
-    	pDao.updatePlayer(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
+    	logger.info("Editing Monster " + getMonsterName());
+    	MonsterDao mDao = new MonsterDaoImpl();
+    	mDao.updateMonster(getId(), getMonsterName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP());
 	}
 
 	public void remove() {
-    	logger.info("Removing Creature " + getPlayerName());
-    	PlayerDao pDao = new PlayerDaoImpl();
-    	pDao.deletePlayer(getId());		
+    	logger.info("Removing Monster " + getMonsterName());
+    	MonsterDao mDao = new MonsterDaoImpl();
+    	mDao.deleteMonster(getId());		
 	}
 
 	public List<Object[]> getAll() {
-    	logger.info("Getting all Creatures in database");
-    	PlayerDao pDao = new PlayerDaoImpl();
-    	return pDao.readAllPlayers();
+    	logger.info("Getting all Monsters in database");
+    	MonsterDao mDao = new MonsterDaoImpl();
+    	return mDao.readAllMonsters();
 	}
 
-	public int compareTo(Player other) {
+	public int compareTo(Monster other) {
         //Descending sorting
 		int initiativeOther = other.getInitiative(); 
 		int initiativeThis = this.getInitiative(); 
@@ -293,4 +279,5 @@ public class Player implements EntityM, Comparable<Player> {
 			return 1; 
 		}
 	}
+
 }
