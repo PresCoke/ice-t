@@ -17,19 +17,23 @@ public class TallyDaoImpl implements TallyDao {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public int saveTally (Tally tally) {
-    	logger.debug("A new tally named " + tally.getName() + " is about to be created in the database.");
+	public int saveTally (String name, int combatEncounterId) {
+    	logger.debug("A new tally named " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         int tallyId = -1;
         try {
             transaction = session.beginTransaction();
-            tallyId = (Integer) session.save(tally);
+            Tally t = new Tally(name);
+            logger.debug("Association with a combat encounter");
+            CombatEncounter ce = (CombatEncounter) session.load(CombatEncounter.class, combatEncounterId);
+            t.setCombatEncounter(ce);
+            tallyId = (Integer) session.save(t);
             transaction.commit();
-        	logger.info("A new tally named " + tally.getName() + " was successfully saved in the database.");
+        	logger.info("A new tally named " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving a new tally " + tally.getName() + " in the database --- " + e.getMessage());
+            logger.fatal("Error while saving a new tally " + name + " in the database --- " + e.getMessage());
         } finally {
             session.close();
         }

@@ -11,14 +11,9 @@ import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
 
-import entity.A_Area;
-import entity.A_Close;
-import entity.A_Melee;
-import entity.A_Range;
 import entity.Attack;
 import entity.Attack_Type;
 import entity.CharacterSheet;
-import entity.Player;
 import entity.EntityEnum.CS_Monster_Origin;
 import entity.EntityEnum.CS_Monster_Type;
 import entity.EntityEnum.CS_Role;
