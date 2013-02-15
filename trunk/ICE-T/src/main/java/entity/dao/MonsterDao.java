@@ -55,6 +55,7 @@ public interface MonsterDao {
 	
 	/**
 	 * Update a monster in the database and Associate this monster to a team
+	 * This function does not update the character sheet
 	 * @param monster
 	 * @param team
 	 */
