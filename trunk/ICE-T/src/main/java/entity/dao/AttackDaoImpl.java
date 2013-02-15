@@ -31,7 +31,7 @@ public class AttackDaoImpl implements AttackDao {
 			String trigger, A_Effect_Type effectType, A_Ability ability,
 			CS_Resistance_Type damageType, A_Defense defense,
 			A_Sustain sustain, A_Action action, A_Use_Type useType,
-			Attack_Type attack_type, int characterSheetId) {
+			int characterSheetId) {
     	logger.debug("Attack " + name + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
@@ -57,21 +57,44 @@ public class AttackDaoImpl implements AttackDao {
             a.setSustain(sustain);
             a.setAction(action);
             a.setUseType(useType);
-            //Set Attack's type
-            logger.debug("Setting attack's type");
-            a.setAttackType(attack_type);
-            attack_type.setAttack(a);
             //Set the characterSheet
-            logger.debug("Setting characterSheet");
+            logger.debug("Association with a character sheet");
             CharacterSheet cs = (CharacterSheet) session.load(CharacterSheet.class, characterSheetId);
+            logger.debug("CharacterSheet name = " + cs.getName());
             a.setCharacterSheet(cs);
-            //Save
             attackId = (Integer) session.save(a);          
             transaction.commit();
         	logger.info("Attack " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving Attack " + name + " in the database --- " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return attackId;
+	}
+	
+
+	public int saveAttack(Attack attack, int characterSheetId) {
+		logger.debug("Attack " + attack.getAttackName() + " is about to be created in the database.");
+    	Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        int attackId = -1;
+        try {
+            transaction = session.beginTransaction();
+            //Set the characterSheet
+            logger.debug("Setting characterSheet");
+            CharacterSheet cs = (CharacterSheet) session.load(CharacterSheet.class, characterSheetId);
+            attack.setCharacterSheet(cs);
+            cs.addAttack(attack);
+            session.saveOrUpdate(cs);
+            //Save
+            attackId = (Integer) session.save(attack); 
+            transaction.commit();
+        	logger.info("Attack " + attack.getAttackName() + " was successfully saved in the database.");
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.fatal("Error while saving Attack " + attack.getAttackName() + " in the database --- " + e.getMessage());
         } finally {
             session.close();
         }
@@ -111,7 +134,6 @@ public class AttackDaoImpl implements AttackDao {
             a.setUseType(useType);
             //Set Attack's type
             //TODO
-            
             //Set the characterSheet
             CharacterSheet cs = (CharacterSheet) session.load(CharacterSheet.class, characterSheetId);
             a.setCharacterSheet(cs);
@@ -136,6 +158,7 @@ public class AttackDaoImpl implements AttackDao {
             transaction = session.beginTransaction();
             Attack a = (Attack) session.get(Attack.class, attackId);
             CharacterSheet cs = a.getCharacterSheet();
+            cs.removeAttack(a);
             logger.info("Deletion of Attack " + a.getAttackName() + "associated to the character sheet " + a.getCharacterSheet().getName());
             session.delete(a);
             logger.info("Update of the Character Sheet associated to the attack deleted.");
@@ -149,5 +172,4 @@ public class AttackDaoImpl implements AttackDao {
             session.close();
         }		
 	}
-
 }

@@ -16,8 +16,14 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import entity.dao.AttackDao;
+import entity.dao.AttackDaoImpl;
+import entity.dao.Attack_TypeDao;
+import entity.dao.Attack_TypeDaoImpl;
 import entity.dao.CharacterSheetDao;
 import entity.dao.CharacterSheetDaoImpl;
+import entity.dao.ResistanceDao;
+import entity.dao.ResistanceDaoImpl;
 
 /**
  * CharacterSheet Class
@@ -837,8 +843,33 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public void edit() {
-    	logger.info("Editing Character Sheet " + getName());
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+    	CharacterSheet csDB = csDao.getCharacterSheet(getId());
+        logger.debug("Deleting previous character sheet's attacks");
+    	AttackDao aDao = new AttackDaoImpl();
+    	for(Attack a : csDB.getAttacks()){
+        	aDao.deleteAttack(a.getId());
+    	}
+        logger.info("Deleting previous character sheet's resistances");
+    	ResistanceDao rDao = new ResistanceDaoImpl();
+    	for(Resistance r : csDB.getResistances()){
+    		rDao.deleteResistance(r.getId());
+    	}
+        logger.debug("Setting new character sheet's attacks");
+        Attack_TypeDao atDao = new Attack_TypeDaoImpl();
+    	for(Attack a : getAttacks()){
+    		int attackId = aDao.saveAttack(a.getAttackName(), a.getPrimaryTarget(), a.getSecondaryTarget(), a.getAccessories(), a.getPowerSource(),
+    				a.getFrequency(), a.getHit(), a.getMiss(), a.isBasic(), a.getTrigger(), a.getEffectType(), a.getAbility(),
+    				a.getDamageType(), a.getDefense(), a.getSustain(), a.getAction(), a.getUseType(), getId());
+            //Set Attack's type
+            logger.debug("Setting attack's type");
+    		atDao.saveAttackType(a.getAttackType(), attackId);
+    	}
+        logger.debug("Setting new character sheet's resistance");
+    	for(Resistance r : getResistances()){
+    		rDao.saveResistance(r.getResistanceType(), r.getResistanceValue(), getId());
+    	}
+    	logger.info("Editing Character Sheet " + getName());
 		csDao.updateCharacterSheet(getId(), getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),

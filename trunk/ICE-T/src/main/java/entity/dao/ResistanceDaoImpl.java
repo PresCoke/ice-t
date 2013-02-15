@@ -18,9 +18,9 @@ public class ResistanceDaoImpl implements ResistanceDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int saveResistance(String name, CS_Resistance_Type resistanceType,
+	public int saveResistance(CS_Resistance_Type resistanceType,
 			int resistanceValue, int characterSheetId) {
-    	logger.debug("Resistance " + name + " is about to be created in the database.");
+    	logger.debug("Resistance is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         int resistanceID = -1;
@@ -35,20 +35,20 @@ public class ResistanceDaoImpl implements ResistanceDao {
         	r.setCharacterSheet(cs);
             resistanceID = (Integer) session.save(r);
             transaction.commit();
-        	logger.info("Resistance" + name + " was successfully saved in the database.");
+        	logger.info("Resistance was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while saving Resistance " + name + " in the database --- " + e.getMessage());
+            logger.fatal("Error while saving Resistance in the database --- " + e.getMessage());
         } finally {
             session.close();
         }
         return resistanceID;
 	}
 
-	public void updateResistance(int resistanceId, String name,
+	public void updateResistance(int resistanceId,
 			CS_Resistance_Type resistanceType, int resistanceValue,
 			int characterSheetId) {
-    	logger.debug("Resistance " + name + " is about to be updated in the database.");
+    	logger.debug("Resistance is about to be updated in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         try {
@@ -61,10 +61,10 @@ public class ResistanceDaoImpl implements ResistanceDao {
             logger.debug("CharacterSheet name = " + cs.getName());
         	r.setCharacterSheet(cs);
             transaction.commit();
-        	logger.info("Resistance " + name + " was successfully updated in the database.");
+        	logger.info("Resistance was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Resistance " + name + " in the database --- " + e.getMessage());
+            logger.fatal("Error while updating Resistance in the database --- " + e.getMessage());
         } finally {
             session.close();
         }

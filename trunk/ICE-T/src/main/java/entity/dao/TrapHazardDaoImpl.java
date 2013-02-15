@@ -157,7 +157,7 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
     			Attack_TypeDao attacktypeDao = new Attack_TypeDaoImpl();
     			attacktypeDao.deleteAttackType(a.getAttackType().getId());
     			atype.setAttack(a);
-    			attacktypeDao.saveAttackType(atype);
+    			attacktypeDao.saveAttackType(atype, a.getId());
     			session.flush();
     			session.evict(a.getAttackType());
     			a.setAttackType(atype);

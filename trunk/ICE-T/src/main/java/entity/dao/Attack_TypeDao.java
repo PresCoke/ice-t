@@ -7,9 +7,10 @@ public interface Attack_TypeDao {
 	/**
 	 * Save an attack type in database
 	 * @param type of the attack
+	 * @param attackID
 	 * @return type's id stored in the database
 	 */
-	public int saveAttackType(Attack_Type type);
+	public int saveAttackType(Attack_Type type, int attackID);
 	
 	/**
 	 * Delete an attack type from the database
