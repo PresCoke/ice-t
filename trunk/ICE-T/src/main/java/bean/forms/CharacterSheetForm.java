@@ -767,7 +767,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		 * 
 		 */
 		JPanel skill_panel = new JPanel();
-		skill_panel.setLayout( new GridLayout(0, 2) );
+		//skill_panel.setLayout( new GridLayout(0, 2) );
 		skill_panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), entity_l10n.getString("Skill_title")) );
 		//acrobatics
 		JLabel acro_label = new JLabel(entity_l10n.getString("ACRO_entity"));
@@ -792,7 +792,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		acro_field.setValue(theCharacter.getAcrobatics());
-		skill_panel.add(acro_label); skill_panel.add(acro_field);
+		//skill_panel.add(acro_label); skill_panel.add(acro_field);
 		//athletics
 		JLabel athl_label = new JLabel(entity_l10n.getString("ATHL_entity"));
 		athl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -816,7 +816,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		athl_field.setValue(theCharacter.getAthletics());
-		skill_panel.add(athl_label); skill_panel.add(athl_field);
+		//skill_panel.add(athl_label); skill_panel.add(athl_field);
 		//arcana
 		JLabel arca_label = new JLabel(entity_l10n.getString("ARCA_entity"));
 		arca_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -840,7 +840,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		arca_field.setValue(theCharacter.getArcana());
-		skill_panel.add(arca_label); skill_panel.add(arca_field);
+		//skill_panel.add(arca_label); skill_panel.add(arca_field);
 		//bluff
 		JLabel bluf_label = new JLabel(entity_l10n.getString("BLUF_entity"));
 		bluf_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -864,7 +864,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		bluf_field.setValue(theCharacter.getBluff());
-		skill_panel.add(bluf_label); skill_panel.add(bluf_field);
+		//skill_panel.add(bluf_label); skill_panel.add(bluf_field);
 		//diplomacy
 		JLabel dipl_label = new JLabel(entity_l10n.getString("DIPL_entity"));
 		dipl_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -888,7 +888,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		dipl_field.setValue(theCharacter.getDiplomacy());
-		skill_panel.add(dipl_label); skill_panel.add(dipl_field);
+		//skill_panel.add(dipl_label); skill_panel.add(dipl_field);
 		//dungeoneering
 		JLabel dung_label = new JLabel(entity_l10n.getString("DUNG_entity"));
 		dung_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -912,7 +912,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		dung_field.setValue(theCharacter.getDungeoneering());
-		skill_panel.add(dung_label); skill_panel.add(dung_field);
+		//skill_panel.add(dung_label); skill_panel.add(dung_field);
 		//endurance
 		JLabel endu_label = new JLabel(entity_l10n.getString("ENDU_entity"));
 		endu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -936,7 +936,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		endu_field.setValue(theCharacter.getEndurance());
-		skill_panel.add(endu_label); skill_panel.add(endu_field);
+		//skill_panel.add(endu_label); skill_panel.add(endu_field);
 		//heal
 		JLabel heal_label = new JLabel(entity_l10n.getString("HEAL_entity"));
 		heal_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -984,7 +984,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		hist_field.setValue(theCharacter.getHistory());
-		skill_panel.add(hist_label); skill_panel.add(hist_field);
+		//skill_panel.add(hist_label); skill_panel.add(hist_field);
 		//insight
 		JLabel insi_label = new JLabel(entity_l10n.getString("INSI_entity"));
 		insi_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1008,7 +1008,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		insi_field.setValue(theCharacter.getInsight());
-		skill_panel.add(insi_label); skill_panel.add(insi_field);
+		//skill_panel.add(insi_label); skill_panel.add(insi_field);
 		//intimidate
 		JLabel inti_label = new JLabel(entity_l10n.getString("INTI_entity"));
 		inti_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1032,7 +1032,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		inti_field.setValue(theCharacter.getIntimidate());
-		skill_panel.add(inti_label); skill_panel.add(inti_field);
+		//skill_panel.add(inti_label); skill_panel.add(inti_field);
 		//nature
 		JLabel natu_label = new JLabel(entity_l10n.getString("NATU_entity"));
 		natu_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1056,7 +1056,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		natu_field.setValue(theCharacter.getNature());
-		skill_panel.add(natu_label); skill_panel.add(natu_field);
+		//skill_panel.add(natu_label); skill_panel.add(natu_field);
 		//perception
 		JLabel perc_label = new JLabel(entity_l10n.getString("PERC_entity"));
 		perc_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1080,7 +1080,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		perc_field.setValue(theCharacter.getPerception());
-		skill_panel.add(perc_label); skill_panel.add(perc_field);
+		//skill_panel.add(perc_label); skill_panel.add(perc_field);
 		//religion
 		JLabel reli_label = new JLabel(entity_l10n.getString("RELI_entity"));
 		reli_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1104,7 +1104,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		reli_field.setValue(theCharacter.getReligion());
-		skill_panel.add(reli_label); skill_panel.add(reli_field);
+		//skill_panel.add(reli_label); skill_panel.add(reli_field);
 		//stealth
 		JLabel stea_label = new JLabel(entity_l10n.getString("STEA_entity"));
 		stea_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1128,7 +1128,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		stea_field.setValue(theCharacter.getStealth());
-		skill_panel.add(stea_label); skill_panel.add(stea_field);
+		//skill_panel.add(stea_label); skill_panel.add(stea_field);
 		//streetwise
 		JLabel stre_label = new JLabel(entity_l10n.getString("STRE_entity"));
 		stre_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1152,7 +1152,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		stre_field.setValue(theCharacter.getStreetwise());
-		skill_panel.add(stre_label); skill_panel.add(stre_field);
+		//skill_panel.add(stre_label); skill_panel.add(stre_field);
 		//theivery
 		JLabel thie_label = new JLabel(entity_l10n.getString("THIE_entity"));
 		thie_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
@@ -1176,7 +1176,99 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		thie_field.setValue(theCharacter.getThievery());
-		skill_panel.add(thie_label); skill_panel.add(thie_field);
+		//skill_panel.add(thie_label); skill_panel.add(thie_field);
+		
+		GroupLayout skill_layout = new GroupLayout(skill_panel);
+		skill_layout.setHorizontalGroup( skill_layout.createSequentialGroup()
+				.addGroup( skill_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(acro_label)
+						.addComponent(athl_label)
+						.addComponent(arca_label)
+						.addComponent(bluf_label)
+						.addComponent(dipl_label)
+						.addComponent(dung_label)
+						.addComponent(endu_label)
+						.addComponent(heal_label)
+						.addComponent(hist_label)
+						.addComponent(insi_label)
+						.addComponent(inti_label)
+						.addComponent(natu_label)
+						.addComponent(perc_label)
+						.addComponent(reli_label)
+						.addComponent(stea_label)
+						.addComponent(stre_label)
+						.addComponent(thie_label)
+						)
+				.addGroup( skill_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+						.addComponent(acro_field)
+						.addComponent(athl_field)
+						.addComponent(arca_field)
+						.addComponent(bluf_field)
+						.addComponent(dipl_field)
+						.addComponent(dung_field)
+						.addComponent(endu_field)
+						.addComponent(heal_field)
+						.addComponent(hist_field)
+						.addComponent(insi_field)
+						.addComponent(inti_field)
+						.addComponent(natu_field)
+						.addComponent(perc_field)
+						.addComponent(reli_field)
+						.addComponent(stea_field)
+						.addComponent(stre_field)
+						.addComponent(thie_field)
+						)
+				);
+						
+		skill_layout.setVerticalGroup( skill_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup( skill_layout.createSequentialGroup()
+						.addComponent(acro_label)
+						.addComponent(athl_label)
+						.addComponent(arca_label)
+						.addComponent(bluf_label)
+						.addComponent(dipl_label)
+						.addComponent(dung_label)
+						.addComponent(endu_label)
+						.addComponent(heal_label)
+						.addComponent(hist_label)
+						.addComponent(insi_label)
+						.addComponent(inti_label)
+						.addComponent(natu_label)
+						.addComponent(perc_label)
+						.addComponent(reli_label)
+						.addComponent(stea_label)
+						.addComponent(stre_label)
+						.addComponent(thie_label))
+				.addGroup( skill_layout.createSequentialGroup()
+						.addComponent(acro_field)
+						.addComponent(athl_field)
+						.addComponent(arca_field)
+						.addComponent(bluf_field)
+						.addComponent(dipl_field)
+						.addComponent(dung_field)
+						.addComponent(endu_field)
+						.addComponent(heal_field)
+						.addComponent(hist_field)
+						.addComponent(insi_field)
+						.addComponent(inti_field)
+						.addComponent(natu_field)
+						.addComponent(perc_field)
+						.addComponent(reli_field)
+						.addComponent(stea_field)
+						.addComponent(stre_field)
+						.addComponent(thie_field))
+				);
+		skill_layout.linkSize(SwingConstants.HORIZONTAL, thie_field, stre_field, stea_field, reli_field, perc_field, natu_field,
+														 inti_field, insi_field, hist_field, heal_field, endu_field, dung_field,
+														 dipl_field, bluf_field, arca_field, athl_field, acro_field);
+		skill_layout.linkSize(SwingConstants.VERTICAL, thie_field, thie_label, stre_field, stre_label, stea_field, stea_label, 
+													   reli_field, reli_label, perc_field, perc_label, natu_field, natu_label,
+				 									   inti_field, inti_label, insi_field, insi_label, hist_field, hist_label, 
+				 									   heal_field, heal_label, endu_field, endu_label, dung_field, dung_label,
+				 									   dipl_field, dipl_label, bluf_field, bluf_label, arca_field, arca_label,
+				 									   athl_field, athl_label, acro_field, acro_label);
+		skill_panel.setLayout(skill_layout);
+	
 		
 		/*
 		 * 
@@ -1530,3 +1622,4 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	}
 
 }
+
