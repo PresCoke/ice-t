@@ -1,7 +1,5 @@
 package entity.dao;
 
-import entity.Tally;
-
 public interface TallyDao {
 	
 	/**
@@ -13,7 +11,8 @@ public interface TallyDao {
 	/**
 	 * Save a tally in the database
 	 * @param tally
+	 * @param combatEncounterId
 	 * @return tally's id stored in the database
 	 */
-	public int saveTally (Tally tally);
+	public int saveTally (String name, int combatEncounterId);
 }

@@ -42,13 +42,8 @@ public interface CombatEncounterDao {
 	 * @param name
 	 * @param notes
 	 * @param currentCreatureId
-	 * @param rewards
-	 * @param tally
-	 * @param tuples
-	 * @param teams
 	 */
-	public void updateCombatEncounter(int combatEncounterId, String name, String notes, int currentCreatureId,
-			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams);
+	public void updateCombatEncounter(int combatEncounterId, String name, String notes, int currentCreatureId);
 	
 	/**
 	 * Delete a Combat Encounter from the database

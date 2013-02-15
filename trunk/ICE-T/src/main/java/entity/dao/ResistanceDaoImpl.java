@@ -67,8 +67,7 @@ public class ResistanceDaoImpl implements ResistanceDao {
             logger.fatal("Error while updating Resistance in the database --- " + e.getMessage());
         } finally {
             session.close();
-        }
-		
+        }	
 	}
 
 	public void deleteResistance(int resistanceId) {

@@ -21,10 +21,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
-import entity.dao.PlayerDao;
-import entity.dao.PlayerDaoImpl;
+import entity.dao.MonsterDao;
+import entity.dao.MonsterDaoImpl;
+import entity.dao.RewardsDao;
+import entity.dao.RewardsDaoImpl;
+import entity.dao.TallyDao;
+import entity.dao.TallyDaoImpl;
 import entity.dao.TrapHazardDao;
 import entity.dao.TrapHazardDaoImpl;
+import entity.dao.TupleDao;
+import entity.dao.TupleDaoImpl;
 
 /**
  * CombatEncounter Class
@@ -53,7 +59,7 @@ public class CombatEncounter implements EntityM{
 	private int currentCreatureId;
 	
 	//Associations
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter", orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "combatEncounter", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Rewards> rewards;
@@ -70,7 +76,7 @@ public class CombatEncounter implements EntityM{
 
 	//Other
 	@Transient
-	private List<Player> creaturesInCE;
+	private List<Player> playersInCe;
 	
 
 	/**
@@ -190,12 +196,12 @@ public class CombatEncounter implements EntityM{
 		this.currentCreatureId = currentCreatureId;
 	}	
 
-	public List<Player> getCreaturesInCE() {
-		return creaturesInCE;
+	public List<Player> getPlayersInCE() {
+		return playersInCe;
 	}
 
-	public void setCreaturesInCE(List<Player> creaturesInCE) {
-		this.creaturesInCE = creaturesInCE;
+	public void setPlayersInCE(List<Player> playersInCe) {
+		this.playersInCe = playersInCe;
 	}
 
 	/**
@@ -207,19 +213,17 @@ public class CombatEncounter implements EntityM{
 	 * @return list of creatures sorted
 	 */
 	public List<Player> organizeCreaturesByInitiative(){	
-		//Retrieving all the creatures in the combat encounter
-		creaturesInCE = new ArrayList<Player>();
+		//Retrieving all the players in the combat encounter
+		playersInCe = new ArrayList<Player>();
 		List<Team> teams = this.getTeams();
-		PlayerDao cDao = new PlayerDaoImpl();
 		for (Team t : teams){
-			List<Player> creatures = cDao.getPlayersInTeam(t.getId());
-			for (Player c : creatures){
-				creaturesInCE.add(c);
+			for (Player p : t.getPlayers()){
+				playersInCe.add(p);
 			}
 		}
 		//Sorting
-		Collections.sort(creaturesInCE);
-		return creaturesInCE;
+		Collections.sort(playersInCe);
+		return playersInCe;
 	}
 
 	/**
@@ -227,29 +231,29 @@ public class CombatEncounter implements EntityM{
 	 * the CE was played
 	 * @return list of creatures sorted
 	 */
-	public List<Player> organizeCreaturesAfterLoad(){	
+	public List<Player> organizeCreaturesAfterLoadingCE(){	
 		//Retrieving all the creatures in the combat encounter and sort them out
 		this.organizeCreaturesByInitiative();
 		
 		//Sort the creatures to get them the way they were last time
-		for (Player c : creaturesInCE){
-			if (c.getId() == currentCreatureId){
+		for (Player p : playersInCe){
+			if (p.getId() == currentCreatureId){
 				break;
 			} else {
 				this.finishTurn();
 			}
 		}
 		
-		return creaturesInCE;
+		return playersInCe;
 	}
 	
 	/**
 	 * Take the first creature in the list of creatures playing and put it at the end of the list
 	 */
 	public void finishTurn(){
-		Player current = creaturesInCE.get(0);
-		creaturesInCE.remove(0);
-		creaturesInCE.add(current);	
+		Player current = playersInCe.get(0);
+		playersInCe.remove(0);
+		playersInCe.add(current);	
 	}
 	
 	/**
@@ -262,7 +266,7 @@ public class CombatEncounter implements EntityM{
 		//Retrieving all the creatures' level in the combat encounter
     	logger.info("Retrieving all the creatures in the CE");
 		List<Integer> levels = new ArrayList<Integer>();
-		for (Player c : creaturesInCE){
+		for (Player c : playersInCe){
 			levels.add(c.getCharacterSheet().getId());
 		}
 		
@@ -276,43 +280,57 @@ public class CombatEncounter implements EntityM{
 		Random random = new Random();
 		int r = random.nextInt(3) - random.nextInt(3);
 		int levelEncounter = sum/creaturesNumber + r;
+		if (levelEncounter < 1){
+			levelEncounter = 1;
+		}
 		int XPbudget = levelEncounter*250;
 		
 		//Getting all NPC creatures and traps in database that would suit the XPbudget
 		List<Object> npcs = new ArrayList<Object>();
     	logger.info("Getting all NPC creatures that would suit the XP budget");
-		PlayerDao cDao = new PlayerDaoImpl();
-//		List<Monster> npCreatures = new ArrayList<Monster>();
-//		List<Monster> creatures = cDao.getAllPlayers();
-//		for (Player p : creatures){
-//			if(c.getCharacterSheet().isNPC() && c.getCharacterSheet().getXP()<=XPbudget){
-//				npCreatures.add(c);
-//			}
-//		}
-//    	logger.info("Getting all traps that would suit the XP budget");
-//		TrapHazardDao thDao = new TrapHazardDaoImpl();
-//		List<TrapHazard> trapHazards = new ArrayList<TrapHazard>();
-//		List<TrapHazard> trapHazardsAll = thDao.getAllTrapHazards();
-//		for (TrapHazard th : trapHazardsAll){
-//			if(th.getXp()<=XPbudget){
-//				trapHazards.add(th);
-//			}
-//		}
-//		
-//		//Creating the list
-//    	logger.info("Adding the NPC creatures and the traps in the list");
-//    	for (Player c : npCreatures){
-//    		npcs.add(c);
-//    	}
-//    	for (TrapHazard th : trapHazards){
-//    		npcs.add(th);
-//    	}				
+		MonsterDao mDao = new MonsterDaoImpl();
+		List<Monster> monsters = new ArrayList<Monster>();
+		List<Monster> allMonsters = mDao.getAllMonsters();
+		for (Monster m : allMonsters){
+			if(m.getCharacterSheet().getXP()<=XPbudget){
+				monsters.add(m);
+			}
+		}
+    	logger.info("Getting all traps that would suit the XP budget");
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		List<TrapHazard> trapHazards = new ArrayList<TrapHazard>();
+		List<TrapHazard> trapHazardsAll = thDao.getAllTrapHazards();
+		for (TrapHazard th : trapHazardsAll){
+			if(th.getXp()<=XPbudget){
+				trapHazards.add(th);
+			}
+		}
+		
+		//Creating the list
+    	logger.info("Adding the NPC creatures and the traps in the list");
+    	for (Monster c : monsters){
+    		npcs.add(c);
+    	}
+    	for (TrapHazard th : trapHazards){
+    		npcs.add(th);
+    	}				
 		return npcs;
+	}
+	
+	/**
+	 * Allow the game master to roll a D20 automatically
+	 * @return
+	 */
+	public int autoRoll(){
+		Random random = new Random();
+		int d = random.nextInt(21);
+		return d;
 	}
 
 	/*
 	 * Methods save, edit, remove and getAll
 	 */
+	//TODO Test through the interface
 	public void save() {
     	logger.info("Saving Combat Encounter " + getName());
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
@@ -321,10 +339,59 @@ public class CombatEncounter implements EntityM{
 	}
 
 	public void edit() {
+		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+		CombatEncounter ceDB = ceDao.getCombatEncounter(getId());
+		
+        //Set the rewards
+        logger.debug("Deleting previous CE's rewards");
+        RewardsDao rDao = new RewardsDaoImpl();
+        if(ceDB.getRewards() != null && !ceDB.getRewards().isEmpty()){
+            for (Rewards r : ceDB.getRewards()){
+            	rDao.deleteRewards(r.getId());
+            } 
+        }
+        logger.debug("Setting CE's new rewards");
+        if(rewards != null && !rewards.isEmpty()){
+            for(Rewards r : getRewards()){
+            	rDao.saveRewards(r.getXP(), r.getTreasure(), getId());
+            }
+        }
+        
+        //Set the tally and the tuples
+        logger.debug("Deleting previous CE's tally and tuples");
+		TallyDao tallyDao = new TallyDaoImpl();
+		TupleDao tupleDao = new TupleDaoImpl();
+        if (ceDB.getTally() != null){
+			tallyDao.deleteTally(ceDB.getTally().getId());
+        }
+        logger.debug("Setting CE's tally and tuples");
+        if (getTally() != null){
+        	Tally t = getTally();
+        	int tallyId = tallyDao.saveTally(t.getName(), getId());
+        	if (t.getTuples() != null && !t.getTuples().isEmpty()){
+        		List<Tuple> tuples = t.getTuples();
+        		for (Tuple tuple : tuples){
+        			tupleDao.saveTuple(tuple.getName(), tuple.getValue1(), tuple.getValue2(), tallyId);
+        		}
+        	}
+        } 
+        
+        //Set the teams
+    	logger.info("Setting CE's teams");
+        if(ceDB.getTeams() != null && !ceDB.getTeams().isEmpty()){
+        	for (Team t : ceDB.getTeams()){
+        		t.setCombatEncounter(null);
+        	}
+        }
+        if(getTeams() != null && !getTeams().isEmpty()){
+        	for (Team t : getTeams()){
+        		t.setCombatEncounter(this);
+        	}
+        }
+        
+        //Update Combat encounter
     	logger.info("Editing Combat Encounter " + getName());
-    	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
-    	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId(), getRewards(),
-				getTally(), getTally().getTuples(), getTeams());		
+    	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId());		
 	}
 
 	public void remove() {

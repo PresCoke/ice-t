@@ -1,13 +1,10 @@
 package entity.dao;
 
-import org.apache.log4j.Logger;
 
 public class DAOException extends Exception {
 
 	private static final long serialVersionUID = 8358041037569440113L;
 	
-	private static final Logger logger = Logger.getLogger(AttackDaoImpl.class);
-
 	/**
 	 * Constructors
 	 */

@@ -67,6 +67,7 @@ public class Team implements EntityM {
 		this.name= "";
 		this.players = new ArrayList<Player>();
 		this.monsters = new ArrayList<Monster>();
+		this.traphazards = new ArrayList<TrapHazard>();
 	}
 	
 	/**
@@ -77,6 +78,7 @@ public class Team implements EntityM {
 		this.name=name;
 		this.players = new ArrayList<Player>();
 		this.monsters = new ArrayList<Monster>();
+		this.traphazards = new ArrayList<TrapHazard>();
 	}
 
 	/**

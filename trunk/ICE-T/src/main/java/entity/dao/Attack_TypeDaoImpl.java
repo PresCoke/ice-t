@@ -8,9 +8,6 @@ import org.hibernate.Transaction;
 import resource.HibernateUtil;
 import entity.Attack;
 import entity.Attack_Type;
-import entity.CharacterSheet;
-import entity.Effect;
-import entity.EntityEnum.E_Duration;
 
 public class Attack_TypeDaoImpl implements Attack_TypeDao {
 
