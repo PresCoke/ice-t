@@ -63,22 +63,22 @@ public class Mediator {
 	public List<Object[]> getUniqueEntityIDsForType(String selectedEntityType) {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		
-		if (selectedEntityType == entityNames.getString("CharacterSheet_entity")) {
+		if (selectedEntityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			//List<Object[]> names = null;
 			
 			return cs_dao.readAllCharacterSheets();
 			
-		} else if (selectedEntityType == entityNames.getString("Monster_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("Monster_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			return cs_dao.readAllCharacterSheets();
 			
-		} else if (selectedEntityType == entityNames.getString("Team_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("Team_entity"))) {
 			
 			entity.dao.TeamDaoImpl te_dao = new entity.dao.TeamDaoImpl();
 			return te_dao.readAllTeams();
-		} else if (selectedEntityType == entityNames.getString("TrapHazard_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			
 			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
 			return th_dao.readAllTrapHazards();
@@ -89,23 +89,23 @@ public class Mediator {
 
 	public Object getEntityOfID(int selectedEntityId, String selectedEntityType) {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
-		if (selectedEntityType == entityNames.getString("CharacterSheet_entity")) {
+		if (selectedEntityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
 			return cs;
-		} else if (selectedEntityType == entityNames.getString("Monster_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("Monster_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
 			return cs;
 			
-		} else if (selectedEntityType == entityNames.getString("Team_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("Team_entity"))) {
 			
 			entity.dao.TeamDaoImpl te_dao = new entity.dao.TeamDaoImpl();
 			entity.Team te = te_dao.getTeam(selectedEntityId);
 			return te;
-		} else if (selectedEntityType == entityNames.getString("TrapHazard_entity")) {
+		} else if (selectedEntityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			
 			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
 			entity.TrapHazard th = th_dao.getTrapHazard(selectedEntityId);

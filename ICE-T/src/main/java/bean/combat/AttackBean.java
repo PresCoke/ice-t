@@ -55,7 +55,7 @@ public class AttackBean implements Bean {
 		
 		JEditorPane theAttackBean = new JEditorPane();
 		TitledBorder title = BorderFactory.createTitledBorder(name);
-		title.setTitleJustification(SwingConstants.LEFT);
+		title.setTitleJustification(TitledBorder.LEFT);
 		theAttackBean.setBorder(title);
 		if (isSelected) {
 			theAttackBean.setBackground( system_defaults.getColor("List.selectionBackground") );
@@ -225,10 +225,10 @@ public class AttackBean implements Bean {
 				attack_l10n.getString("Attack_attack") + ability + " v. "+ defense+"\n"+
 				attack_l10n.getString("Hit_attack")+hit+"\n"+attack_l10n.getString("Miss_attack") +miss;
 		//Need to do something about missing fields
-		if (aAttack.getSecondaryTarget() != "") {
+		if (!aAttack.getSecondaryTarget().equals("")) {
 			fullText+= attack_l10n.getString("Secondary_attack")+aAttack.getSecondaryTarget();
 		}
-		if (aAttack.getTrigger() != "") {
+		if (!aAttack.getTrigger().equals("")) {
 			fullText+= attack_l10n.getString("Trigger_attack")+aAttack.getTrigger();
 		}
 		if (aAttack.getSustain() != EntityEnum.A_Sustain.NONE ) {
