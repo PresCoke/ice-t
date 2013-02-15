@@ -234,58 +234,33 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             cs.setMonsterOrigin(monsterOrigin);
             cs.setMonsterType(monsterType); 
             cs.setNPC(isNPC);
-            //Set the resistance(s)
-            logger.debug("Deleting previous character sheet's resistances");
-            List<Resistance> resistancesDB = cs.getResistances();
-            
-            for(Resistance r : cs.getResistances()){
-            	ResistanceDao rDao = new ResistanceDaoImpl();
-            	rDao.deleteResistance(r.getId());
-            }
-            cs.removeAllResistances();
-            session.update(cs);
-            session.flush();
-            logger.debug("Setting character sheet's resistances");
-            for(Resistance r : resistances){
-        		cs.addResistance(r);
-        		r.setCharacterSheet(cs);
-        	}
-            //Set the attack(s)
-            if (attacks != null && attacksTypes != null){
-	            if(attacks.size() != attacksTypes.size()){
-	                logger.fatal("The list attacks (size = " + attacks.size() +") does not have the same length than attacksTypes (size = " + attacksTypes.size() + ")");
-	            	throw new DAOException();
-	            }
-	            logger.debug("Deleting previous character sheet's attacks");
-	            List<Attack> attacksDB = (cs.getAttacks());
-	            
-	            for(Attack a : attacksDB){
-	            	AttackDao aDao = new AttackDaoImpl();
-	            	aDao.deleteAttack(a.getId());
-		            session.evict(a);
-		            //session.flush();
-	            }
-	            cs.removeAllAttacks();
-	            session.update(cs);
-	            session.flush();
-	            logger.debug("Setting new character sheet's attacks");
-	            int i = 0;
-	            for (Attack a : attacks){
-	            	Attack_Type t = attacksTypes.get(i);
-            		a.setAttackType(t);
-            		a.setCharacterSheet(cs);
-            		t.setAttack(a);
-            		cs.addAttack(a);
-            		i++;
-	            }  
-            }
+//            logger.debug("Setting character sheet's resistances");
+//            for(Resistance r : resistances){
+//        		cs.addResistance(r);
+//        		r.setCharacterSheet(cs);
+//        	}
+//            //Set the attack(s)
+//            if (attacks != null && attacksTypes != null){
+//	            if(attacks.size() != attacksTypes.size()){
+//	                logger.fatal("The list attacks (size = " + attacks.size() +") does not have the same length than attacksTypes (size = " + attacksTypes.size() + ")");
+//	            	throw new DAOException();
+//	            }
+// 	            logger.debug("Setting new character sheet's attacks");
+//	            int i = 0;
+//	            for (Attack a : attacks){
+//	            	Attack_Type t = attacksTypes.get(i);
+//            		a.setAttackType(t);
+//            		a.setCharacterSheet(cs);
+//            		t.setAttack(a);
+//            		cs.addAttack(a);
+//            		i++;
+//	            }  
+//            }
             transaction.commit();
         	logger.info("Character Sheet " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while updating Character Sheet " + name + " in the database --- " + e.getMessage());
-        } catch (DAOException e) {
-            transaction.rollback();
+            logger.fatal("Error while updating Character Sheet " + name + " in the database --- " + e.getMessage());	
         } finally {
             session.close();
         }

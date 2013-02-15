@@ -71,18 +71,18 @@ public class HibernateTest {
 		resistances.add(r2);
 		
 		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
-		A_Area t = new A_Area();
-		t.setPersonal(true);
-		t.setArea_range(100);
-		t.setArea_size(100);
-		t.setArea_type(EntityEnum.A_Area_Type.burst);
-		attacksTypes.add(t);
-		A_Area t2 = new A_Area();
-		t2.setPersonal(true);
-		t2.setArea_range(0);
-		t2.setArea_size(0);
-		t2.setArea_type(EntityEnum.A_Area_Type.wall);
-		attacksTypes.add(t2);
+//		A_Area t = new A_Area();
+//		t.setPersonal(true);
+//		t.setArea_range(100);
+//		t.setArea_size(100);
+//		t.setArea_type(EntityEnum.A_Area_Type.burst);
+//		attacksTypes.add(t);
+//		A_Area t2 = new A_Area();
+//		t2.setPersonal(true);
+//		t2.setArea_range(0);
+//		t2.setArea_size(0);
+//		t2.setArea_type(EntityEnum.A_Area_Type.wall);
+//		attacksTypes.add(t2);
 //		A_Close t = new A_Close();
 //		t.setPersonal(false);
 //		t.setCloseType(EntityEnum.A_Close_Type.burst);
@@ -93,18 +93,18 @@ public class HibernateTest {
 //		t2.setCloseType(EntityEnum.A_Close_Type.blast);
 //		t2.setSize(1);
 //		attacksTypes.add(t2);
-//		A_Melee t = new A_Melee();
-//		t.setPersonal(true);
-//		t.setReach(100);
-//		attacksTypes.add(t);
-//		A_Range t2 = new A_Range();
-//		t2.setPersonal(true);
-//		t2.setL_range(50);
-//		t2.setS_range(10);
+		A_Melee t = new A_Melee();
+		t.setPersonal(true);
+		t.setReach(100);
+		attacksTypes.add(t);
+		A_Range t2 = new A_Range();
+		t2.setPersonal(true);
+		t2.setL_range(50);
+		t2.setS_range(10);
 //		attacksTypes.add(t2);
 		
 		List<Attack> attacks = new ArrayList<Attack>();
-		Attack a1 = new Attack("AttackZombie1");
+		Attack a1 = new Attack("Attack1");
 		a1.setPrimaryTarget("Bill");
 		a1.setSecondaryTarget("Jack");
 		a1.setAccessories("Gun");
@@ -121,8 +121,8 @@ public class HibernateTest {
 		a1.setSustain(EntityEnum.A_Sustain.standard);
 		a1.setAction(EntityEnum.A_Action.minor);
 		a1.setUseType(EntityEnum.A_Use_Type.atWill);
-		attacks.add(a1);
-		Attack a2 = new Attack("AttackZombie2");
+//		attacks.add(a1);
+		Attack a2 = new Attack("Attack2");
 		a2.setPrimaryTarget("Bill");
 		a2.setSecondaryTarget("Jack");
 		a2.setAccessories("Gun");
@@ -142,18 +142,17 @@ public class HibernateTest {
 		attacks.add(a2);
 	
 		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-
-//		csDao.saveCharacterSheet("Zombie", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
-//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
+//
+//		csDao.saveCharacterSheet("Terminator", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 10, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes, false);
-		
-		csDao.updateCharacterSheet(2, "Arnold", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
-			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
-			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
-			resistances, attacks, attacksTypes, true);	
-//
-//
+//		
+//		csDao.updateCharacterSheet(1, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 10, "made with metal", 10, 2, "all of them", "misc",
+//			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
+//			resistances, attacks, attacksTypes, false);	
+
 //		MonsterDao mDao = new MonsterDaoImpl();
 //		mDao.saveMonster("Zombie", 10, 15, 16, true, 20, csDao.getCharacterSheet(3));
 //		mDao.saveMonster("Zombie2", 10, 15, 16, true, 20, csDao.getCharacterSheet(3));
@@ -172,7 +171,7 @@ public class HibernateTest {
 //		Attack_TypeDao attacktypeDao = new Attack_TypeDaoImpl();
 //		attacktypeDao.deleteAttackType(2);
 //		
-//		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
 //
 //		thDao.saveTrapHazard("BigTrap", 5, 10, T_CounterMeasureSkill.bluff , "When a creature steps on it", 6, 18, 
 //				"none", EntityEnum.T_Type.trap, EntityEnum.T_Role.obstacle, EntityEnum.T_CounterMeasureSkill.heal,
@@ -193,9 +192,9 @@ public class HibernateTest {
 //		}
 //		
 //		CharacterSheet cs = csDao.getCharacterSheet(2);
-		
+//		
 //		PlayerDao pDao = new PlayerDaoImpl();
-
+//
 //		pDao.savePlayer("Tim", 100, 10, 10, true, 10, cs);
 //		pDao.savePlayer("James", 100, 10, 20, true, 10, cs);
 //
@@ -214,7 +213,7 @@ public class HibernateTest {
 
 		
 		
-//		TeamDao teamDao = new TeamDaoImpl();
+		TeamDao teamDao = new TeamDaoImpl();
 		
 //		teamDao.saveTeam("iceTeam", players);
 //		teamDao.updateTeam(1, "iceTeamBig", players);
@@ -241,20 +240,20 @@ public class HibernateTest {
 //		effectDao.deleteEffects(effectsIds);
 //		
 //		
-//		List<Rewards> rewards = new ArrayList<Rewards>();
-//		Rewards rew1 = new Rewards(20, "Gold");
-//		Rewards rew2 = new Rewards(50, "Gold & Silver");
-//		Rewards rew3 = new Rewards(110, "Sword");
-//		rewards.add(rew1);
-//		rewards.add(rew2);
+		List<Rewards> rewards = new ArrayList<Rewards>();
+		Rewards rew1 = new Rewards(20, "Gold");
+		Rewards rew2 = new Rewards(50, "Gold & Silver");
+		Rewards rew3 = new Rewards(110, "Sword");
+		rewards.add(rew1);
+		rewards.add(rew2);
 //		rewards.add(rew3);
 
-//		Tally tally = new Tally("ScoreNPC");
-//		List<Tuple> tuples = new ArrayList<Tuple>();
-//		Tuple tuple1 = new Tuple("tuple4", 5, 6);
-//		Tuple tuple2 = new Tuple("tuple2", 15, 8);
-//		tuples.add(tuple1);
-//		tuples.add(tuple2);
+		Tally tally = new Tally("ScoreNPC");
+		List<Tuple> tuples = new ArrayList<Tuple>();
+		Tuple tuple1 = new Tuple("tuple4", 5, 6);
+		Tuple tuple2 = new Tuple("tuple2", 15, 8);
+		tuples.add(tuple1);
+		tuples.add(tuple2);
 //
 //		CreatureDao cDao = new CreatureDaoImpl();
 //		List<Creature> creatures = new ArrayList<Creature>();
@@ -265,7 +264,7 @@ public class HibernateTest {
 //		teamDao.saveTeam("IceTeam1", creatures);
 //		teamDao.saveTeam("IceTeam2", creatures);
 //		
-//		List<Team> teams = new ArrayList<Team>();
+		List<Team> teams = new ArrayList<Team>();
 //		Team team1 = teamDao.getTeam(1);
 //		Team team2 = teamDao.getTeam(2);
 //		teams.add(team1);
@@ -277,7 +276,7 @@ public class HibernateTest {
 //		traphazards.add(th1);
 //		traphazards.add(th2);
 //
-//		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
 
 //		ceDao.saveCombatEncounter("CE1", "Game almost over", 1, rewards, tally, tuples, teams);
 //		ceDao.updateCombatEncounter(1,"CE2", "Game almost over", 2, rewards, tally, tuples, teams);
