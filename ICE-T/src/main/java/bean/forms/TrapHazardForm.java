@@ -425,10 +425,8 @@ public class TrapHazardForm implements FormBean {
 			isValidForm = false;
 			invalidFieldString += "The xp field is absent.\n";
 		}
-		Attack aAttack = (Attack) attackForm_bean.getEntity();
-		if (aAttack == null) {
+		if (attackForm_bean.validateEntity()) {
 			isValidForm = false;
-			invalidFieldString += "This trap has no attack.\n";
 		}
 		
 		if (!isValidForm) {
