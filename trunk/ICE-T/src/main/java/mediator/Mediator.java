@@ -92,12 +92,12 @@ public class Mediator {
 		if (selectedEntityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
-			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
+			entity.CharacterSheet cs = cs_dao.getCharacterSheet(selectedEntityId);
 			return cs;
 		} else if (selectedEntityType.equals(entityNames.getString("Monster_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
-			entity.CharacterSheet cs = cs_dao.getCharacterSheets(selectedEntityId);
+			entity.CharacterSheet cs = cs_dao.getCharacterSheet(selectedEntityId);
 			return cs;
 			
 		} else if (selectedEntityType.equals(entityNames.getString("Team_entity"))) {
