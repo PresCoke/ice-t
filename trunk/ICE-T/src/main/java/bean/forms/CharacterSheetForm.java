@@ -1263,14 +1263,10 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		addResist_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				Resistance addThis = (Resistance) resistanceForm_bean.getEntity();
-				if (addThis.getResistanceType() != null && addThis.getResistanceValue() != 0) {
+				if (resistanceForm_bean.validateEntity()) {
 					theCharacter.addResistance(addThis);
 					resistance_list_model.addElement(addThis);
-					//resistanceForm_bean = new ResistanceForm();
 					resistanceForm_panel = resistanceForm_bean.createEntityPanel();
-					/*if (resistance_list.getSelectedIndex() != -1) {
-						resistance_list.remove( resistance_list.getSelectedIndex() );
-					}*/
 				}		
 			}
 		});
@@ -1348,9 +1344,11 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		addAttack_button.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				Attack addThis = (Attack) attackForm_bean.getEntity();
-				theCharacter.addAttack(addThis);
-				attackForm_panel = attackForm_bean.createEntityPanel();
-				attack_list_model.addElement(addThis);
+				if (attackForm_bean.validateEntity()) {
+					theCharacter.addAttack(addThis);
+					attackForm_panel = attackForm_bean.createEntityPanel();
+					attack_list_model.addElement(addThis);
+				}
 			}
 		});
 		JButton removeAttack_button = new JButton(entity_l10n.getString("Remove_button"));
