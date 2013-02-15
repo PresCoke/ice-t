@@ -25,7 +25,6 @@ public class Root_Window {
 	Edit_Tab editEntity_tab; // holds all GUI related functions for the Edit tab
 	Help_Tab help_tab; // holds all GUI related functions for the Help tab
 	New_Tab newEntity_tab; // holds all GUI related functions for the New tab
-	Welcome_Tab welcome_tab; // holds all GUI related functions for the Welcome tab
 	
 	String[] entity_names;
 	

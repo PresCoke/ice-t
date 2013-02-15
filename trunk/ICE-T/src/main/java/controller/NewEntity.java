@@ -27,16 +27,16 @@ public class NewEntity {
 		case 1://Monster
 			empty_entity = new MonsterSheetForm();
 			break;
-		case 2://Team
+		case 2://TrapHazard
 			empty_entity = new TrapHazardForm();
 			break;
 		case 3://Combat Encounter
 			empty_entity = null; break;
-		case 4://Effect
-			empty_entity = new EffectForm();
-			break;
-		case 5://Trap/Hazard
+		case 4://Team
 			empty_entity = new TeamForm();
+			break;
+		case 5://Effect
+			empty_entity = new EffectForm();
 			break;
 		}
 		

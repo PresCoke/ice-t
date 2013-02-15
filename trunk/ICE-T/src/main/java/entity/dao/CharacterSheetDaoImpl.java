@@ -237,11 +237,12 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
             //Set the resistance(s)
             logger.debug("Deleting previous character sheet's resistances");
             List<Resistance> resistancesDB = cs.getResistances();
-            cs.removeAllResistances();
+            
             for(Resistance r : cs.getResistances()){
             	ResistanceDao rDao = new ResistanceDaoImpl();
             	rDao.deleteResistance(r.getId());
             }
+            cs.removeAllResistances();
             session.update(cs);
             session.flush();
             logger.debug("Setting character sheet's resistances");
@@ -256,14 +257,15 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 	            	throw new DAOException();
 	            }
 	            logger.debug("Deleting previous character sheet's attacks");
-	            List<Attack> attacksDB = cs.getAttacks();
-	            cs.removeAllAttacks();
+	            List<Attack> attacksDB = (cs.getAttacks());
+	            
 	            for(Attack a : attacksDB){
 	            	AttackDao aDao = new AttackDaoImpl();
 	            	aDao.deleteAttack(a.getId());
 		            session.evict(a);
-		            session.flush();
+		            //session.flush();
 	            }
+	            cs.removeAllAttacks();
 	            session.update(cs);
 	            session.flush();
 	            logger.debug("Setting new character sheet's attacks");

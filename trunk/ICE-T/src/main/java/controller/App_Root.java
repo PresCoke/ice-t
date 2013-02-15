@@ -28,7 +28,6 @@ public class App_Root
 	public static Combat combat_controller;
 	public static EditEntity editEntity_controller;
 	public static NewEntity newEntity_controller;
-	public static Welcome welcome_controller;
 	public static GenerateRandomEncounter gre_controller;
 	public static Locale language_locale;
 	private static String dbPath;
@@ -63,7 +62,7 @@ public class App_Root
 		combat_controller = new Combat();
 		editEntity_controller = new EditEntity();
 		newEntity_controller = new NewEntity();
-		welcome_controller = new Welcome();
+//		welcome_controller = new Welcome();
 		
 		mainWindow = new Root_Window();
 		mainWindow.start();

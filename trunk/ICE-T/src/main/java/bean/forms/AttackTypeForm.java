@@ -320,21 +320,27 @@ public class AttackTypeForm implements FormBean {
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 		if (usingThis instanceof A_Range) {
-			range_hidden = new A_Range();
+			range_hidden = (A_Range) usingThis;
 			attackType_selection.setSelectedItem( entity_l10n.getString("Ranged_attack") );
+			createRangedPanel();
 		} else if (usingThis instanceof A_Melee) {
-			melee_hidden = new A_Melee();
+			melee_hidden = (A_Melee) usingThis;
 			attackType_selection.setSelectedItem( entity_l10n.getString("Melee_attack") );
+			createMeleePanel();
 		} else if (usingThis instanceof A_Close) {
-			close_hidden = new A_Close();
+			close_hidden = (A_Close) usingThis;
 			attackType_selection.setSelectedItem( entity_l10n.getString("Close_attack") );
+			createClosePanel();
 		} else if (usingThis instanceof A_Area) {
-			area_hidden = new A_Area();
+			area_hidden = (A_Area) usingThis;
 			attackType_selection.setSelectedItem( entity_l10n.getString("Area_attack") );
+			createAreaPanel();
 		} else {
-			theAttackType = new Attack_Type();
+			theAttackType = (Attack_Type) usingThis;
 			attackType_selection.setSelectedItem( entity_l10n.getString("Personal_attack") );
+			createPersonalPanel();
 		}
+		
 		return attackType_panel;
 	}
 
@@ -373,13 +379,13 @@ public class AttackTypeForm implements FormBean {
 
 	private void createClosePanel() {
 		theAttackType.setPersonal(false);
-		closeType_field.setSelectedItem( close_hidden.getCloseType() );
+		closeType_field.setSelectedIndex( close_hidden.getCloseType().ordinal() );
 		closeSize_field.setText( Integer.toString(close_hidden.getSize()) );
 	}
 
 	private void createAreaPanel() {
 		theAttackType.setPersonal(false);
-		areaType_field.setSelectedItem( area_hidden.getArea_type() );
+		areaType_field.setSelectedIndex( area_hidden.getArea_type().ordinal() );
 		areaRange_field.setText( Integer.toString(area_hidden.getArea_range()) );
 		areaSize_field.setText( Integer.toString(area_hidden.getArea_size()) );
 	}

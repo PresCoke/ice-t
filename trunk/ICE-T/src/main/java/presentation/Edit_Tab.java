@@ -143,6 +143,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		temp_border.setTitle(selectedEntityName);
 		temp_border.setTitleJustification(TitledBorder.CENTER);
 		entityEdit_pane.setBorder(temp_border);
+		entityEdit_pane.setPreferredSize( new Dimension(0,0) );
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
