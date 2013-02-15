@@ -342,42 +342,18 @@ public class AttackTypeForm implements FormBean {
 		String selection = (String) attackType_selection.getSelectedItem();
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 		if ( selection.equals(entity_l10n.getString("Ranged_attack")) ) {
-			if (this.longRange_field.getText() != "") {
-				range_hidden.setL_range( Integer.parseInt(this.longRange_field.getText()) );
-			} else {
-				
-			}
-			if (this.shortRange_field.getText() != "") {
-				range_hidden.setS_range( Integer.parseInt(this.shortRange_field.getText()) );
-			} else {
-				
-			}
+			range_hidden.setL_range( Integer.parseInt(this.longRange_field.getText()) );
+			range_hidden.setS_range( Integer.parseInt(this.shortRange_field.getText()) );
 			return range_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Melee_attack")) ) {
-			if (this.reach_field.getText() != "") {
-				melee_hidden.setReach( Integer.parseInt(this.reach_field.getText()) );
-			} else {
-				
-			}
+			melee_hidden.setReach( Integer.parseInt(this.reach_field.getText()) );
 			return melee_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Area_attack")) ) {
-			if (this.areaRange_field.getText() != "") {
-				area_hidden.setArea_range( Integer.parseInt(this.areaRange_field.getText()) ); 
-			} else {
-				
-			}
-			if (this.areaSize_field.getText() != "") {
-				area_hidden.setArea_size( Integer.parseInt(this.areaSize_field.getText()) );
-			} else {
-				
-			}
+			area_hidden.setArea_range( Integer.parseInt(this.areaRange_field.getText()) );
+			area_hidden.setArea_size( Integer.parseInt(this.areaSize_field.getText()) );
 			return area_hidden;
 		} else if ( selection.equals(entity_l10n.getString("Close_attack")) ) {
-			if (this.closeSize_field.getText() != "") {
-				close_hidden.setSize( Integer.parseInt(this.closeSize_field.getText()) );
-			} else {
-				
-			}
+			close_hidden.setSize( Integer.parseInt(this.closeSize_field.getText()) );
 			return close_hidden;
 		} else {
 			return theAttackType;
@@ -410,5 +386,55 @@ public class AttackTypeForm implements FormBean {
 	
 	private void createPersonalPanel() {
 		theAttackType.setPersonal(true);
+	}
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		String window_title = "";
+		String selection = (String) attackType_selection.getSelectedItem();
+		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
+		if ( selection.equals(entity_l10n.getString("Ranged_attack")) ) {
+			window_title = entity_l10n.getString("Ranged_attack");
+			if (this.longRange_field.getText().equals("")) {
+				isValidForm = false;
+				invalidFieldString += "Long Range field is absent.\n";
+			}
+			if (this.shortRange_field.getText() != "") {
+				isValidForm = false;
+				invalidFieldString += "Short Range field is absent.\n";
+			}
+		} else if ( selection.equals(entity_l10n.getString("Melee_attack")) ) {
+			window_title = entity_l10n.getString("Melee_attack");
+			if (this.reach_field.getText() != "") {
+				isValidForm = false;
+				invalidFieldString += "Reach field is absent.\n";
+			}
+		} else if ( selection.equals(entity_l10n.getString("Area_attack")) ) {
+			window_title = entity_l10n.getString("Area_attack");
+			if (this.areaRange_field.getText() != "") {
+				isValidForm = false;
+				invalidFieldString += "Area Range field is absent.\n";
+			}
+			if (this.areaSize_field.getText() != "") {
+				isValidForm = false;
+				invalidFieldString += "Area Size field is absent.\n";
+			}
+		} else if ( selection.equals(entity_l10n.getString("Close_attack")) ) {
+			window_title = entity_l10n.getString("Close_attack");
+			if (this.closeSize_field.getText() != "") {
+				isValidForm = false;
+				invalidFieldString += "Close Size field is absent.\n";
+			}
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(attackType_panel,
+										  invalidFieldString,
+										  window_title,
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
 	}
 }

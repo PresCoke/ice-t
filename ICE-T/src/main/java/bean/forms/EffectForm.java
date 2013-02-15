@@ -109,6 +109,11 @@ public class EffectForm implements FormBean {
 
 	public Object getEntity() {
 		
+		theEffect.setName(effectName_field.getText());
+		theEffect.setChanges(effectChanges_field.getText());
+		theEffect.setMetrics(effectMetrics_field.getText());
+		
+		
 		return theEffect;
 	}
 	
@@ -118,6 +123,30 @@ public class EffectForm implements FormBean {
 		effectDuration_list.setSelectedIndex( theEffect.getDuration().ordinal() );
 		effectMetrics_field.setText( theEffect.getMetrics() );
 		
+	}
+
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if (effectName_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The name field is absent.\n";
+		}
+		if (effectMetrics_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The effect metrics field is absent.\n";
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(effectForm_Panel,
+										  invalidFieldString,
+										  "Effect",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
 	}
 
 }

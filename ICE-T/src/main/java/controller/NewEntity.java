@@ -75,4 +75,8 @@ public class NewEntity {
 		return entity_names;
 	}
 
+	public boolean isValidEntity() {
+		return empty_entity.validateEntity();
+	}
+
 }

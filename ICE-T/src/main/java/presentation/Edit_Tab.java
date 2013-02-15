@@ -113,9 +113,10 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 
 	public void actionPerformed(ActionEvent evt) {
 		if ( (JButton) evt.getSource() == this.save_button ) {
-			this.saveChanges();
-			this.editEntity_window.setVisible(false);
-			this.editEntity_window.dispose();
+			if (this.saveChanges()) {
+				this.editEntity_window.setVisible(false);
+				this.editEntity_window.dispose();
+			}
 		} else if ( (JButton) evt.getSource() == this.remove_button ) {
 			this.removeSelectedEntity();
 			this.editEntity_window.setVisible(false);
@@ -197,8 +198,12 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	}
 	
 	private boolean saveChanges() {
-		this.controller_reference.saveEntity();
-		return true;
+		if (controller_reference.validateEntity()) {
+			this.controller_reference.saveEntity();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
