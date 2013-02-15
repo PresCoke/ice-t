@@ -373,33 +373,13 @@ public class TrapHazardForm implements FormBean {
 
 	public Object getEntity() {
 		
-		if ( this.trapName_field.getText() != "" ){
-			theTrap.setName(this.trapName_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.trapCounterText_field.getText() != "") {
-			theTrap.setCounterMeasureDescription( this.trapCounterText_field.getText() );
-		} else {
-			//TODO: do something
-		}
-		if (this.trapTriggers_field.getText() != "") {
-			theTrap.setTriggers( this.trapTriggers_field.getText() );
-		} else {
-			//TODO: do something
-		}
-		if (this.trapXP_field.getText() != "") {
-			theTrap.setXp( Integer.parseInt( this.trapXP_field.getText() ) );
-		} else {
-			//TODO: do something
-		}
+		theTrap.setName(this.trapName_field.getText());
+		theTrap.setCounterMeasureDescription( this.trapCounterText_field.getText() );
+		theTrap.setTriggers( this.trapTriggers_field.getText() );
+		theTrap.setXp( Integer.parseInt( this.trapXP_field.getText() ) );
 		
 		Attack aAttack = (Attack) attackForm_bean.getEntity();
-		if (aAttack != null) {
-			theTrap.setAttack(aAttack);
-		} else {
-			//TODO: do something
-		}
+		theTrap.setAttack(aAttack);
 		return theTrap;
 	}
 	
@@ -423,6 +403,42 @@ public class TrapHazardForm implements FormBean {
 		
 		attackForm_bean.createPanelFromExistingEntity( theTrap.getAttack() );
 		
+	}
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if ( this.trapName_field.getText().equals("")){
+			isValidForm = false;
+			invalidFieldString += "Name is absent.\n";
+		}
+		if (this.trapCounterText_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The counter-measure description is absent.\n";
+		}
+		if (this.trapTriggers_field.getText().equals("") && this.trapType_list.getSelectedIndex() == 0) {
+			isValidForm = false;
+			invalidFieldString += "The trigger for the trap is absent.\n";
+		}
+		if (this.trapXP_field.getText().equals("") || this.trapXP_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The xp field is absent.\n";
+		}
+		Attack aAttack = (Attack) attackForm_bean.getEntity();
+		if (aAttack == null) {
+			isValidForm = false;
+			invalidFieldString += "This trap has no attack.\n";
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(trapForm_panel,
+										  invalidFieldString,
+										  "Trap/Hazard",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
 	}
 
 }

@@ -20,7 +20,7 @@ public class ResistanceForm implements FormBean {
 	public ResistanceForm() {
 		
 		resistanceForm_panel = new JPanel();
-		resistValue_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
+		resistValue_field = new JSpinner( new SpinnerNumberModel(0, -100, 100, 1) );
 		
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", controller.App_Root.language_locale);
 		
@@ -140,6 +140,25 @@ public class ResistanceForm implements FormBean {
 		
 		resistValue_field.setValue(theResistance.getResistanceValue());
 		
+	}
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if (((Integer) resistValue_field.getValue() ) == 0) {
+			isValidForm = false;
+			invalidFieldString += "Resistance value cannot be zero.\n";
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(resistanceForm_panel,
+										  invalidFieldString,
+										  "Resistance",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
 	}
 
 }

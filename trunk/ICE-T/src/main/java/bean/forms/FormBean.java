@@ -7,4 +7,5 @@ public interface FormBean {
 	public JPanel createEntityPanel();
 	public JPanel createPanelFromExistingEntity(Object usingThis);
 	public Object getEntity();
+	public boolean validateEntity();
 }

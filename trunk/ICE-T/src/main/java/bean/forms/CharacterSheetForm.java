@@ -33,7 +33,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	private CharacterSheet theCharacter;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
-	private JTextField name_field, playerName_field;
+	private JTextField name_field;
 	private JComboBox role_list, size_list; 
 	private JTextField xp_field;
 	private JSpinner lvl_field;
@@ -65,7 +65,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	
 	public CharacterSheetForm() {
 		name_field = new JTextField();
-		playerName_field = new JTextField();
 		xp_field = new JTextField();
 		speed_field = new JTextField();
 		init_field = new JTextField();
@@ -97,66 +96,67 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		return totalBean_panel;
 	}
-
-	public Object getEntity() {
 	
-		//TODO: this must be more robust!!!
-		if (name_field.getText() != "") {
-			theCharacter.setName(name_field.getText());
-		} else {
-			
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if (name_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The name field is absent.\n";
 		}
-		if (playerName_field.getText() != "") {
-			/*theCharacter.setPlayerName(playerName_field.getText());*/
-			//lol what!?
-		} else {
-			
+		if (xp_field.getText().equals("") || xp_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The xp field is zero or absent.\n";
 		}
-		if (xp_field.getText() != "") {
-			theCharacter.setXP( Integer.parseInt(xp_field.getText()) );
-		} else {
-			
+		if (speed_field.getText().equals("") || speed_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The speed field is zero or absent.\n";
 		}
-		if (speed_field.getText() != "") {
-			theCharacter.setSpeed( Integer.parseInt(speed_field.getText()) );
-		} else {
-			
+		if (init_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The initiative field is zero or absent.\n";
 		}
-		if (init_field.getText() != "") {
-			theCharacter.setInitiative( Integer.parseInt(init_field.getText()) );
-		} else {
-			
+		
+		if (maxHP_field.getText().equals("") || maxHP_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The Maximum HP field is zero or absent.\n";
 		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(characterForm_panel,
+										  invalidFieldString,
+										  "Character Sheet",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
+	}
+	
+	public Object getEntity() {
+		theCharacter.setName(name_field.getText());
+		theCharacter.setXP( Integer.parseInt(xp_field.getText()) );
+		theCharacter.setSpeed( Integer.parseInt(speed_field.getText()) );		
+		theCharacter.setInitiative( Integer.parseInt(init_field.getText()) );
+		theCharacter.setMaxHP( Integer.parseInt(maxHP_field.getText()) );
+		
 		if (pwr_field.getText() != "") {
 			theCharacter.setPowerSource(pwr_field.getText());
-		} else {
-			
-		}
-		if (maxHP_field.getText() != "") {
-			theCharacter.setMaxHP( Integer.parseInt(maxHP_field.getText()) );
-		} else {
-			
 		}
 		if (surgeNum_field.getText() != "") {
 			theCharacter.setSurgesPerDay( Integer.parseInt(surgeNum_field.getText()) );
-		} else {
-			
 		}
 		if (lang_field.getText() != "") {
 			theCharacter.setLanguages(lang_field.getText());
-		} else {
-			
 		}
 		if (racef_field.getText() != "") {
 			theCharacter.setRaceFeatures(racef_field.getText());
-		} else {
-			
 		}
 		if (misc_field.getText() != "") {
 			theCharacter.setMisc(misc_field.getText());
-		} else {
-			
 		}
+		
+		
 		return theCharacter;
 	}
 	
@@ -177,11 +177,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
 		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		name_field.setText(theCharacter.getName());
-		
-		//Player Name
-		JLabel playerName_label = new JLabel( entity_l10n.getString("PlayerName_entity") );
-		playerName_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-		playerName_field.setText(theCharacter.getName());		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
 		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
@@ -255,6 +250,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 
 			public void keyTyped(KeyEvent ke) {
 				int initiative = ke.getKeyChar() - '0';
+				if (ke.getKeyChar() == '-' ) {
+					return;
+				}
 				if (initiative < 0 || initiative > 9) { // ensure health is an integer
 					ke.consume();
 				}
@@ -349,9 +347,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 							.addComponent(name_label)
 							.addComponent(name_field))
 					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(playerName_label)
-							.addComponent(playerName_field))
-					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lvl_label)
 							.addComponent(lvl_field))
 					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -380,9 +375,6 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 						.addGroup( generalInfo_layout.createSequentialGroup()
 								.addComponent(name_label)
 								.addComponent(name_field))
-						.addGroup( generalInfo_layout.createSequentialGroup()
-								.addComponent(playerName_label)
-								.addComponent(playerName_field))
 						.addGroup( generalInfo_layout.createSequentialGroup()
 								.addComponent(lvl_label)
 								.addComponent(lvl_field))

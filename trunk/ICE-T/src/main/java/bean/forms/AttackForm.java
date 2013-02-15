@@ -1,6 +1,7 @@
 package bean.forms;
 
 import javax.swing.*;
+
 import controller.App_Root;
 import java.awt.event.*;
 import java.util.ResourceBundle;
@@ -447,46 +448,22 @@ public class AttackForm implements FormBean {
 	}
 
 	public Object getEntity() {
-		if (this.attackName_field.getText() != "") {
-			theAttack.setAttackName(this.attackName_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackPrimary_field.getText() != "") {
-			theAttack.setPrimaryTarget(this.attackPrimary_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackSecondary_field.getText() != "") {
-			theAttack.setSecondaryTarget(this.attackSecondary_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackAccessories_field.getText() != "") {
-			theAttack.setAccessories(this.attackAccessories_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackPwr_field.getText() != "") {
-			theAttack.setPowerSource(this.attackPwr_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackHit_field.getText() != "") {
-			theAttack.setHit(this.attackHit_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackMiss_field.getText() != "") {
-			theAttack.setMiss(this.attackMiss_field.getText());
-		} else {
-			//TODO: do something
-		}
-		if (this.attackTrigger_field.getText() != "") {
-			theAttack.setTrigger(this.attackTrigger_field.getText());
-		} else {
-			//TODO: do something
-		}
+		
+		theAttack.setAttackName(this.attackName_field.getText());
+		
+		theAttack.setPrimaryTarget(this.attackPrimary_field.getText());
+		
+		theAttack.setSecondaryTarget(this.attackSecondary_field.getText());
+		
+		theAttack.setAccessories(this.attackAccessories_field.getText());
+		
+		theAttack.setPowerSource(this.attackPwr_field.getText());
+		
+		theAttack.setHit(this.attackHit_field.getText());
+		
+		theAttack.setMiss(this.attackMiss_field.getText());
+		
+		theAttack.setTrigger(this.attackTrigger_field.getText());
 		theAttackType = (Attack_Type) attackType_form.getEntity();
 		theAttack.setAttackType(theAttackType);
 		return theAttack;
@@ -513,6 +490,34 @@ public class AttackForm implements FormBean {
 		attackTrigger_field.setText(theAttack.getTrigger());
 		theAttackType = theAttack.getAttackType();
 		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+	}
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if (this.attackName_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "Attack name is absent.\n";
+		}
+		if (this.attackPrimary_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "Primary target is absent.\n";
+		}
+		if (this.attackHit_field.getText() != "") {
+			isValidForm = false;
+			invalidFieldString += "Hit field is absent.\n";
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(attack_panel,
+										  invalidFieldString,
+										  "Attack",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		
+		return isValidForm;
 	}
 
 }

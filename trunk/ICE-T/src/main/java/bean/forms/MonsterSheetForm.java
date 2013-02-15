@@ -24,13 +24,12 @@ import entity.Resistance;
  * 		add resistances and get them out. 
  */
 public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
-	// TODO: remove player_name?
 	private JPanel totalBean_panel;
 	GroupLayout totalBean_layout;
 	JButton next_button;
 
 	private CharacterSheet theMonster;
-	private JPanel characterForm_panel;
+	private JPanel monsterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
 	private JTextField name_field;
 	private JComboBox role_list, size_list;
@@ -96,59 +95,22 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 	}
 
 	public Object getEntity() {
+		theMonster.setName(name_field.getText());
+		theMonster.setXP(Integer.parseInt(xp_field.getText()));
+		theMonster.setSpeed(Integer.parseInt(speed_field.getText()));
+		theMonster.setInitiative(Integer.parseInt(init_field.getText()));
+		theMonster.setMaxHP(Integer.parseInt(maxHP_field.getText()));
+		theMonster.setSurgesPerDay(Integer.parseInt(surgeNum_field.getText()));
+		theMonster.setLanguages(lang_field.getText());
+		theMonster.setRaceFeatures(racef_field.getText());
+		theMonster.setMisc(misc_field.getText());
 
-		// TODO: this must be more robust!!!
-		if (name_field.getText() != "") {
-			theMonster.setName(name_field.getText());
-		} else {
-
-		}
-		if (xp_field.getText() != "") {
-			theMonster.setXP(Integer.parseInt(xp_field.getText()));
-		} else {
-
-		}
-		if (speed_field.getText() != "") {
-			theMonster.setSpeed(Integer.parseInt(speed_field.getText()));
-		} else {
-
-		}
-		if (init_field.getText() != "") {
-			theMonster.setInitiative(Integer.parseInt(init_field.getText()));
-		} else {
-
-		}
-		if (maxHP_field.getText() != "") {
-			theMonster.setMaxHP(Integer.parseInt(maxHP_field.getText()));
-		} else {
-
-		}
-		if (surgeNum_field.getText() != "") {
-			theMonster.setSurgesPerDay(Integer.parseInt(surgeNum_field.getText()));
-		} else {
-
-		}
-		if (lang_field.getText() != "") {
-			theMonster.setLanguages(lang_field.getText());
-		} else {
-
-		}
-		if (racef_field.getText() != "") {
-			theMonster.setRaceFeatures(racef_field.getText());
-		} else {
-
-		}
-		if (misc_field.getText() != "") {
-			theMonster.setMisc(misc_field.getText());
-		} else {
-
-		}
 		return theMonster;
 	}
 
 	private void createPanel() {
-		characterForm_panel = new JPanel();
-		GroupLayout characterForm_layout = new GroupLayout(characterForm_panel);
+		monsterForm_panel = new JPanel();
+		GroupLayout characterForm_layout = new GroupLayout(monsterForm_panel);
 
 		final ResourceBundle entity_l10n = ResourceBundle.getBundle(
 				"filters.beanGUI_l10n.Entity",
@@ -1434,7 +1396,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 					resistance_list_model.remove(selected);
 					theMonster.removeResistanceAt(selected);
 				}
-				characterForm_panel.repaint();
+				monsterForm_panel.repaint();
 			}
 		});
 		resistance_list_model = new DefaultListModel();
@@ -1512,7 +1474,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 					attack_list_model.remove(selected);
 					theMonster.removeAttackAt(selected);
 				}
-				characterForm_panel.repaint();
+				monsterForm_panel.repaint();
 			}
 		});
 
@@ -1576,8 +1538,8 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 						.addComponent(skill_panel))
 				);
 
-		characterForm_panel.setLayout(characterForm_layout);
-		characterForm_panel.setAutoscrolls(true);
+		monsterForm_panel.setLayout(characterForm_layout);
+		monsterForm_panel.setAutoscrolls(true);
 
 		next_button = new JButton(entity_l10n.getString("Next_button"));
 		next_button.addActionListener(this);
@@ -1586,10 +1548,10 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 		totalBean_layout = new GroupLayout(totalBean_panel);
 		totalBean_layout.setHorizontalGroup(totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addComponent(next_button)
-				.addComponent(characterForm_panel));
+				.addComponent(monsterForm_panel));
 		totalBean_layout.setVerticalGroup(totalBean_layout.createSequentialGroup()
 				.addComponent(next_button)
-				.addComponent(characterForm_panel));
+				.addComponent(monsterForm_panel));
 		totalBean_panel.setLayout(totalBean_layout);
 	}
 
@@ -1637,8 +1599,8 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 		JButton theButton = (JButton) e.getSource();
 		if (theButton.getText().equals(entity_l10n.getString("Next_button"))) {
 			theButton.setText(entity_l10n.getString("Back_button"));
-			totalBean_layout.removeLayoutComponent(characterForm_panel);
-			characterForm_panel.setVisible(false);
+			totalBean_layout.removeLayoutComponent(monsterForm_panel);
+			monsterForm_panel.setVisible(false);
 			attackForm_panel.setVisible(true);
 			totalBean_layout.setHorizontalGroup(totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 					.addComponent(next_button)
@@ -1652,17 +1614,53 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 				entity_l10n.getString("Back_button"))) {
 			theButton.setText(entity_l10n.getString("Next_button"));
 			totalBean_layout.removeLayoutComponent(attackForm_panel);
-			characterForm_panel.setVisible(true);
+			monsterForm_panel.setVisible(true);
 			attackForm_panel.setVisible(false);
 			totalBean_layout.setHorizontalGroup(totalBean_layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 					.addComponent(next_button)
-					.addComponent(characterForm_panel));
+					.addComponent(monsterForm_panel));
 			totalBean_layout.setVerticalGroup(totalBean_layout.createSequentialGroup()
 					.addComponent(next_button)
-					.addComponent(characterForm_panel));
+					.addComponent(monsterForm_panel));
 			totalBean_panel.setLayout(totalBean_layout);
 		}
 
+	}
+
+	public boolean validateEntity() {
+		boolean isValidForm = true;
+		String invalidFieldString = "";
+		
+		if (name_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The name field is absent.\n";
+		}
+		if (xp_field.getText().equals("") || xp_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The xp field is zero or absent.\n";
+		}
+		if (speed_field.getText().equals("") || speed_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The speed field is zero or absent.\n";
+		}
+		if (init_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The initiative field is zero or absent.\n";
+		}
+		
+		if (maxHP_field.getText().equals("") || maxHP_field.getText().equals("0")) {
+			isValidForm = false;
+			invalidFieldString += "The Maximum HP field is zero or absent.\n";
+		}
+		
+		if (!isValidForm) {
+			JOptionPane.showMessageDialog(monsterForm_panel,
+										  invalidFieldString,
+										  "Monster Sheet",
+										  JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return isValidForm;
 	}
 
 }

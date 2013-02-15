@@ -19,4 +19,9 @@ public class TeamForm implements FormBean {
 		return null;
 	}
 
+	public boolean validateEntity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

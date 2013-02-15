@@ -103,10 +103,11 @@ public class New_Tab implements ActionListener/*, ListSelectionListener*/ {
 	}
 	
 	private void saveNewEntity() {
-		controller_reference.saveEntity();
-		
-		newEntity_window.setVisible(false);
-		newEntity_window.dispose();
+		if (controller_reference.isValidEntity()) {
+			controller_reference.saveEntity();
+			newEntity_window.setVisible(false);
+			newEntity_window.dispose();
+		}
 	}
 	
 }
