@@ -81,6 +81,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	
 	public JPanel createEntityPanel() {
 		theCharacter = new CharacterSheet();
+		theCharacter.setNPC(false);
 		
 		createPanel();
 		
@@ -90,6 +91,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof CharacterSheet) {
 			theCharacter = (CharacterSheet) usingThis;
+			if (theCharacter.isNPC()) {
+				theCharacter = new CharacterSheet();
+			}
 		}
 		
 		createPanel();
@@ -177,6 +181,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
 		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		name_field.setText(theCharacter.getName());
+		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
 		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
@@ -1429,6 +1434,8 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 //				.addComponent(addAttack_button)
 				);
 		
+		characterForm_layout.linkSize(SwingConstants.HORIZONTAL, ability_panel, defense_panel, health_panel, otherInfo_panel);
+	
 		characterForm_panel.setLayout(characterForm_layout);
 		characterForm_panel.setAutoscrolls(true);
 		

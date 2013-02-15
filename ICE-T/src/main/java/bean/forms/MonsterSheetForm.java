@@ -78,7 +78,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 
 	public JPanel createEntityPanel() {
 		theMonster = new CharacterSheet();
-
+		theMonster.setNPC(true);
 		createPanel();
 
 		return totalBean_panel;
@@ -87,6 +87,9 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof CharacterSheet) {
 			theMonster = (CharacterSheet) usingThis;
+			if (!theMonster.isNPC()) {
+				theMonster = new CharacterSheet();
+			}
 		}
 
 		createPanel();

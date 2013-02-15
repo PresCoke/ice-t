@@ -287,6 +287,7 @@ public class AttackForm implements FormBean {
 		attackTrigger_field = new JTextField();
 		
 		attackType_form = new AttackTypeForm();
+		theAttackType = new Attack_Type();
 		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 
 		GroupLayout attack_layout = new GroupLayout(attack_panel);

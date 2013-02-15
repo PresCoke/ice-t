@@ -56,7 +56,7 @@ public class EditEntity {
 		if (entityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			editableEntity = new CharacterSheetForm();
 		} else if (entityType.equals(entityNames.getString("Monster_entity"))) {
-			editableEntity = new CharacterSheetForm();
+			editableEntity = new MonsterSheetForm();
 		} else if (entityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			editableEntity = new TrapHazardForm();
 		} else if (entityType.equals(entityNames.getString("Effect_entity"))) {

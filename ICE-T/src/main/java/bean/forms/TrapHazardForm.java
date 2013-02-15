@@ -363,7 +363,7 @@ public class TrapHazardForm implements FormBean {
 	}
 	
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
-		if (usingThis instanceof Resistance) {
+		if (usingThis instanceof TrapHazard) {
 			theTrap = (TrapHazard) usingThis;
 		}
 		createPanel();
@@ -425,7 +425,7 @@ public class TrapHazardForm implements FormBean {
 			isValidForm = false;
 			invalidFieldString += "The xp field is absent.\n";
 		}
-		if (attackForm_bean.validateEntity()) {
+		if (!attackForm_bean.validateEntity()) {
 			isValidForm = false;
 		}
 		
