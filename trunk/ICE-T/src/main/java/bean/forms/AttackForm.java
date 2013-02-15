@@ -504,7 +504,7 @@ public class AttackForm implements FormBean {
 			isValidForm = false;
 			invalidFieldString += "Primary target is absent.\n";
 		}
-		if (this.attackHit_field.getText() != "") {
+		if (this.attackHit_field.getText().equals("")) {
 			isValidForm = false;
 			invalidFieldString += "Hit field is absent.\n";
 		}
