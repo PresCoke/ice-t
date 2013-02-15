@@ -32,7 +32,7 @@ public interface CharacterSheetDao {
 	 * @param id of the character sheet
 	 * @return character sheet associated to the id
 	 */
-	public CharacterSheet getCharacterSheets(int characterSheetId);
+	public CharacterSheet getCharacterSheet(int characterSheetId);
 	
 	/**
 	 * Save a character sheet in the database

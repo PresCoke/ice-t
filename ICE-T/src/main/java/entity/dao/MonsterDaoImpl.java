@@ -65,6 +65,10 @@ public class MonsterDaoImpl implements MonsterDao {
             m.setInitiative(initiative);
             m.setSecondWind(secondWind);
             m.setTempHP(tempHP);
+            if (!characterSheet.isNPC()){
+                logger.error("The character sheet is not supposed to be associated to a Monster but a Player.");
+            	throw new DAOException();
+            }
             m.setCharacterSheet(characterSheet);
             monsterId = (Integer) session.save(m);
             transaction.commit();
@@ -72,7 +76,10 @@ public class MonsterDaoImpl implements MonsterDao {
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving monster " + monsterName + " in the database --- " + e.getMessage());
-        } finally {
+        } catch (DAOException e) {
+            transaction.rollback();
+            logger.fatal("Error while saving monster " + monsterName + " in the database.");
+		} finally {
             session.close();
         }
         return monsterId;
@@ -135,6 +142,7 @@ public class MonsterDaoImpl implements MonsterDao {
             transaction = session.beginTransaction();
             Monster m = (Monster) session.get(Monster.class, monsterId);
             logger.info("Deletion of monster " + m.getMonsterName());
+            m.getCharacterSheet().removeMonster(m);
             session.delete(m);
             transaction.commit();
         	logger.info("Monster " + monsterId + " was successfully removed from the database.");

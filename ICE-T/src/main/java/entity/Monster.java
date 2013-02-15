@@ -61,7 +61,7 @@ public class Monster implements EntityM, Comparable<Monster> {
 	@JoinColumn (name="Team_id")
 	private Team team;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="CharacterSheet_id")
 	private CharacterSheet characterSheet;
 	

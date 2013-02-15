@@ -56,6 +56,7 @@ public interface PlayerDao {
 	
 	/**
 	 * Update a player in the database and Associate this player to a team
+	 * This function does not update the character sheet
 	 * @param player
 	 * @param team
 	 */

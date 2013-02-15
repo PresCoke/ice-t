@@ -62,6 +62,10 @@ public class PlayerDaoImpl implements PlayerDao {
             p.setInitiative(initiative);
             p.setSecondWind(secondWind);
             p.setTempHP(tempHP);
+            if (characterSheet.isNPC()){
+                logger.error("The character sheet is not supposed to be associated to a Player but a Monster.");
+            	throw new DAOException();
+            }
             p.setCharacterSheet(characterSheet);
             logger.debug("Setting player's stats");
             Stats stats = new Stats();
@@ -78,6 +82,9 @@ public class PlayerDaoImpl implements PlayerDao {
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving player " + playerName + " in the database --- " + e.getMessage());
+        } catch (DAOException e) {
+            transaction.rollback();
+            logger.fatal("Error while saving player " + playerName + " in the database.");
         } finally {
             session.close();
         }

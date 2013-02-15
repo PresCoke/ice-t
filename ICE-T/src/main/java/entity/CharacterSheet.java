@@ -145,7 +145,12 @@ public class CharacterSheet implements EntityM {
 	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
-	private Player creature;
+	private Player player;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Monster> monsters;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
@@ -755,12 +760,12 @@ public class CharacterSheet implements EntityM {
 		return types;
 	}
 	
-	public Player getCreature() {
-		return creature;
+	public Player getPlayer() {
+		return player;
 	}
 
-	public void setCreature(Player creature) {
-		this.creature = creature;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	public List<Resistance> getResistances() {
@@ -777,6 +782,38 @@ public class CharacterSheet implements EntityM {
 
 	public void setNPC(boolean isNPC) {
 		this.isNPC = isNPC;
+	}
+
+	public List<Monster> getMonsters() {
+		return monsters;
+	}
+
+	public void setMonsters(List<Monster> monsters) {
+		this.monsters = monsters;
+	}
+	
+	public void removeAllMonsters() {
+		this.monsters.removeAll(monsters);
+	}
+	
+	public void addMonster(Monster addThisResistance) {
+		this.monsters.add(addThisResistance);
+	}
+	
+	public Monster getMonsterAt(int index) {
+		return this.monsters.get(index);
+	}
+	
+	public Monster removeMonsterAt(int index) throws IndexOutOfBoundsException {
+		return this.monsters.remove(index);
+	}
+	
+	public boolean removeMonster(Monster thisMonster) {
+		return this.monsters.remove(thisMonster);
+	}
+	
+	public int getNumberOfMonsters() {
+		return this.monsters.size();
 	}
 
 	/**

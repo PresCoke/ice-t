@@ -18,7 +18,7 @@ public class TallyDaoImpl implements TallyDao {
 	}
 	
 	public int saveTally (Tally tally) {
-    	logger.debug("A new tally named" + tally.getName() + " is about to be created in the database.");
+    	logger.debug("A new tally named " + tally.getName() + " is about to be created in the database.");
     	Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         int tallyId = -1;

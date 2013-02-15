@@ -2,6 +2,7 @@ package entity.dao;
 
 import java.util.List;
 
+import entity.Monster;
 import entity.Player;
 import entity.Team;
 import entity.TrapHazard;
@@ -26,7 +27,7 @@ public interface TeamDao {
 	 * @param creatures
 	 * @return team's id stored in the database
 	 */
-	public int saveTeam(String name, List<Player> creatures);
+	public int saveTeam(String name, List<Player> players);
 	
 	/**
 	 * Update a team in the database
@@ -34,26 +35,32 @@ public interface TeamDao {
 	 * @param name
 	 * @param creatures
 	 */
-	public void updateTeam(int teamId, String name, List<Player> creatures);
+	public void updateTeam(int teamId, String name, List<Player> players);
 	
 	/**
-	 * Save a team in the database
+	 * Save a NPC team in the database
 	 * @param name
-	 * @param creatures
+	 * @param monsters
 	 * @param traphazards
 	 * @return team's id stored in the database
 	 */
-	public int saveNPCteam(String name, List<Player> creatures, List<TrapHazard> traphazards);
+	public int saveNPCteam(String name, List<Monster> monsters, List<TrapHazard> traphazards);
 	
 	/**
-	 * Update a team in the database
+	 * Update a NPC team in the database
 	 * @param teamId
 	 * @param name
-	 * @param creatures
+	 * @param monsters
 	 * @param traphazards
 	 */
-	public void updateNPCteam(int teamId, String name, List<Player> creatures, List<TrapHazard> traphazards);
+	public void updateNPCteam(int teamId, String name, List<Monster> monsters, List<TrapHazard> traphazards);
 		
+	/**
+	 * Delete a NPC team from the database
+	 * @param team's id
+	 */
+	public void deleteNPCTeam(int teamId);
+	
 	/**
 	 * Delete a team from the database
 	 * @param team's id

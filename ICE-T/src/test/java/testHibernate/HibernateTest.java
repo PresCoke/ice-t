@@ -17,6 +17,7 @@ import entity.Attack;
 import entity.Attack_Type;
 import entity.CharacterSheet;
 import entity.CombatEncounter;
+import entity.Monster;
 import entity.Player;
 import entity.EntityEnum;
 import entity.EntityEnum.CS_Monster_Origin;
@@ -41,6 +42,8 @@ import entity.dao.CharacterSheetDao;
 import entity.dao.CharacterSheetDaoImpl;
 import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
+import entity.dao.MonsterDao;
+import entity.dao.MonsterDaoImpl;
 import entity.dao.PlayerDao;
 import entity.dao.PlayerDaoImpl;
 import entity.dao.EffectDao;
@@ -68,18 +71,18 @@ public class HibernateTest {
 		resistances.add(r2);
 		
 		List<Attack_Type> attacksTypes = new ArrayList<Attack_Type>();
-//		A_Area t = new A_Area();
-//		t.setPersonal(true);
-//		t.setArea_range(100);
-//		t.setArea_size(100);
-//		t.setArea_type(EntityEnum.A_Area_Type.burst);
-//		attacksTypes.add(t);
-//		A_Area t2 = new A_Area();
-//		t2.setPersonal(true);
-//		t2.setArea_range(0);
-//		t2.setArea_size(0);
-//		t2.setArea_type(EntityEnum.A_Area_Type.wall);
-//		attacksTypes.add(t2);
+		A_Area t = new A_Area();
+		t.setPersonal(true);
+		t.setArea_range(100);
+		t.setArea_size(100);
+		t.setArea_type(EntityEnum.A_Area_Type.burst);
+		attacksTypes.add(t);
+		A_Area t2 = new A_Area();
+		t2.setPersonal(true);
+		t2.setArea_range(0);
+		t2.setArea_size(0);
+		t2.setArea_type(EntityEnum.A_Area_Type.wall);
+		attacksTypes.add(t2);
 //		A_Close t = new A_Close();
 //		t.setPersonal(false);
 //		t.setCloseType(EntityEnum.A_Close_Type.burst);
@@ -99,59 +102,63 @@ public class HibernateTest {
 //		t2.setL_range(50);
 //		t2.setS_range(10);
 //		attacksTypes.add(t2);
-//		
+		
 		List<Attack> attacks = new ArrayList<Attack>();
-//		Attack a1 = new Attack("AttackTrap3");
-//		a1.setPrimaryTarget("Bill");
-//		a1.setSecondaryTarget("Jack");
-//		a1.setAccessories("Gun");
-//		a1.setPowerSource("Gun");
-//		a1.setFrequency(10);
-//		a1.setHit("2D16");
-//		a1.setMiss("2D4");
-//		a1.setBasic(true);
-//		a1.setTrigger("The player can use that attack whenever");
-//		a1.setEffectType(EntityEnum.A_Effect_Type.fear);
-//		a1.setAbility(EntityEnum.A_Ability.STR);
-//		a1.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
-//		a1.setDefense(EntityEnum.A_Defense.REF);
-//		a1.setSustain(EntityEnum.A_Sustain.standard);
-//		a1.setAction(EntityEnum.A_Action.minor);
-//		a1.setUseType(EntityEnum.A_Use_Type.atWill);
-//		attacks.add(a1);
-//		Attack a2 = new Attack("AttackTrap4");
-//		a2.setPrimaryTarget("Bill");
-//		a2.setSecondaryTarget("Jack");
-//		a2.setAccessories("Gun");
-//		a2.setPowerSource("Gun");
-//		a2.setFrequency(10);
-//		a2.setHit("2D16");
-//		a2.setMiss("2D4");
-//		a2.setBasic(true);
-//		a2.setTrigger("The player can use that attack whenever");
-//		a2.setEffectType(EntityEnum.A_Effect_Type.fear);
-//		a2.setAbility(EntityEnum.A_Ability.STR);
-//		a2.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
-//		a2.setDefense(EntityEnum.A_Defense.REF);
-//		a2.setSustain(EntityEnum.A_Sustain.standard);
-//		a2.setAction(EntityEnum.A_Action.minor);
-//		a2.setUseType(EntityEnum.A_Use_Type.atWill);
-//		attacks.add(a2);
+		Attack a1 = new Attack("AttackZombie1");
+		a1.setPrimaryTarget("Bill");
+		a1.setSecondaryTarget("Jack");
+		a1.setAccessories("Gun");
+		a1.setPowerSource("Gun");
+		a1.setFrequency(10);
+		a1.setHit("2D16");
+		a1.setMiss("2D4");
+		a1.setBasic(true);
+		a1.setTrigger("The player can use that attack whenever");
+		a1.setEffectType(EntityEnum.A_Effect_Type.fear);
+		a1.setAbility(EntityEnum.A_Ability.STR);
+		a1.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
+		a1.setDefense(EntityEnum.A_Defense.REF);
+		a1.setSustain(EntityEnum.A_Sustain.standard);
+		a1.setAction(EntityEnum.A_Action.minor);
+		a1.setUseType(EntityEnum.A_Use_Type.atWill);
+		attacks.add(a1);
+		Attack a2 = new Attack("AttackZombie2");
+		a2.setPrimaryTarget("Bill");
+		a2.setSecondaryTarget("Jack");
+		a2.setAccessories("Gun");
+		a2.setPowerSource("Gun");
+		a2.setFrequency(10);
+		a2.setHit("2D16");
+		a2.setMiss("2D4");
+		a2.setBasic(true);
+		a2.setTrigger("The player can use that attack whenever");
+		a2.setEffectType(EntityEnum.A_Effect_Type.fear);
+		a2.setAbility(EntityEnum.A_Ability.STR);
+		a2.setDamageType(EntityEnum.CS_Resistance_Type.thunder);
+		a2.setDefense(EntityEnum.A_Defense.REF);
+		a2.setSustain(EntityEnum.A_Sustain.standard);
+		a2.setAction(EntityEnum.A_Action.minor);
+		a2.setUseType(EntityEnum.A_Use_Type.atWill);
+		attacks.add(a2);
 	
 		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 
-		csDao.saveCharacterSheet("Terminator", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
-			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
-			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
-			resistances, attacks, attacksTypes, false);
-//
+//		csDao.saveCharacterSheet("Zombie", 10, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
+//			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
+//			resistances, attacks, attacksTypes, false);
 //		
-//		csDao.updateCharacterSheet(1, "T-1000", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//		csDao.updateCharacterSheet(3, "Zombie", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
 //			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 0, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes, true);	
-//		
-//		
+//
+//
+//		MonsterDao mDao = new MonsterDaoImpl();
+//		mDao.saveMonster("Zombie", 10, 15, 16, true, 20, csDao.getCharacterSheet(3));
+//		mDao.saveMonster("Zombie2", 10, 15, 16, true, 20, csDao.getCharacterSheet(3));
+//		mDao.updateMonster(1, "Wolf", 10, 15, 16, false, 20);
+//		mDao.deleteMonster(1);
 //		csDao.deleteCharacterSheet(1);
 //		csDao.deleteCharacterSheet(6);
 //		
@@ -165,6 +172,8 @@ public class HibernateTest {
 //		Attack_TypeDao attacktypeDao = new Attack_TypeDaoImpl();
 //		attacktypeDao.deleteAttackType(2);
 //		
+//		TrapHazardDao thDao = new TrapHazardDaoImpl();
+//
 //		thDao.saveTrapHazard("BigTrap", 5, 10, T_CounterMeasureSkill.bluff , "When a creature steps on it", 6, 18, 
 //				"none", EntityEnum.T_Type.trap, EntityEnum.T_Role.obstacle, EntityEnum.T_CounterMeasureSkill.heal,
 //				a1, t);
@@ -183,27 +192,37 @@ public class HibernateTest {
 //			logger.debug("Creature's name = " + c.getPlayerName() + " - Creature's CS = " + c.getCharacterSheet().getName());
 //		}
 //		
-//		CharacterSheet cs = csDao.getCharacterSheets(2);
-//		
-//		CreatureDao cDao = new CreatureDaoImpl();
+//		CharacterSheet cs = csDao.getCharacterSheet(2);
+		
+		PlayerDao pDao = new PlayerDaoImpl();
+
+//		pDao.savePlayer("Tim", 100, 10, 10, true, 10, cs);
+//		pDao.savePlayer("James", 100, 10, 20, true, 10, cs);
 //
-//		cDao.saveCreature("Tim", 100, 10, 10, true, 10, cs);
-//		cDao.saveCreature("James", 100, 10, 20, true, 10, cs);
-//
-//		List<Creature> creatures = new ArrayList<Creature>();
-//		creatures = cDao.getAllCreatures();
-//		creatures.remove(0);
+//		List<Player> players = new ArrayList<Player>();
+//		players = pDao.getAllPlayers();
+//		players.remove(0);
 //		
-//		TrapHazardDao thDao = new TrapHazardDaoImpl();
-//		List<TrapHazard> traphazards = new ArrayList<TrapHazard>();
-//		traphazards.add(thDao.getTrapHazard(1));
-//		traphazards.add(thDao.getTrapHazard(2));
-//
-//		TeamDao teamDao = new TeamDaoImpl();
-//		teamDao.saveNPCteam("NPC2", creatures, traphazards);
-//		teamDao.updateNPCteam(1, "NPCFuckOff", creatures, traphazards);
-//		
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		List<TrapHazard> traphazards = new ArrayList<TrapHazard>();
+		traphazards.add(thDao.getTrapHazard(1));
+		traphazards.add(thDao.getTrapHazard(2));
+
+		MonsterDao mDao = new MonsterDaoImpl();
+		List<Monster> monsters = mDao.getAllMonsters();
+//		monsters.remove(1);
+
+		
+		
+		TeamDao teamDao = new TeamDaoImpl();
+		
+//		teamDao.saveTeam("iceTeam", players);
+//		teamDao.updateTeam(1, "iceTeamBig", players);
 //		teamDao.deleteTeam(1);
+		
+//		teamDao.saveNPCteam("NPC1", monsters, traphazards);
+		teamDao.updateNPCteam(2, "NPC1", monsters, traphazards);
+//		teamDao.deleteNPCTeam(1);
 //
 //		
 //		
@@ -222,20 +241,20 @@ public class HibernateTest {
 //		effectDao.deleteEffects(effectsIds);
 //		
 //		
-//		List<Rewards> rewards = new ArrayList<Rewards>();
-//		Rewards rew1 = new Rewards(20, "Gold");
-//		Rewards rew2 = new Rewards(50, "Gold & Silver");
-//		Rewards rew3 = new Rewards(110, "Sword");
-//		rewards.add(rew1);
-//		rewards.add(rew2);
+		List<Rewards> rewards = new ArrayList<Rewards>();
+		Rewards rew1 = new Rewards(20, "Gold");
+		Rewards rew2 = new Rewards(50, "Gold & Silver");
+		Rewards rew3 = new Rewards(110, "Sword");
+		rewards.add(rew1);
+		rewards.add(rew2);
 //		rewards.add(rew3);
-//
-//		Tally tally = new Tally("Score");
-//		List<Tuple> tuples = new ArrayList<Tuple>();
-//		Tuple tuple1 = new Tuple("tuple4", 5, 6);
-//		Tuple tuple2 = new Tuple("tuple2", 15, 8);
-//		tuples.add(tuple1);
-//		tuples.add(tuple2);
+
+		Tally tally = new Tally("ScoreNPC");
+		List<Tuple> tuples = new ArrayList<Tuple>();
+		Tuple tuple1 = new Tuple("tuple4", 5, 6);
+		Tuple tuple2 = new Tuple("tuple2", 15, 8);
+		tuples.add(tuple1);
+		tuples.add(tuple2);
 //
 //		CreatureDao cDao = new CreatureDaoImpl();
 //		List<Creature> creatures = new ArrayList<Creature>();
@@ -246,11 +265,11 @@ public class HibernateTest {
 //		teamDao.saveTeam("IceTeam1", creatures);
 //		teamDao.saveTeam("IceTeam2", creatures);
 //		
-//		List<Team> teams = new ArrayList<Team>();
-//		Team team1 = teamDao.getTeam(1);
-//		Team team2 = teamDao.getTeam(2);
-//		teams.add(team1);
-//		teams.add(team2);
+		List<Team> teams = new ArrayList<Team>();
+		Team team1 = teamDao.getTeam(1);
+		Team team2 = teamDao.getTeam(2);
+		teams.add(team1);
+		teams.add(team2);
 //		List<TrapHazard> traphazards = new ArrayList<TrapHazard>();
 //		TrapHazardDao thDao = new TrapHazardDaoImpl();
 //		TrapHazard th1 = thDao.getTrapHazard(1);
@@ -258,8 +277,10 @@ public class HibernateTest {
 //		traphazards.add(th1);
 //		traphazards.add(th2);
 //
-//		ceDao.saveCombatEncounter("CE1", "Game almost over", 1, rewards, tally, tuples, teams, traphazards);
-//		ceDao.updateCombatEncounter(1,"CE2", "Game almost over", 2, rewards, tally, tuples, teams, traphazards);
+		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+
+//		ceDao.saveCombatEncounter("CE1", "Game almost over", 1, rewards, tally, tuples, teams);
+		ceDao.updateCombatEncounter(1,"CE2", "Game almost over", 2, rewards, tally, tuples, teams);
 //		ceDao.deleteCombatEncounter(1);
 //		ceDao.readAllCombatEncounters();
 //		
@@ -268,7 +289,6 @@ public class HibernateTest {
 //	
 //		
 //		
-//		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
 //		CombatEncounter ce = ceDao.getCombatEncounter(1);
 //		List<Creature> creatures = ce.organizeCreaturesByInitiative();
 //		for (Creature c : creatures){

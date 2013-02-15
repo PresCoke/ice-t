@@ -47,7 +47,12 @@ public class Team implements EntityM {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
-	private List<Player> creatures;
+	private List<Player> players;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+		org.hibernate.annotations.CascadeType.PERSIST})
+	private List<Monster> monsters;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
@@ -60,7 +65,8 @@ public class Team implements EntityM {
 	 */
 	public Team() {
 		this.name= "";
-		this.creatures = new ArrayList<Player>();
+		this.players = new ArrayList<Player>();
+		this.monsters = new ArrayList<Monster>();
 	}
 	
 	/**
@@ -69,7 +75,8 @@ public class Team implements EntityM {
 	 */
 	public Team(String name) {
 		this.name=name;
-		this.creatures = new ArrayList<Player>();
+		this.players = new ArrayList<Player>();
+		this.monsters = new ArrayList<Monster>();
 	}
 
 	/**
@@ -99,42 +106,85 @@ public class Team implements EntityM {
 		this.name = name;
 	}
 	
-	public List<Player> getCreatures() {
-		return creatures;
+	public List<Player> getPlayers() {
+		return players;
 	}
 
-	public void setCreatures(List<Player> creatures) {
-		this.creatures = creatures;
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
 	
-	public void removeAllCreatures() {
-		this.creatures.removeAll(creatures);
+	public void removeAllPlayers() {
+		this.players.removeAll(players);
 	}
 	
-	public void addCreature(Player addThisCreature) {
-		this.creatures.add(addThisCreature);
+	public void addPlayer(Player addThisPlayer) {
+		this.players.add(addThisPlayer);
 	}
 	
-	public Player getCreatureAt(int index) {
-		return this.creatures.get(index);
+	public Player getPlayerAt(int index) {
+		return this.players.get(index);
 	}
 	
-	public Player removeCreatureAt(int index) throws IndexOutOfBoundsException {
-		return this.creatures.remove(index);
+	public Player removePlayerAt(int index) throws IndexOutOfBoundsException {
+		return this.players.remove(index);
 	}
 	
-	public boolean removeCreature(Player thisCreature) {
-		return this.creatures.remove(thisCreature);
+	public boolean removePlayer(Player thisPlayer) {
+		return this.players.remove(thisPlayer);
 	}
 	
-	public int getNumberOfCreatures() {
-		return this.creatures.size();
+	public int getNumberOfPlayers() {
+		return this.players.size();
 	}
 	
-	public int getIndexOf (Player thisCreature){
+	public int getIndexOf (Player thisPlayer){
 		int index = 0;
-		for (Player c : creatures){
-			if (c.getPlayerName().equals(thisCreature.getPlayerName())){
+		for (Player p : players){
+			if (p.getPlayerName().equals(thisPlayer.getPlayerName())){
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+	
+	public List<Monster> getMonsters() {
+		return monsters;
+	}
+
+	public void setMonsters(List<Monster> monsters) {
+		this.monsters = monsters;
+	}
+	
+	public void removeAllMonsters() {
+		this.monsters.removeAll(monsters);
+	}
+	
+	public void addMonster(Monster addThisMonster) {
+		this.monsters.add(addThisMonster);
+	}
+	
+	public Monster getMonsterAt(int index) {
+		return this.monsters.get(index);
+	}
+	
+	public Monster removeMonsterAt(int index) throws IndexOutOfBoundsException {
+		return this.monsters.remove(index);
+	}
+	
+	public boolean removeMonster(Monster thisMonster) {
+		return this.monsters.remove(thisMonster);
+	}
+	
+	public int getNumberOfMonsters() {
+		return this.monsters.size();
+	}
+	
+	public int getIndexOf (Monster thisMonster){
+		int index = 0;
+		for (Monster m : monsters){
+			if (m.getMonsterName().equals(thisMonster.getMonsterName())){
 				break;
 			}
 			index++;
@@ -177,13 +227,13 @@ public class Team implements EntityM {
 	public void save() {
     	logger.info("Saving Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
-		tDao.saveTeam(getName(), getCreatures());
+		tDao.saveTeam(getName(), getPlayers());
 	}
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());
     	TeamDao tDao = new TeamDaoImpl();
-		tDao.updateTeam(getId(), getName(), getCreatures());
+		tDao.updateTeam(getId(), getName(), getPlayers());
 	}
 
 	public void remove() {
