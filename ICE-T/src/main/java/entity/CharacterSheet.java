@@ -839,7 +839,7 @@ public class CharacterSheet implements EntityM {
 	public void edit() {
     	logger.info("Editing Character Sheet " + getName());
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
+		csDao.updateCharacterSheet(getId(), getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
 				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
