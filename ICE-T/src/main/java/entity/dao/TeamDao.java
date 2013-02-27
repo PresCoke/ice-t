@@ -22,6 +22,12 @@ public interface TeamDao {
 	public List<Object[]> readAllTeams();
 	
 	/**
+	 * Get a list containing the players' teams attached to a combat encounter 
+	 * @return a list of Teams
+	 */
+	public List<Team> getAllPlayerTeamsIn(int thisCombatEncounter);
+	
+	/**
 	 * Save a team in the database
 	 * @param name
 	 * @param creatures
