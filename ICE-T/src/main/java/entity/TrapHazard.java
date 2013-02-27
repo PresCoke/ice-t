@@ -29,7 +29,7 @@ import entity.dao.TrapHazardDaoImpl;
 public class TrapHazard implements EntityM {
 	
 	private static final Logger logger = Logger.getLogger(TrapHazard.class);
-
+	//TODO: add description variable
 	@Id
 	@GenericGenerator(name="generator", strategy="increment")
 	@GeneratedValue(generator="generator")
