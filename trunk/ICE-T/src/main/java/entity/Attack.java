@@ -64,7 +64,7 @@ public class Attack {
 	//Enum
 	@Column(name="effectType")
 	private EntityEnum.A_Effect_Type effectType;
-	@Column(name="ability")
+	@Column(name="ability") // TODO: doesn't make sense for traps and hazards 
 	private EntityEnum.A_Ability ability;
 	@Column(name="damageType")
 	private EntityEnum.CS_Resistance_Type damageType;
