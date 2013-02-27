@@ -105,6 +105,16 @@ public class Monster implements EntityM, Comparable<Monster> {
 		secondWind = false;
 		tempHP = 0;
 	}
+	
+	public Monster(CharacterSheet sheet) {
+		this.monsterName = sheet.getName();
+		characterSheet = sheet;
+		currentHP = characterSheet.getMaxHP();
+		currentHealSurges = characterSheet.getSurgesPerDay();
+		initiative = characterSheet.getLevel();
+		secondWind = false;
+		tempHP = 0;
+	}
 	/**
 	 * Getters & Setters
 	 */

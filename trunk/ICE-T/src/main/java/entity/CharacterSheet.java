@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import entity.dao.AttackDao;
 import entity.dao.AttackDaoImpl;
@@ -153,9 +155,11 @@ public class CharacterSheet implements EntityM {
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Player player;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)
+	/*@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "characterSheet", orphanRemoval=true)*/
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "characterSheet", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 		org.hibernate.annotations.CascadeType.PERSIST})
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Monster> monsters;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "characterSheet", orphanRemoval=true)

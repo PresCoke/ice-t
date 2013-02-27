@@ -143,6 +143,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		theCharacter.setSpeed( Integer.parseInt(speed_field.getText()) );		
 		theCharacter.setInitiative( Integer.parseInt(init_field.getText()) );
 		theCharacter.setMaxHP( Integer.parseInt(maxHP_field.getText()) );
+		theCharacter.setNPC(false);
 		
 		if (pwr_field.getText() != "") {
 			theCharacter.setPowerSource(pwr_field.getText());

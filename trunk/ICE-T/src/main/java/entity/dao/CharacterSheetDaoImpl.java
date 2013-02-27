@@ -57,6 +57,25 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		List<CharacterSheet> characterSheets = q.list();		
 		return characterSheets;
 	}
+	
+	public List<CharacterSheet> getAllNPCCharacterSheets() {
+		logger.info("Retrieval of all NPC character sheets in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createSQLQuery("SELECT * FROM CharacterSheet WHERE CharacterSheet.isNPC = TRUE");
+		List<CharacterSheet> characterSheets = q.list();		
+		return characterSheets;
+	}
+
+
+	public List<CharacterSheet> getAllNonNPCCharacterSheets() {
+		logger.info("Retrieval of all Player character sheets in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createSQLQuery("SELECT * FROM CharacterSheet WHERE CharacterSheet.isNPC = FALSE");
+		List<CharacterSheet> characterSheets = q.list();		
+		return characterSheets;
+	}
 
 	public int saveCharacterSheet(String name, int acrobatics, int athletics,
 			int arcana, int bluff, int diplomacy, int dungeoneering,
