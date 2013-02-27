@@ -59,7 +59,7 @@ public class CombatEncounter implements EntityM{
 	private int currentCreatureId;
 	
 	//Associations
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "combatEncounter", orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter", orphanRemoval=true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Rewards> rewards;
@@ -69,7 +69,7 @@ public class CombatEncounter implements EntityM{
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Tally tally;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "combatEncounter")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Team> teams;
