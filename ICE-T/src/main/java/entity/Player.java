@@ -110,6 +110,16 @@ public class Player implements EntityM, Comparable<Player> {
 		secondWind = false;
 		tempHP = 0;
 	}
+	
+	public Player(CharacterSheet sheet) {
+		playerName = sheet.getName();
+		characterSheet = sheet;
+		currentHP = characterSheet.getMaxHP();
+		currentHealSurges = characterSheet.getSurgesPerDay();
+		initiative = characterSheet.getLevel();
+		secondWind = false;
+		tempHP = 0;
+	}
 	/**
 	 * Getters & Setters
 	 */

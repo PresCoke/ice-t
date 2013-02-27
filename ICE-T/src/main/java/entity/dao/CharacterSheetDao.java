@@ -28,6 +28,18 @@ public interface CharacterSheetDao {
 	public List<CharacterSheet> getAllCharacterSheets();
 	
 	/**
+	 * Get a list of all NPC character sheets in database
+	 * @return list of all NPC character sheets
+	 */
+	public List<CharacterSheet> getAllNPCCharacterSheets();
+	
+	/**
+	 * Get a list of all player character sheets in database
+	 * @return list of all player character sheets
+	 */
+	public List<CharacterSheet> getAllNonNPCCharacterSheets();
+	
+	/**
 	 * Get a specific character sheet in the database
 	 * @param id of the character sheet
 	 * @return character sheet associated to the id

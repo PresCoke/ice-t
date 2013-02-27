@@ -107,6 +107,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 		theMonster.setLanguages(lang_field.getText());
 		theMonster.setRaceFeatures(racef_field.getText());
 		theMonster.setMisc(misc_field.getText());
+		theMonster.setNPC(true);
 
 		return theMonster;
 	}
