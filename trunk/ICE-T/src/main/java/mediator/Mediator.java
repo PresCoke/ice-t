@@ -1,23 +1,17 @@
 package mediator;
 
-//-- Project Imports --//
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import controller.App_Root;
-import entity.dao.EffectDaoImpl;
-
 import resource.*;
 
 /**
  * Mediator
- * 
- * @author jamesbegg
- *
+ * @author jamesbegg & TimHP
  */
-
 public class Mediator {
+	
+//	private static final Logger logger = Logger.getLogger(Mediator.class);
 	
 	/*
 	 * 
@@ -29,35 +23,35 @@ public class Mediator {
 	String propertiesURL;
 	EmbeddedDBManager dbMgr;
 	
+	/**
+	 * Pre: Application started, machine/user specific properties are passed as file URL
+	 * Post: Mediator created, but does not create or start anything else
+	 * @param machineProperties
+	 */
 	public Mediator (String machineProperties) {
-		/*
-		 * Pre: Application started, machine/user specific properties are passed as file URL
-		 * Post: Mediator created, but does not create or start anything else
-		 */
-		
 		propertiesURL = machineProperties;
 	}
 	
+	/**
+	 * Pre: Application has just started
+	 * Post: Resource and Entity packages are initialized and ready to be used.
+	 * @return
+	 */
 	public int start () {
-		/*
-		 * Pre: Application has just started
-		 * Post: Resource and Entity packages are initialized and ready to be used.
-		 */
-		//dbMgr = new EmbeddedDBManager(propertiesURL);
-		//dbMgr.start();
-		
+//		dbMgr = new EmbeddedDBManager(propertiesURL);
+//		dbMgr.start();
+//		dbMgr.connect();
 		return -1;
 	}
 	
+	/**
+	 * Pre: the application is closing
+	 * Post:the mediator has closed all open resources and all entities have been saved in their current state.	
+	 * @return
+	 */
 	public int close () {
-		/*
-		 * Pre: the application is closing
-		 * Post:the mediator has closed all open resources and all entities have been saved in their current state.
-		 */
-		
-		//dbMgr.close();
+//		dbMgr.close();
 		return -1;
-	
 	}
 
 	public List<Object[]> getUniqueEntityIDsForType(String selectedEntityType) {
