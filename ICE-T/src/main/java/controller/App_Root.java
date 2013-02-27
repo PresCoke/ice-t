@@ -1,10 +1,10 @@
 package controller;
 
-//-- Project Imports --//
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
 
 import mediator.*;
 import presentation.*;
@@ -18,6 +18,7 @@ import presentation.*;
 public class App_Root
 {
 
+	private static final Logger logger = Logger.getLogger(App_Root.class);
 	
 	/**
 	 * @param args
@@ -47,12 +48,17 @@ public class App_Root
 			
 			fis.close();
 			
-		} catch (Exception e) {
-			Exception_Window.showException(e);
+		} catch (FileNotFoundException fe) {
+            logger.fatal("Error while getting the file src/main/resources/filters/ApplicationSettings.properties --- " + fe.getMessage());
+			Exception_Window.showException(fe);
+			language_locale = new Locale("en_CA");
+			dbPath = "";
+		} catch (IOException ioe) {
+            logger.fatal("Error while loading or closing the file ApplicationSettings.properties --- " + ioe.getMessage());
+			Exception_Window.showException(ioe);
 			language_locale = new Locale("en_CA");
 			dbPath = "";
 		}
-
 		
 		
 		resource_mediator = new Mediator(dbPath);
@@ -100,6 +106,7 @@ public class App_Root
 			resource_mediator.start();
 			
 		} catch (Exception e) {
+            logger.fatal("Error while getting, loading or closing the nes preferences in the file ApplicationSettings.properties --- " + e.getMessage());
 			Exception_Window.showException(e);	
 		}
 	}
