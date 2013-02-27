@@ -276,4 +276,13 @@ public class TeamDaoImpl implements TeamDao {
 		return t;
 	}
 
+	public List<Team> getAllPlayerTeamsIn(int thisCombatEncounter) {
+    	logger.info("Retrieval of all teams in the database");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createSQLQuery("SELECT * FROM Team WHERE Team.CombatEncounter_id = " + thisCombatEncounter);
+		List<Team> teams = q.list();
+		return teams;
+	}
+
 }

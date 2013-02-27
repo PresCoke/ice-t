@@ -23,6 +23,8 @@ import entity.dao.CombatEncounterDao;
 import entity.dao.CombatEncounterDaoImpl;
 import entity.dao.MonsterDao;
 import entity.dao.MonsterDaoImpl;
+import entity.dao.PlayerDao;
+import entity.dao.PlayerDaoImpl;
 import entity.dao.RewardsDao;
 import entity.dao.RewardsDaoImpl;
 import entity.dao.TallyDao;
@@ -56,6 +58,7 @@ public class CombatEncounter implements EntityM{
 	private String notes;
 	
 	@Column(name="currentCreatureId")
+	//if it's the GM's turn, the current Creature's id is -1
 	private int currentCreatureId;
 	
 	//Associations
@@ -69,14 +72,21 @@ public class CombatEncounter implements EntityM{
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private Tally tally;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "combatEncounter")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "combatEncounter")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 		org.hibernate.annotations.CascadeType.PERSIST})
 	private List<Team> teams;
 
 	//Other
 	@Transient
-	private List<Player> playersInCe;
+	private List<Player> playersInCe = new ArrayList<Player>();
+	
+	@Transient
+	private List<Monster> monstersInCe = new ArrayList<Monster>();
+	
+	@Transient
+	//Players + monsters
+	private List<Object> creaturesInCe = new ArrayList<Object>();
 	
 
 	/**
@@ -203,6 +213,23 @@ public class CombatEncounter implements EntityM{
 	public void setPlayersInCE(List<Player> playersInCe) {
 		this.playersInCe = playersInCe;
 	}
+	
+	public List<Player> getPlayersInCe() {
+		return playersInCe;
+	}
+
+	public void setPlayersInCe(List<Player> playersInCe) {
+		this.playersInCe = playersInCe;
+	}
+
+	public List<Object> getCreaturesInCe() {
+		return creaturesInCe;
+	}
+
+	public void setCreaturesInCe(List<Object> creaturesInCe) {
+		this.creaturesInCe = creaturesInCe;
+	}
+	
 
 	/**
 	 * Other functions
@@ -212,18 +239,45 @@ public class CombatEncounter implements EntityM{
 	 * Get all the creatures in the combat encounter and sort them out descending
 	 * @return list of creatures sorted
 	 */
-	public List<Player> organizeCreaturesByInitiative(){	
-		//Retrieving all the players in the combat encounter
-		playersInCe = new ArrayList<Player>();
+	public List<Object> organizeCreaturesByInitiative(){	
+    	logger.info("Retrieving all the teams attached to the Combat Encounter " + getName());
+		creaturesInCe = new ArrayList<Object>();
 		List<Team> teams = this.getTeams();
+    	logger.info("Retrieving all the creatures in the Combat Encounter " + getName());
 		for (Team t : teams){
-			for (Player p : t.getPlayers()){
-				playersInCe.add(p);
+			PlayerDao pDao = new PlayerDaoImpl();
+			List<Player> players = pDao.getPlayersInTeam(t.getId());
+			MonsterDao mDao = new MonsterDaoImpl();
+			List<Monster> monsters = mDao.getMonstersInTeam(t.getId());
+			if(players.isEmpty()){
+				for (Monster m : monsters){
+					monstersInCe.add(m);
+				}
+			} else {
+				for (Player p : players){
+					playersInCe.add(p);
+				}
 			}
 		}
-		//Sorting
+		//Sorting players
+    	logger.info("Sorting the players");
 		Collections.sort(playersInCe);
-		return playersInCe;
+		//Sorting all the creatures (players & monsters)
+    	logger.info("Sorting all the creatures in the game");
+		int gameMasterInitiative = monstersInCe.get(0).getInitiative();
+		int index = 0;
+		for (int i = 0; i<playersInCe.size(); i++){
+			Player p = playersInCe.get(i);
+			creaturesInCe.add(p);
+			if (p.getInitiative()<gameMasterInitiative){
+				index = i;
+			}
+		}
+		for (Monster m : monstersInCe){
+			creaturesInCe.add(index, m);
+		}
+		
+		return creaturesInCe;
 	}
 
 	/**
@@ -231,36 +285,70 @@ public class CombatEncounter implements EntityM{
 	 * the CE was played
 	 * @return list of creatures sorted
 	 */
-	public List<Player> organizeCreaturesAfterLoadingCE(){	
+	public List<Object> organizeCreaturesAfterLoadingCE(){	
 		//Retrieving all the creatures in the combat encounter and sort them out
 		this.organizeCreaturesByInitiative();
 		
 		//Sort the creatures to get them the way they were last time
-		for (Player p : playersInCe){
-			if (p.getId() == currentCreatureId){
-				break;
-			} else {
+		if (currentCreatureId == -1){
+	    	logger.info("The currentCreatureId is null so it was the Game Master's turn when the game was last saved.");
+	    	Object o = creaturesInCe.get(0);
+	    	while(o instanceof Player){
+				Player p = (Player) creaturesInCe.get(0);
+		    	logger.info("The creature is the player " + p.getPlayerName());
 				this.finishTurn();
-			}
-		}
+				o = creaturesInCe.get(0);
+	    	}
+		} else {
+			int size = creaturesInCe.size();
+	    	Object o = creaturesInCe.get(0);
+	    	do{
+				if (o instanceof Player){
+					Player p = (Player) o;
+			    	logger.info("The creature is the player " + p.getPlayerName());
+					if (p.getId() == currentCreatureId){
+						break;
+					} else {
+						this.finishTurn();
+					}
+					o = creaturesInCe.get(0);
+				} else {
+					Monster m = (Monster) o;
+			    	logger.info("The creature is the monster " + m.getMonsterName());
+			    	this.finishTurn();
+			    	o = creaturesInCe.get(0);
+				}
+				size --;
+	    	}while(size>0);
+	    }
 		
-		return playersInCe;
+		return creaturesInCe;
 	}
 	
 	/**
 	 * Take the first creature in the list of creatures playing and put it at the end of the list
+	 * If the creature is a monster, all the monsters are put at the end of the list
 	 */
 	public void finishTurn(){
-		Player current = playersInCe.get(0);
-		playersInCe.remove(0);
-		playersInCe.add(current);	
+		Object current = creaturesInCe.get(0);
+		if (current instanceof Player){
+			creaturesInCe.remove(0);
+			creaturesInCe.add(current);	
+		} else {
+			Object currentMonster = creaturesInCe.get(0);
+			while(currentMonster instanceof Monster){
+				creaturesInCe.remove(0);
+				creaturesInCe.add(currentMonster);
+				currentMonster = creaturesInCe.get(0);
+			}
+		}
 	}
 	
 	/**
 	 * Generate a random encounter, that is to say a random team of monsters
 	 * @return list of creatures and traps
 	 */
-	//TODO Test
+	//TODO test that shit
 	public List<Object> generateRandomEncounter(){
 		
 		//Retrieving all the creatures' level in the combat encounter
@@ -330,7 +418,7 @@ public class CombatEncounter implements EntityM{
 	/*
 	 * Methods save, edit, remove and getAll
 	 */
-	//TODO Test through the interface
+	//TODO test that shit
 	public void save() {
     	logger.info("Saving Combat Encounter " + getName());
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
