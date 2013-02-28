@@ -8,9 +8,10 @@ import java.awt.*;
 import javax.swing.table.TableCellRenderer;
 
 import controller.App_Root;
+import entity.Attack;
 import entity.TrapHazard;
 
-public class TrapBean implements Bean, TableCellRenderer {
+public class TrapBean extends Bean implements TableCellRenderer {
 
 	private TrapHazard theTrap;
 	private AttackBean theAttackBean;
@@ -52,8 +53,6 @@ public class TrapBean implements Bean, TableCellRenderer {
 		
 		AttackBean attack_bean = new AttackBean();
 		attack_bean.createPanelFrom(aTrap.getAttack());
-		JEditorPane aAttack_panel = (JEditorPane) attack_bean.getListCellRendererComponent(null, aTrap.getAttack(), 
-																						   0, false, false);
 		String cmSkill = ""; String cmDC = Integer.toString(aTrap.getDifficultyLevel());
 		String cmDescription = aTrap.getCounterMeasureDescription();
 		
@@ -157,20 +156,67 @@ public class TrapBean implements Bean, TableCellRenderer {
 		trap_text.setText(
 				name+" - "+level+" "+role+"\n"+
 				type+" - "+xp+" XP\n"+
-				description+"\n"+
-				"Avoidance: "+avoidance_skill+" "+avoidance_dc+"/n"+
-				"Trigger: "+trigger+"\n"+
-				"Counter Measure: "+cmSkill+" "+cmDC+"\n"+
-				cmDescription
+				description+"\n"
 				);
-		JPanel theFinalPanel = new JPanel();
-		theFinalPanel.setLayout( new BoxLayout(theFinalPanel, BoxLayout.PAGE_AXIS) );
-		theFinalPanel.add(trap_text);
-		theFinalPanel.add(aAttack_panel);
-		if (isSelected) {
-			theFinalPanel.setBackground( system_defaults.getColor("List.selectionBackground") );
+		String attack_summary = "";
+		Attack attacks = aTrap.getAttack();
+		attack_summary = attacks.getAttackName();
+		switch (attacks.getAction()) {
+		case standard:
+			attack_summary+= trap_l10n.getString("Standard_attack"); break;
+		case move:
+			attack_summary+= trap_l10n.getString("Move_attack"); break;
+		case minor:
+			attack_summary+= trap_l10n.getString("Minor_attack"); break;
+		case free:
+			attack_summary+= trap_l10n.getString("Free_attack"); break;
+						}
+		attack_summary += "; ";
+		switch (attacks.getUseType()) {
+		case atWill:
+			attack_summary += trap_l10n.getString("AtWill_attack"); break;
+		case encounter:
+			attack_summary += trap_l10n.getString("Encounter_attack"); break;
+		case daily:
+			attack_summary += trap_l10n.getString("Daily_attack"); break;
+		case recharge:
+			attack_summary += trap_l10n.getString("Recharge_attack"); break;
 		}
-		return theFinalPanel;
+		attack_summary += ") * " + attacks.getAccessories() + "\n";
+		switch (attacks.getAbility()) {//TODO: makes absolutley no sense for a trap!?
+		case STR:
+			attack_summary += trap_l10n.getString("STR_attack"); break;
+		case CON:
+			attack_summary += trap_l10n.getString("CON_attack"); break;
+		case INT:
+			attack_summary += trap_l10n.getString("INT_attack"); break;
+		case DEX:
+			attack_summary += trap_l10n.getString("DEX_attack"); break;
+		case WIS:
+			attack_summary += trap_l10n.getString("WIS_attack"); break;
+		case CHAR:
+			attack_summary += trap_l10n.getString("CHA_attack"); break;
+		}
+		attack_summary += " vs. ";
+		switch (attacks.getDefense()) {
+		case AC:
+			attack_summary += trap_l10n.getString("AC_attack"); break;
+		case REF:
+			attack_summary += trap_l10n.getString("REF_attack"); break;
+		case FORT:
+			attack_summary += trap_l10n.getString("FORT_attack"); break;
+		case WILL:
+			attack_summary += trap_l10n.getString("WILL_attack"); break;
+		}
+		attack_summary += "; "+attacks.getHit();
+		trap_text.setToolTipText("<html>"+trap_l10n.getString("AvoidSkill_trap")+avoidance_skill+" "+avoidance_dc+"<br>"+
+				 trap_l10n.getString("Trigger_trap")+trigger+"<br>"+
+				 trap_l10n.getString("CounterText_trap")+cmSkill+" "+cmDC+"<br>"+
+				 cmDescription+"<br>"+attack_summary+"</html");
+		if (isSelected) {
+			trap_text.setBackground( system_defaults.getColor("List.selectionBackground") );
+		}
+		return trap_text;
 	}
 	
 	public Component getTableCellRendererComponent(JTable theTable, Object theValue,
@@ -206,8 +252,6 @@ public class TrapBean implements Bean, TableCellRenderer {
 		
 		AttackBean attack_bean = new AttackBean();
 		attack_bean.createPanelFrom(aTrap.getAttack());
-		JEditorPane aAttack_panel = (JEditorPane) attack_bean.getListCellRendererComponent(null, aTrap.getAttack(), 
-																						   0, false, false);
 		String cmSkill = ""; String cmDC = Integer.toString(aTrap.getDifficultyLevel());
 		String cmDescription = aTrap.getCounterMeasureDescription();
 		
@@ -311,20 +355,67 @@ public class TrapBean implements Bean, TableCellRenderer {
 		trap_text.setText(
 				name+" - "+level+" "+role+"\n"+
 				type+" - "+xp+" XP\n"+
-				description+"\n"+
-				"Avoidance: "+avoidance_skill+" "+avoidance_dc+"/n"+
-				"Trigger: "+trigger+"\n"+
-				"Counter Measure: "+cmSkill+" "+cmDC+"\n"+
-				cmDescription
+				description+"\n"
 				);
-		JPanel theFinalPanel = new JPanel();
-		theFinalPanel.setLayout( new BoxLayout(theFinalPanel, BoxLayout.PAGE_AXIS) );
-		theFinalPanel.add(trap_text);
-		theFinalPanel.add(aAttack_panel);
-		if (isSelected) {
-			theFinalPanel.setBackground( system_defaults.getColor("List.selectionBackground") );
+		String attack_summary = "";
+		Attack attacks = aTrap.getAttack();
+		attack_summary = attacks.getAttackName();
+		switch (attacks.getAction()) {
+		case standard:
+			attack_summary+= trap_l10n.getString("Standard_attack"); break;
+		case move:
+			attack_summary+= trap_l10n.getString("Move_attack"); break;
+		case minor:
+			attack_summary+= trap_l10n.getString("Minor_attack"); break;
+		case free:
+			attack_summary+= trap_l10n.getString("Free_attack"); break;
+						}
+		attack_summary += "; ";
+		switch (attacks.getUseType()) {
+		case atWill:
+			attack_summary += trap_l10n.getString("AtWill_attack"); break;
+		case encounter:
+			attack_summary += trap_l10n.getString("Encounter_attack"); break;
+		case daily:
+			attack_summary += trap_l10n.getString("Daily_attack"); break;
+		case recharge:
+			attack_summary += trap_l10n.getString("Recharge_attack"); break;
 		}
-		return theFinalPanel;
+		attack_summary += ") * " + attacks.getAccessories() + "\n";
+		switch (attacks.getAbility()) {//TODO: makes absolutley no sense for a trap!?
+		case STR:
+			attack_summary += trap_l10n.getString("STR_attack"); break;
+		case CON:
+			attack_summary += trap_l10n.getString("CON_attack"); break;
+		case INT:
+			attack_summary += trap_l10n.getString("INT_attack"); break;
+		case DEX:
+			attack_summary += trap_l10n.getString("DEX_attack"); break;
+		case WIS:
+			attack_summary += trap_l10n.getString("WIS_attack"); break;
+		case CHAR:
+			attack_summary += trap_l10n.getString("CHA_attack"); break;
+		}
+		attack_summary += " vs. ";
+		switch (attacks.getDefense()) {
+		case AC:
+			attack_summary += trap_l10n.getString("AC_attack"); break;
+		case REF:
+			attack_summary += trap_l10n.getString("REF_attack"); break;
+		case FORT:
+			attack_summary += trap_l10n.getString("FORT_attack"); break;
+		case WILL:
+			attack_summary += trap_l10n.getString("WILL_attack"); break;
+		}
+		attack_summary += "; "+attacks.getHit();
+		trap_text.setToolTipText("<html>"+trap_l10n.getString("AvoidSkill_trap")+avoidance_skill+" "+avoidance_dc+"<br>"+
+									 trap_l10n.getString("Trigger_trap")+trigger+"<br>"+
+									 trap_l10n.getString("CounterText_trap")+cmSkill+" "+cmDC+"<br>"+
+									 cmDescription+"<br>"+attack_summary+"</html");
+		if (isSelected) {
+			trap_text.setBackground( system_defaults.getColor("List.selectionBackground") );
+		}
+		return trap_text;
 	}
 	
 	public void createPanelFrom(Object thisEntity) {

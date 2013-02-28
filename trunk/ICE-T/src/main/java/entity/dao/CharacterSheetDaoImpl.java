@@ -80,7 +80,8 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		logger.info("Retrieval of all NPC character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("SELECT * FROM CharacterSheet WHERE CharacterSheet.isNPC = TRUE");
+		Query q = session.createQuery("SELECT cs FROM CharacterSheet cs WHERE cs.isNPC=:value");
+		q.setParameter("value", true);
 		List<CharacterSheet> characterSheets = q.list();		
 		return characterSheets;
 	}
@@ -90,7 +91,8 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		logger.info("Retrieval of all Player character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("SELECT * FROM CharacterSheet WHERE CharacterSheet.isNPC = FALSE");
+		Query q = session.createQuery("SELECT cs FROM CharacterSheet cs WHERE cs.isNPC=:value");
+		q.setParameter("value", false);
 		List<CharacterSheet> characterSheets = q.list();		
 		return characterSheets;
 	}

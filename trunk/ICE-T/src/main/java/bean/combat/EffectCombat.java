@@ -4,7 +4,7 @@ import java.awt.Component;
 
 import javax.swing.*;
 
-public class EffectCombat implements Bean {
+public class EffectCombat extends Bean {
 
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
