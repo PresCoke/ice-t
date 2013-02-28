@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 import entity.*;
 
-public class AttackBean implements Bean {
+public class AttackBean extends Bean {
 
 	private Attack theAttack;
 	

@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import entity.Resistance;
 
-public class ResistanceBean implements Bean {
+public class ResistanceBean extends Bean {
 	
 	/*
 	 * NOW DOES WORK

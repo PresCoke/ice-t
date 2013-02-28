@@ -16,9 +16,9 @@ import entity.Team;
 /* 
  * BIG FUCKING TODO :: apparently the dao will only save player teams and NPC teams which can also have traps/hazards???
  */
-public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemListener {
+public class TeamForm implements FormBean, ActionListener {
 
-	private static final int creatureTableDimension = 5;
+	private static final int creatureTableDimension = 3;
 	private Team theTeam;
 	private JPanel teamForm_panel;
 	private JPanel options_panel;
@@ -26,6 +26,7 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 	private JRadioButton displayCreature_radiobutton;
 	private JRadioButton displayTraps_radiobutton;
 	private JButton next_button, prev_button;
+	private JButton add_button, sub_button;
 	private JTable addableCreatures_table;
 	private DefaultTableModel addableCreatures_model;
 	private JList currentTeam_list;
@@ -35,13 +36,27 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 		ResourceBundle team_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 		teamForm_panel = new JPanel();
 		
-		addableCreatures_model = new DefaultTableModel(5, 5);
+		addableCreatures_model = new DefaultTableModel(creatureTableDimension, creatureTableDimension) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		addableCreatures_model.setColumnCount(creatureTableDimension);
+		addableCreatures_model.setRowCount(creatureTableDimension);
 		getFirstCreatureTable(false);
 		addableCreatures_table = new JTable(addableCreatures_model);
+		addableCreatures_table.setRowHeight(80);
+		addableCreatures_table.setPreferredSize( new Dimension(170*creatureTableDimension, 80*creatureTableDimension) );
 		addableCreatures_table.setRowSelectionAllowed(false);
 		addableCreatures_table.setColumnSelectionAllowed(false);
 		addableCreatures_table.setCellSelectionEnabled(true);
 		addableCreatures_table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		//addableCreatures_table.setDragEnabled(true);
+		for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+			addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
+			addableCreatures_table.getColumnModel().getColumn(index).setMinWidth(170);
+		}
 		
 		//TODO: this is a really bad way to make these two buttons the same size
 		next_button = new JButton("  "+team_l10n.getString("Next_team")+"  ");
@@ -49,23 +64,55 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 		prev_button = new JButton(team_l10n.getString("Prev_team"));
 		prev_button.addActionListener(this);
 		
-		isNPC_checkbox = new JCheckBox();
-		isNPC_checkbox.addChangeListener(this);
-		isNPC_checkbox.setEnabled(false);
+		add_button = new JButton(team_l10n.getString("Add_button"));
+		add_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				for (int index = 0, x_index = 0, y_index = 0; index < creatureTableDimension*creatureTableDimension; index++) {
+					if (addableCreatures_table.isCellSelected(y_index, x_index) ) {
+						currentTeam_model.addElement( addableCreatures_table.getValueAt(y_index, x_index) );
+					}
+					if (x_index < creatureTableDimension) {
+						x_index++;
+					} else {
+						y_index++;
+						x_index = 0;
+					}
+				}
+			}
+		});
 		
-		displayCreature_radiobutton = new JRadioButton(team_l10n.getString("CreatureDisplay_label"));
-		displayCreature_radiobutton.addItemListener(this);
-		displayCreature_radiobutton.setSelected(true);
+		sub_button = new JButton(team_l10n.getString("Remove_button"));
+		sub_button.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				for (int index = 0; index < currentTeam_model.getSize(); index++) {
+					if (currentTeam_list.isSelectedIndex(index) ) {
+						currentTeam_model.remove(index);
+					}
+				}
+			}
+		});
+		
+		isNPC_checkbox = new JCheckBox();
 		displayTraps_radiobutton = new JRadioButton(team_l10n.getString("TrapDisplay_label"));
-		displayTraps_radiobutton.addItemListener(this);
+		displayCreature_radiobutton = new JRadioButton(team_l10n.getString("CreatureDisplay_label"));
+		
+		isNPC_checkbox.addActionListener(this);
+		
+		displayCreature_radiobutton.addActionListener(this);
+		displayCreature_radiobutton.setSelected(true);
+		
+		displayTraps_radiobutton.addActionListener(this);
 		displayTraps_radiobutton.setSelected(false);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(displayCreature_radiobutton);
 		buttonGroup.add(displayTraps_radiobutton);
 		
 		options_panel = new JPanel();
+		options_panel.setLayout( new BoxLayout(options_panel, BoxLayout.LINE_AXIS) );
 		options_panel.setBorder( BorderFactory.createTitledBorder(team_l10n.getString("Options_title")) );
+		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
 		options_panel.add(isNPC_checkbox);
+		options_panel.add(Box.createHorizontalGlue());
 		options_panel.add(displayCreature_radiobutton);
 		options_panel.add(displayTraps_radiobutton);
 	}
@@ -101,19 +148,30 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 			thePlayer.createPanelFrom(theTeam.getPlayerAt(index));
 			currentTeam_model.addElement(thePlayer);
 		}
+		for (index=0; index < theTeam.getTraphazards().size(); index++) {
+			bean.combat.TrapBean theTrap = new bean.combat.TrapBean();
+			theTrap.createPanelFrom(theTeam.getTrapHazardAt(index));
+			currentTeam_model.addElement(theTrap);
+		}
 		
 		currentTeam_list = new JList(currentTeam_model);
 		currentTeam_list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		currentTeam_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		currentTeam_list.setCellRenderer(new bean.combat.CreatureBean());
+		currentTeam_list.setCellRenderer(new bean.combat.CreatureBean()); //TODO: Problem...
+		currentTeam_list.setPreferredSize(new Dimension(0, 80));
+		currentTeam_list.setFixedCellWidth(170);
+		currentTeam_list.setFixedCellHeight(80);
+		//currentTeam_list.setDropMode(DropMode.ON);
 		
 		JScrollPane team_pane = new JScrollPane(currentTeam_list);
 		team_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		team_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		
 		JScrollPane creature_pane = new JScrollPane(addableCreatures_table);
-		creature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		creature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		creature_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//		JPanel creature_pane = new JPanel();
+//		creature_pane.add(addableCreatures_table);
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.PAGE_AXIS) );
@@ -121,12 +179,25 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 		button_panel.add(Box.createGlue());
 		button_panel.add(prev_button);
 		
+		JPanel otherButton_panel = new JPanel();
+		otherButton_panel.setLayout( new BoxLayout(otherButton_panel, BoxLayout.LINE_AXIS) );
+		otherButton_panel.add(add_button);
+		otherButton_panel.add(Box.createHorizontalGlue());
+		otherButton_panel.add(sub_button);
+		
+//		teamForm_panel.setLayout( new BorderLayout() );
+//		teamForm_panel.add(options_panel, BorderLayout.PAGE_START);
+//		teamForm_panel.add(button_panel, BorderLayout.LINE_END);
+//		teamForm_panel.add(creature_pane, BorderLayout.CENTER);
+//		teamForm_panel.add(team_pane, BorderLayout.PAGE_END);
+		
 		GroupLayout teamForm_layout = new GroupLayout(teamForm_panel);
 		teamForm_layout.setHorizontalGroup( teamForm_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(options_panel)
 				.addGroup( teamForm_layout.createSequentialGroup()
 						.addComponent(creature_pane)
 						.addComponent(button_panel))
+				.addComponent(otherButton_panel)
 				.addComponent(team_pane)
 				);
 		teamForm_layout.setVerticalGroup( teamForm_layout.createSequentialGroup()
@@ -134,6 +205,7 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 				.addGroup( teamForm_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(creature_pane)
 						.addComponent(button_panel))
+				.addComponent(otherButton_panel)
 				.addComponent(team_pane)
 				);
 		teamForm_layout.setAutoCreateGaps(true);
@@ -167,37 +239,44 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 	
 	private void getFirstCreatureTable(boolean isNPC) {
 		Object[][] theCreatures = TeamController.getFirstPage(false, false, creatureTableDimension);
-		//Object[][] theCreatures = new Object[5][5];
-		int index = 0;
-		int maxRows = creatureTableDimension;
-		for ( ; index < maxRows; index++) {
-			addableCreatures_model.addRow(theCreatures[index]);
+		for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+			addableCreatures_model.setValueAt(theCreatures[y_index][x_index], y_index, x_index);
+			if (x_index < creatureTableDimension) {
+				x_index++;
+			} else {
+				y_index++;
+				x_index = 0;
+			}
 		}
 	}
 
 	public void actionPerformed(ActionEvent ae) {
 		Object source = ae.getSource();
 		Object[][] newCreature = new Object[0][0];
-		if (source == next_button) {
-			newCreature = TeamController.getNextPage(isNPC_checkbox.isEnabled(), displayTraps_radiobutton.isEnabled(), creatureTableDimension);
+		if (source == next_button || source == prev_button) {
+			if (source == next_button) {
+				newCreature = TeamController.getNextPage(
+						isNPC_checkbox.isEnabled(),
+						displayTraps_radiobutton.isEnabled(),
+						creatureTableDimension);
 
-		} else if (source == prev_button) {
-			newCreature = TeamController.getPreviousPage(isNPC_checkbox.isEnabled(), displayTraps_radiobutton.isEnabled(), creatureTableDimension);
-		}
-		int index = 0;
-		int maxRows = addableCreatures_model.getRowCount();
-		for (; index < maxRows; index++) {
-			addableCreatures_model.removeRow(index);
-			addableCreatures_model.insertRow(index, newCreature[index]);
-		}
-
-	}
-
-	public void stateChanged(ChangeEvent ce) {
-		Object source = ce.getSource();
-		Object[][] newCreature = new Object[0][0];
-		if ( source == isNPC_checkbox) {
-			boolean isNPCTeam = isNPC_checkbox.isEnabled(); //get new state
+			} else if (source == prev_button) {
+				newCreature = TeamController.getPreviousPage(
+						isNPC_checkbox.isEnabled(),
+						displayTraps_radiobutton.isEnabled(),
+						creatureTableDimension);
+			}
+			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+				addableCreatures_model.setValueAt(newCreature[y_index][x_index], y_index, x_index);
+				if (x_index < creatureTableDimension) {
+					x_index++;
+				} else {
+					y_index++;
+					x_index = 0;
+				}
+			}
+		} else if ( source == isNPC_checkbox) {
+			boolean isNPCTeam = isNPC_checkbox.isSelected(); //get new state
 			if (isNPCTeam && theTeam.getNumberOfPlayers() > 0) { // user wants a monster team instead
 				int x = JOptionPane.showConfirmDialog(teamForm_panel,
 						  "All players currently in the team will be removed.\n Do you wish to proceed.",//TODO: make french
@@ -219,37 +298,48 @@ public class TeamForm implements FormBean, ActionListener, ChangeListener, ItemL
 				}
 				theTeam.removeAllMonsters();
 			}
-			newCreature = TeamController.getFirstPage(isNPC_checkbox.isEnabled(), displayTraps_radiobutton.isEnabled(), creatureTableDimension);
-			int index = 0;
-			int maxRows = addableCreatures_model.getRowCount();
-			for (; index < maxRows; index++) {
-				addableCreatures_model.removeRow(index);
-				addableCreatures_model.insertRow(index, newCreature[index]);
+			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
+			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+				addableCreatures_model.setValueAt(newCreature[y_index][x_index], y_index, x_index);
+				if (x_index < creatureTableDimension) {
+					x_index++;
+				} else {
+					y_index++;
+					x_index = 0;
+				}
 			}
-		}
-		
-	}
-
-	public void itemStateChanged(ItemEvent ie) {
-		Object source = ie.getSource();
-		if (source == displayCreature_radiobutton) {
-			Object[][] newCreature = TeamController.getFirstPage(isNPC_checkbox.isEnabled(), displayTraps_radiobutton.isEnabled(), creatureTableDimension);
-			int index = 0;
-			int maxRows = addableCreatures_model.getRowCount();
-			for (; index < maxRows; index++) {
-				addableCreatures_model.removeRow(index);
-				addableCreatures_model.insertRow(index, newCreature[index]);
+			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
+			}
+		} else if (source == displayCreature_radiobutton) {
+			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
+			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+				addableCreatures_model.setValueAt(newCreature[y_index][x_index], y_index, x_index);
+				if (x_index < creatureTableDimension) {
+					x_index++;
+				} else {
+					y_index++;
+					x_index = 0;
+				}
+			}
+			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
 			}
 		} else if (source == displayTraps_radiobutton) {
-			Object[][] newTraps = TeamController.getFirstPage(isNPC_checkbox.isEnabled(), displayTraps_radiobutton.isEnabled(), creatureTableDimension);
-			int index = 0;
-			int maxRows = addableCreatures_model.getRowCount();
-			for (; index < maxRows; index++) {
-				addableCreatures_model.removeRow(index);
-				addableCreatures_model.insertRow(index, newTraps[index]);
+			Object[][] newTraps = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
+			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+				addableCreatures_model.setValueAt(newTraps[y_index][x_index], y_index, x_index);
+				if (x_index < creatureTableDimension) {
+					x_index++;
+				} else {
+					y_index++;
+					x_index = 0;
+				}
+			}
+			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.TrapBean());
 			}
 		}
-		
-	}
 
+	}
 }

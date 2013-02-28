@@ -23,7 +23,7 @@ public class TeamController {
 				last_number = columnNumber*columnNumber;
 			}
 			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
-				theTable[xindex][yindex] = new Player(playerList.get(lindex));
+				theTable[yindex][xindex] = new Player((CharacterSheet) playerList.get(lindex));
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -43,8 +43,8 @@ public class TeamController {
 				monsterList = monsterList.subList(last_number, last_index);
 				last_number = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = new Monster(monsterList.get(lindex));
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
+				theTable[yindex][xindex] = new Monster(monsterList.get(lindex));
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -64,8 +64,8 @@ public class TeamController {
 				trapList = trapList.subList(last_number, last_index);
 				last_number = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = trapList.get(lindex);
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
+				theTable[yindex][xindex] = trapList.get(lindex);
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -87,13 +87,13 @@ public class TeamController {
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>playerList.size()) {
 				playerList = playerList.subList(last_number, playerList.size());
-				last_number = playerList.size();
+				last_index = playerList.size();
 			} else {
 				playerList = playerList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
-				theTable[xindex][yindex] = new Player(playerList.get(lindex));
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = new Player(playerList.get(lindex));
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -101,6 +101,7 @@ public class TeamController {
 					xindex = 0;
 				}
 			}
+			last_number+= last_index;
 			
 		} else if (isNPCTeam && !getTraps){
 			CharacterSheetDao mDAO = new CharacterSheetDaoImpl();
@@ -108,13 +109,13 @@ public class TeamController {
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>monsterList.size()) {
 				monsterList = monsterList.subList(last_number, monsterList.size());
-				last_number = monsterList.size();
+				last_index = monsterList.size();
 			} else {
 				monsterList = monsterList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = new Monster(monsterList.get(lindex));
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = new Monster(monsterList.get(lindex));
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -122,20 +123,20 @@ public class TeamController {
 					xindex = 0;
 				}
 			}
-			
+			last_number+= last_index;
 		} else if (getTraps) {
 			TrapHazardDao tDAO = new TrapHazardDaoImpl();
 			List<TrapHazard> trapList = tDAO.getAllTrapHazards();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>trapList.size()) {
 				trapList = trapList.subList(last_number, trapList.size());
-				last_number = trapList.size();
+				last_index = trapList.size();
 			} else {
 				trapList = trapList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = trapList.get(lindex);
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = trapList.get(lindex);
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -143,9 +144,9 @@ public class TeamController {
 					xindex = 0;
 				}
 			}
+			last_number+= last_index;
 		}
 		
-		last_number += columnNumber*columnNumber;
 		return theTable;
 	}
 
@@ -158,34 +159,37 @@ public class TeamController {
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>playerList.size()) {
 				playerList = playerList.subList(last_number, playerList.size());
-				last_number = playerList.size();
+				last_index = playerList.size();
 			} else {
 				playerList = playerList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
-				theTable[xindex][yindex] = new Player(playerList.get(lindex));
-				if (xindex<5) {
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = new Player(playerList.get(lindex));
+				if (xindex<columnNumber) {
 					xindex++;
 				} else {
 					yindex++;
 					xindex = 0;
 				}
 			}
-			
+			last_number -= last_index;
+			if (last_number < 0) {
+				last_number = 0;
+			}
 		} else if (isNPCTeam && !getTraps){
 			CharacterSheetDao mDAO = new CharacterSheetDaoImpl();
 			List<CharacterSheet> monsterList = mDAO.getAllNPCCharacterSheets();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>monsterList.size()) {
 				monsterList = monsterList.subList(last_number, monsterList.size());
-				last_number = monsterList.size();
+				last_index = monsterList.size();
 			} else {
 				monsterList = monsterList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = new Monster(monsterList.get(lindex));
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = new Monster(monsterList.get(lindex));
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -193,20 +197,23 @@ public class TeamController {
 					xindex = 0;
 				}
 			}
-			
+			last_number -= last_index;
+			if (last_number < 0) {
+				last_number = 0;
+			}
 		} else if (getTraps) {
 			TrapHazardDao tDAO = new TrapHazardDaoImpl();
 			List<TrapHazard> trapList = tDAO.getAllTrapHazards();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>trapList.size()) {
 				trapList = trapList.subList(last_number, trapList.size());
-				last_number = trapList.size();
+				last_index = trapList.size();
 			} else {
 				trapList = trapList.subList(last_number, last_index);
-				last_number = columnNumber*columnNumber;
+				last_index = columnNumber*columnNumber;
 			}
-			for (int yindex=0, xindex=0, lindex = 0; lindex < columnNumber*columnNumber && yindex < columnNumber; lindex++) {
-				theTable[xindex][yindex] = trapList.get(lindex);
+			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
+				theTable[yindex][xindex] = trapList.get(lindex);
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -214,12 +221,12 @@ public class TeamController {
 					xindex = 0;
 				}
 			}
+			last_number -= last_index;
+			if (last_number < 0) {
+				last_number = 0;
+			}
 		}
-		
-		last_number -= columnNumber*columnNumber;
-		if (last_number < 0) {
-			last_number = 0;
-		}
+	
 		return theTable;
 	}
 }

@@ -10,7 +10,7 @@ import java.awt.event.*;
 
 import entity.Player;
 
-public class CreatureCombat implements Bean {
+public class CreatureCombat extends Bean {
 
 	private Player theCreature;
 	private JSpinner currentHealth_field;
