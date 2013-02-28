@@ -50,7 +50,7 @@ public class Mediator {
 	 * @return
 	 */
 	public int close () {
-//		dbMgr.close();
+		//dbMgr.close();
 		return -1;
 	}
 

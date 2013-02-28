@@ -231,6 +231,7 @@ public class Team implements EntityM {
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.saveTeam(getName(), getPlayers());
 	}
+	//TODO: add saveNPC team...
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());
