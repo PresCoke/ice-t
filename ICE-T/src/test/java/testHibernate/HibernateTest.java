@@ -161,8 +161,8 @@ public class HibernateTest {
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes, false);
 //		
-//		csDao.updateCharacterSheet(1, "Terminator", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
-//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 10, "made with metal", 10, 2, "all of them", "misc",
+//		csDao.updateCharacterSheet(4, "T-600", 20, 15, 10, 8, 16, 9, 18, 2, 5, 7, 1, 3, 5, 4, 19, 17, 4, 
+//			6, 4, 2, 7, 50, 5, 8, 2, 2, 2, 2, 2, 1, 800, "made with metal", 10, 2, "all of them", "misc",
 //			"T-600", "uranium", CS_Role.brute, CS_Size.huge, CS_Monster_Origin.immortal, CS_Monster_Type.humanoid,
 //			resistances, attacks, attacksTypes, true);	
 //
@@ -174,9 +174,9 @@ public class HibernateTest {
 //		
 		MonsterDao mDao = new MonsterDaoImpl();
 //		mDao.saveMonster("T1", 10, 15, 16, true, 20, csDao.getCharacterSheet(1));
-//		mDao.saveMonster("T2", 10, 15, 16, true, 20, csDao.getCharacterSheet(1));
-//		mDao.updateMonster(1, "Wolf", 10, 15, 16, false, 20);
-//		mDao.deleteMonster(1);
+//		mDao.saveMonster("T2", 10, 15, 16, true, 20, csDao.getCharacterSheet(4));
+//		mDao.updateMonster(2, "T2", 10, 15, 16, false, 20);
+//		mDao.deleteMonster(2);
 //		csDao.deleteCharacterSheet(1);
 //		csDao.deleteCharacterSheet(6);
 //		
@@ -242,7 +242,7 @@ public class HibernateTest {
 //		
 //		teamDao.saveNPCteam("NPC1", monsters, traphazards);
 //		teamDao.updateNPCteam(2, "NPC1", monsters, traphazards);
-//		teamDao.deleteNPCTeam(1);
+//		teamDao.deleteNPCTeam(2);
 //
 //		
 //		
@@ -291,7 +291,29 @@ public class HibernateTest {
 //		teams.add(team1);
 //		teams.add(team2);
 //
-		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+//		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+//		CombatEncounter ce = ceDao.getCombatEncounter(1);
+//		
+//		List<Object> creatures = ce.organizeCreaturesByInitiative();
+//		
+//		for (Object o : creatures){
+//			Player p = (Player) o;
+//			System.out.println("Player ---- Name = " + p.getPlayerName() + " - Initiative = " + p.getInitiative());
+//		}
+//		List<Object> teamNPC = ce.generateRandomEncounter();
+//		
+//		for (Object o : teamNPC){
+//			if (o instanceof Monster){
+//				Monster m = (Monster) o;
+//				System.out.println("Monster ---- id = " + m.getId() + " - name = " + m.getMonsterName());
+//			} else if (o instanceof TrapHazard) {
+//				TrapHazard th = (TrapHazard) o;
+//				System.out.println("Trap ---- id = " + th.getId() + " - name = " + th.getName());
+//			} else {
+//				System.out.println("NOT GOOD !!!!");
+//			}
+//		}
+//		
 //
 //		ceDao.saveCombatEncounter("CE1", "Game almost over", 1, rewards, tally, tuples, teams);
 //		ceDao.updateCombatEncounter(1,"CE1", "Game almost over", -1);
@@ -303,7 +325,7 @@ public class HibernateTest {
 //	
 //		
 //		
-		CombatEncounter ce = ceDao.getCombatEncounter(1);
+//		ceDao.deleteCombatEncounter(1);
 //		List<Object> creatures = ce.organizeCreaturesByInitiative();
 //		for (Object o : creatures){
 //			if (o instanceof Player){

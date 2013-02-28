@@ -88,6 +88,9 @@ public class CombatEncounter implements EntityM{
 	//Players + monsters
 	private List<Object> creaturesInCe = new ArrayList<Object>();
 	
+	@Transient
+	int XPbudget = 0;
+	
 
 	/**
 	 * Default constructor
@@ -249,7 +252,7 @@ public class CombatEncounter implements EntityM{
 			List<Player> players = pDao.getPlayersInTeam(t.getId());
 			MonsterDao mDao = new MonsterDaoImpl();
 			List<Monster> monsters = mDao.getMonstersInTeam(t.getId());
-			if(players.isEmpty()){
+			if(players == null || players.isEmpty()){
 				for (Monster m : monsters){
 					monstersInCe.add(m);
 				}
@@ -264,19 +267,25 @@ public class CombatEncounter implements EntityM{
 		Collections.sort(playersInCe);
 		//Sorting all the creatures (players & monsters)
     	logger.info("Sorting all the creatures in the game");
-		int gameMasterInitiative = monstersInCe.get(0).getInitiative();
-		int index = 0;
-		for (int i = 0; i<playersInCe.size(); i++){
-			Player p = playersInCe.get(i);
-			creaturesInCe.add(p);
-			if (p.getInitiative()<gameMasterInitiative){
-				index = i;
-			}
-		}
-		for (Monster m : monstersInCe){
-			creaturesInCe.add(index, m);
-		}
-		
+    	if (monstersInCe == null || monstersInCe.isEmpty()){
+    		for (Player p : playersInCe){
+    			creaturesInCe.add(p);
+    		}
+    	} else {
+    		int gameMasterInitiative = monstersInCe.get(0).getInitiative();
+    		int index = 0;
+    		for (int i = 0; i<playersInCe.size(); i++){
+    			Player p = playersInCe.get(i);
+    			creaturesInCe.add(p);
+    			if (p.getInitiative()<gameMasterInitiative){
+    				index = i;
+    			}
+    		}
+    		for (Monster m : monstersInCe){
+    			creaturesInCe.add(index, m);
+    		}
+    	}
+    	
 		return creaturesInCe;
 	}
 
@@ -348,7 +357,6 @@ public class CombatEncounter implements EntityM{
 	 * Generate a random encounter, that is to say a random team of monsters
 	 * @return list of creatures and traps
 	 */
-	//TODO test that shit
 	public List<Object> generateRandomEncounter(){
 		
 		//Retrieving all the creatures' level in the combat encounter
@@ -371,8 +379,8 @@ public class CombatEncounter implements EntityM{
 		if (levelEncounter < 1){
 			levelEncounter = 1;
 		}
-		int XPbudget = levelEncounter*250;
-		
+		XPbudget = levelEncounter*250;
+
 		//Getting all NPC creatures and traps in database that would suit the XPbudget
 		List<Object> npcs = new ArrayList<Object>();
     	logger.info("Getting all NPC creatures that would suit the XP budget");
