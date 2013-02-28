@@ -46,6 +46,10 @@ public class EffectDaoImpl implements EffectDao {
         List<Integer> effectsIds = new ArrayList<Integer>();
         try {
             transaction = session.beginTransaction();
+            if (players == null || players.isEmpty()){
+                logger.error("It's impossible to save the effect for the list of players is either null or empty.");
+            	throw new DAOException();
+            }
             for (Player c : players){
                 int effectId = -1;
 	        	logger.debug("Setting the effect's attributes");
@@ -67,6 +71,8 @@ public class EffectDaoImpl implements EffectDao {
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while saving Effect " + name + " in the database --- " + e.getMessage());
+        } catch (DAOException e) {
+            transaction.rollback();
         } finally {
             session.close();
         }

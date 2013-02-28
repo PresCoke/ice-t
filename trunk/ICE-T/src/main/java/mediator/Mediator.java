@@ -61,12 +61,12 @@ public class Mediator {
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
 			//List<Object[]> names = null;
 			
-			return cs_dao.readAllCharacterSheets();
+			return cs_dao.readAllPlayers();
 			
 		} else if (selectedEntityType.equals(entityNames.getString("Monster_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
-			return cs_dao.readAllCharacterSheets();
+			return cs_dao.readAllMonsters();
 			
 		} else if (selectedEntityType.equals(entityNames.getString("Team_entity"))) {
 			
