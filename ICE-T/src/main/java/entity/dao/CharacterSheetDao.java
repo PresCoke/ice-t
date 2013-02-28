@@ -16,10 +16,22 @@ import entity.Resistance;
 public interface CharacterSheetDao {
 	
 	/**
-	 * Get a list containing the ids and names of all the character sheets in the database
+	 * Get a list containing the ids and names of all the players in the database
 	 * @return a list of Object array, each array containing an int (id) and a String (name)
 	 */
 	public List<Object[]> readAllCharacterSheets();
+	
+	/**
+	 * Get a list containing the ids and names of all the players in the database
+	 * @return a list of Object array, each array containing an int (id) and a String (name)
+	 */
+	public List<Object[]> readAllPlayers();
+	
+	/**
+	 * Get a list containing the ids and names of all the monsters in the database
+	 * @return a list of Object array, each array containing an int (id) and a String (name)
+	 */
+	public List<Object[]> readAllMonsters();
 	
 	/**
 	 * Get a list of all character sheets in database

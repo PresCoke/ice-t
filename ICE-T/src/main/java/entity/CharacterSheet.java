@@ -894,4 +894,16 @@ public class CharacterSheet implements EntityM {
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
     	return csDao.readAllCharacterSheets();
 	}
+	
+	public List<Object[]> getAllPlayers() {
+    	logger.info("Getting all Character Sheets in database");
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+    	return csDao.readAllPlayers();
+	}
+	
+	public List<Object[]> getAllMonsters() {
+    	logger.info("Getting all Character Sheets in database");
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+    	return csDao.readAllMonsters();
+	}
 }
