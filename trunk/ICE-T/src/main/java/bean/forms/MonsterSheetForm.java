@@ -158,6 +158,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 					}
 				}
 			});
+		lvl_field.setValue(theMonster.getLevel());
 		// XP
 		JLabel xp_label = new JLabel(entity_l10n.getString("XP_entity"));
 		xp_label.setAlignmentX(Component.CENTER_ALIGNMENT);
