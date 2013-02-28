@@ -56,6 +56,9 @@ public class NewEntity {
 			/*TODO: lol what about this: ie. the need for a list of creatures*/
 			Effect ef = (Effect) theEntity;
 			ef.save(null);
+		} else if (theEntity instanceof Team) {
+			Team tm = (Team) theEntity;
+			tm.save();
 		}
 		
 	}

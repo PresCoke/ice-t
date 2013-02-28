@@ -54,7 +54,7 @@ public class TeamForm implements FormBean, ActionListener {
 		addableCreatures_table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		//addableCreatures_table.setDragEnabled(true);
 		for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-			addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
+			addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.TeamRenderer());
 			addableCreatures_table.getColumnModel().getColumn(index).setMinWidth(170);
 		}
 		
@@ -69,7 +69,16 @@ public class TeamForm implements FormBean, ActionListener {
 			public void actionPerformed(ActionEvent ae) {
 				for (int index = 0, x_index = 0, y_index = 0; index < creatureTableDimension*creatureTableDimension; index++) {
 					if (addableCreatures_table.isCellSelected(y_index, x_index) ) {
-						currentTeam_model.addElement( addableCreatures_table.getValueAt(y_index, x_index) );
+						Object theValue = addableCreatures_table.getValueAt(y_index, x_index);
+						currentTeam_model.addElement( theValue );
+						if (theValue instanceof entity.Player) {
+							theTeam.addPlayer((entity.Player) theValue);
+						} else if (theValue instanceof entity.Monster) {
+							theTeam.addMonster((entity.Monster) theValue);
+						} else if (theValue instanceof entity.TrapHazard) {
+							theTeam.addTrapHazard((entity.TrapHazard) theValue);
+						}
+						
 					}
 					if (x_index < creatureTableDimension) {
 						x_index++;
@@ -86,7 +95,14 @@ public class TeamForm implements FormBean, ActionListener {
 			public void actionPerformed(ActionEvent ae) {
 				for (int index = 0; index < currentTeam_model.getSize(); index++) {
 					if (currentTeam_list.isSelectedIndex(index) ) {
-						currentTeam_model.remove(index);
+						Object theValue = currentTeam_model.remove(index);
+						if (theValue instanceof entity.Player) {
+							theTeam.removePlayer((entity.Player) theValue);
+						} else if (theValue instanceof entity.Monster) {
+							theTeam.removeMonster((entity.Monster) theValue);
+						} else if (theValue instanceof entity.TrapHazard) {
+							theTeam.removeTrapHazard((entity.TrapHazard) theValue);
+						}
 					}
 				}
 			}
@@ -155,17 +171,17 @@ public class TeamForm implements FormBean, ActionListener {
 		}
 		
 		currentTeam_list = new JList(currentTeam_model);
-		currentTeam_list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		currentTeam_list.setLayoutOrientation(JList.VERTICAL);
 		currentTeam_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		currentTeam_list.setCellRenderer(new bean.combat.CreatureBean()); //TODO: Problem...
-		currentTeam_list.setPreferredSize(new Dimension(0, 80));
+		currentTeam_list.setCellRenderer(new bean.combat.TeamRenderer());
+		currentTeam_list.setPreferredSize(new Dimension(170, 0));
 		currentTeam_list.setFixedCellWidth(170);
 		currentTeam_list.setFixedCellHeight(80);
 		//currentTeam_list.setDropMode(DropMode.ON);
 		
 		JScrollPane team_pane = new JScrollPane(currentTeam_list);
-		team_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		team_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		team_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		team_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		JScrollPane creature_pane = new JScrollPane(addableCreatures_table);
 		creature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -180,9 +196,9 @@ public class TeamForm implements FormBean, ActionListener {
 		button_panel.add(prev_button);
 		
 		JPanel otherButton_panel = new JPanel();
-		otherButton_panel.setLayout( new BoxLayout(otherButton_panel, BoxLayout.LINE_AXIS) );
+		otherButton_panel.setLayout( new BoxLayout(otherButton_panel, BoxLayout.PAGE_AXIS) );
 		otherButton_panel.add(add_button);
-		otherButton_panel.add(Box.createHorizontalGlue());
+		otherButton_panel.add(Box.createGlue());
 		otherButton_panel.add(sub_button);
 		
 //		teamForm_panel.setLayout( new BorderLayout() );
@@ -195,18 +211,19 @@ public class TeamForm implements FormBean, ActionListener {
 		teamForm_layout.setHorizontalGroup( teamForm_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(options_panel)
 				.addGroup( teamForm_layout.createSequentialGroup()
+						.addComponent(button_panel)
 						.addComponent(creature_pane)
-						.addComponent(button_panel))
-				.addComponent(otherButton_panel)
-				.addComponent(team_pane)
+						.addComponent(otherButton_panel)
+						.addComponent(team_pane))
 				);
 		teamForm_layout.setVerticalGroup( teamForm_layout.createSequentialGroup()
 				.addComponent(options_panel)
 				.addGroup( teamForm_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(button_panel)
 						.addComponent(creature_pane)
-						.addComponent(button_panel))
-				.addComponent(otherButton_panel)
-				.addComponent(team_pane)
+						.addComponent(otherButton_panel)
+						.addComponent(team_pane)
+						)
 				);
 		teamForm_layout.setAutoCreateGaps(true);
 		//teamForm_layout.linkSize(SwingConstants.HORIZONTAL, next_button, prev_button);
@@ -230,7 +247,7 @@ public class TeamForm implements FormBean, ActionListener {
 		if (!isValidForm) {
 			JOptionPane.showMessageDialog(teamForm_panel,
 										  invalidFieldString,
-										  "Character Sheet",
+										  "Team",
 										  JOptionPane.WARNING_MESSAGE);
 		}
 		
@@ -308,9 +325,9 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
-			}
+//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
+//			}
 		} else if (source == displayCreature_radiobutton) {
 			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
 			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
@@ -322,9 +339,9 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
-			}
+//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
+//			}
 		} else if (source == displayTraps_radiobutton) {
 			Object[][] newTraps = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
 			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
@@ -336,9 +353,9 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.TrapBean());
-			}
+//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
+//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.TrapBean());
+//			}
 		}
 
 	}
