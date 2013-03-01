@@ -19,6 +19,8 @@ public interface MonsterDao {
 	 */
 	public List<Monster> getAllMonsters();
 	
+	public List<Monster> getMonstersByName(String monsterName);
+	
 	/**
 	 * Get the monsters which are in a given team
 	 * @param id of the team

@@ -133,10 +133,10 @@ public class Effect {
 	/**
 	 * Other functions
 	 */
-	public void save(List<Player> creatures) {
+	public void save(List<Player> players) {
     	logger.info("Saving Effect " + getName());
     	EffectDao eDao = new EffectDaoImpl();
-    	eDao.saveEffect(getName(), getChanges(), getMetrics(), getDuration(), creatures);
+    	eDao.saveEffect(getName(), getChanges(), getMetrics(), getDuration(), players);
 	}
 
 	public void remove(List<Integer> ids) {
