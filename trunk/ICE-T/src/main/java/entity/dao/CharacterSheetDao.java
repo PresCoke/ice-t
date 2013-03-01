@@ -59,6 +59,13 @@ public interface CharacterSheetDao {
 	public CharacterSheet getCharacterSheet(int characterSheetId);
 	
 	/**
+	 * Get a specific character sheet in the database
+	 * @param characterSheet's name
+	 * @return the character sheet
+	 */
+	public List<CharacterSheet> getCharacterSheetByName(String characterSheetName);
+	
+	/**
 	 * Save a character sheet in the database
 	 * @param name
 	 * @param acrobatics
