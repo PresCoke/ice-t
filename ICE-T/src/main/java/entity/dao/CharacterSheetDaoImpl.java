@@ -40,6 +40,15 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
 		return cs;
 	}
 	
+	public List<CharacterSheet> getCharacterSheetByName(String characterSheetName) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();		
+		Query q = session.createQuery("FROM CharacterSheet WHERE CharacterSheet_name=:value");
+		q.setParameter("value", characterSheetName);
+		List<CharacterSheet> cs = q.list();
+		return cs;
+	}
+	
 	public List<Object[]> readAllCharacterSheets() {
     	logger.info("Retrieval of all character sheets in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -193,6 +202,7 @@ public class CharacterSheetDaoImpl implements CharacterSheetDao {
         	logger.info("Character Sheet " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
+            e.printStackTrace();
             logger.fatal("Error while saving character sheet " + name + " in the database --- " + e.getMessage());
         } catch (DAOException e) {
         	transaction.rollback();

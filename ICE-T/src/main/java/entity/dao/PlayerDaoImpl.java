@@ -81,6 +81,7 @@ public class PlayerDaoImpl implements PlayerDao {
         	logger.info("Player " + playerName + " was successfully saved in the database.");
         } catch (HibernateException e) {
             transaction.rollback();
+            e.printStackTrace();
             logger.fatal("Error while saving player " + playerName + " in the database --- " + e.getMessage());
         } catch (DAOException e) {
             transaction.rollback();

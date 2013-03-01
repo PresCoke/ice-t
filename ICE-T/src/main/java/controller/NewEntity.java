@@ -1,9 +1,12 @@
 package controller;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import entity.*;
+import entity.dao.CharacterSheetDao;
+import entity.dao.CharacterSheetDaoImpl;
 import bean.forms.*;
 
 public class NewEntity {
@@ -50,6 +53,9 @@ public class NewEntity {
 			Player pl = (Player) theEntity;
 			CharacterSheet cs = pl.getCharacterSheet();
 			cs.save();
+			CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+			List<CharacterSheet> csDB = csDao.getCharacterSheetByName(cs.getName());
+			pl.setCharacterSheet(csDB.get(0));
 			pl.save();
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;

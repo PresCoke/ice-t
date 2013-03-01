@@ -145,6 +145,12 @@ public class HibernateTest {
 	
 		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		
+		List<CharacterSheet> cs = csDao.getCharacterSheetByName("Terminator");
+		
+		for (CharacterSheet c : cs){
+			System.out.println("id = " + c.getId() + " - name = " + c.getName());
+		}
+		
 //		List<Object[]> players = csDao.readAllMonsters();
 //		
 //		for (Object[] o : players){
