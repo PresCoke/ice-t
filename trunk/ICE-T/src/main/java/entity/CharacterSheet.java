@@ -18,6 +18,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import entity.EntityEnum.CS_Role;
+import entity.EntityEnum.CS_Size;
 import entity.dao.AttackDao;
 import entity.dao.AttackDaoImpl;
 import entity.dao.Attack_TypeDao;
@@ -213,6 +215,8 @@ public class CharacterSheet implements EntityM {
 		this.setMaxHP(0);
 		this.surgesPerDay = 0;
 		/*Other*/
+		this.role = CS_Role.artillery;
+		this.size = CS_Size.tiny;
 		this.powerSource = "";
 		this.level = 0;
 		this.XP = 0;
@@ -266,6 +270,8 @@ public class CharacterSheet implements EntityM {
 		this.setMaxHP(0);
 		this.surgesPerDay = 0;
 		/*Other*/
+		this.role = CS_Role.artillery;
+		this.size = CS_Size.tiny;
 		this.powerSource = "";
 		this.level = 0;
 		this.XP = 0;

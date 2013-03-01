@@ -12,8 +12,8 @@ public class TeamController {
 		Object[][] theTable = new Object[columnNumber][columnNumber];
 		
 		if (!isNPCTeam && !getTraps) {
-			CharacterSheetDao pDAO = new CharacterSheetDaoImpl();
-			List<CharacterSheet> playerList = pDAO.getAllNonNPCCharacterSheets();
+			PlayerDao pDAO = new PlayerDaoImpl();
+			List<Player> playerList = pDAO.getAllPlayers();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>playerList.size()) {
 				playerList = playerList.subList(last_number, playerList.size());
@@ -23,7 +23,7 @@ public class TeamController {
 				last_number = columnNumber*columnNumber;
 			}
 			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
-				theTable[yindex][xindex] = new Player((CharacterSheet) playerList.get(lindex));
+				theTable[yindex][xindex] = playerList.get(lindex);
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -82,8 +82,8 @@ public class TeamController {
 		Object[][] theTable = new Object[columnNumber][columnNumber];
 		
 		if (!isNPCTeam && !getTraps) {
-			CharacterSheetDao pDAO = new CharacterSheetDaoImpl();
-			List<CharacterSheet> playerList = pDAO.getAllNonNPCCharacterSheets();
+			PlayerDao pDAO = new PlayerDaoImpl();
+			List<Player> playerList = pDAO.getAllPlayers();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>playerList.size()) {
 				playerList = playerList.subList(last_number, playerList.size());
@@ -93,7 +93,7 @@ public class TeamController {
 				last_index = columnNumber*columnNumber;
 			}
 			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
-				theTable[yindex][xindex] = new Player(playerList.get(lindex));
+				theTable[yindex][xindex] = playerList.get(lindex);
 				if (xindex<5) {
 					xindex++;
 				} else {
@@ -154,8 +154,8 @@ public class TeamController {
 		Object[][] theTable = new Object[columnNumber][columnNumber];
 		
 		if (!isNPCTeam && !getTraps) {
-			CharacterSheetDao pDAO = new CharacterSheetDaoImpl();
-			List<CharacterSheet> playerList = pDAO.getAllNonNPCCharacterSheets();
+			PlayerDao pDAO = new PlayerDaoImpl();
+			List<Player> playerList = pDAO.getAllPlayers();
 			int last_index = last_number+columnNumber*columnNumber;
 			if (last_index>playerList.size()) {
 				playerList = playerList.subList(last_number, playerList.size());
@@ -165,7 +165,7 @@ public class TeamController {
 				last_index = columnNumber*columnNumber;
 			}
 			for (int yindex=0, xindex=0, lindex = 0; lindex < last_index; lindex++) {
-				theTable[yindex][xindex] = new Player(playerList.get(lindex));
+				theTable[yindex][xindex] = playerList.get(lindex);
 				if (xindex<columnNumber) {
 					xindex++;
 				} else {
