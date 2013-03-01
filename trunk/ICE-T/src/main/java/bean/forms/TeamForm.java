@@ -14,7 +14,7 @@ import controller.TeamController;
 import entity.Team;
 
 /* 
- * BIG FUCKING TODO :: apparently the dao will only save player teams and NPC teams which can also have traps/hazards???
+ * BIG FUCKING TODO :: get pre-existing players from DB! do not create new ones
  */
 public class TeamForm implements FormBean, ActionListener {
 
@@ -22,6 +22,7 @@ public class TeamForm implements FormBean, ActionListener {
 	private Team theTeam;
 	private JPanel teamForm_panel;
 	private JPanel options_panel;
+	private JTextField name_field;
 	private JCheckBox isNPC_checkbox;
 	private JRadioButton displayCreature_radiobutton;
 	private JRadioButton displayTraps_radiobutton;
@@ -42,6 +43,9 @@ public class TeamForm implements FormBean, ActionListener {
 				return false;
 			}
 		};
+		
+		name_field = new JTextField();
+		
 		addableCreatures_model.setColumnCount(creatureTableDimension);
 		addableCreatures_model.setRowCount(creatureTableDimension);
 		getFirstCreatureTable(false);
@@ -127,6 +131,8 @@ public class TeamForm implements FormBean, ActionListener {
 		options_panel.setLayout( new BoxLayout(options_panel, BoxLayout.LINE_AXIS) );
 		options_panel.setBorder( BorderFactory.createTitledBorder(team_l10n.getString("Options_title")) );
 		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
+		options_panel.add(new JLabel(team_l10n.getString("Name_entity")));
+		options_panel.add(name_field);
 		options_panel.add(isNPC_checkbox);
 		options_panel.add(Box.createHorizontalGlue());
 		options_panel.add(displayCreature_radiobutton);
@@ -232,6 +238,8 @@ public class TeamForm implements FormBean, ActionListener {
 	}
 	
 	public Object getEntity() {
+		//TODO: auto-generate names if they're monsters
+		theTeam.setName(name_field.getText());
 		return theTeam;
 	}
 
@@ -242,6 +250,10 @@ public class TeamForm implements FormBean, ActionListener {
 		if ( (theTeam.getNumberOfMonsters() + theTeam.getNumberOfPlayers() ) == 0) {
 			isValidForm = false;
 			invalidFieldString += "You must add at least one creature before saving.\n";
+		}
+		if ( name_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "You must name the team.\n";
 		}
 		
 		if (!isValidForm) {
