@@ -65,7 +65,7 @@ public class EditEntity {
 			editableEntity = new TeamForm();
 		}
 		
-		return editableEntity.createPanelFromExistingEntity(theEntity);
+		return editableEntity.createPanelFromExistingEntity( theEntity );
 	}
 
 	public void saveEntity() {

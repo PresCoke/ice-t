@@ -25,15 +25,16 @@ import entity.Resistance;
  * 		add resistances and get them out. 
  */
 public class CharacterSheetForm implements FormBean, KeyListener, ActionListener {
-	//TODO: remove player_name?
 	private JPanel totalBean_panel;
 	GroupLayout totalBean_layout;
 	JButton next_button;
 	
 	private CharacterSheet theCharacter;
+	private entity.Player thePlayer;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
 	private JTextField name_field;
+	private JTextField player_field;
 	private JComboBox role_list, size_list; 
 	private JTextField xp_field;
 	private JSpinner lvl_field;
@@ -64,6 +65,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	DefaultListModel attack_list_model;
 	
 	public CharacterSheetForm() {
+		player_field = new JTextField();
 		name_field = new JTextField();
 		xp_field = new JTextField();
 		speed_field = new JTextField();
@@ -89,8 +91,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	}
 	
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
-		if (usingThis instanceof CharacterSheet) {
-			theCharacter = (CharacterSheet) usingThis;
+		if (usingThis instanceof entity.Player) {
+			thePlayer = (entity.Player) usingThis;
+			theCharacter = thePlayer.getCharacterSheet();
 			if (theCharacter.isNPC()) {
 				theCharacter = new CharacterSheet();
 			}
@@ -104,10 +107,13 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	public boolean validateEntity() {
 		boolean isValidForm = true;
 		String invalidFieldString = "";
-		
+		if (player_field.getText().equals("")) {
+			isValidForm = false;
+			invalidFieldString += "The player name field is absent.\n";
+		}
 		if (name_field.getText().equals("")) {
 			isValidForm = false;
-			invalidFieldString += "The name field is absent.\n";
+			invalidFieldString += "The character name field is absent.\n";
 		}
 		if (xp_field.getText().equals("") || xp_field.getText().equals("0")) {
 			isValidForm = false;
@@ -160,9 +166,14 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		if (misc_field.getText() != "") {
 			theCharacter.setMisc(misc_field.getText());
 		}
+		thePlayer = new entity.Player(player_field.getText(), theCharacter);
+		thePlayer.setCurrentHealSurges(theCharacter.getSurgesPerDay());
+		thePlayer.setCurrentHP(theCharacter.getMaxHP());
+		thePlayer.setInitiative(theCharacter.getInitiative());
+		thePlayer.setSecondWind(false);
+		thePlayer.setTempHP(0);
 		
-		
-		return theCharacter;
+		return thePlayer;
 	}
 	
 	private void createPanel() {
@@ -178,6 +189,10 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		 */
 		JPanel generalInfo_panel = new JPanel();
 		generalInfo_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
+		//Player Name
+		JLabel player_label = new JLabel( entity_l10n.getString("PlayerName_entity") );
+		//TODO: set player_field...
+		//player_field
 		//Character Name
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
 		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -350,6 +365,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		generalInfo_layout.setHorizontalGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup( generalInfo_layout.createSequentialGroup()
 					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(player_label)
+							.addComponent(player_field))
+					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(name_label)
 							.addComponent(name_field))
 					.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -378,6 +396,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 				);
 		generalInfo_layout.setVerticalGroup( generalInfo_layout.createSequentialGroup()
 				.addGroup( generalInfo_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addGroup( generalInfo_layout.createSequentialGroup()
+								.addComponent(player_label)
+								.addComponent(player_field))
 						.addGroup( generalInfo_layout.createSequentialGroup()
 								.addComponent(name_label)
 								.addComponent(name_field))

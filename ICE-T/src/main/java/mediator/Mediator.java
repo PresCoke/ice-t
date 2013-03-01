@@ -53,7 +53,7 @@ public class Mediator {
 		//dbMgr.close();
 		return -1;
 	}
-
+	//TODO: change anything that uses a character sheet to get a Player instead...
 	public List<Object[]> getUniqueEntityIDsForType(String selectedEntityType) {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		
@@ -85,9 +85,9 @@ public class Mediator {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		if (selectedEntityType.equals(entityNames.getString("CharacterSheet_entity"))) {
 			
-			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();
-			entity.CharacterSheet cs = cs_dao.getCharacterSheet(selectedEntityId);
-			return cs;
+			entity.dao.PlayerDao pl_dao = new entity.dao.PlayerDaoImpl();
+			entity.Player pl = pl_dao.getPlayerOfId(selectedEntityId);
+			return pl;
 		} else if (selectedEntityType.equals(entityNames.getString("Monster_entity"))) {
 			
 			entity.dao.CharacterSheetDaoImpl cs_dao = new entity.dao.CharacterSheetDaoImpl();

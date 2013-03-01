@@ -159,4 +159,11 @@ public class PlayerDaoImpl implements PlayerDao {
         }
     }
 
+	public Player getPlayerOfId(int playerId) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();		
+		Player pl = (Player) session.get(Player.class, playerId);
+		return pl;
+	}
+
 }

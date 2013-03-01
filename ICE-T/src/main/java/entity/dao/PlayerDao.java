@@ -67,5 +67,7 @@ public interface PlayerDao {
 	 * @param playerId
 	 */
 	public void deletePlayer(int playerId);
+
+	public Player getPlayerOfId(int playerId);
 	
 }

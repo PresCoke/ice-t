@@ -46,9 +46,11 @@ public class NewEntity {
 	public void saveEntity() {
 		//TODO: FIX THIS
 		Object theEntity = empty_entity.getEntity();
-		if (theEntity instanceof CharacterSheet) {
-			CharacterSheet cs = (CharacterSheet) theEntity;
+		if (theEntity instanceof Player) {
+			Player pl = (Player) theEntity;
+			CharacterSheet cs = pl.getCharacterSheet();
 			cs.save();
+			pl.save();
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.save();
@@ -57,6 +59,7 @@ public class NewEntity {
 			Effect ef = (Effect) theEntity;
 			ef.save(null);
 		} else if (theEntity instanceof Team) {
+			//TODO: if npc team then save monsters first. and then save team
 			Team tm = (Team) theEntity;
 			tm.save();
 		}
