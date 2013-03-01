@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import entity.dao.MonsterDao;
+import entity.dao.MonsterDaoImpl;
 import entity.dao.TeamDao;
 import entity.dao.TeamDaoImpl;
 
@@ -231,7 +233,20 @@ public class Team implements EntityM {
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.saveTeam(getName(), getPlayers());
 	}
-	//TODO: add saveNPC team...
+	
+	public void saveNPC(List<Monster> monsters) {
+    	logger.info("Saving Monsters before saving the team.");
+		MonsterDao mDao = new MonsterDaoImpl();
+    	for (Monster m : monsters){
+    		mDao.saveMonster(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
+    			m.isSecondWind(), m.getTempHP(), m.getCharacterSheet());
+    	}
+		List<Monster> monstersDB = mDao.getMonstersByName(monsters.get(0).getMonsterName());
+		this.setMonsters(monstersDB);
+    	logger.info("Saving NPC Team " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
+		tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
+	}
 
 	public void edit() {
     	logger.info("Editing Combat Encounter " + getName());

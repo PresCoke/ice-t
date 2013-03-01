@@ -4,13 +4,21 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
+import testHibernate.HibernateTest;
+
 import entity.*;
 import entity.dao.CharacterSheetDao;
 import entity.dao.CharacterSheetDaoImpl;
+import entity.dao.MonsterDao;
+import entity.dao.MonsterDaoImpl;
 import bean.forms.*;
 
 public class NewEntity {
 
+	private static final Logger logger = Logger.getLogger(NewEntity.class);
+	
 	FormBean empty_entity;
 	String[] entity_names;
 	
@@ -52,11 +60,7 @@ public class NewEntity {
 		if (theEntity instanceof Player) {
 			Player pl = (Player) theEntity;
 			CharacterSheet cs = pl.getCharacterSheet();
-			cs.save();
-			CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-			List<CharacterSheet> csDB = csDao.getCharacterSheetByName(cs.getName());
-			pl.setCharacterSheet(csDB.get(0));
-			pl.save();
+			cs.save(pl);
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.save();
@@ -65,9 +69,15 @@ public class NewEntity {
 			Effect ef = (Effect) theEntity;
 			ef.save(null);
 		} else if (theEntity instanceof Team) {
-			//TODO: if npc team then save monsters first. and then save team
 			Team tm = (Team) theEntity;
-			tm.save();
+			if (tm.getPlayers() != null && !tm.getPlayers().isEmpty()){
+		    	logger.info("Team of players named " + tm.getName() + " is about to be saved in the database.");
+				tm.save();
+			} else {
+		    	logger.info("Team of NPCs named " + tm.getName() + " is about to be saved in the database so the monsters must be saved in the database first.");
+		    	List<Monster> monsters = tm.getMonsters();
+				tm.saveNPC(monsters);		    	
+			}
 		}
 		
 	}

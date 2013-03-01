@@ -48,6 +48,15 @@ public class MonsterDaoImpl implements MonsterDao {
 		List<Monster> monsters = q.list();
 		return monsters;
 	}
+	
+	public List<Monster> getMonstersByName(String monsterName) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();		
+		Query q = session.createQuery("FROM Monster WHERE monster_name=:value");
+		q.setParameter("value", monsterName);
+		List<Monster> monsters = q.list();
+		return monsters;
+	}
 
 	public int saveMonster(String monsterName, int currentHP,
 			int currentHealSurges, int initiative, boolean secondWind,
