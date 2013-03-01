@@ -76,7 +76,10 @@ public class TeamForm implements FormBean, ActionListener {
 						Object theValue = addableCreatures_table.getValueAt(y_index, x_index);
 						currentTeam_model.addElement( theValue );
 						if (theValue instanceof entity.Player) {
-							theTeam.addPlayer((entity.Player) theValue);
+							entity.Player addable = (entity.Player) theValue;
+							if (!currentTeam_model.contains(addable)) {
+								theTeam.addPlayer(addable);
+							}
 						} else if (theValue instanceof entity.Monster) {
 							theTeam.addMonster((entity.Monster) theValue);
 						} else if (theValue instanceof entity.TrapHazard) {

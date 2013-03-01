@@ -106,7 +106,7 @@ public class Player implements EntityM, Comparable<Player> {
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
-		initiative = characterSheet.getLevel();
+		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
 	}
@@ -116,7 +116,7 @@ public class Player implements EntityM, Comparable<Player> {
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
-		initiative = characterSheet.getLevel();
+		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
 	}
