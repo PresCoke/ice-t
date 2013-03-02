@@ -451,7 +451,6 @@ public class TeamRenderer implements ListCellRenderer, TableCellRenderer {
 		 * Speed: [Speed] Initiative: [Initiative]
 		 */
 		ResourceBundle creat_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
-		
 		CharacterSheet theSheet = characterSheet;
 		String name = theSheet.getName(), level = Integer.toString(theSheet.getLevel()), role = "";
 		String size = "", origin = "", monsterType = "", exp = Integer.toString(theSheet.getXP());
