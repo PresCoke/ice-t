@@ -70,7 +70,10 @@ public class NewEntity {
 			ef.save(null);
 		} else if (theEntity instanceof Team) {
 			Team tm = (Team) theEntity;
-			if (tm.getPlayers() != null && !tm.getPlayers().isEmpty()){
+			boolean player_not_empty_null = tm.getPlayers() != null && !tm.getPlayers().isEmpty();
+			boolean monster_empty_null = tm.getMonsters() == null || tm.getMonsters().isEmpty();
+			boolean trap_empty_null = tm.getTraphazards() == null || tm.getTraphazards().isEmpty();
+			if (player_not_empty_null && monster_empty_null && trap_empty_null){
 		    	logger.info("Team of players named " + tm.getName() + " is about to be saved in the database.");
 				tm.save();
 			} else {

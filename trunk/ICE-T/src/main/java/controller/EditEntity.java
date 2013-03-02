@@ -79,8 +79,20 @@ public class EditEntity {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.edit();
 		} else if (theEntity instanceof Team) {
-			Team tm = (Team) theEntity;
-			tm.edit();
+			//TODO: make work for npc team
+//			Team tm = (Team) theEntity;
+//			boolean player_not_empty_null = tm.getPlayers() != null && !tm.getPlayers().isEmpty();
+//			boolean monster_empty_null = tm.getMonsters() == null || tm.getMonsters().isEmpty();
+//			boolean trap_empty_null = tm.getTraphazards() == null || tm.getTraphazards().isEmpty();
+//			if (player_not_empty_null && monster_empty_null && trap_empty_null){
+//		    	logger.info("Team of players named " + tm.getName() + " is about to be saved in the database.");
+//				tm.save();
+//			} else {
+//		    	logger.info("Team of NPCs named " + tm.getName() + " is about to be saved in the database so the monsters must be saved in the database first.");
+//		    	List<Monster> monsters = tm.getMonsters();
+//				tm.saveNPC(monsters);		    	
+//			}
+//			tm.edit();
 		}
 	}
 
@@ -93,6 +105,10 @@ public class EditEntity {
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.remove();
+		} else if (theEntity instanceof Team) {
+			//TODO: make work for npc team
+			Team tm = (Team) theEntity;
+			tm.remove();
 		}
 	}
 
