@@ -76,7 +76,24 @@ public class TeamForm implements FormBean, ActionListener {
 						Object theValue = addableCreatures_table.getValueAt(y_index, x_index);
 						if (theValue instanceof entity.Player) {
 							entity.Player addable = (entity.Player) theValue;
-							if (!currentTeam_model.contains(addable)) {
+							boolean isAlreadyInTeam = false;
+							for (int i = 0; i<currentTeam_model.size(); i++) {
+								Object currentComparator = currentTeam_model.get(i);
+								if (currentComparator instanceof bean.combat.CreatureBean) {
+									currentComparator = ((bean.combat.CreatureBean) currentComparator).getEntity();
+									if ( !(currentComparator instanceof entity.Player) ) {
+										continue;
+									}
+									
+								} else if ( !(currentComparator instanceof entity.Player) ) {
+									continue;
+								}
+								if (addable.compareTo((entity.Player) (currentComparator)) == 0) {
+									isAlreadyInTeam = true;
+									break;
+								}
+							}
+							if (!isAlreadyInTeam) {
 								currentTeam_model.addElement( theValue );
 								theTeam.addPlayer(addable);
 							}
@@ -136,10 +153,10 @@ public class TeamForm implements FormBean, ActionListener {
 		options_panel.setLayout( new BoxLayout(options_panel, BoxLayout.LINE_AXIS) );
 		options_panel.setBorder( BorderFactory.createTitledBorder(team_l10n.getString("Options_title")) );
 		options_panel.add(new JLabel(team_l10n.getString("Name_entity")));
-		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
 		options_panel.add(name_field);
-		options_panel.add(isNPC_checkbox);
 		options_panel.add(Box.createHorizontalGlue());
+		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
+		options_panel.add(isNPC_checkbox);
 		options_panel.add(displayCreature_radiobutton);
 		options_panel.add(displayTraps_radiobutton);
 	}
@@ -164,6 +181,7 @@ public class TeamForm implements FormBean, ActionListener {
 
 	private void createPanel() {
 		currentTeam_model = new DefaultListModel();
+		name_field.setText(theTeam.getName());
 		int index = 0;
 		for (index = 0; index < theTeam.getNumberOfMonsters(); index++) {
 			bean.combat.CreatureBean theMonster = new bean.combat.CreatureBean(); 

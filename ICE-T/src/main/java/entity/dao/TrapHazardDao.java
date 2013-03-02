@@ -82,5 +82,7 @@ public interface TrapHazardDao {
 	 * @return trap/hazard's id associated to the given id
 	 */
 	public TrapHazard getTrapHazard(int trapHazardId);
+
+	public List<TrapHazard> getAllTrapHazardsInTeam(int teamId);
 	
 }

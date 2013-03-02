@@ -210,5 +210,14 @@ public class TrapHazardDaoImpl implements TrapHazardDao {
         return th;
 	}
 
+	public List<TrapHazard> getAllTrapHazardsInTeam(int teamId) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("from TrapHazard where Team_ID=:value");
+		q.setParameter("value", teamId);
+		List<TrapHazard> ths = q.list();
+		return ths;
+	}
+
 
 }

@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
+import entity.CharacterSheet;
 import entity.Monster;
 import entity.Player;
 import entity.Team;
@@ -32,7 +33,7 @@ public class TeamDaoImpl implements TeamDao {
     	logger.info("Retrieval of all teams in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("Select Team_id, Team_name from Team");
+		Query q = session.createSQLQuery("Select Team_id, Team_name from Team");
 		List<Object[]> teams = q.list();
 		return teams;
 	}
@@ -267,6 +268,27 @@ public class TeamDaoImpl implements TeamDao {
             transaction = session.beginTransaction();
             t = (Team) session.get(Team.class, teamId);
         	logger.info("Team " + teamId + " was successfully retrieved from the database.");
+        	logger.info("Getting all players, monsters and traps belonging to team: "+teamId+".");
+//        	Query q = session.createQuery("FROM Player WHERE Team_ID=:value");
+//    		q.setParameter("value", teamId);
+        	PlayerDao pDAO = new PlayerDaoImpl();
+    		List<Player> p = pDAO.getPlayersInTeam(teamId);
+        	logger.info(p.size() + " Players retrieved from DB");
+//        	q = session.createQuery("FROM Monster WHERE Team_ID=:value");
+//        	q.setParameter("value", teamId);
+        	MonsterDao mDAO = new MonsterDaoImpl();
+        	List<Monster> m = mDAO.getMonstersInTeam(teamId);
+        	logger.info(m.size() + " Monsters retrieved from DB");
+//        	q = session.createQuery("FROM TrapHazard WHERE Team_ID=:value");
+//        	q.setParameter("value", teamId);
+        	TrapHazardDao thDAO = new TrapHazardDaoImpl();
+        	List<TrapHazard> th = thDAO.getAllTrapHazardsInTeam(teamId);
+        	logger.info(th.size() + " TrapHazards retrieved from DB");
+        	
+        	t.setPlayers(p);
+            t.setMonsters(m);
+            t.setTraphazards(th);
+        	
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while retrieving Team " + teamId + " in the database --- " + e.getMessage());
@@ -280,7 +302,8 @@ public class TeamDaoImpl implements TeamDao {
     	logger.info("Retrieval of all teams in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("SELECT * FROM Team WHERE Team.CombatEncounter_id = " + thisCombatEncounter);
+		Query q = session.createQuery("FROM Team WHERE CombatEncounter_id=:value");
+		q.setParameter("value", thisCombatEncounter);
 		List<Team> teams = q.list();
 		return teams;
 	}
