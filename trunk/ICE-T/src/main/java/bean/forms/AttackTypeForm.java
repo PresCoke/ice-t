@@ -313,6 +313,10 @@ public class AttackTypeForm implements FormBean {
 	
 	public JPanel createEntityPanel() {
 		theAttackType = new Attack_Type();
+		range_hidden = new A_Range();
+		melee_hidden = new A_Melee();
+		close_hidden = new A_Close();
+		area_hidden = new A_Area();
 		createPersonalPanel();
 		return attackType_panel;
 	}
@@ -321,22 +325,39 @@ public class AttackTypeForm implements FormBean {
 		ResourceBundle entity_l10n = ResourceBundle.getBundle("filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 		if (usingThis instanceof A_Range) {
 			range_hidden = (A_Range) usingThis;
+			melee_hidden = new A_Melee();
+			close_hidden = new A_Close();
+			area_hidden = new A_Area();
 			attackType_selection.setSelectedItem( entity_l10n.getString("Ranged_attack") );
 			createRangedPanel();
 		} else if (usingThis instanceof A_Melee) {
 			melee_hidden = (A_Melee) usingThis;
+			melee_hidden = new A_Melee();
+			range_hidden = new A_Range();
+			close_hidden = new A_Close();
+			area_hidden = new A_Area();
 			attackType_selection.setSelectedItem( entity_l10n.getString("Melee_attack") );
 			createMeleePanel();
 		} else if (usingThis instanceof A_Close) {
 			close_hidden = (A_Close) usingThis;
+			melee_hidden = new A_Melee();
+			range_hidden = new A_Range();
+			area_hidden = new A_Area();
 			attackType_selection.setSelectedItem( entity_l10n.getString("Close_attack") );
 			createClosePanel();
 		} else if (usingThis instanceof A_Area) {
 			area_hidden = (A_Area) usingThis;
+			melee_hidden = new A_Melee();
+			range_hidden = new A_Range();
+			close_hidden = new A_Close();
 			attackType_selection.setSelectedItem( entity_l10n.getString("Area_attack") );
 			createAreaPanel();
 		} else {
 			theAttackType = (Attack_Type) usingThis;
+			melee_hidden = new A_Melee();
+			range_hidden = new A_Range();
+			close_hidden = new A_Close();
+			area_hidden = new A_Area();
 			attackType_selection.setSelectedItem( entity_l10n.getString("Personal_attack") );
 			createPersonalPanel();
 		}

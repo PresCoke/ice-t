@@ -288,7 +288,7 @@ public class AttackForm implements FormBean {
 		
 		attackType_form = new AttackTypeForm();
 		theAttackType = new Attack_Type();
-		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
+		attackType_panel = attackType_form.createEntityPanel();
 
 		GroupLayout attack_layout = new GroupLayout(attack_panel);
 		attack_layout.setHorizontalGroup( attack_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -489,6 +489,7 @@ public class AttackForm implements FormBean {
 		attackHit_field.setText(theAttack.getHit());
 		attackMiss_field.setText(theAttack.getMiss());
 		attackTrigger_field.setText(theAttack.getTrigger());
+		//attackType_panel = attackType_form.createEntityPanel();
 		theAttackType = theAttack.getAttackType();
 		attackType_panel = attackType_form.createPanelFromExistingEntity(theAttackType);
 	}

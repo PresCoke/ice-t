@@ -74,16 +74,18 @@ public class TeamForm implements FormBean, ActionListener {
 				for (int index = 0, x_index = 0, y_index = 0; index < creatureTableDimension*creatureTableDimension; index++) {
 					if (addableCreatures_table.isCellSelected(y_index, x_index) ) {
 						Object theValue = addableCreatures_table.getValueAt(y_index, x_index);
-						currentTeam_model.addElement( theValue );
 						if (theValue instanceof entity.Player) {
 							entity.Player addable = (entity.Player) theValue;
 							if (!currentTeam_model.contains(addable)) {
+								currentTeam_model.addElement( theValue );
 								theTeam.addPlayer(addable);
 							}
 						} else if (theValue instanceof entity.Monster) {
 							theTeam.addMonster((entity.Monster) theValue);
+							currentTeam_model.addElement( theValue );
 						} else if (theValue instanceof entity.TrapHazard) {
 							theTeam.addTrapHazard((entity.TrapHazard) theValue);
+							currentTeam_model.addElement( theValue );
 						}
 						
 					}
@@ -133,8 +135,8 @@ public class TeamForm implements FormBean, ActionListener {
 		options_panel = new JPanel();
 		options_panel.setLayout( new BoxLayout(options_panel, BoxLayout.LINE_AXIS) );
 		options_panel.setBorder( BorderFactory.createTitledBorder(team_l10n.getString("Options_title")) );
-		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
 		options_panel.add(new JLabel(team_l10n.getString("Name_entity")));
+		options_panel.add( new JLabel(team_l10n.getString("NPCOnly_label")) );
 		options_panel.add(name_field);
 		options_panel.add(isNPC_checkbox);
 		options_panel.add(Box.createHorizontalGlue());
