@@ -155,16 +155,6 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
             //Set the monsters
-            logger.debug("Modifying previous monsters' team");
-            List<Monster> monstersDB = t.getMonsters();
-            for (Monster m : monstersDB){
-            	Monster monster = (Monster) session.get(Monster.class, m.getId());
-            	monster.setTeam(null);
-                session.update(monster);
-            } 
-            logger.debug("Modifying previous monsters' team done");
-            t.removeAllMonsters();
-            session.update(t);
             logger.debug("Setting NPC team's monsters and monsters' team");
             for (Monster m : monsters){
                 Monster monster = (Monster) session.get(Monster.class, m.getId());
@@ -210,23 +200,23 @@ public class TeamDaoImpl implements TeamDao {
             //Update monsters
             logger.info("Update of monsters");
             for (Monster m : t.getMonsters()){
-            	Monster monster = (Monster) session.get(Monster.class, m.getId());
-            	monster.setTeam(null);
-                session.update(monster);
+            	m.setTeam(null);
+                session.update(m);
             }
             //Update Traps/Hazards
             logger.info("Update of traps/hazards");
             for (TrapHazard th : t.getTraphazards()){
                 th.setTeam(null);
+                session.update(th);
             }
             //Deletion of the team
-            logger.info("Deletion of team " + t.getName());
+            logger.info("Deletion of NPC team " + t.getName());
             session.delete(t);
             transaction.commit();
-        	logger.info("Team " + teamId + " was successfully removed from the database.");
+        	logger.info("NPC Team " + teamId + " was successfully removed from the database.");
         } catch (HibernateException e) {
             transaction.rollback();
-            logger.fatal("Error while deleting Team " + teamId + " in the database --- " + e.getMessage());
+            logger.fatal("Error while deleting NPC Team " + teamId + " in the database --- " + e.getMessage());
         } finally {
             session.close();
         }		

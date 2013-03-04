@@ -144,13 +144,21 @@ public class HibernateTest {
 		attacks.add(a2);
 	
 		CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-		
-		List<CharacterSheet> cs = csDao.getCharacterSheetByName("Terminator");
-		
-		for (CharacterSheet c : cs){
-			System.out.println("id = " + c.getId() + " - name = " + c.getName());
-		}
-		
+		csDao.deleteCharacterSheet(5);
+		csDao.deleteCharacterSheet(6);
+		csDao.deleteCharacterSheet(7);
+		csDao.deleteCharacterSheet(8);
+		csDao.deleteCharacterSheet(9);
+		csDao.deleteCharacterSheet(10);
+		csDao.deleteCharacterSheet(11);
+
+//		
+//		List<CharacterSheet> cs = csDao.getCharacterSheetByName("Terminator");
+//		
+//		for (CharacterSheet c : cs){
+//			System.out.println("id = " + c.getId() + " - name = " + c.getName());
+//		}
+//		
 //		List<Object[]> players = csDao.readAllMonsters();
 //		
 //		for (Object[] o : players){
@@ -244,7 +252,7 @@ public class HibernateTest {
 //		
 //		teamDao.saveTeam("iceTeam", players);
 //		teamDao.updateTeam(1, "iceTeamBig", players);
-//		teamDao.deleteTeam(1);
+//		teamDao.deleteTeam(2);
 //		
 //		teamDao.saveNPCteam("NPC1", monsters, traphazards);
 //		teamDao.updateNPCteam(2, "NPC1", monsters, traphazards);
@@ -297,7 +305,8 @@ public class HibernateTest {
 //		teams.add(team1);
 //		teams.add(team2);
 //
-//		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+		CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
+//		ceDao.deleteCombatEncounter(1);
 //		CombatEncounter ce = ceDao.getCombatEncounter(1);
 //		
 //		List<Object> creatures = ce.organizeCreaturesByInitiative();

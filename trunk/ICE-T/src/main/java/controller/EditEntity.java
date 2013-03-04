@@ -9,10 +9,14 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 import bean.forms.*;
 import entity.*;
 
 public class EditEntity {
+	
+	private static final Logger logger = Logger.getLogger(EditEntity.class);
 	
 	FormBean editableEntity;
 	Map<String, Integer> entityID_list;
@@ -79,20 +83,19 @@ public class EditEntity {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.edit();
 		} else if (theEntity instanceof Team) {
-			//TODO: make work for npc team
-//			Team tm = (Team) theEntity;
-//			boolean player_not_empty_null = tm.getPlayers() != null && !tm.getPlayers().isEmpty();
-//			boolean monster_empty_null = tm.getMonsters() == null || tm.getMonsters().isEmpty();
-//			boolean trap_empty_null = tm.getTraphazards() == null || tm.getTraphazards().isEmpty();
-//			if (player_not_empty_null && monster_empty_null && trap_empty_null){
-//		    	logger.info("Team of players named " + tm.getName() + " is about to be saved in the database.");
-//				tm.save();
-//			} else {
-//		    	logger.info("Team of NPCs named " + tm.getName() + " is about to be saved in the database so the monsters must be saved in the database first.");
-//		    	List<Monster> monsters = tm.getMonsters();
-//				tm.saveNPC(monsters);		    	
-//			}
-//			tm.edit();
+			//TODO: test that shit
+			Team tm = (Team) theEntity;
+			boolean player_not_empty_null = tm.getPlayers() != null && !tm.getPlayers().isEmpty();
+			boolean monster_empty_null = tm.getMonsters() == null || tm.getMonsters().isEmpty();
+			boolean trap_empty_null = tm.getTraphazards() == null || tm.getTraphazards().isEmpty();
+			if (player_not_empty_null && monster_empty_null && trap_empty_null){
+		    	logger.info("Team of players named " + tm.getName() + " is about to be updated in the database.");
+				tm.edit();
+			} else {
+		    	logger.info("Team of NPCs named " + tm.getName() + " is about to be saved in the database so the monsters must be saved in the database first.");
+		    	List<Monster> monsters = tm.getMonsters();
+				tm.editNPC(monsters);		    	
+			}
 		}
 	}
 
@@ -106,9 +109,22 @@ public class EditEntity {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.remove();
 		} else if (theEntity instanceof Team) {
-			//TODO: make work for npc team
+			//TODO: test that shit
 			Team tm = (Team) theEntity;
-			tm.remove();
+			boolean player_not_empty_null = tm.getPlayers() != null && !tm.getPlayers().isEmpty();
+			boolean monster_empty_null = tm.getMonsters() == null || tm.getMonsters().isEmpty();
+			boolean trap_empty_null = tm.getTraphazards() == null || tm.getTraphazards().isEmpty();
+			if (player_not_empty_null && monster_empty_null && trap_empty_null){
+		    	logger.info("Team of players named " + tm.getName() + " is about to be removed in the database.");
+				tm.remove();
+			} else {
+		    	logger.info("Team of NPCs named " + tm.getName() + " is about to be removed in the database.");
+				tm.removeNPC();		    	
+			}
+		} else if (theEntity instanceof Monster){
+			Monster m = (Monster) theEntity;
+			CharacterSheet cs = m.getCharacterSheet();
+			cs.remove();
 		}
 	}
 
