@@ -41,6 +41,8 @@ public class Rewards {
 	 * Default constructor
 	 */
 	public Rewards() {
+		this.XP = 0;
+		this.treasure = "";
 	}
 
 	/**

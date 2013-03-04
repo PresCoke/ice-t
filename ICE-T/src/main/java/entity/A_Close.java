@@ -31,6 +31,8 @@ public class A_Close extends Attack_Type {
 	 * Default Constructor
 	 */
 	public A_Close() {
+		close_size = 0;
+		closeType = EntityEnum.A_Close_Type.blast;
 	}
 
 	/**

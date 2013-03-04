@@ -167,6 +167,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			theCharacter.setMisc(misc_field.getText());
 		}
 		thePlayer = new entity.Player(player_field.getText(), theCharacter);
+		thePlayer.setPlayerName(player_field.getText());
 		thePlayer.setCurrentHealSurges(theCharacter.getSurgesPerDay());
 		thePlayer.setCurrentHP(theCharacter.getMaxHP());
 		thePlayer.setInitiative(theCharacter.getInitiative());
@@ -191,8 +192,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		generalInfo_panel.setBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		//Player Name
 		JLabel player_label = new JLabel( entity_l10n.getString("PlayerName_entity") );
-		//TODO: set player_field...
-		//player_field
+		player_field.setText( thePlayer.getPlayerName() );
 		//Character Name
 		JLabel name_label = new JLabel( entity_l10n.getString("Name_entity") );
 		name_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -320,7 +320,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		if (theCharacter.getRole() != null) {
-			role_list.setSelectedItem( theCharacter.getRole() );
+			role_list.setSelectedItem( theCharacter.getRole().ordinal() );
 		}
 		//size
 		JLabel size_label = new JLabel(entity_l10n.getString("Size_entity"));
@@ -353,7 +353,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		if (theCharacter.getSize() != null) {
-			size_list.setSelectedItem( theCharacter.getSize() );
+			size_list.setSelectedItem( theCharacter.getSize().ordinal() );
 		}
 		//power source
 		JLabel pwr_label = new JLabel(entity_l10n.getString("Power_entity"));
@@ -1488,6 +1488,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			temp_bean.createPanelFrom(theCharacter.getAttackAt(index));
 			attack_list_model.addElement(temp_bean);
 		}
+		
 		
 		attack_list = new JList(attack_list_model);
 		attack_list.setLayoutOrientation(JList.VERTICAL);

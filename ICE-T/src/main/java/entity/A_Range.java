@@ -26,6 +26,8 @@ public class A_Range extends Attack_Type {
 	 * Default constructor
 	 */
 	public A_Range() {
+		L_range = 0;
+		S_range = 0;
 	}
 
 

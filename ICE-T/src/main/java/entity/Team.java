@@ -230,13 +230,13 @@ public class Team implements EntityM {
 	/**
 	 * Other functions
 	 */
-	public void save() {
+	public int save() {
     	logger.info("Saving Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
-		tDao.saveTeam(getName(), getPlayers());
+		return tDao.saveTeam(getName(), getPlayers());
 	}
 	
-	public void saveNPC(List<Monster> monsters) {
+	public int saveNPC(List<Monster> monsters) {
     	logger.info("Saving Monsters before saving the team.");
 		MonsterDao mDao = new MonsterDaoImpl();
     	for (Monster m : monsters){
@@ -247,16 +247,17 @@ public class Team implements EntityM {
 		this.setMonsters(monstersDB);
     	logger.info("Saving NPC Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
-		tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
+		return tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
 	}
 
-	public void edit() {
+	public int edit() {
     	logger.info("Editing Combat Encounter " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateTeam(getId(), getName(), getPlayers());
+		return 1;
 	}
 	
-	public void editNPC(List<Monster> monsters) {
+	public int editNPC(List<Monster> monsters) {
     	logger.info("Updating Monsters before updating the team.");
 		MonsterDao mDao = new MonsterDaoImpl();
 		List<Monster> monstersDB = mDao.getMonstersInTeam(getId());
@@ -276,6 +277,7 @@ public class Team implements EntityM {
     	logger.info("Updating NPC Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateNPCteam(getId(), getName(), getMonsters(), getTraphazards());
+		return 1;
 	}
 
 	public void remove() {

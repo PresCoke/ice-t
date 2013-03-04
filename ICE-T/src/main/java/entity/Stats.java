@@ -45,6 +45,11 @@ public class Stats {
 	 * Default constructor
 	 */
 	public Stats() {
+		this.kills = 0;
+		this.deaths = 0;
+		this.hits = 0;
+		this.misses = 0;
+		this.assists = 0;
 	}
 
 	

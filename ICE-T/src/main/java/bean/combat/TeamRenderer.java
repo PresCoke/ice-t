@@ -23,8 +23,8 @@ public class TeamRenderer implements ListCellRenderer, TableCellRenderer {
 			theFinalPane = createPlayerPanel( ((Player) theValue).getCharacterSheet() );
 		} else if (theValue instanceof Monster) {
 			theFinalPane = createMonsterPanel( ((Monster) theValue).getCharacterSheet() );
-		} else if (theValue instanceof CreatureBean) {
-			Object aCreature = ( (CreatureBean) theValue ).getEntity();
+		} else if (theValue instanceof CreatureBeanShallow) {
+			Object aCreature = ( (CreatureBeanShallow) theValue ).getEntity();
 			if (aCreature instanceof Player) {
 				theFinalPane = createPlayerPanel( ((Player) aCreature).getCharacterSheet() );
 			} else if (aCreature instanceof Monster) {
@@ -50,8 +50,8 @@ public class TeamRenderer implements ListCellRenderer, TableCellRenderer {
 			theFinalPane = createPlayerPanel( ((Player) theValue).getCharacterSheet() );
 		} else if (theValue instanceof Monster) {
 			theFinalPane = createMonsterPanel( ((Monster) theValue).getCharacterSheet() );
-		} else if (theValue instanceof CreatureBean) {
-			Object aCreature = ( (CreatureBean) theValue ).getEntity();
+		} else if (theValue instanceof CreatureBeanShallow) {
+			Object aCreature = ( (CreatureBeanShallow) theValue ).getEntity();
 			if (aCreature instanceof Player) {
 				theFinalPane = createPlayerPanel( ((Player) aCreature).getCharacterSheet() );
 			} else if (aCreature instanceof Monster) {

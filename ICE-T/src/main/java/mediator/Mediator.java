@@ -108,4 +108,10 @@ public class Mediator {
 			return null;
 		}
 	}
+
+	public entity.CombatEncounter getCombatEncounterOfID(int thisID) {
+		entity.dao.CombatEncounterDao ceDAO =  new entity.dao.CombatEncounterDaoImpl();
+		entity.CombatEncounter ce = ceDAO.getCombatEncounter(thisID);
+		return ce;
+	}
 }

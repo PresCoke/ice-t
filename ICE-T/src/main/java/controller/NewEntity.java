@@ -40,9 +40,6 @@ public class NewEntity {
 		case 4://Team
 			empty_entity = new TeamForm();
 			break;
-		case 5://Effect
-			empty_entity = new EffectForm();
-			break;
 		}
 		
 		return empty_entity;

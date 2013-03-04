@@ -20,6 +20,8 @@ public class TeamForm implements FormBean, ActionListener {
 
 	private static final int creatureTableDimension = 3;
 	private Team theTeam;
+	private String monsterNames = ""; //this will be the same for every monster in a team.
+									  //TODO: make this able to be different for every monster however not necessarily unique
 	private JPanel teamForm_panel;
 	private JPanel options_panel;
 	private JTextField name_field;
@@ -44,6 +46,10 @@ public class TeamForm implements FormBean, ActionListener {
 			}
 		};
 		
+		java.util.Random random_generator = new java.util.Random();
+		int alpha = random_generator.nextInt(26) + 65;
+		int numeric = random_generator.nextInt(100);
+		monsterNames = Character.toString((char) alpha)+numeric;
 		name_field = new JTextField();
 		
 		addableCreatures_model.setColumnCount(creatureTableDimension);
@@ -79,13 +85,10 @@ public class TeamForm implements FormBean, ActionListener {
 							boolean isAlreadyInTeam = false;
 							for (int i = 0; i<currentTeam_model.size(); i++) {
 								Object currentComparator = currentTeam_model.get(i);
-								if (currentComparator instanceof bean.combat.CreatureBean) {
-									currentComparator = ((bean.combat.CreatureBean) currentComparator).getEntity();
-									if ( !(currentComparator instanceof entity.Player) ) {
-										continue;
-									}
-									
-								} else if ( !(currentComparator instanceof entity.Player) ) {
+								if (currentComparator instanceof bean.combat.CreatureBeanShallow) {
+									currentComparator = ((bean.combat.CreatureBeanShallow) currentComparator).getEntity();
+								}
+								if ( !(currentComparator instanceof entity.Player) ) {
 									continue;
 								}
 								if (addable.compareTo((entity.Player) (currentComparator)) == 0) {
@@ -98,9 +101,17 @@ public class TeamForm implements FormBean, ActionListener {
 								theTeam.addPlayer(addable);
 							}
 						} else if (theValue instanceof entity.Monster) {
-							theTeam.addMonster((entity.Monster) theValue);
+							entity.Monster theMonster = (entity.Monster) theValue;
+							theMonster.setMonsterName(monsterNames);
+							theTeam.addMonster(theMonster);
 							currentTeam_model.addElement( theValue );
 						} else if (theValue instanceof entity.TrapHazard) {
+							if ( !isNPC_checkbox.isSelected() ) {
+								JOptionPane.showMessageDialog(teamForm_panel,
+										  "Cannot add a trap to a Player team.",//TODO: make french
+										  "Team Form",
+										  JOptionPane.WARNING_MESSAGE);
+							}
 							theTeam.addTrapHazard((entity.TrapHazard) theValue);
 							currentTeam_model.addElement( theValue );
 						}
@@ -180,16 +191,17 @@ public class TeamForm implements FormBean, ActionListener {
 	}
 
 	private void createPanel() {
-		currentTeam_model = new DefaultListModel();
 		name_field.setText(theTeam.getName());
+		
+		currentTeam_model = new DefaultListModel();
 		int index = 0;
 		for (index = 0; index < theTeam.getNumberOfMonsters(); index++) {
-			bean.combat.CreatureBean theMonster = new bean.combat.CreatureBean(); 
+			bean.combat.CreatureBeanShallow theMonster = new bean.combat.CreatureBeanShallow(); 
 			theMonster.createPanelFrom(theTeam.getMonsterAt(index));
 			currentTeam_model.addElement(theMonster);
 		}
 		for (index = 0; index < theTeam.getNumberOfPlayers(); index++) {
-			bean.combat.CreatureBean thePlayer = new bean.combat.CreatureBean();
+			bean.combat.CreatureBeanShallow thePlayer = new bean.combat.CreatureBeanShallow();
 			thePlayer.createPanelFrom(theTeam.getPlayerAt(index));
 			currentTeam_model.addElement(thePlayer);
 		}
@@ -339,6 +351,7 @@ public class TeamForm implements FormBean, ActionListener {
 					return;
 				}
 				theTeam.removeAllPlayers();
+				currentTeam_model.removeAllElements();
 			} else if (isNPCTeam && theTeam.getNumberOfMonsters() > 0) { // user wants a player team instead
 				int x = JOptionPane.showConfirmDialog(teamForm_panel,
 						  "All monsters currently in the team will be removed.\n Do you wish to proceed.",//TODO: make french
@@ -349,6 +362,7 @@ public class TeamForm implements FormBean, ActionListener {
 					return;
 				}
 				theTeam.removeAllMonsters();
+				currentTeam_model.removeAllElements();
 			}
 			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
 			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {

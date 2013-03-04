@@ -35,6 +35,9 @@ public class A_Area extends Attack_Type {
 	 * Default constructor
 	 */
 	public A_Area() {
+		area_range = 0;
+		area_size = 0;
+		area_type = EntityEnum.A_Area_Type.burst;
 	}
 
 	
