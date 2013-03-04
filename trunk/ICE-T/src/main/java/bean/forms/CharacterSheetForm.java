@@ -83,6 +83,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	
 	public JPanel createEntityPanel() {
 		theCharacter = new CharacterSheet();
+		thePlayer = new entity.Player();
 		theCharacter.setNPC(false);
 		
 		createPanel();
