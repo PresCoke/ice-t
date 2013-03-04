@@ -6,13 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import testHibernate.HibernateTest;
-
 import entity.*;
-import entity.dao.CharacterSheetDao;
-import entity.dao.CharacterSheetDaoImpl;
-import entity.dao.MonsterDao;
-import entity.dao.MonsterDaoImpl;
 import bean.forms.*;
 
 public class NewEntity {

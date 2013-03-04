@@ -20,6 +20,8 @@ import entity.dao.MonsterDao;
 import entity.dao.MonsterDaoImpl;
 import entity.dao.TeamDao;
 import entity.dao.TeamDaoImpl;
+import entity.dao.TrapHazardDao;
+import entity.dao.TrapHazardDaoImpl;
 
 /**
  * Team Class
@@ -253,11 +255,39 @@ public class Team implements EntityM {
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateTeam(getId(), getName(), getPlayers());
 	}
+	
+	public void editNPC(List<Monster> monsters) {
+    	logger.info("Updating Monsters before updating the team.");
+		MonsterDao mDao = new MonsterDaoImpl();
+		List<Monster> monstersDB = mDao.getMonstersInTeam(getId());
+		for (Monster m : monstersDB){
+			mDao.deleteMonster(m.getId());
+		}
+    	for (Monster m : monsters){
+    		mDao.saveMonster(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
+    				m.isSecondWind(), m.getTempHP(), m.getCharacterSheet());
+    	}
+		logger.info("Updating TrapsHazards before updating the team.");
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		List<TrapHazard> trapHazards = thDao.getAllTrapHazardsInTeam(getId());
+		for (TrapHazard th : trapHazards){
+			th.setTeam(null);
+		}		
+    	logger.info("Updating NPC Team " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
+		tDao.updateNPCteam(getId(), getName(), getMonsters(), getTraphazards());
+	}
 
 	public void remove() {
     	logger.info("Removing Combat Encounter " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.deleteTeam(getId());
+	}
+	
+	public void removeNPC() {
+    	logger.info("Removing Combat Encounter " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
+		tDao.deleteNPCTeam(getId());
 	}
 
 	public List<Object[]> getAll() {
