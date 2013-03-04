@@ -234,21 +234,22 @@ public class TrapHazard implements EntityM {
 	/**
 	 * Other functions
 	 */
-	public void save() {
+	public int save() {
 		logger.info("Saving TrapHazard " + this.getName());
 		TrapHazardDao thDao = new TrapHazardDaoImpl();
-		thDao.saveTrapHazard(getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
+		return thDao.saveTrapHazard(getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
 				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
 				getAttack(), getAttack().getAttackType());
 	}
 
 
-	public void edit() {
+	public int edit() {
 		logger.info("Editing TrapHazard " + this.getName());
 		TrapHazardDao thDao = new TrapHazardDaoImpl();
 		thDao.updateTrapHazard(getId(), getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
 				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
 				getAttack(), getAttack().getAttackType());
+		return 1;
 		
 	}
 

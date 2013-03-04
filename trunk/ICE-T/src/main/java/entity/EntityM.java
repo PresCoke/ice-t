@@ -12,12 +12,12 @@ public interface EntityM {
 	/**
 	 * Save an entity
 	 */
-	public abstract void save();
+	public int save();
 	
 	/**
 	 * Edit an entity
 	 */
-	public abstract void edit();
+	public int edit();
 	
 	/**
 	 * Remove an entity

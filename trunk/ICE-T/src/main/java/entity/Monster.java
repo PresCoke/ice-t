@@ -154,7 +154,7 @@ public class Monster implements EntityM, Comparable<Monster> {
 
 
 	public void setInitiative(int initiative) {
-		this.initiative = initiative;
+		this.initiative = characterSheet.getInitiative() + initiative;
 	}
 
 
@@ -250,18 +250,19 @@ public class Monster implements EntityM, Comparable<Monster> {
 	/*
 	 * Other functions
 	 */
-	public void save() {
+	public int save() {
     	logger.info("Saving Monster " + getMonsterName());
     	MonsterDao mDao = new MonsterDaoImpl();
-    	mDao.saveMonster(getMonsterName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
+    	return mDao.saveMonster(getMonsterName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
 	}
 
-	public void edit() {
+	public int edit() {
     	logger.info("Editing Monster " + getMonsterName());
     	MonsterDao mDao = new MonsterDaoImpl();
     	mDao.updateMonster(getId(), getMonsterName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP());
+    	return 1;
 	}
 
 	public void remove() {

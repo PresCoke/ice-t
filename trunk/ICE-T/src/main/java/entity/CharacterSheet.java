@@ -840,10 +840,10 @@ public class CharacterSheet implements EntityM {
 		return null;
 	}
 
-	public void save(Player pl) {
+	public int save(Player pl) {
     	logger.info("Saving Character Sheet " + getName());
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
-		csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
+		int cs_id = csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
 				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
 				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
@@ -853,9 +853,10 @@ public class CharacterSheet implements EntityM {
 		List<CharacterSheet> csDB = csDao.getCharacterSheetByName(getName());
 		pl.setCharacterSheet(csDB.get(0));
 		pl.save();
+		return cs_id;
 	}
 
-	public void edit() {
+	public int edit() {
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
     	CharacterSheet csDB = csDao.getCharacterSheet(getId());
         logger.debug("Deleting previous character sheet's attacks");
@@ -890,6 +891,7 @@ public class CharacterSheet implements EntityM {
 				getLevel(), getXP(), getRaceFeatures(), getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(),
 				getPowerSource(), getRole(), getSize(), getMonsterOrigin(), getMonsterType(), getCharacter_resistances(),
 				getAttacks(), getAttacksTypes(getAttacks()),isNPC());
+		return 1;
 	}
 
 	public void remove() {
@@ -916,6 +918,7 @@ public class CharacterSheet implements EntityM {
     	return csDao.readAllMonsters();
 	}
 
-	public void save() {	
+	public int save() {
+		return -1;
 	}
 }

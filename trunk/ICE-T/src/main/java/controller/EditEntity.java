@@ -35,7 +35,6 @@ public class EditEntity {
 	}
 
 	public String[] getEntityNamesOfType(String selectedEntityType) {
-		//TODO: I'm thinking going through App_Root then to the mediator and making the request to the database like that
 		List<Object[]> temp = App_Root.resource_mediator.getUniqueEntityIDsForType(selectedEntityType);
 		List<String> names = new ArrayList<String>();
 		entityID_list = new HashMap<String, Integer>();
@@ -63,8 +62,6 @@ public class EditEntity {
 			editableEntity = new MonsterSheetForm();
 		} else if (entityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			editableEntity = new TrapHazardForm();
-		} else if (entityType.equals(entityNames.getString("Effect_entity"))) {
-			editableEntity = new EffectForm();
 		} else if (entityType.equals(entityNames.getString("Team_entity"))) {
 			editableEntity = new TeamForm();
 		}

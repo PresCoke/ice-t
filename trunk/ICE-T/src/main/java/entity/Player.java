@@ -159,7 +159,7 @@ public class Player implements EntityM, Comparable<Player> {
 
 
 	public void setInitiative(int initiative) {
-		this.initiative = initiative;
+		this.initiative = characterSheet.getInitiative() + initiative;
 	}
 
 
@@ -264,19 +264,20 @@ public class Player implements EntityM, Comparable<Player> {
 	/**
 	 * Other functions
 	 */
-	public void save() {
+	public int save() {
     	logger.info("Saving Creature " + getPlayerName());
     	PlayerDao pDao = new PlayerDaoImpl();
-    	pDao.savePlayer(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
+    	return pDao.savePlayer(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
 		
 	}
 
-	public void edit() {
+	public int edit() {
     	logger.info("Editing Creature " + getPlayerName());
     	PlayerDao pDao = new PlayerDaoImpl();
     	pDao.updatePlayer(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP());
+    	return 1;
 	}
 
 	public void remove() {

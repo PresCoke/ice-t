@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import entity.CombatEncounter;
+
 import mediator.*;
 import presentation.*;
 
@@ -66,6 +68,7 @@ public class App_Root
 		
 		help_controller = new Help();
 		combat_controller = new Combat();
+		combat_controller.setCombatEncounter(App_Root.getLastOpenEncounter());
 		editEntity_controller = new EditEntity();
 		newEntity_controller = new NewEntity();
 //		welcome_controller = new Welcome();
@@ -109,6 +112,48 @@ public class App_Root
             logger.fatal("Error while getting, loading or closing the nes preferences in the file ApplicationSettings.properties --- " + e.getMessage());
 			Exception_Window.showException(e);	
 		}
+	}
+
+
+	public static CombatEncounter getLastOpenEncounter() {
+		int lastCE_id;
+		try {
+			java.util.Properties props = new java.util.Properties();
+			java.io.File f = new java.io.File("src/main/resources/filters/ApplicationSettings.properties");
+			java.io.FileInputStream fis = new java.io.FileInputStream(f);
+			props.load(fis);
+			
+			lastCE_id = Integer.parseInt(props.getProperty("LastOpenCombatEncounter_ID"));
+			
+			fis.close();
+			
+		} catch (Exception e) {
+			return new CombatEncounter();
+		}
+		
+		if (lastCE_id < 0) {
+			return new CombatEncounter();
+		} else {
+			CombatEncounter theCE = resource_mediator.getCombatEncounterOfID(lastCE_id);
+			return theCE;
+		}
+	}
+
+
+	public static void changeLastOpenEncounter(int CE_id) {
+		try {
+			java.util.Properties props = new java.util.Properties();
+			java.io.File f = new java.io.File("src/main/resources/filters/ApplicationSettings.properties");
+			java.io.FileInputStream fis = new java.io.FileInputStream(f);
+			props.load(fis);
+			
+			props.setProperty("LastOpenCombatEncounter_ID", Integer.toString(CE_id));
+			
+			fis.close();
+		} catch (Exception e) {
+			
+		}
+		
 	}
 
 }

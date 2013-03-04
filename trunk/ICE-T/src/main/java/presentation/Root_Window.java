@@ -29,13 +29,8 @@ public class Root_Window {
 	String[] entity_names;
 	
 	public Root_Window() {
-		main_window = new JFrame();
-		
-		/*welcome_tab = new Welcome_Tab(App_Root.welcome_controller); 
-		newEntity_tab = new New_Tab(App_Root.newEntity_controller); 
-		editEntity_tab = new Edit_Tab(App_Root.editEntity_controller);*/ 
+		main_window = new JFrame(); 
 		combat_tab = new Combat_Tab(App_Root.combat_controller); 
-		//help_tab = new Help_Tab(App_Root.help_controller);
 		
 	}
 	
@@ -123,7 +118,12 @@ public class Root_Window {
 		save_item = new JMenuItem(root_window_l10n.getString("Save_menuitem"));
 		save_item.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//TODO: get app to save currently open combat encounter
+				int CE_id;
+				if (App_Root.combat_controller.getID() < 0) {
+					App_Root.combat_controller.saveOpenCombatEncounter();
+				} else {
+					App_Root.combat_controller.updateOpenCombatEncounter();
+				}
 			}
 		});
 		file_menu.add(save_item);
@@ -137,7 +137,11 @@ public class Root_Window {
 		quit_item = new JMenuItem(root_window_l10n.getString("Quit_menuitem"));
 		quit_item.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//TODO: should include a save of the current combat encounter
+				if (App_Root.combat_controller.getID() < 0) {
+					App_Root.combat_controller.saveOpenCombatEncounter();
+				} else {
+					App_Root.combat_controller.updateOpenCombatEncounter();
+				}
 				App_Root.exit();
 			}
 		});

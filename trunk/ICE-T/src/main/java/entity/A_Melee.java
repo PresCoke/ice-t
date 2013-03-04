@@ -25,6 +25,7 @@ public class A_Melee extends Attack_Type {
 	 * Default constructor
 	 */
 	public A_Melee() {
+		melee_reach = 0;
 	}
 
 	

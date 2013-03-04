@@ -135,6 +135,11 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
         try {
             transaction = session.beginTransaction();
             ce = (CombatEncounter) session.get(CombatEncounter.class, combatEncounterId);
+            
+            TeamDao tDAO = new TeamDaoImpl();
+            List<Team> t = tDAO.getAllPlayerTeamsIn(ce.getId());
+            
+            ce.setTeams(t);
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while retrieving CombatEncounter " + combatEncounterId + " in the database --- " + e.getMessage());

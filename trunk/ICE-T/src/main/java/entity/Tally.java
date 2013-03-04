@@ -49,6 +49,9 @@ public class Tally {
 	 * Default constructor
 	 */
 	public Tally() {
+		this.name = "";
+		this.tuples = new ArrayList<Tuple>();
+		this.tuples.add(new Tuple());
 	}
 	
 	/**
