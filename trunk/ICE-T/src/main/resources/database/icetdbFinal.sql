@@ -109,8 +109,8 @@ CREATE TABLE Player (
 
 CREATE TABLE Monster (
 	Monster_id INTEGER NOT NULL,
-	monster_name VARCHAR(50) NOT NULL UNIQUE,
-	CharacterSheet_id INTEGER NOT NULL UNIQUE,
+	monster_name VARCHAR(50) NOT NULL,
+	CharacterSheet_id INTEGER NOT NULL,
 	Team_id INTEGER,
 	currentHP INTEGER NOT NULL,
 	currentHealSurges INTEGER NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE Attack (
 
 CREATE TABLE Attack_Type (
 	Attack_Type_id INTEGER NOT NULL PRIMARY KEY,
-	Attack_id INTEGER NOT NULL UNIQUE,
+	Attack_id INTEGER UNIQUE NOT NULL,
 	isPersonal BOOLEAN NOT NULL,
 	CONSTRAINT FK_Attack_Type_Attack FOREIGN KEY (Attack_id) REFERENCES Attack (Attack_id)
 );
