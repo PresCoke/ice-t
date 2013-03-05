@@ -69,11 +69,13 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		name_pane.setBorder( BorderFactory.createEtchedBorder() );
 		name_pane.setPreferredSize( new Dimension(150, 0) ); //TODO: find better way then specifying exact sizes
 		name_pane.setMinimumSize( new Dimension(150, 0) );
+//		name_pane.setMaximumSize( new Dimension(150, 0) );
 		
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
 		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
-		listSelection_panel.setPreferredSize( new Dimension(150, 100) );
+		listSelection_panel.setPreferredSize( new Dimension(150, 0) );
+//		listSelection_panel.setMaximumSize( new Dimension(150, 0) );
 		listSelection_panel.add(name_pane);
 		
 		save_button = new JButton(editTab_l10n.getString("Save_Button"));

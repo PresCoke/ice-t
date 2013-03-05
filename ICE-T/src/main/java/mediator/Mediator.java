@@ -37,9 +37,9 @@ public class Mediator {
 	 * @return
 	 */
 	public int start () {
-		dbMgr = new EmbeddedDBManager(propertiesURL);
-		dbMgr.start();
-		dbMgr.connect();
+//		dbMgr = new EmbeddedDBManager(propertiesURL);
+//		dbMgr.start();
+//		dbMgr.connect();
 		return -1;
 	}
 	
@@ -49,7 +49,7 @@ public class Mediator {
 	 * @return
 	 */
 	public int close () {
-		dbMgr.close();
+//		dbMgr.close();
 		return -1;
 	}
 	

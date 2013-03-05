@@ -45,7 +45,7 @@ public class TeamController {
 			}
 			for (int yindex=0, xindex=0, lindex = 0; lindex < last_number; lindex++) {
 				theTable[yindex][xindex] = new Monster(monsterList.get(lindex));
-				if (xindex<5) {
+				if (xindex<2) { //TODO: make this creature table dimension 
 					xindex++;
 				} else {
 					yindex++;
