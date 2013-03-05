@@ -41,6 +41,33 @@ public interface AttackDao {
 	
 	/**
 	 * Save an attack in the database
+	 * @param name
+	 * @param primaryTarget
+	 * @param secondaryTarget
+	 * @param accessories
+	 * @param powerSource
+	 * @param frequency
+	 * @param hit
+	 * @param miss
+	 * @param basic
+	 * @param trigger
+	 * @param effectType
+	 * @param ability
+	 * @param damageType
+	 * @param defense
+	 * @param sustain
+	 * @param action
+	 * @param useType
+	 * @param trapHazardId
+	 * @return attack's id stored in the database
+	 */
+	public int saveAttackForTrap(String name, String primaryTarget, String secondaryTarget, String accessories, 
+			String powerSource, int frequency, String hit, String miss, boolean basic, String trigger,
+			A_Effect_Type effectType, A_Ability ability, CS_Resistance_Type damageType, A_Defense defense,
+			A_Sustain sustain, A_Action action, A_Use_Type useType, int trapHazardId);
+	
+	/**
+	 * Save an attack in the database
 	 * @param attack
 	 * @param characterSheetId
 	 * @return attack's id stored in the database
@@ -77,9 +104,15 @@ public interface AttackDao {
 			int characterSheetId);
 	
 	/**
-	 * Delete an attack from the database
+	 * Delete a character's attack from the database
 	 * @param attackId
 	 */
 	public void deleteAttack(int attackId);
+	
+	/**
+	 * Delete a trap's attack from the database
+	 * @param attackId
+	 */
+	public void deleteAttackFromTrap(int attackId);
 }
 

@@ -16,6 +16,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import entity.dao.AttackDao;
+import entity.dao.AttackDaoImpl;
+import entity.dao.Attack_TypeDao;
+import entity.dao.Attack_TypeDaoImpl;
 import entity.dao.TrapHazardDao;
 import entity.dao.TrapHazardDaoImpl;
 
@@ -92,7 +96,7 @@ public class TrapHazard implements EntityM {
 		this.counterMeasureDescription = "";
 		this.counterMeasureSkill = EntityEnum.T_CounterMeasureSkill.acrobatics;
 		this.difficultyLevel = 0;
-		this.level = 0;
+		this.level = 1;
 		this.role = EntityEnum.T_Role.blaster;
 		this.triggers = "";
 		this.type = EntityEnum.T_Type.hazard;
@@ -244,11 +248,22 @@ public class TrapHazard implements EntityM {
 
 
 	public int edit() {
-		logger.info("Editing TrapHazard " + this.getName());
 		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		TrapHazard thDB = thDao.getTrapHazard(getId());
+        logger.debug("Deleting previous traphazard's attack");
+    	AttackDao aDao = new AttackDaoImpl();
+        aDao.deleteAttackFromTrap(thDB.getAttack().getId());
+        logger.debug("Setting new traphazard's attack");
+        Attack a = this.getAttack();
+        Attack_TypeDao atDao = new Attack_TypeDaoImpl();
+   		int attackId = aDao.saveAttackForTrap(a.getAttackName(), a.getPrimaryTarget(), a.getSecondaryTarget(), a.getAccessories(), a.getPowerSource(),
+    				a.getFrequency(), a.getHit(), a.getMiss(), a.isBasic(), a.getTrigger(), a.getEffectType(), a.getAbility(),
+    				a.getDamageType(), a.getDefense(), a.getSustain(), a.getAction(), a.getUseType(), getId());
+        logger.debug("Setting attack's type");
+    	atDao.saveAttackType(a.getAttackType(), attackId);
+		logger.info("Editing TrapHazard " + this.getName());
 		thDao.updateTrapHazard(getId(), getName(), getAvoidance(), getLevel(), getAvoidanceSkill(), getTriggers(),getXp(),
-				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill(),
-				getAttack(), getAttack().getAttackType());
+				getDifficultyLevel(), getCounterMeasureDescription(), getType(), getRole(), getCounterMeasureSkill());
 		return 1;
 		
 	}

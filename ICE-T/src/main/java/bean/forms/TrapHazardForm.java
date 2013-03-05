@@ -45,7 +45,7 @@ public class TrapHazardForm implements FormBean {
 		
 		JLabel trapLevel_label = new JLabel(entity_l10n.getString("Level_trap"));
 		//TODO: perhaps add key listener to ensure that value is 0 <= x <= 100
-		trapLevel_field = new JSpinner( new SpinnerNumberModel(0, 0, 30, 1) );
+		trapLevel_field = new JSpinner( new SpinnerNumberModel(1, 1, 30, 1) );
 		trapLevel_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent ce) {
 				int level = (Integer) ((JSpinner) ce.getSource()).getValue();
@@ -95,6 +95,9 @@ public class TrapHazardForm implements FormBean {
 				}
 			}
 		});
+//		if (theTrap.getRole() != null) {
+//			trapRole_list.setSelectedIndex( theTrap.getRole().ordinal() );
+//		}
 		
 		String[] trapType = { entity_l10n.getString("Trap_trap"),
 							  entity_l10n.getString("Hazard_trap") };
@@ -112,6 +115,9 @@ public class TrapHazardForm implements FormBean {
 				}
 			}
 		});
+//		if (theTrap.getType() != null) {
+//			trapType_list.setSelectedIndex( theTrap.getType().ordinal() );
+//		}
 		
 		JLabel trapAvoidSkill_label = new JLabel(entity_l10n.getString("AvoidSkill_trap"));
 		String[] trapAvoidSkills = { entity_l10n.getString("ACRO_trap"),
@@ -173,6 +179,9 @@ public class TrapHazardForm implements FormBean {
 				}
 			}
 		});
+//		if (theTrap.getAvoidanceSkill() != null) {
+//			trapAvoidSkill_field.setSelectedIndex( theTrap.getAvoidanceSkill().ordinal() );
+//		}
 	
 		JLabel trapAvoidValue_label = new JLabel(entity_l10n.getString("AvoidValue_trap"));
 		//TODO: perhaps add key listener to ensure that value is 0 <= x <= 100
@@ -240,6 +249,10 @@ public class TrapHazardForm implements FormBean {
 				}
 			}
 		});
+//		if (theTrap.getCounterMeasureSkill() != null) {
+//			trapCounterSkill_field.setSelectedIndex( theTrap.getCounterMeasureSkill().ordinal() );
+//		}
+		
 		JLabel trapCounterDifficulty_label = new JLabel(entity_l10n.getString("CounterDifficulty_trap"));
 		trapCounterDifficulty_field = new JSpinner( new SpinnerNumberModel(0, 0, 100, 1) );
 		trapCounterDifficulty_field.addChangeListener( new ChangeListener() {

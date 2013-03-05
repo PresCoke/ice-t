@@ -154,35 +154,17 @@ public class TeamDaoImpl implements TeamDao {
             transaction = session.beginTransaction();
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
-            //Set the monsters
-            logger.debug("Setting NPC team's monsters and monsters' team");
-            for (Monster m : monsters){
-                Monster monster = (Monster) session.get(Monster.class, m.getId());
-                t.addMonster(monster);
-                monster.setTeam(t);
-                session.update(monster);
+            //Set the trapHazards
+            logger.debug("Setting traps");
+            for (TrapHazard th : t.getTraphazards()){
+                th.setTeam(null);
+                session.update(th);
             }
-            //Set the traps/hazards
-            logger.debug("Modifying previous traps/hazards' team");
-            List<TrapHazard> trapHazardsDB = t.getTraphazards();
-            for (TrapHazard th : trapHazardsDB){
-            	TrapHazard traphazard = (TrapHazard) session.get(TrapHazard.class, th.getId());
-            	traphazard.setTeam(null);
-                session.update(traphazard);
-            } 
-            logger.debug("Modifying previous traps/hazards' team done");
-            t.removeAllTrapHazards();
-            session.update(t);
-            logger.debug("Setting NPC team of the traps/hazards and traps/hazards' team");
-            for (TrapHazard th : traphazards){
-            	TrapHazard traphazard = (TrapHazard) session.get(TrapHazard.class, th.getId());
-                t.addTrapHazard(traphazard);
-                traphazard.setTeam(t);
-                session.update(traphazard);
-            }
+            logger.debug("Traps updated");
             transaction.commit();
         	logger.info("NPC Team " + name + " was successfully updated in the database.");
         } catch (HibernateException e) {
+        	e.printStackTrace();
             transaction.rollback();
             logger.fatal("Error while updating NPC Team " + name + " in the database --- " + e.getMessage());
         } finally {
@@ -199,10 +181,11 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             //Update monsters
             logger.info("Update of monsters");
+            MonsterDao mDao = new MonsterDaoImpl();
             for (Monster m : t.getMonsters()){
-            	m.setTeam(null);
-                session.update(m);
+                mDao.deleteMonster(m.getId());
             }
+            t.removeAllMonsters();
             //Update Traps/Hazards
             logger.info("Update of traps/hazards");
             for (TrapHazard th : t.getTraphazards()){

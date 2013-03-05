@@ -44,7 +44,8 @@ public class MonsterDaoImpl implements MonsterDao {
     	logger.info("Retrieval of all monsters in the team " + teamId);
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createQuery("from Monster where Team_id="+teamId);
+		Query q = session.createQuery("from Monster where Team_id=:value");
+		q.setParameter("value", teamId);
 		List<Monster> monsters = q.list();
 		return monsters;
 	}
@@ -56,6 +57,13 @@ public class MonsterDaoImpl implements MonsterDao {
 		q.setParameter("value", monsterName);
 		List<Monster> monsters = q.list();
 		return monsters;
+	}
+	
+	public Monster getMonster(int monsterId) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();		
+		Monster m = (Monster) session.get(Monster.class, monsterId);
+		return m;
 	}
 
 	public int saveMonster(String monsterName, int currentHP,
@@ -79,6 +87,43 @@ public class MonsterDaoImpl implements MonsterDao {
             	throw new DAOException();
             }
             m.setCharacterSheet(characterSheet);
+            monsterId = (Integer) session.save(m);
+            transaction.commit();
+        	logger.info("Monster " + monsterName + " was successfully saved in the database.");
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.fatal("Error while saving monster " + monsterName + " in the database --- " + e.getMessage());
+        } catch (DAOException e) {
+            transaction.rollback();
+            logger.fatal("Error while saving monster " + monsterName + " in the database.");
+		} finally {
+            session.close();
+        }
+        return monsterId;
+	}
+	
+	public int saveMonsterInTeam(String monsterName, int currentHP,
+			int currentHealSurges, int initiative, boolean secondWind,
+			int tempHP, CharacterSheet characterSheet, Team team) {
+    	logger.debug("Monster " + monsterName + " is about to be created in the database.");
+    	Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        int monsterId = -1;
+        try {
+            transaction = session.beginTransaction();
+            logger.debug("Setting monster's attributes");
+            Monster m = new Monster(monsterName);
+            m.setCurrentHP(currentHP);
+            m.setCurrentHealSurges(currentHealSurges);
+            m.setInitiative(initiative);
+            m.setSecondWind(secondWind);
+            m.setTempHP(tempHP);
+            if (!characterSheet.isNPC()){
+                logger.error("The character sheet is not supposed to be associated to a Monster but a Player.");
+            	throw new DAOException();
+            }
+            m.setCharacterSheet(characterSheet);
+            m.setTeam(team);
             monsterId = (Integer) session.save(m);
             transaction.commit();
         	logger.info("Monster " + monsterName + " was successfully saved in the database.");
