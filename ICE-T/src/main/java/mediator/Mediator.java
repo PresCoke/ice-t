@@ -18,8 +18,7 @@ public class Mediator {
 	 * MAJOR TODO: make sure app handles when there is no DB present and tells user about it!
 	 * 
 	 */
-	
-	
+		
 	String propertiesURL;
 	EmbeddedDBManager dbMgr;
 	
@@ -38,9 +37,9 @@ public class Mediator {
 	 * @return
 	 */
 	public int start () {
-//		dbMgr = new EmbeddedDBManager(propertiesURL);
-//		dbMgr.start();
-//		dbMgr.connect();
+		dbMgr = new EmbeddedDBManager(propertiesURL);
+		dbMgr.start();
+		dbMgr.connect();
 		return -1;
 	}
 	
@@ -50,9 +49,10 @@ public class Mediator {
 	 * @return
 	 */
 	public int close () {
-		//dbMgr.close();
+		dbMgr.close();
 		return -1;
 	}
+	
 	//TODO: change anything that uses a character sheet to get a Player instead...
 	public List<Object[]> getUniqueEntityIDsForType(String selectedEntityType) {
 		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
