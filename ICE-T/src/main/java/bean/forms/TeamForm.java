@@ -195,6 +195,12 @@ public class TeamForm implements FormBean, ActionListener {
 		
 		currentTeam_model = new DefaultListModel();
 		int index = 0;
+		
+		//If the team is a player team, the isNPC_checkbox is set to false
+		if (theTeam.getNumberOfPlayers() == 0){
+			isNPC_checkbox.setEnabled(false);
+		}
+		
 		for (index = 0; index < theTeam.getNumberOfMonsters(); index++) {
 			bean.combat.CreatureBeanShallow theMonster = new bean.combat.CreatureBeanShallow(); 
 			theMonster.createPanelFrom(theTeam.getMonsterAt(index));

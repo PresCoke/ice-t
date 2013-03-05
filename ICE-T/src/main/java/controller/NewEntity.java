@@ -46,12 +46,14 @@ public class NewEntity {
 	}
 
 	public void saveEntity() {
-		//TODO: FIX THIS
 		Object theEntity = empty_entity.getEntity();
 		if (theEntity instanceof Player) {
 			Player pl = (Player) theEntity;
 			CharacterSheet cs = pl.getCharacterSheet();
 			cs.save(pl);
+		} else if (theEntity instanceof CharacterSheet) {
+			CharacterSheet cs = (CharacterSheet) theEntity;
+			cs.save();		
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.save();

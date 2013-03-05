@@ -218,7 +218,7 @@ public class CharacterSheet implements EntityM {
 		this.role = CS_Role.artillery;
 		this.size = CS_Size.tiny;
 		this.powerSource = "";
-		this.level = 0;
+		this.level = 1;
 		this.XP = 0;
 		this.raceFeatures = "";
 		this.speed = 0;
@@ -273,7 +273,7 @@ public class CharacterSheet implements EntityM {
 		this.role = CS_Role.artillery;
 		this.size = CS_Size.tiny;
 		this.powerSource = "";
-		this.level = 0;
+		this.level = 1;
 		this.XP = 0;
 		this.raceFeatures = "";
 		this.speed = 0;
@@ -841,7 +841,7 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public int save(Player pl) {
-    	logger.info("Saving Character Sheet " + getName());
+    	logger.info("Saving Player " + pl.getPlayerName());
     	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
 		int cs_id = csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
 				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
@@ -919,6 +919,15 @@ public class CharacterSheet implements EntityM {
 	}
 
 	public int save() {
-		return -1;
+    	logger.info("Saving Monster " + getName());
+    	CharacterSheetDao csDao = new CharacterSheetDaoImpl();
+		int cs_id = csDao.saveCharacterSheet(getName(), getAcrobatics(), getAthletics(), getArcana(), getBluff(), getDiplomacy(),
+				getDungeoneering(), getEndurance(), getHeal(), getHistory(), getInsight(), getIntimidate(), getNature(),
+				getPerception(), getReligion(), getStealth(), getStreetwise(), getThievery(), getAC(), getREF(), getFORT(),
+				getWILL(), getMaxHP(), getSurgesPerDay(), getSTR(), getCON(), getINT(), getDEX(), getWIS(), getCHAR(), 
+				getLevel(), getXP(), getRaceFeatures(), getSpeed(), getInitiative(), getLanguages(), getMisc(), getKeywords(),
+				getPowerSource(), getRole(), getSize(), getMonsterOrigin(), getMonsterType(), getCharacter_resistances(),
+				getAttacks(), getAttacksTypes(getAttacks()), isNPC());
+		return 1;
 	}
 }
