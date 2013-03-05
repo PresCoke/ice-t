@@ -217,7 +217,7 @@ CREATE TABLE Rewards (
 
 CREATE TABLE Tally (
 	Tally_id INTEGER NOT NULL,
-	name VARCHAR(50) NOT NULL UNIQUE,
+	name VARCHAR(50) NOT NULL,
 	CombatEncounter_id INTEGER NOT NULL UNIQUE,
 	CONSTRAINT PK_Tally PRIMARY KEY (Tally_id),
 	CONSTRAINT FK_Tally_CombatEncounter FOREIGN KEY (CombatEncounter_id) REFERENCES CombatEncounter (CombatEncounter_id) 
@@ -225,7 +225,7 @@ CREATE TABLE Tally (
 
 CREATE TABLE Tuple (
 	Tuple_id INTEGER NOT NULL,
-	Tuple_name VARCHAR(50) NOT NULL UNIQUE,
+	Tuple_name VARCHAR(50) NOT NULL,
 	Tally_id INTEGER NOT NULL,
 	value1 INTEGER NOT NULL,
 	value2 INTEGER NOT NULL,
