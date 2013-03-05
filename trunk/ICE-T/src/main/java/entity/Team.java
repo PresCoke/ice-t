@@ -226,6 +226,10 @@ public class Team implements EntityM {
 		return this.traphazards.remove(thisTrapHazard);
 	}
 	
+	public int getNumberOfTrapsHazards() {
+		return this.traphazards.size();
+	}
+	
 
 	/**
 	 * Other functions
@@ -243,8 +247,10 @@ public class Team implements EntityM {
     		mDao.saveMonster(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
     			m.isSecondWind(), m.getTempHP(), m.getCharacterSheet());
     	}
-		List<Monster> monstersDB = mDao.getMonstersByName(monsters.get(0).getMonsterName());
-		this.setMonsters(monstersDB);
+    	if(monsters != null && !monsters.isEmpty()){
+			List<Monster> monstersDB = mDao.getMonstersByName(monsters.get(0).getMonsterName());
+			this.setMonsters(monstersDB);
+    	}
     	logger.info("Saving NPC Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		return tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
@@ -265,18 +271,18 @@ public class Team implements EntityM {
 			mDao.deleteMonster(m.getId());
 		}
     	for (Monster m : monsters){
-    		mDao.saveMonster(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
-    				m.isSecondWind(), m.getTempHP(), m.getCharacterSheet());
-    	}
-		logger.info("Updating TrapsHazards before updating the team.");
-		TrapHazardDao thDao = new TrapHazardDaoImpl();
-		List<TrapHazard> trapHazards = thDao.getAllTrapHazardsInTeam(getId());
-		for (TrapHazard th : trapHazards){
-			th.setTeam(null);
-		}		
+    		mDao.saveMonsterInTeam(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
+    				m.isSecondWind(), m.getTempHP(), m.getCharacterSheet(), this);
+    	}	
     	logger.info("Updating NPC Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateNPCteam(getId(), getName(), getMonsters(), getTraphazards());
+		TrapHazardDao thDao = new TrapHazardDaoImpl();
+		for (TrapHazard th : getTraphazards()){
+			thDao.updateTrapHazardInTeam(th.getId(), th.getName(), th.getAvoidance(), th.getLevel(), th.getAvoidanceSkill(), th.getTriggers(),
+					th.getXp(), th.getDifficultyLevel(), th.getCounterMeasureDescription(), th.getType(), th.getRole(), th.getCounterMeasureSkill(),
+					this);
+		}			
 		return 1;
 	}
 

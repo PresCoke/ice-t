@@ -8,6 +8,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
+import bean.combat.CreatureBeanShallow;
+import bean.combat.TrapBean;
+
 import controller.App_Root;
 import controller.TeamController;
 
@@ -54,7 +57,6 @@ public class TeamForm implements FormBean, ActionListener {
 		
 		addableCreatures_model.setColumnCount(creatureTableDimension);
 		addableCreatures_model.setRowCount(creatureTableDimension);
-		getFirstCreatureTable(false);
 		addableCreatures_table = new JTable(addableCreatures_model);
 		addableCreatures_table.setRowHeight(80);
 		addableCreatures_table.setPreferredSize( new Dimension(170*creatureTableDimension, 80*creatureTableDimension) );
@@ -106,14 +108,32 @@ public class TeamForm implements FormBean, ActionListener {
 							theTeam.addMonster(theMonster);
 							currentTeam_model.addElement( theValue );
 						} else if (theValue instanceof entity.TrapHazard) {
+							entity.TrapHazard addable = (entity.TrapHazard) theValue;
 							if ( !isNPC_checkbox.isSelected() ) {
 								JOptionPane.showMessageDialog(teamForm_panel,
 										  "Cannot add a trap to a Player team.",//TODO: make french
 										  "Team Form",
 										  JOptionPane.WARNING_MESSAGE);
+							} else {
+								boolean isAlreadyInTeam = false;
+								for (int i = 0; i<currentTeam_model.size(); i++) {
+									Object currentComparator = currentTeam_model.get(i);
+									if (currentComparator instanceof bean.combat.CreatureBeanShallow) {
+										currentComparator = ((bean.combat.CreatureBeanShallow) currentComparator).getEntity();
+									}
+									if ( !(currentComparator instanceof entity.TrapHazard) ) {
+										continue;
+									}
+									if (addable.getName() == ((entity.TrapHazard)(currentComparator)).getName()) {
+										isAlreadyInTeam = true;
+										break;
+									}
+								}
+								if (!isAlreadyInTeam) {
+									theTeam.addTrapHazard((entity.TrapHazard) theValue);
+									currentTeam_model.addElement( theValue );
+								}
 							}
-							theTeam.addTrapHazard((entity.TrapHazard) theValue);
-							currentTeam_model.addElement( theValue );
 						}
 						
 					}
@@ -132,7 +152,14 @@ public class TeamForm implements FormBean, ActionListener {
 			public void actionPerformed(ActionEvent ae) {
 				for (int index = 0; index < currentTeam_model.getSize(); index++) {
 					if (currentTeam_list.isSelectedIndex(index) ) {
-						Object theValue = currentTeam_model.remove(index);
+						Object theValue;
+						if (currentTeam_model.get(index) instanceof CreatureBeanShallow){
+							theValue = ((CreatureBeanShallow) currentTeam_model.remove(index)).getEntity();
+						} else if(currentTeam_model.get(index) instanceof TrapBean) {
+							theValue = ((TrapBean) currentTeam_model.remove(index)).getEntity();
+						} else {
+							theValue = currentTeam_model.remove(index);
+						} 
 						if (theValue instanceof entity.Player) {
 							theTeam.removePlayer((entity.Player) theValue);
 						} else if (theValue instanceof entity.Monster) {
@@ -196,11 +223,18 @@ public class TeamForm implements FormBean, ActionListener {
 		currentTeam_model = new DefaultListModel();
 		int index = 0;
 		
-		//If the team is a player team, the isNPC_checkbox is set to false
-		if (theTeam.getNumberOfPlayers() == 0){
+		//If the team is updated, the isNPC_checkbox is set to false
+		if (theTeam.getNumberOfPlayers() > 0){
 			isNPC_checkbox.setEnabled(false);
+			getFirstCreatureTable(false);
+		} else if (theTeam.getNumberOfMonsters() > 0 || theTeam.getNumberOfTrapsHazards() > 0 ){
+			getFirstCreatureTable(true);
+			isNPC_checkbox.setEnabled(false);
+			isNPC_checkbox.setSelected(true);
+		} else {
+			getFirstCreatureTable(false);
 		}
-		
+
 		for (index = 0; index < theTeam.getNumberOfMonsters(); index++) {
 			bean.combat.CreatureBeanShallow theMonster = new bean.combat.CreatureBeanShallow(); 
 			theMonster.createPanelFrom(theTeam.getMonsterAt(index));
@@ -288,9 +322,9 @@ public class TeamForm implements FormBean, ActionListener {
 		boolean isValidForm = true;
 		String invalidFieldString = "";
 		
-		if ( (theTeam.getNumberOfMonsters() + theTeam.getNumberOfPlayers() ) == 0) {
+		if ( (theTeam.getNumberOfMonsters() + theTeam.getNumberOfPlayers() + theTeam.getNumberOfTrapsHazards()) == 0) {
 			isValidForm = false;
-			invalidFieldString += "You must add at least one creature before saving.\n";
+			invalidFieldString += "You must add at least one creature or one trap before saving.\n";
 		}
 		if ( name_field.getText().equals("")) {
 			isValidForm = false;
@@ -308,7 +342,7 @@ public class TeamForm implements FormBean, ActionListener {
 	}
 	
 	private void getFirstCreatureTable(boolean isNPC) {
-		Object[][] theCreatures = TeamController.getFirstPage(false, false, creatureTableDimension);
+		Object[][] theCreatures = TeamController.getFirstPage(isNPC, false, creatureTableDimension);
 		for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
 			addableCreatures_model.setValueAt(theCreatures[y_index][x_index], y_index, x_index);
 			if (x_index < creatureTableDimension) {
@@ -358,7 +392,7 @@ public class TeamForm implements FormBean, ActionListener {
 				}
 				theTeam.removeAllPlayers();
 				currentTeam_model.removeAllElements();
-			} else if (isNPCTeam && theTeam.getNumberOfMonsters() > 0) { // user wants a player team instead
+			} else if (!isNPCTeam && theTeam.getNumberOfMonsters() > 0) { // user wants a player team instead
 				int x = JOptionPane.showConfirmDialog(teamForm_panel,
 						  "All monsters currently in the team will be removed.\n Do you wish to proceed.",//TODO: make french
 						  "Team Form",
@@ -380,9 +414,7 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
-//			}
+
 		} else if (source == displayCreature_radiobutton) {
 			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
 			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
@@ -394,9 +426,7 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.CreatureBean());
-//			}
+
 		} else if (source == displayTraps_radiobutton) {
 			Object[][] newTraps = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
 			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
@@ -408,9 +438,7 @@ public class TeamForm implements FormBean, ActionListener {
 					x_index = 0;
 				}
 			}
-//			for (int index=0; index<addableCreatures_table.getColumnCount(); index++) {
-//				addableCreatures_table.getColumnModel().getColumn(index).setCellRenderer(new bean.combat.TrapBean());
-//			}
+
 		}
 
 	}

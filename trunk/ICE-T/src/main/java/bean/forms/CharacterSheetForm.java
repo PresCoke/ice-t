@@ -1391,9 +1391,17 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			public void actionPerformed(ActionEvent ae) {
 				Resistance addThis = (Resistance) resistanceForm_bean.getEntity();
 				if (resistanceForm_bean.validateEntity()) {
-					theCharacter.addResistance(addThis);
-					resistance_list_model.addElement(addThis);
-					resistanceForm_panel = resistanceForm_bean.createEntityPanel();
+					boolean alreadyInTheList = false;
+					for(Resistance r : theCharacter.getResistances()){
+						if (r.getResistanceType() == addThis.getResistanceType()){
+							alreadyInTheList = true;
+						}
+					}
+					if(!alreadyInTheList){
+						theCharacter.addResistance(addThis);
+						resistance_list_model.addElement(addThis);
+					}
+					//resistanceForm_panel = resistanceForm_bean.createEntityPanel();
 				}		
 			}
 		});

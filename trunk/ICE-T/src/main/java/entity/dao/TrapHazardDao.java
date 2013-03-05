@@ -7,6 +7,7 @@ import entity.Attack_Type;
 import entity.EntityEnum.T_CounterMeasureSkill;
 import entity.EntityEnum.T_Role;
 import entity.EntityEnum.T_Type;
+import entity.Team;
 import entity.TrapHazard;
 
 /**
@@ -68,7 +69,29 @@ public interface TrapHazardDao {
 	 */
 	public void updateTrapHazard(int trapHazardId, String name, int avoidance, int level, T_CounterMeasureSkill skill, 
 			String triggers, int xp, int difficultyLevel, String counterMeasureDescription, T_Type type, T_Role role,
-			T_CounterMeasureSkill counterMeasureSkill, Attack attack, Attack_Type atype);
+			T_CounterMeasureSkill counterMeasureSkill);
+	
+
+	/**
+	 * Update a trap/hazard in the database
+	 * @param trapHazardId
+	 * @param name
+	 * @param avoidance
+	 * @param level
+	 * @param skill
+	 * @param triggers
+	 * @param xp
+	 * @param difficultyLevel
+	 * @param counterMeasureDescription
+	 * @param type
+	 * @param role
+	 * @param counterMeasureSkill
+	 * @param team
+	 */
+	public void updateTrapHazardInTeam(int trapHazardId, String name, int avoidance,
+			int level, T_CounterMeasureSkill skill, String triggers, int xp,
+			int difficultyLevel, String counterMeasureDescription, T_Type type,
+			T_Role role, T_CounterMeasureSkill counterMeasureSkill, Team team);
 	
 	/**
 	 * Delete a trap/hazard from the database

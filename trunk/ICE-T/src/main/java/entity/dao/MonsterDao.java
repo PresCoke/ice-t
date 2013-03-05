@@ -43,6 +43,21 @@ public interface MonsterDao {
 			boolean secondWind, int tempHP, CharacterSheet characterSheet);
 	
 	/**
+	 * Save a monster in the database
+	 * @param monsterName
+	 * @param currentHP
+	 * @param currentHealSurges
+	 * @param initiative
+	 * @param secondWind
+	 * @param tempHP
+	 * @param characterSheet
+	 * @param team
+	 * @return monster's id stored in the database
+	 */
+	public int saveMonsterInTeam(String monsterName, int currentHP, int currentHealSurges, int initiative,
+			boolean secondWind, int tempHP, CharacterSheet characterSheet, Team team);
+	
+	/**
 	 * Update a monster in the database
 	 * @param monsterId
 	 * @param monsterName

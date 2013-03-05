@@ -154,7 +154,11 @@ public class Monster implements EntityM, Comparable<Monster> {
 
 
 	public void setInitiative(int initiative) {
-		this.initiative = characterSheet.getInitiative() + initiative;
+		if(characterSheet != null){
+			this.initiative = characterSheet.getInitiative() + initiative;
+		} else {
+			this.initiative = initiative;
+		}
 	}
 
 
