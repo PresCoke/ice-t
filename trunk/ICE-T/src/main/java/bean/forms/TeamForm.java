@@ -405,9 +405,9 @@ public class TeamForm implements FormBean, ActionListener {
 				currentTeam_model.removeAllElements();
 			}
 			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
-			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+			for (int index = 0, x_index=0, y_index=0; index < newCreature.length; index++) {
 				addableCreatures_model.setValueAt(newCreature[y_index][x_index], y_index, x_index);
-				if (x_index < creatureTableDimension) {
+				if (x_index < creatureTableDimension - 1) {
 					x_index++;
 				} else {
 					y_index++;
@@ -417,9 +417,9 @@ public class TeamForm implements FormBean, ActionListener {
 
 		} else if (source == displayCreature_radiobutton) {
 			newCreature = TeamController.getFirstPage(isNPC_checkbox.isSelected(), displayTraps_radiobutton.isSelected(), creatureTableDimension);
-			for (int index = 0, x_index=0, y_index=0; index < creatureTableDimension; index++) {
+			for (int index = 0, x_index=0, y_index=0; index < newCreature.length; index++) {
 				addableCreatures_model.setValueAt(newCreature[y_index][x_index], y_index, x_index);
-				if (x_index < creatureTableDimension) {
+				if (x_index < creatureTableDimension - 1) {
 					x_index++;
 				} else {
 					y_index++;
