@@ -5,6 +5,8 @@ import controller.*;
 //-- Class Imports --//
 import javax.swing.*;
 
+import entity.CombatEncounter;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
@@ -20,6 +22,7 @@ import java.util.ResourceBundle;
 public class Root_Window {
 	
 	JFrame main_window; // main application window
+	JComponent content;
 	
 	Combat_Tab combat_tab; // holds all GUI related functions for the Combat tab
 	Edit_Tab editEntity_tab; // holds all GUI related functions for the Edit tab
@@ -120,7 +123,20 @@ public class Root_Window {
 			public void actionPerformed(ActionEvent ae) {
 				int CE_id;
 				if (App_Root.combat_controller.getID() < 0) {
-					App_Root.combat_controller.saveOpenCombatEncounter();
+					ResourceBundle save_l10n = ResourceBundle.getBundle("filters.MainGUI_l10n.RootWindow", App_Root.language_locale);
+					String name = "";
+					do {
+						name = (String) JOptionPane.showInputDialog(
+								main_window,
+								save_l10n.getString("SaveCE_message"),
+								save_l10n.getString("SaveCE_title"),
+								JOptionPane.PLAIN_MESSAGE,
+								null,
+								null,
+								""
+								);
+					} while (name == null || name.length() <= 0);
+					App_Root.combat_controller.saveOpenCombatEncounter(name);
 				} else {
 					App_Root.combat_controller.updateOpenCombatEncounter();
 				}
@@ -137,11 +153,24 @@ public class Root_Window {
 		quit_item = new JMenuItem(root_window_l10n.getString("Quit_menuitem"));
 		quit_item.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				if (App_Root.combat_controller.getID() < 0) {
-					App_Root.combat_controller.saveOpenCombatEncounter();
-				} else {
-					App_Root.combat_controller.updateOpenCombatEncounter();
-				}
+//				if (App_Root.combat_controller.getID() < 0) {
+//					ResourceBundle save_l10n = ResourceBundle.getBundle("filters.MainGUI_l10n.RootWindow", App_Root.language_locale);
+//					String name = "";
+//					do {
+//						name = (String) JOptionPane.showInputDialog(
+//								main_window,
+//								save_l10n.getString("SaveCE_message"),
+//								save_l10n.getString("SaveCE_title"),
+//								JOptionPane.PLAIN_MESSAGE,
+//								null,
+//								null,
+//								""
+//								);
+//					} while (name == null || name.length() <= 0);
+//					App_Root.combat_controller.saveOpenCombatEncounter(name);
+//				} else {
+//					App_Root.combat_controller.updateOpenCombatEncounter();
+//				}
 				App_Root.exit();
 			}
 		});
@@ -154,8 +183,53 @@ public class Root_Window {
 			JMenuItem aMenuItem = new JMenuItem(entity_names[index]);
 			aMenuItem.addActionListener( new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					//TODO I'm thinking this should go through controller.NewEntity not presentation.New_Tab
 					String entityToBeCreated = ((JMenuItem) ae.getSource()).getText();
+					String ce = ResourceBundle.getBundle("filters.MainGUI_l10n.EntityTypeName", App_Root.language_locale)
+							.getString("CombatEncounter_entity");
+					if (entityToBeCreated.equals(ce)) {
+						String [] options = {"Yes", "No", "Cancel"};
+						int x = JOptionPane.showOptionDialog(App_Root.mainWindow.getFrame(),
+								  "Do you wish to save the currently open Encounter?",//TODO: make french
+								  "ICE-T",
+								  JOptionPane.YES_NO_CANCEL_OPTION,
+								  JOptionPane.WARNING_MESSAGE,
+								  null,
+								  options,
+								  options[0]
+								  );
+						if (x == JOptionPane.CANCEL_OPTION || x == JOptionPane.CLOSED_OPTION) {
+							return;
+						}
+						else if (x == JOptionPane.YES_OPTION) {
+							if (App_Root.combat_controller.getID() < 0) {
+								ResourceBundle save_l10n = ResourceBundle.getBundle("filters.MainGUI_l10n.RootWindow", App_Root.language_locale);
+								String name = "";
+								do {
+									name = (String) JOptionPane.showInputDialog(
+											App_Root.mainWindow.getFrame(),
+											save_l10n.getString("SaveCE_message"),
+											save_l10n.getString("SaveCE_title"),
+											JOptionPane.PLAIN_MESSAGE,
+											null,
+											null,
+											""
+											);
+								} while (name == null || name.length() <= 0);
+								App_Root.combat_controller.saveOpenCombatEncounter(name);
+							} else {
+								App_Root.combat_controller.updateOpenCombatEncounter();
+							}
+						}
+						App_Root.combat_controller.setCombatEncounter(new CombatEncounter());
+						combat_tab = new Combat_Tab(App_Root.combat_controller);
+						content.removeAll();
+						content = (JComponent) combat_tab.getPanel();
+						main_window.setContentPane(content);
+						main_window.pack();
+						main_window.validate();
+						main_window.setVisible(true);
+						return;
+					}
 					New_Tab aNewEntityFrame = new New_Tab(App_Root.newEntity_controller, entityToBeCreated);
 					aNewEntityFrame.showFrame();
 				}
@@ -183,7 +257,7 @@ public class Root_Window {
 		
 		main_window.setJMenuBar(app_menubar);
 		
-		JComponent content = (JComponent)combat_tab.getPanel();
+		content = (JComponent)combat_tab.getPanel();
 		
 		main_window.setTitle(root_window_l10n.getString("App_title"));
 		//main_window.setDefaultLookAndFeelDecorated(true);
@@ -202,5 +276,9 @@ public class Root_Window {
 	public void close() {
 		main_window.setVisible(false);
 		main_window.dispose();
+	}
+
+	public Component getFrame() {
+		return main_window;
 	}
 }

@@ -1,5 +1,8 @@
 package entity.dao;
 
+import entity.Tally;
+import java.util.List;
+
 public interface TallyDao {
 	
 	/**
@@ -15,4 +18,6 @@ public interface TallyDao {
 	 * @return tally's id stored in the database
 	 */
 	public int saveTally (String name, int combatEncounterId);
+	
+	public List<Tally> getTally(int combatEncounterID);
 }

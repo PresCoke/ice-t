@@ -6,6 +6,7 @@ import entity.Monster;
 import entity.Player;
 import entity.Team;
 import entity.TrapHazard;
+import entity.CombatEncounter;
 
 
 /**
@@ -79,4 +80,8 @@ public interface TeamDao {
 	 * @return team associated to the team's id
 	 */
 	public Team getTeam(int teamId);
+	
+	public void updateTeam(int teamId, CombatEncounter encounter, String name, List<Player> players);
+	
+	public void updateNPCteam(int teamId, CombatEncounter encounter, String name, List<Monster> monsters, List<TrapHazard> traphazards);
 }

@@ -15,6 +15,7 @@ import entity.Monster;
 import entity.Player;
 import entity.Team;
 import entity.TrapHazard;
+import entity.CombatEncounter;
 
 /**
  * DAO of a team
@@ -68,6 +69,7 @@ public class TeamDaoImpl implements TeamDao {
         }
         return teamID;
 	}
+	
 
 	public void updateTeam(int teamId, String name, List<Player> players) {
     	logger.debug("Team " + name + " is about to be updated in the database.");
@@ -103,7 +105,6 @@ public class TeamDaoImpl implements TeamDao {
             session.close();
         }
 	}
-
 
 	public int saveNPCteam(String name, List<Monster> monsters,
 			List<TrapHazard> traphazards) {
@@ -279,6 +280,98 @@ public class TeamDaoImpl implements TeamDao {
 		q.setParameter("value", thisCombatEncounter);
 		List<Team> teams = q.list();
 		return teams;
+	}
+
+	public void updateTeam(int teamId, CombatEncounter encounter, String name,
+			List<Player> players) {
+		logger.debug("Team " + name
+				+ " is about to be updated in the database.");
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			Team t = (Team) session.get(Team.class, teamId);
+			t.setName(name);
+			t.setCombatEncounter(encounter);
+			logger.debug("Modifying previous players' team");
+			List<Player> playersDB = t.getPlayers();
+			for (Player p : playersDB) {
+				Player player = (Player) session.get(Player.class, p.getId());
+				player.setTeam(null);
+				session.update(player);
+			}
+			logger.debug("Modifying previous players' team done");
+			t.removeAllPlayers();
+			session.update(t);
+			logger.debug("Setting team's players and players' team");
+			for (Player p : players) {
+				Player player = (Player) session.get(Player.class, p.getId());
+				t.addPlayer(player);
+				player.setTeam(t);
+				session.update(player);
+			}
+			transaction.commit();
+			logger.info("Team " + name
+					+ " was successfully updated in the database.");
+		} catch (HibernateException e) {
+			transaction.rollback();
+			logger.fatal("Error while updating Team " + name
+					+ " in the database --- " + e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	public void updateNPCteam(int teamId, CombatEncounter encounter,
+			String name, List<Monster> monsters, List<TrapHazard> traphazards) {
+		logger.debug("NPC Team " + name
+				+ " is about to be updated in the database.");
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			Team t = (Team) session.get(Team.class, teamId);
+			t.setName(name);
+			t.setCombatEncounter(encounter);
+			// Set the monsters
+			logger.debug("Setting NPC team's monsters and monsters' team");
+			for (Monster m : monsters) {
+				Monster monster = (Monster) session.get(Monster.class,
+						m.getId());
+				t.addMonster(monster);
+				monster.setTeam(t);
+				session.update(monster);
+			}
+			// Set the traps/hazards
+			logger.debug("Modifying previous traps/hazards' team");
+			List<TrapHazard> trapHazardsDB = t.getTraphazards();
+			for (TrapHazard th : trapHazardsDB) {
+				TrapHazard traphazard = (TrapHazard) session.get(
+						TrapHazard.class, th.getId());
+				traphazard.setTeam(null);
+				session.update(traphazard);
+			}
+			logger.debug("Modifying previous traps/hazards' team done");
+			t.removeAllTrapHazards();
+			session.update(t);
+			logger.debug("Setting NPC team of the traps/hazards and traps/hazards' team");
+			for (TrapHazard th : traphazards) {
+				TrapHazard traphazard = (TrapHazard) session.get(
+						TrapHazard.class, th.getId());
+				t.addTrapHazard(traphazard);
+				traphazard.setTeam(t);
+				session.update(traphazard);
+			}
+			transaction.commit();
+			logger.info("NPC Team " + name
+					+ " was successfully updated in the database.");
+		} catch (HibernateException e) {
+			transaction.rollback();
+			logger.fatal("Error while updating NPC Team " + name
+					+ " in the database --- " + e.getMessage());
+		} finally {
+			session.close();
+		}
 	}
 
 }

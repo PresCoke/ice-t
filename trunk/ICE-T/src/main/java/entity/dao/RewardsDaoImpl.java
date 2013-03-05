@@ -1,8 +1,12 @@
 package entity.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
@@ -62,6 +66,16 @@ public class RewardsDaoImpl implements RewardsDao {
         } finally {
             session.close();
         }			
+	}
+
+	public List<Rewards> getRewards(int combatEncounterId) {
+		logger.info("Rewards belonging to Combat Ecounter: " + combatEncounterId
+				+ " are about to be retrieved from the database.");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("FROM Rewards WHERE CombatEncounter_ID=:value");
+		q.setParameter("value", combatEncounterId);
+		return q.list();
 	}
 
 }

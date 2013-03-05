@@ -22,7 +22,7 @@ public class CreatureBeanShallow extends Bean {
 	public CreatureBeanShallow() {
 		
 	}
-
+	
 	public Component getListCellRendererComponent(JList theList, Object theValue,
 			int index, boolean isSelected, boolean hasFocus) {
 		
@@ -33,17 +33,15 @@ public class CreatureBeanShallow extends Bean {
 		} else if (theValue instanceof TrapBean) {
 			theFinalPane = createTrapPanel((TrapHazard)( (TrapBean) theValue ).getEntity());
 		} else if (theValue instanceof Player) {
-			theFinalPane = createPlayerPanel( ((Player) theValue).getCharacterSheet(), (Player) theValue );
+			CreatureBeanShallow aBean = new CreatureBeanShallow();
+			aBean.createPanelFrom(theValue);
+			theFinalPane = aBean.createPanel(isSelected, isCurrentCreature);
 		} else if (theValue instanceof Monster) {
-			theFinalPane = createMonsterPanel( ((Monster) theValue).getCharacterSheet(), (Monster) theValue );
+			CreatureBeanShallow aBean = new CreatureBeanShallow();
+			aBean.createPanelFrom(theValue);
+			theFinalPane = aBean.createPanel(isSelected, isCurrentCreature);
 		} else if (theValue instanceof CreatureBeanShallow) {
-			isCurrentCreature = ((CreatureBeanShallow) theValue).isCurrentCreature;
-			Object aCreature = ( (CreatureBeanShallow) theValue ).getEntity();
-			if (aCreature instanceof Player) {
-				theFinalPane = createPlayerPanel( ((Player) aCreature).getCharacterSheet(), (Player) aCreature );
-			} else if (aCreature instanceof Monster) {
-				theFinalPane = createMonsterPanel( ((Monster) aCreature).getCharacterSheet(), (Monster) aCreature );
-			}
+			theFinalPane = ((CreatureBeanShallow) theValue).createPanel(isSelected, isCurrentCreature);
 		} else {
 			return (new JPanel());
 		}
@@ -57,7 +55,17 @@ public class CreatureBeanShallow extends Bean {
 		return theFinalPane;
 	}
 	
-	private JPanel createMonsterPanel(CharacterSheet characterSheet, Monster theValue) {
+	private JPanel createPanel(boolean isSelected, boolean isCurrentCreature2) {
+		if (thePlayer != null && theMonster == null) {
+			return createPlayerPanel(isSelected, isCurrentCreature);
+		} else if (thePlayer == null && theMonster != null) {
+			return createMonsterPanel(isSelected, isCurrentCreature);
+		} else {
+			return (new JPanel());
+		}
+	}
+	
+	private JPanel createMonsterPanel(boolean isSelected, boolean isCurrentCreature2) {
 		/*
 		 * [Name] - [LVL] [XP] XP
 		 * Current HP: [HP] Bloodied: [isBloodied] SecondWinded: [SecondWind]
@@ -66,25 +74,23 @@ public class CreatureBeanShallow extends Bean {
 		ResourceBundle creat_l10n = ResourceBundle.getBundle(
 				"filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 
-		CharacterSheet theSheet = characterSheet;
+		CharacterSheet theSheet = theMonster.getCharacterSheet();
 		String name = theSheet.getName(), level = Integer.toString(theSheet.getLevel()), exp = Integer.toString(theSheet.getXP());
 		String bloodied = Integer.toString(theSheet.getBloodied());
-		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(theValue.getInitiative());
+		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(theMonster.getInitiative());
 		
 		JLabel isSecondWindUsed_label = new JLabel(creat_l10n.getString("SecondWind_creature"));
 		JCheckBox isSecondWindUsed_box = new JCheckBox();
-		isSecondWindUsed_box.setSelected(theValue.isSecondWind());
+		isSecondWindUsed_box.setSelected(theMonster.isSecondWind());
 		isSecondWindUsed_box.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				//Tricky as fuck might not work;
 				thePlayer.setSecondWind( ((JCheckBox) ae.getSource()).isSelected() ); 
 			}
 		});
-		JSpinner currentHP_field = new JSpinner (new SpinnerNumberModel(theValue.getCurrentHP(), -1*theSheet.getBloodied(), theSheet.getMaxHP(), 1) );
+		JSpinner currentHP_field = new JSpinner (new SpinnerNumberModel(theMonster.getCurrentHP(), -1*theSheet.getBloodied(), theSheet.getMaxHP(), 1) );
 		currentHP_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int hp = (Integer) ((JSpinner) arg0.getSource()).getValue();
-				//TODO: tricky as fuck may not work!!!
 				theMonster.setCurrentHP(hp);
 			}
 		});
@@ -101,12 +107,11 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-		currentHP_field.setValue(theValue.getCurrentHP());
-		JSpinner initiative_field = new JSpinner( new SpinnerNumberModel(theValue.getInitiative(), 0, 100, 1));
+		currentHP_field.setValue(theMonster.getCurrentHP());
+		JSpinner initiative_field = new JSpinner( new SpinnerNumberModel(theMonster.getInitiative(), 0, 100, 1));
 		initiative_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int init = (Integer) ((JSpinner) arg0.getSource()).getValue();
-				//TODO: tricky as fuck may not work!!!
 				theMonster.setInitiative(init);
 			}
 		});
@@ -123,13 +128,13 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-		initiative_field.setValue(theValue.getCurrentHP());
+		initiative_field.setValue(theMonster.getCurrentHP());
 
 		JPanel aCreature_panel = new JPanel();
 		aCreature_panel.setLayout( new BoxLayout(aCreature_panel, BoxLayout.PAGE_AXIS) );
-		aCreature_panel.add(new JLabel(
-				name + " - " + creat_l10n.getString("LVL_entity") + " " + level + exp + " XP\n"
-				));
+		JLabel header_label = new JLabel(
+				name + " - " + creat_l10n.getString("LVL_entity") + " " + level +" "+ exp + " XP\n"
+				);
 		
 		JPanel health_panel = new JPanel();
 		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
@@ -138,8 +143,6 @@ public class CreatureBeanShallow extends Bean {
 		health_panel.add(Box.createHorizontalGlue());
 		health_panel.add(new JLabel(creat_l10n.getString("Bloodied_entity") + " "+ bloodied));
 		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(isSecondWindUsed_label);
-		health_panel.add(isSecondWindUsed_box);
 		
 		JPanel extra_panel = new JPanel();
 		extra_panel.setLayout( new BoxLayout(extra_panel, BoxLayout.LINE_AXIS));
@@ -148,13 +151,38 @@ public class CreatureBeanShallow extends Bean {
 		extra_panel.add(Box.createHorizontalGlue());
 		extra_panel.add( new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed) );
 		
-		aCreature_panel.add(health_panel);
-		aCreature_panel.add(extra_panel);
+		GroupLayout aCreature_layout = new GroupLayout(aCreature_panel);
+		aCreature_layout.setHorizontalGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.LEADING) 
+				.addComponent(header_label)
+				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(isSecondWindUsed_label)
+						.addComponent(isSecondWindUsed_box))
+				.addComponent(extra_panel));
+		aCreature_layout.setVerticalGroup( aCreature_layout.createSequentialGroup()
+				.addComponent(header_label)
+				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(isSecondWindUsed_label)
+						.addComponent(isSecondWindUsed_box))
+				.addComponent(extra_panel));
+		aCreature_panel.setLayout(aCreature_layout);
+		
+		
+		if (isCurrentCreature) {
+			aCreature_panel.setBackground(Color.GREEN);
+			health_panel.setBackground(Color.GREEN);
+			extra_panel.setBackground(Color.GREEN);
+		} else if (isSelected) {
+			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+			health_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+			extra_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+		}
 		
 		return aCreature_panel;
 	}
 
-	private JPanel createPlayerPanel(CharacterSheet characterSheet, Player theValue) {
+	private JPanel createPlayerPanel(boolean isSelected, boolean isCurrentCreature2) {
 		/*
 		 * [Name] - [LVL] [XP] XP
 		 * Current HP: [HP] Bloodied: [isBloodied] SecondWinded: [SecondWind]
@@ -163,21 +191,21 @@ public class CreatureBeanShallow extends Bean {
 		ResourceBundle creat_l10n = ResourceBundle.getBundle(
 				"filters.BeanGUI_l10n.Entity", App_Root.language_locale);
 
-		CharacterSheet theSheet = characterSheet;
+		CharacterSheet theSheet = thePlayer.getCharacterSheet();
 		String name = theSheet.getName(), level = Integer.toString(theSheet.getLevel()), exp = Integer.toString(theSheet.getXP());
 		String bloodied = Integer.toString(theSheet.getBloodied());
-		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(theValue.getInitiative());
+		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(thePlayer.getInitiative());
 		
 		JLabel isSecondWindUsed_label = new JLabel(creat_l10n.getString("SecondWind_creature"));
 		JCheckBox isSecondWindUsed_box = new JCheckBox();
-		isSecondWindUsed_box.setSelected(theValue.isSecondWind());
+		isSecondWindUsed_box.setSelected(thePlayer.isSecondWind());
 		isSecondWindUsed_box.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				//Tricky as fuck might not work;
 				thePlayer.setSecondWind( ((JCheckBox) ae.getSource()).isSelected() ); 
 			}
 		});
-		JSpinner currentHP_field = new JSpinner (new SpinnerNumberModel(theValue.getCurrentHP(), -1*theSheet.getBloodied(), theSheet.getMaxHP(), 1) );
+		JSpinner currentHP_field = new JSpinner (new SpinnerNumberModel(thePlayer.getCurrentHP(), -1*theSheet.getBloodied(), theSheet.getMaxHP(), 1) );
 		currentHP_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int hp = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -198,8 +226,8 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-		currentHP_field.setValue(theValue.getCurrentHP());
-		JSpinner initiative_field = new JSpinner( new SpinnerNumberModel(theValue.getInitiative(), 0, 100, 1));
+		currentHP_field.setValue(thePlayer.getCurrentHP());
+		JSpinner initiative_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), 0, 100, 1));
 		initiative_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int init = (Integer) ((JSpinner) arg0.getSource()).getValue();
@@ -220,13 +248,12 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-		initiative_field.setValue(theValue.getCurrentHP());
 
 		JPanel aCreature_panel = new JPanel();
 		aCreature_panel.setLayout( new BoxLayout(aCreature_panel, BoxLayout.PAGE_AXIS) );
-		aCreature_panel.add(new JLabel(
-				name + " - " + creat_l10n.getString("LVL_entity") + " " + level + exp + " XP\n"
-				));
+		JLabel header_label = new JLabel(
+				name + " - " + creat_l10n.getString("LVL_entity") + " " + level+ " " + exp + " XP\n"
+				);
 		
 		JPanel health_panel = new JPanel();
 		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
@@ -245,8 +272,32 @@ public class CreatureBeanShallow extends Bean {
 		extra_panel.add(Box.createHorizontalGlue());
 		extra_panel.add( new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed) );
 		
-		aCreature_panel.add(health_panel);
-		aCreature_panel.add(extra_panel);
+		GroupLayout aCreature_layout = new GroupLayout(aCreature_panel);
+		aCreature_layout.setHorizontalGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.LEADING) 
+				.addComponent(header_label)
+				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(isSecondWindUsed_label)
+						.addComponent(isSecondWindUsed_box))
+				.addComponent(extra_panel));
+		aCreature_layout.setVerticalGroup( aCreature_layout.createSequentialGroup()
+				.addComponent(header_label)
+				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(isSecondWindUsed_label)
+						.addComponent(isSecondWindUsed_box))
+				.addComponent(extra_panel));
+		aCreature_panel.setLayout(aCreature_layout);
+		
+		if (isCurrentCreature) {
+			aCreature_panel.setBackground(Color.GREEN);
+			health_panel.setBackground(Color.GREEN);
+			extra_panel.setBackground(Color.GREEN);
+		} else if (isSelected) {
+			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+			health_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+			extra_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+		}
 		
 		return aCreature_panel;
 	}

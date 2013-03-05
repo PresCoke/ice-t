@@ -1,8 +1,12 @@
 package entity.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import resource.HibernateUtil;
@@ -38,6 +42,16 @@ public class TupleDaoImpl implements TupleDao {
             session.close();
         }
         return tupleID;
+	}
+
+	public List<Tuple> getTuple(int id) {
+		logger.info("Tuple belonging to Tally: " + id
+				+ " are about to be retrieved from the database.");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("FROM Tuple WHERE Tally_ID=:value");
+		q.setParameter("value", id);
+		return q.list();
 	}
 
 }

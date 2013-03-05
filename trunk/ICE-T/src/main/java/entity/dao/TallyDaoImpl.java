@@ -1,9 +1,13 @@
 package entity.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
 
 import resource.HibernateUtil;
 import entity.CombatEncounter;
@@ -57,6 +61,16 @@ public class TallyDaoImpl implements TallyDao {
         } finally {
             session.close();
         }		
+	}
+
+	public List<Tally> getTally(int combatEncounterID) {
+		logger.info("Tally belonging to Combat Ecounter: " + combatEncounterID
+				+ " is about to be retrieved from the database.");
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createQuery("FROM Tally WHERE CombatEncounter_ID=:value");
+		q.setParameter("value", combatEncounterID);
+		return q.list();
 	}
 
 }

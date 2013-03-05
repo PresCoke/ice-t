@@ -1,26 +1,36 @@
 package controller;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Random;
 
+import javax.swing.DefaultListModel;
+
 import org.apache.log4j.Logger;
+
+import bean.combat.CreatureBeanShallow;
 
 import entity.*;
 
 public class Combat {
 	private static final Logger logger = Logger.getLogger(Combat.class);
 	private CombatEncounter theEncounter;
+	private List<Object> creaturesInTheCE;
+	private ListIterator currentCreature;
 	
 	public Combat() {
-		
+		creaturesInTheCE = new ArrayList<Object>();
 	}
 
 	public CombatEncounter getCombatEncounter() {
 		return theEncounter;
 	}
 
-	public void saveOpenCombatEncounter() {
+	public void saveOpenCombatEncounter(String name) {
+		theEncounter.setName(name);
 		int CE_id = theEncounter.save();
+		theEncounter.setId(CE_id);
 		App_Root.changeLastOpenEncounter(CE_id);
 	}
 
@@ -35,6 +45,7 @@ public class Combat {
 	public void setCombatEncounter(CombatEncounter openEncounter) {
 		theEncounter = openEncounter;
 		theEncounter.organizeCreaturesIntoRespectiveLists();
+		creaturesInTheCE = theEncounter.getCreaturesInCe();
 	}
 	/**
 	 * Allow the game master to roll a D20 automatically
@@ -49,9 +60,10 @@ public class Combat {
 	/**
 	 * Organize the creatures in the way they were the last time 
 	 * the CE was played
+	 * @param creature_model 
 	 * @return list of creatures sorted
 	 */
-	public javax.swing.DefaultListModel organizeCreaturesByInitiative(){	
+	public javax.swing.DefaultListModel organizeCreaturesByInitiative(DefaultListModel creature_model){	
 		//Retrieving all the creatures in the combat encounter and sort them out
 		//Sort the creatures to get them the way they were last time
 		
@@ -62,67 +74,74 @@ public class Combat {
     	 * for j=1 to A.length
     	 * 	key=A[j]
     	 * 	i=j-1
-    	 * 	while (i > 0 and A[i] > key
+    	 * 	while (i > 0 and A[i] > key)
     	 * 		A[i+1] = A[i]
     	 * 		i = i - 1;
     	 * 	A[i+1] = key
     	 */
-		List<Object> creatures = theEncounter.getCreaturesInCe();
+		creaturesInTheCE = theEncounter.getCreaturesInCe();
 		Object key;
-		for (int j = 1, i = 0; j < creatures.size(); j++) {
-			key = creatures.get(j);
+		for (int j = 1, i = 0; j < creaturesInTheCE.size(); j++) {
+			key = creaturesInTheCE.get(j);
 			if (key instanceof Player) {
 				i = j - 1;
 				while (i > 0) {
-					if (creatures.get(i) instanceof Player) {
-						if ( ((Player) creatures.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
+					if (creaturesInTheCE.get(i) instanceof Player) {
+						if ( ((Player) creaturesInTheCE.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
 							break;
 						}
-					} else if (creatures.get(i) instanceof Monster) {
-						if ( ((Monster) creatures.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
+					} else if (creaturesInTheCE.get(i) instanceof Monster) {
+						if ( ((Monster) creaturesInTheCE.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
 							break;
 						}
 					}
-					creatures.set(i+1, creatures.get(i));
+					creaturesInTheCE.set(i+1, creaturesInTheCE.get(i));
 					i = i - 1;
 				}
-				creatures.set(i+1, key);
+				creaturesInTheCE.set(i+1, key);
 			} else if (key instanceof Monster) {
 				i = j - 1;
 				while (i > 0) {
-					if (creatures.get(i) instanceof Player) {
-						if ( ((Player) creatures.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
+					if (creaturesInTheCE.get(i) instanceof Player) {
+						if ( ((Player) creaturesInTheCE.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
 							break;
 						}
-					} else if (creatures.get(i) instanceof Monster) {
-						if ( ((Monster) creatures.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
+					} else if (creaturesInTheCE.get(i) instanceof Monster) {
+						if ( ((Monster) creaturesInTheCE.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
 							break;
 						}
 					}
-					creatures.set(i+1, creatures.get(i));
+					creaturesInTheCE.set(i+1, creaturesInTheCE.get(i));
 					i = i - 1;
 				}
-				creatures.set(i+1, key);
+				creaturesInTheCE.set(i+1, key);
 			}
 		}
-		javax.swing.DefaultListModel sorted_list = new javax.swing.DefaultListModel();
-		for (int index = 0; index < creatures.size(); index++) {
-			sorted_list.addElement(creatures.get(index));
+		theEncounter.setCreaturesInCe(creaturesInTheCE);
+		
+		creature_model.removeAllElements();
+		for (int index = 0; index < creaturesInTheCE.size(); index++) {
+			creature_model.addElement(creaturesInTheCE.get(index));
 		}
-		
-		theEncounter.setCreaturesInCe(creatures);
-		
+//		List<TrapHazard> traps = theEncounter.getTrapsInCE();
 		if (theEncounter.getCurrentCreatureId() == -1) {
 	    	logger.info("The currentCreatureId is null so this is a new game.");
-	    	theEncounter.setCurrentCreatureId(0);
+	    	Object first_creature = creature_model.get(0);
+	    	if (first_creature instanceof Player) {
+	    		theEncounter.setCurrentCreatureId( ((entity.Player) first_creature).getCharacterSheet().getId() );
+	    	} else if (first_creature instanceof Monster) {
+	    		theEncounter.setCurrentCreatureId( ((entity.Monster) first_creature).getCharacterSheet().getId() );
+	    	} 
 	    	this.setCurrentCreature(theEncounter.getCurrentCreatureId());
 		} else {
 			logger.info("The currentCreatureId is non-null so set the current creature to the saved one.");
 			this.setCurrentCreature(theEncounter.getCurrentCreatureId());
 	    }
 		
+		currentCreature = creaturesInTheCE.listIterator(0);
+		currentCreature.next();
 		
-		return sorted_list;
+		return creature_model;
 	}
 
 	/**
@@ -130,19 +149,17 @@ public class Combat {
 	 * If the creature is a monster, all the monsters are put at the end of the list
 	 */
 	public int finishTurn() {
-		return theEncounter.nextCreature();
-//		Object current = creaturesInCe.get(0);
-//		if (current instanceof Player){
-//			creaturesInCe.remove(0);
-//			creaturesInCe.add(current);	
-//		} else {
-//			Object currentMonster = creaturesInCe.get(0);
-//			while(currentMonster instanceof Monster){
-//				creaturesInCe.remove(0);
-//				creaturesInCe.add(currentMonster);
-//				currentMonster = creaturesInCe.get(0);
-//			}
-//		}
+		/*
+		 * Going to have to take a careful look at this...
+		 */
+		if (currentCreature.hasNext()) {
+			currentCreature.next();
+			return currentCreature.nextIndex();
+		} else {
+			currentCreature = creaturesInTheCE.listIterator(0);
+			currentCreature.next();
+			return currentCreature.nextIndex();
+		}
 	}
 	
 	/**
@@ -220,6 +237,56 @@ public class Combat {
 				 theEncounter.removeTrapHazard((TrapHazard) value);
 			 }
 		 }
+	}
+
+	public void addTheseTeamsToCE(List<Team> addingTheseTeams) {
+		/*
+		 * Must add team to combat encounter which includes:
+		 * 	-adding any new creatures, monsters and traps to their respective lists
+		 * 
+		 */
+		
+		for (int index = 0; index < addingTheseTeams.size(); index++) {
+			theEncounter.addTeams( addingTheseTeams.get(index) );
+		}
+		theEncounter.organizeCreaturesIntoRespectiveLists();
+	}
+
+	public DefaultListModel updateCreaturesInCE(DefaultListModel creature_model) {
+		List<Object> creatures = theEncounter.getCreaturesInCe();
+		for (int index = 0; index < creatures.size(); index++) {
+			CreatureBeanShallow aBean = new CreatureBeanShallow();
+			aBean.createPanelFrom(creatures.get(index));
+			creature_model.addElement(aBean);
+		}
+		
+		return creature_model;
+	}
+
+	public void setStoryNotes(String newStory) {
+		theEncounter.setNotes(newStory);
+	}
+
+	public void changeTupleName(int tupleChanged, String name) {
+		theEncounter.getTally().getTuples().get(tupleChanged).setName(name);
+	}
+
+	public void changeTupleValue1(int row, int value1) {
+		theEncounter.getTally().getTuples().get(row).setValue1(value1);
+	}
+
+	public void changeTupleValue2(int row, int value2) {
+		theEncounter.getTally().getTuples().get(row).setValue2(value2);
+	}
+
+	public Object[] addTuple() {
+		Tuple addingThisTuple = new Tuple();
+		theEncounter.getTally().getTuples().add(addingThisTuple);
+		Object[] return_data = new Object[3];
+		return_data[0] = addingThisTuple.getName();
+		return_data[1] = addingThisTuple.getValue1();
+		return_data[2] = addingThisTuple.getValue2();
+		return return_data;
 	}
 	
 }
