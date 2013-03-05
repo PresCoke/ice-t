@@ -36,7 +36,8 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	public int saveCombatEncounter(String name, String notes, int currentCreatureId,
 			List<Rewards> rewards, Tally tally, List<Tuple> tuples, List<Team> teams) {
     	logger.debug("CombatEncounter " + name + " is about to be created in the database.");
-    	Session session = HibernateUtil.getSessionFactory().openSession();
+    	Session session = null;
+    	session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         int combatEncounterID = -1;
         try {
@@ -62,18 +63,19 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	            }
             }
             //Set the teams
-            if (teams != null && !teams.isEmpty()){
+           /* if (teams != null && !teams.isEmpty()){
                 logger.debug("Setting CE's teams");
 	            ce.setTeams(teams);
 	            for (Team t : teams){
 	            	t.setCombatEncounter(ce);
 	            }  
 	            logger.debug("Teams updated");
-            }
+            }*/
             combatEncounterID = (Integer) session.save(ce);
             transaction.commit();
         	logger.info("CombatEncounter " + name + " was successfully saved in the database.");
         } catch (HibernateException e) {
+        	combatEncounterID = -1;
             transaction.rollback();
             logger.fatal("Error while saving CombatEncounter " + name + " in the database --- " + e.getMessage());
         } finally {
@@ -139,7 +141,19 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             TeamDao tDAO = new TeamDaoImpl();
             List<Team> t = tDAO.getAllPlayerTeamsIn(ce.getId());
             
+            TallyDao tlDAO = new TallyDaoImpl();
+            Tally tl = tlDAO.getTally(combatEncounterId).get(0);
+            
+            TupleDao tpDAO = new TupleDaoImpl();
+            List<Tuple> tp = tpDAO.getTuple(tl.getId());
+            
+            RewardsDao rwDAO = new RewardsDaoImpl();
+            List<Rewards> rw = rwDAO.getRewards(combatEncounterId);
+            
             ce.setTeams(t);
+            tl.setTuples(tp);
+            ce.setTally(tl);
+            ce.setRewards(rw);
         } catch (HibernateException e) {
             transaction.rollback();
             logger.fatal("Error while retrieving CombatEncounter " + combatEncounterId + " in the database --- " + e.getMessage());

@@ -4,6 +4,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 
 import entity.*;
@@ -35,8 +37,6 @@ public class NewEntity {
 		case 2://TrapHazard
 			empty_entity = new TrapHazardForm();
 			break;
-		case 3://Combat Encounter
-			empty_entity = null; break;
 		case 4://Team
 			empty_entity = new TeamForm();
 			break;

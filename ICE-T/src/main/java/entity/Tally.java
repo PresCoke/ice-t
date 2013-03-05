@@ -49,7 +49,7 @@ public class Tally {
 	 * Default constructor
 	 */
 	public Tally() {
-		this.name = "";
+		this.name = "The Greatest Name in the World";
 		this.tuples = new ArrayList<Tuple>();
 		this.tuples.add(new Tuple());
 	}

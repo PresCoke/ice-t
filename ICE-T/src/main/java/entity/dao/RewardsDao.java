@@ -1,5 +1,8 @@
 package entity.dao;
 
+import entity.Rewards;
+import java.util.List;
+
 public interface RewardsDao {
 
 	/**
@@ -16,5 +19,6 @@ public interface RewardsDao {
 	 * @param rewardsId
 	 */
 	public void deleteRewards (int rewardsId);
-		
+	
+	public List<Rewards> getRewards(int combatEncounterId);
 }

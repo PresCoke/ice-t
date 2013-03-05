@@ -27,6 +27,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	private JButton save_button, remove_button, cancel_button;
 	private EditEntity controller_reference;
 	private GroupLayout editEntity_layout;
+	private int num_entities;
 	
 	public Edit_Tab(EditEntity edit_controller, String entity_type) {
 		controller_reference = edit_controller;
@@ -45,8 +46,12 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		editEntity_window.setContentPane(scrollable);
 		editEntity_window.pack();
 		editEntity_window.validate();
+		if (num_entities == 0) {
+			editEntity_window.dispose();
+			return;
+		}
 		editEntity_window.setVisible(true);
-		
+				
 	}
 
 	private void createPanel() {
@@ -191,6 +196,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		for (int index = 0; index < entityNames.length; index++) {
 			this.name_list.addElement(entityNames[index]);
 		}
+		num_entities = entityNames.length;
 	}
 
 	private boolean removeSelectedEntity() {

@@ -19,20 +19,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
-import entity.dao.CombatEncounterDao;
-import entity.dao.CombatEncounterDaoImpl;
-import entity.dao.MonsterDao;
-import entity.dao.MonsterDaoImpl;
-import entity.dao.PlayerDao;
-import entity.dao.PlayerDaoImpl;
-import entity.dao.RewardsDao;
-import entity.dao.RewardsDaoImpl;
-import entity.dao.TallyDao;
-import entity.dao.TallyDaoImpl;
-import entity.dao.TrapHazardDao;
-import entity.dao.TrapHazardDaoImpl;
-import entity.dao.TupleDao;
-import entity.dao.TupleDaoImpl;
+import entity.dao.*;
 
 /**
  * CombatEncounter Class
@@ -91,15 +78,13 @@ public class CombatEncounter implements EntityM {
 	@Transient
 	private int XPbudget = 0;
 	
-	@Transient
-	private java.util.ListIterator currentCreature;
-	
 
 	/**
 	 * Default constructor
 	 */
 	public CombatEncounter() {
 		id = -1;
+		this.name = "A Combat Encounter";
 		this.teams = new ArrayList<Team>();
 		this.notes = "";
 		this.rewards = new ArrayList<Rewards>();
@@ -215,7 +200,6 @@ public class CombatEncounter implements EntityM {
 	}
 
 	public void setCurrentCreatureId(int currentCreatureId) {
-		this.currentCreature = creaturesInCe.listIterator(currentCreatureId);
 		this.currentCreatureId = currentCreatureId;
 	}	
 
@@ -317,10 +301,22 @@ public class CombatEncounter implements EntityM {
 	 * Methods save, edit, remove and getAll
 	 */
 	public int save() {
-    	logger.info("Saving Combat Encounter " + getName());
+		logger.info("Saving Combat Encounter " + getName());
+    	this.getTally().setName(this.getName());
+    	
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
-    	return ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
+    	int id = ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
 				getTally(), getTally().getTuples(), getTeams());
+    	
+    	TeamDao tmDAO = new TeamDaoImpl();
+		for (Team t : getTeams()) {
+			if (t.getPlayers().size() != 0 && t.getTraphazards().size() == 0 && t.getMonsters().size() == 0) {
+				tmDAO.updateTeam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getPlayers());
+			} else if (t.getPlayers().size() != 0 && (t.getTraphazards().size() != 0 || t.getMonsters().size() != 0)) {
+				tmDAO.updateNPCteam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getMonsters(), t.getTraphazards());
+			}
+		}
+		return id;
 	}
 
 	public int edit() {
@@ -361,8 +357,13 @@ public class CombatEncounter implements EntityM {
         	}
         } 
         
-        //Set the teams
+        //Update Combat encounter
+    	logger.info("Editing Combat Encounter " + getName());
+    	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId());
+    	
+    	  //Set the teams
     	logger.info("Setting CE's teams");
+    	TeamDao tmDAO = new TeamDaoImpl();
         if(ceDB.getTeams() != null && !ceDB.getTeams().isEmpty()){
         	for (Team t : ceDB.getTeams()){
         		t.setCombatEncounter(null);
@@ -370,13 +371,14 @@ public class CombatEncounter implements EntityM {
         }
         if(getTeams() != null && !getTeams().isEmpty()){
         	for (Team t : getTeams()){
-        		t.setCombatEncounter(this);
+        		if (t.getPlayers().size() != 0 && t.getMonsters().size() == 0 && t.getTraphazards().size() == 0) {
+        			tmDAO.updateTeam(t.getId(), ceDB, t.getName(), t.getPlayers());
+        		} else if (t.getPlayers().size() == 0 && (t.getMonsters().size() != 0 || t.getTraphazards().size() != 0) ) {
+        			tmDAO.updateNPCteam(t.getId(), ceDB, t.getName(), t.getMonsters(), t.getTraphazards());
+        		}
         	}
         }
-        
-        //Update Combat encounter
-    	logger.info("Editing Combat Encounter " + getName());
-    	ceDao.updateCombatEncounter(getId(), getName(), getNotes(), getCurrentCreatureId());
+		
     	
     	return this.id;
 	}
@@ -391,15 +393,6 @@ public class CombatEncounter implements EntityM {
     	logger.info("Getting all Combats Encounters in database");
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
     	return ceDao.readAllCombatEncounters();
-	}
-
-	public int nextCreature() {
-		if (currentCreature.hasNext()) {
-			return creaturesInCe.indexOf( currentCreature.next() );
-		} else {
-			currentCreature = creaturesInCe.listIterator(0);
-			return creaturesInCe.indexOf( currentCreature.next() );
-		}
 	}
 
 	public void removePlayer(Player value) {

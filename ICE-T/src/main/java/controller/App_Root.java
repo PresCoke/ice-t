@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -34,7 +35,7 @@ public class App_Root
 	public static GenerateRandomEncounter gre_controller;
 	public static Locale language_locale;
 	private static String dbPath;
-	private static Root_Window mainWindow;
+	public static Root_Window mainWindow;
 	
 	public static void main(String[] args) {
 		
@@ -146,10 +147,12 @@ public class App_Root
 			java.io.File f = new java.io.File("src/main/resources/filters/ApplicationSettings.properties");
 			java.io.FileInputStream fis = new java.io.FileInputStream(f);
 			props.load(fis);
-			
 			props.setProperty("LastOpenCombatEncounter_ID", Integer.toString(CE_id));
-			
 			fis.close();
+			
+			FileOutputStream fos = new FileOutputStream(f);
+			props.store(fos, null);
+			fos.close();
 		} catch (Exception e) {
 			
 		}
