@@ -133,7 +133,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 
 		// level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
-		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
+		SpinnerNumberModel lvl_model = new SpinnerNumberModel(1, 1, 30, 1);
 		lvl_field = new JSpinner(lvl_model);
 		lvl_field.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -176,7 +176,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 				}
 			}
 		});
-		xp_field.setText(Integer.toString(theMonster.getSurgesPerDay()));
+		xp_field.setText(Integer.toString(theMonster.getXP()));
 		// speed
 		JLabel speed_label = new JLabel(entity_l10n.getString("Speed_entity"));
 		speed_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -263,7 +263,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 			}
 		});
 		if (theMonster.getRole() != null) {
-			role_list.setSelectedItem(theMonster.getRole());
+			role_list.setSelectedIndex(theMonster.getRole().ordinal());
 		} else {
 			role_list.setSelectedIndex(0);
 		}
@@ -304,7 +304,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 			}
 		});
 		if (theMonster.getSize() != null) {
-			size_list.setSelectedItem(theMonster.getSize());
+			size_list.setSelectedIndex(theMonster.getSize().ordinal());
 		} else {
 			size_list.setSelectedIndex(0);
 		}
@@ -339,7 +339,7 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 			}
 		});
 		if (theMonster.getMonsterOrigin() != null) {
-			monsterOrigin_field.setSelectedItem(theMonster.getMonsterOrigin());
+			monsterOrigin_field.setSelectedIndex(theMonster.getMonsterOrigin().ordinal());
 		} else {
 			monsterOrigin_field.setSelectedIndex(0);
 		}
@@ -369,6 +369,11 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 				}
 			}
 		});
+		if (theMonster.getMonsterType() != null) {
+			monsterType_field.setSelectedIndex(theMonster.getMonsterType().ordinal());
+		} else {
+			monsterType_field.setSelectedIndex(0);
+		}
 
 		GroupLayout generalInfo_layout = new GroupLayout(generalInfo_panel);
 		generalInfo_layout.setAutoCreateGaps(true);
@@ -1656,6 +1661,11 @@ public class MonsterSheetForm implements FormBean, KeyListener, ActionListener {
 		if (maxHP_field.getText().equals("") || maxHP_field.getText().equals("0")) {
 			isValidForm = false;
 			invalidFieldString += "The Maximum HP field is zero or absent.\n";
+		}
+		
+		if(attack_list.getModel().getSize() == 0){
+			isValidForm = false;
+			invalidFieldString += "The monster musts have at least one attack.\n";
 		}
 		
 		if (!isValidForm) {

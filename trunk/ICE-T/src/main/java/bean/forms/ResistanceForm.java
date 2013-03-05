@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import org.hibernate.engine.query.spi.OrdinalParameterDescriptor;
+
 import java.awt.event.*;
 
 import entity.Resistance;
@@ -133,9 +135,9 @@ public class ResistanceForm implements FormBean {
 	private void createPanel() {
 
 		if (theResistance.getResistanceType() != null) {
-			resistType_list.setSelectedItem( theResistance.getResistanceType() );
+			resistType_list.setSelectedItem( theResistance.getResistanceType().ordinal() );
 		} else {
-			resistType_list.setSelectedItem( theResistance.getResistanceType() );
+			resistType_list.setSelectedItem( theResistance.getResistanceType().ordinal() );
 		}
 		
 		resistValue_field.setValue(theResistance.getResistanceValue());

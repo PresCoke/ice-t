@@ -38,7 +38,7 @@ public class Attack_Type {
 	private Attack attack;
 	
 	public Attack_Type() {
-		isPersonal = true;
+		isPersonal = false;
 	}
 
 

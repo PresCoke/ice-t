@@ -39,6 +39,8 @@ public class Resistance {
 	 * Constructors
 	 */
 	public Resistance() {
+		this.resistanceType=EntityEnum.CS_Resistance_Type.acid;
+		this.resistanceValue=0;
 	}
 	
 	public Resistance(EntityEnum.CS_Resistance_Type resistanceType, int resistanceValue) {

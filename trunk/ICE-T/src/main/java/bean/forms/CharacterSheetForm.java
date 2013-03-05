@@ -134,6 +134,11 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			invalidFieldString += "The Maximum HP field is zero or absent.\n";
 		}
 		
+		if(attack_list.getModel().getSize() == 0){
+			isValidForm = false;
+			invalidFieldString += "The player musts have at least one attack.\n";
+		}
+		
 		if (!isValidForm) {
 			JOptionPane.showMessageDialog(characterForm_panel,
 										  invalidFieldString,
@@ -167,7 +172,9 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		if (misc_field.getText() != "") {
 			theCharacter.setMisc(misc_field.getText());
 		}
-		thePlayer = new entity.Player(player_field.getText(), theCharacter);
+		if(thePlayer.getCharacterSheet() == null){
+			thePlayer = new entity.Player(player_field.getText(), theCharacter);
+		}
 		thePlayer.setPlayerName(player_field.getText());
 		thePlayer.setCurrentHealSurges(theCharacter.getSurgesPerDay());
 		thePlayer.setCurrentHP(theCharacter.getMaxHP());
@@ -201,7 +208,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 		
 		//level
 		JLabel lvl_label = new JLabel(entity_l10n.getString("LVL_entity"));
-		SpinnerNumberModel lvl_model = new SpinnerNumberModel(0, 0, 30, 1);
+		SpinnerNumberModel lvl_model = new SpinnerNumberModel(1, 1, 30, 1);
 		lvl_field = new JSpinner(lvl_model);
 		lvl_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -321,7 +328,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		if (theCharacter.getRole() != null) {
-			role_list.setSelectedItem( theCharacter.getRole().ordinal() );
+			role_list.setSelectedIndex( theCharacter.getRole().ordinal() );
 		}
 		//size
 		JLabel size_label = new JLabel(entity_l10n.getString("Size_entity"));
@@ -354,7 +361,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			}
 		});
 		if (theCharacter.getSize() != null) {
-			size_list.setSelectedItem( theCharacter.getSize().ordinal() );
+			size_list.setSelectedIndex( theCharacter.getSize().ordinal() );
 		}
 		//power source
 		JLabel pwr_label = new JLabel(entity_l10n.getString("Power_entity"));

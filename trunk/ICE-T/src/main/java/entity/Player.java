@@ -159,7 +159,11 @@ public class Player implements EntityM, Comparable<Player> {
 
 
 	public void setInitiative(int initiative) {
-		this.initiative = characterSheet.getInitiative() + initiative;
+		if(characterSheet != null){
+			this.initiative = characterSheet.getInitiative() + initiative;
+		} else {
+			this.initiative = initiative;
+		}
 	}
 
 
@@ -188,7 +192,7 @@ public class Player implements EntityM, Comparable<Player> {
 	}
 
 	
-	public void setId(int id) {
+	private void setId(int id) {
 		this.id = id;
 	}
 
@@ -265,7 +269,7 @@ public class Player implements EntityM, Comparable<Player> {
 	 * Other functions
 	 */
 	public int save() {
-    	logger.info("Saving Creature " + getPlayerName());
+    	logger.info("Saving Player " + getPlayerName());
     	PlayerDao pDao = new PlayerDaoImpl();
     	return pDao.savePlayer(getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP(), getCharacterSheet());
@@ -273,7 +277,7 @@ public class Player implements EntityM, Comparable<Player> {
 	}
 
 	public int edit() {
-    	logger.info("Editing Creature " + getPlayerName());
+    	logger.info("Editing Player " + getPlayerName());
     	PlayerDao pDao = new PlayerDaoImpl();
     	pDao.updatePlayer(getId(), getPlayerName(), getCurrentHP(), getCurrentHealSurges(), getInitiative(),
 				isSecondWind(), getTempHP());
@@ -281,13 +285,13 @@ public class Player implements EntityM, Comparable<Player> {
 	}
 
 	public void remove() {
-    	logger.info("Removing Creature " + getPlayerName());
+    	logger.info("Removing Player " + getPlayerName());
     	PlayerDao pDao = new PlayerDaoImpl();
     	pDao.deletePlayer(getId());		
 	}
 
 	public List<Object[]> getAll() {
-    	logger.info("Getting all Creatures in database");
+    	logger.info("Getting all Players in database");
     	PlayerDao pDao = new PlayerDaoImpl();
     	return pDao.readAllPlayers();
 	}

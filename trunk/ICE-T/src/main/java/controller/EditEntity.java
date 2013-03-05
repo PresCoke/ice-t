@@ -76,6 +76,9 @@ public class EditEntity {
 			CharacterSheet cs = pl.getCharacterSheet();
 			cs.edit();
 			pl.edit();
+		} else if (theEntity instanceof CharacterSheet){
+			CharacterSheet cs = (CharacterSheet) theEntity;
+			cs.edit();
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
 			th.edit();
@@ -101,6 +104,9 @@ public class EditEntity {
 		if (theEntity instanceof Player) {
 			Player pl = (Player) theEntity;
 			CharacterSheet cs = pl.getCharacterSheet();
+			cs.remove();
+		} else if (theEntity instanceof CharacterSheet){
+			CharacterSheet cs = (CharacterSheet) theEntity;
 			cs.remove();
 		} else if (theEntity instanceof TrapHazard) {
 			TrapHazard th = (TrapHazard) theEntity;
