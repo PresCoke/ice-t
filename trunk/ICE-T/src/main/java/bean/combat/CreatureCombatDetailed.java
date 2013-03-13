@@ -100,7 +100,6 @@ public class CreatureCombatDetailed {
 		JSpinner init_field;
 		JLabel speed_label;
 		JLabel ability_defense_label;
-		JPanel health_panel = new JPanel();
 		JLabel currentHP_label;
 		JSpinner currentHP_field;
 		JLabel bloodied_label;
@@ -180,26 +179,26 @@ public class CreatureCombatDetailed {
 		}); 
 		
 		speed_label = new JLabel(" "+player_l10n.getString("Speed_entity")+" "+thePlayer.getCharacterSheet().getSpeed());
-		ability_defense_label = new JLabel(
+		ability_defense_label = new JLabel( "<html>" +
 		        player_l10n.getString("STR_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getSTR())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getSTR()/2) - 5)+")"+
 				
 				player_l10n.getString("CON_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getCON())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getCON()/2) - 5)+")"+
 				
-				player_l10n.getString("DEX_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getDEX())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getDEX()/2) - 5)+")\n"+
+				player_l10n.getString("DEX_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getDEX())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getDEX()/2) - 5)+")<br/>"+
 				
 				player_l10n.getString("INT_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getINT())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getINT()/2) - 5)+")"+
 				
 				player_l10n.getString("WIS_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getWIS())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getWIS()/2) - 5)+")"+
 				
-				player_l10n.getString("CHA_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getCHAR())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getCHAR()/2) - 5)+")\n"+
+				player_l10n.getString("CHA_entity")+" "+Integer.toString(thePlayer.getCharacterSheet().getCHAR())+" ("+Integer.toString( (thePlayer.getCharacterSheet().getCHAR()/2) - 5)+")<br/>"+
 		        
 				player_l10n.getString("AC_entity")+" "+thePlayer.getCharacterSheet().getAC()+" "+player_l10n.getString("FORT_entity")+" "+thePlayer.getCharacterSheet().getFORT()+" "+
 				
-				player_l10n.getString("REF_entity")+" "+thePlayer.getCharacterSheet().getREF()+" "+player_l10n.getString("WILL_entity")+" "+thePlayer.getCharacterSheet().getWILL()
+				player_l10n.getString("REF_entity")+" "+thePlayer.getCharacterSheet().getREF()+" "+player_l10n.getString("WILL_entity")+" "+thePlayer.getCharacterSheet().getWILL() +
 				
-				);
+				"</html>");
 		
-		secondWind_label = new JLabel(player_l10n.getString("SecondWind_creature"));
+		secondWind_label = new JLabel(" " + player_l10n.getString("SecondWind_creature"));
 		secondWindUsed_checkbox.setSelected(thePlayer.isSecondWind());
 		secondWindUsed_checkbox.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -230,16 +229,7 @@ public class CreatureCombatDetailed {
 			}
 		});
 		
-		bloodied_label = new JLabel(player_l10n.getString("Bloodied_entity")+" "+thePlayer.getCharacterSheet().getBloodied());
-		
-		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
-		health_panel.add(currentHP_label);
-		health_panel.add(currentHP_field);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(bloodied_label);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(secondWind_label);
-		health_panel.add(secondWindUsed_checkbox);
+		bloodied_label = new JLabel(" " + player_l10n.getString("Bloodied_entity")+" "+thePlayer.getCharacterSheet().getBloodied());
 		
 		attack_model = new DefaultListModel();
 		List<Attack> list_O_attacks = thePlayer.getCharacterSheet().getAttacks();
@@ -250,7 +240,7 @@ public class CreatureCombatDetailed {
 		attack_list.setCellRenderer( new AttackBean() );
 		attack_panel = new JScrollPane(attack_list);
 		attack_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		tooltip = "<html>";
 		if (thePlayer.getCharacterSheet().getAcrobatics() > 0) {
@@ -318,7 +308,7 @@ public class CreatureCombatDetailed {
 		effect_list.setCellRenderer(new EffectCombat());
 		effect_panel = new JScrollPane(effect_list);
 		effect_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		GroupLayout player_layout = new GroupLayout(player_panel);
 		player_layout.setHorizontalGroup( player_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -327,6 +317,12 @@ public class CreatureCombatDetailed {
 						.addComponent(init_label)
 						.addComponent(init_field)
 						.addComponent(speed_label))
+				.addGroup( player_layout.createSequentialGroup()
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						.addComponent(secondWind_label)
+						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
 				.addComponent(attack_panel)
 				.addComponent(effect_panel)
@@ -337,12 +333,18 @@ public class CreatureCombatDetailed {
 						.addComponent(init_label)
 						.addComponent(init_field)
 						.addComponent(speed_label))
+				.addGroup( player_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						.addComponent(secondWind_label)
+						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
 				.addComponent(attack_panel)
 				.addComponent(effect_panel)
 				);
 		player_layout.linkSize(SwingConstants.VERTICAL, attack_panel, effect_panel);
-				
+		player_layout.linkSize(speed_label, init_field, currentHP_field);		
 		player_panel.setToolTipText(tooltip);
 		player_panel.setLayout(player_layout);
 		return player_panel;
@@ -375,7 +377,6 @@ public class CreatureCombatDetailed {
 		JSpinner init_field;
 		JLabel speed_label;
 		JLabel ability_defense_label;
-		JPanel health_panel = new JPanel();
 		JLabel currentHP_label;
 		JSpinner currentHP_field;
 		JLabel bloodied_label;
@@ -446,11 +447,12 @@ public class CreatureCombatDetailed {
 		case magicalBeast:
 			type = monster_l10n.getString("MagicalBeast_monster"); break;
 		}
-		generalInfo_label = new JLabel(monster_l10n.getString("Name_entity") +" "+ theMonster.getCharacterSheet().getName() +
+		generalInfo_label = new JLabel("<html>" + 
+									   monster_l10n.getString("Name_entity") +" "+ theMonster.getCharacterSheet().getName() +
 									   " "+monster_l10n.getString("LVL_entity")+" " + theMonster.getCharacterSheet().getLevel() +
-									   " "+ role+"\n" +
-									   size + " "  + origin+ " "+type+" "+ theMonster.getCharacterSheet().getXP() + " XP"
-									   );
+									   " "+ role+"<br/>" +
+									   size + " "  + origin+ " "+type+" "+ theMonster.getCharacterSheet().getXP() + " XP" +
+									   "</html>");
 		init_label = new JLabel(monster_l10n.getString("Init_entity"));
 		init_field = new JSpinner( new SpinnerNumberModel(theMonster.getInitiative(), 0, 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
@@ -475,26 +477,26 @@ public class CreatureCombatDetailed {
 		}); 
 		
 		speed_label = new JLabel(" "+monster_l10n.getString("Speed_entity")+" "+theMonster.getCharacterSheet().getSpeed());
-		ability_defense_label = new JLabel(
+		ability_defense_label = new JLabel( "<html>" +
 		        monster_l10n.getString("STR_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getSTR())+" ("+Integer.toString( (theMonster.getCharacterSheet().getSTR()/2) - 5)+")"+
 				
 				monster_l10n.getString("CON_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getCON())+" ("+Integer.toString( (theMonster.getCharacterSheet().getCON()/2) - 5)+")"+
 				
-				monster_l10n.getString("DEX_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getDEX())+" ("+Integer.toString( (theMonster.getCharacterSheet().getDEX()/2) - 5)+")\n"+
+				monster_l10n.getString("DEX_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getDEX())+" ("+Integer.toString( (theMonster.getCharacterSheet().getDEX()/2) - 5)+")<br/>"+
 				
 				monster_l10n.getString("INT_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getINT())+" ("+Integer.toString( (theMonster.getCharacterSheet().getINT()/2) - 5)+")"+
 				
 				monster_l10n.getString("WIS_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getWIS())+" ("+Integer.toString( (theMonster.getCharacterSheet().getWIS()/2) - 5)+")"+
 				
-				monster_l10n.getString("CHA_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getCHAR())+" ("+Integer.toString( (theMonster.getCharacterSheet().getCHAR()/2) - 5)+")\n"+
+				monster_l10n.getString("CHA_entity")+" "+Integer.toString(theMonster.getCharacterSheet().getCHAR())+" ("+Integer.toString( (theMonster.getCharacterSheet().getCHAR()/2) - 5)+")<br/>"+
 		        
 				monster_l10n.getString("AC_entity")+" "+theMonster.getCharacterSheet().getAC()+" "+monster_l10n.getString("FORT_entity")+" "+theMonster.getCharacterSheet().getFORT()+" "+
 				
-				monster_l10n.getString("REF_entity")+" "+theMonster.getCharacterSheet().getREF()+" "+monster_l10n.getString("WILL_entity")+" "+theMonster.getCharacterSheet().getWILL()
+				monster_l10n.getString("REF_entity")+" "+theMonster.getCharacterSheet().getREF()+" "+monster_l10n.getString("WILL_entity")+" "+theMonster.getCharacterSheet().getWILL() +
 				
-				);
+				"</html>");
 		
-		secondWind_label = new JLabel(monster_l10n.getString("SecondWind_creature"));
+		secondWind_label = new JLabel(" " + monster_l10n.getString("SecondWind_creature"));
 		secondWindUsed_checkbox.setSelected(theMonster.isSecondWind());
 		secondWindUsed_checkbox.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -525,16 +527,7 @@ public class CreatureCombatDetailed {
 			}
 		});
 		
-		bloodied_label = new JLabel(monster_l10n.getString("Bloodied_entity")+" "+theMonster.getCharacterSheet().getBloodied());
-		
-		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
-		health_panel.add(currentHP_label);
-		health_panel.add(currentHP_field);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(bloodied_label);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(secondWind_label);
-		health_panel.add(secondWindUsed_checkbox);
+		bloodied_label = new JLabel(" " + monster_l10n.getString("Bloodied_entity")+" "+theMonster.getCharacterSheet().getBloodied());
 		
 		attack_model = new DefaultListModel();
 		List<Attack> list_O_attacks = theMonster.getCharacterSheet().getAttacks();
@@ -545,7 +538,7 @@ public class CreatureCombatDetailed {
 		attack_list.setCellRenderer( new AttackBean() );
 		attack_panel = new JScrollPane(attack_list);
 		attack_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		tooltip = "<html>";
 		if (theMonster.getCharacterSheet().getAcrobatics() > 0) {
@@ -613,7 +606,7 @@ public class CreatureCombatDetailed {
 		effect_list.setCellRenderer(new EffectCombat());
 		effect_panel = new JScrollPane(effect_list);
 		effect_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		GroupLayout monster_layout = new GroupLayout(monster_panel);
 		monster_layout.setHorizontalGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -622,21 +615,34 @@ public class CreatureCombatDetailed {
 						.addComponent(init_label)
 						.addComponent(init_field)
 						.addComponent(speed_label))
+				.addGroup( monster_layout.createSequentialGroup()
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						.addComponent(secondWind_label)
+						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
 				.addComponent(attack_panel)
 				.addComponent(effect_panel)
 				);
 		monster_layout.setVerticalGroup( monster_layout.createSequentialGroup()
 				.addComponent(generalInfo_label)
-				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(init_label)
 						.addComponent(init_field)
 						.addComponent(speed_label))
+				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						.addComponent(secondWind_label)
+						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
 				.addComponent(attack_panel)
 				.addComponent(effect_panel)
 				);
-		monster_layout.linkSize(SwingConstants.VERTICAL, attack_panel, effect_panel);		
+		monster_layout.linkSize(SwingConstants.VERTICAL, attack_panel, effect_panel);	
+		monster_layout.linkSize(speed_label, init_field, currentHP_field);
 		monster_panel.setToolTipText(tooltip);
 		monster_panel.setLayout(monster_layout);
 		

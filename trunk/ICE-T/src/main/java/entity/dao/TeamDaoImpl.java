@@ -156,7 +156,7 @@ public class TeamDaoImpl implements TeamDao {
             Team t = (Team) session.get(Team.class, teamId);
             t.setName(name);
             //Set the trapHazards
-            logger.debug("Setting traps");
+            logger.debug("Removing traps from team, so that they can be added again in a different method...");
             for (TrapHazard th : t.getTraphazards()){
                 th.setTeam(null);
                 session.update(th);

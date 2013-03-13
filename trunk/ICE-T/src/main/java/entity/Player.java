@@ -159,11 +159,7 @@ public class Player implements EntityM, Comparable<Player> {
 
 
 	public void setInitiative(int initiative) {
-		if(characterSheet != null){
-			this.initiative = characterSheet.getInitiative() + initiative;
-		} else {
 			this.initiative = initiative;
-		}
 	}
 
 

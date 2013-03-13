@@ -72,6 +72,8 @@ public class CombatEncounter implements EntityM {
 	private List<Monster> monstersInCe = new ArrayList<Monster>();
 	
 	@Transient
+	private List<TrapHazard> trapsInCe = new ArrayList<TrapHazard>();
+	@Transient
 	//Players + monsters
 	private List<Object> creaturesInCe = new ArrayList<Object>();
 	
@@ -218,7 +220,15 @@ public class CombatEncounter implements EntityM {
 	public void setMonstersInCe(List<Monster> monstersInCe) {
 		this.monstersInCe = monstersInCe;
 	}
-
+	
+	public List<TrapHazard> getTrapsInCe() {
+		return this.trapsInCe;
+	}
+	
+	public void setTrapsInCe(List<TrapHazard> traps) {
+		this.trapsInCe = traps;
+	}
+	
 	public List<Object> getCreaturesInCe() {
 		return creaturesInCe;
 	}
@@ -234,17 +244,22 @@ public class CombatEncounter implements EntityM {
 	 */
 	public List<Object> organizeCreaturesIntoRespectiveLists(){	
     	logger.info("Retrieving all the teams attached to the Combat Encounter " + getName());
+    	monstersInCe = new ArrayList<Monster>();
+    	playersInCe =  new ArrayList<Player>();
 		creaturesInCe = new ArrayList<Object>();
 		List<Team> teams = this.getTeams();
     	logger.info("Retrieving all the creatures in the Combat Encounter " + getName());
 		for (Team t : teams){
-			PlayerDao pDao = new PlayerDaoImpl();
-			List<Player> players = pDao.getPlayersInTeam(t.getId());
-			MonsterDao mDao = new MonsterDaoImpl();
-			List<Monster> monsters = mDao.getMonstersInTeam(t.getId());
+			List<Player> players = t.getPlayers();
+			List<Monster> monsters = t.getMonsters();
+			List<TrapHazard> traps = t.getTraphazards();
+			
 			if(players == null || players.isEmpty()){
 				for (Monster m : monsters){
 					monstersInCe.add(m);
+				}
+				for (TrapHazard th : traps) {
+					trapsInCe.add(th);
 				}
 			} else {
 				for (Player p : players){
@@ -403,11 +418,29 @@ public class CombatEncounter implements EntityM {
 	public void removeMonster(Monster value) {
 		this.monstersInCe.remove(value);
 		this.creaturesInCe.remove(value);
-		//TODO: remove from team it belongs to and delete!
+		for (Team t: getTeams()) {
+			if (t.getMonsters().contains(value) ) {
+				t.getMonsters().remove(value);
+				//this might already be handled...
+				value.remove();
+			}
+			if (t.getMonsters().isEmpty() && t.getTraphazards().isEmpty()) {
+				t.remove();
+			}
+		}
 	}
 
 	public void removeTrapHazard(TrapHazard value) {
-		//TODO: remove from team it belongs to DO NOT DELETE
+		this.trapsInCe.remove(value);
+		for (Team t: getTeams()) {
+			if (t.getTraphazards().contains(value)) {
+				t.getTraphazards().remove(value);
+			}
+		}
+	}
+
+	public void updateTeamsBasedOnTransientModels() {
+		
 	}
 
 }

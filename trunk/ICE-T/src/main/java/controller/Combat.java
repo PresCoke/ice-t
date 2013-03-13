@@ -28,13 +28,17 @@ public class Combat {
 	}
 
 	public void saveOpenCombatEncounter(String name) {
+		theEncounter.updateTeamsBasedOnTransientModels();
 		theEncounter.setName(name);
+		theEncounter.setCreaturesInCe(creaturesInTheCE);
 		int CE_id = theEncounter.save();
 		theEncounter.setId(CE_id);
 		App_Root.changeLastOpenEncounter(CE_id);
 	}
 
 	public void updateOpenCombatEncounter() {
+		theEncounter.updateTeamsBasedOnTransientModels();
+		theEncounter.setCreaturesInCe(creaturesInTheCE);
 		int CE_id = theEncounter.edit();
 		App_Root.changeLastOpenEncounter(CE_id);
 	}
@@ -85,7 +89,7 @@ public class Combat {
 			key = creaturesInTheCE.get(j);
 			if (key instanceof Player) {
 				i = j - 1;
-				while (i > 0) {
+				while (i >= 0) {
 					if (creaturesInTheCE.get(i) instanceof Player) {
 						if ( ((Player) creaturesInTheCE.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
 							break;
@@ -101,7 +105,7 @@ public class Combat {
 				creaturesInTheCE.set(i+1, key);
 			} else if (key instanceof Monster) {
 				i = j - 1;
-				while (i > 0) {
+				while (i >= 0) {
 					if (creaturesInTheCE.get(i) instanceof Player) {
 						if ( ((Player) creaturesInTheCE.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
 							break;
@@ -121,12 +125,14 @@ public class Combat {
 		
 		creature_model.removeAllElements();
 		for (int index = 0; index < creaturesInTheCE.size(); index++) {
-			creature_model.addElement(creaturesInTheCE.get(index));
+			CreatureBeanShallow tempBean = new CreatureBeanShallow();
+			tempBean.createPanelFrom(creaturesInTheCE.get(index));
+			creature_model.addElement(tempBean);
 		}
 //		List<TrapHazard> traps = theEncounter.getTrapsInCE();
 		if (theEncounter.getCurrentCreatureId() == -1) {
 	    	logger.info("The currentCreatureId is null so this is a new game.");
-	    	Object first_creature = creature_model.get(0);
+	    	Object first_creature = creaturesInTheCE.get(0);
 	    	if (first_creature instanceof Player) {
 	    		theEncounter.setCurrentCreatureId( ((entity.Player) first_creature).getCharacterSheet().getId() );
 	    	} else if (first_creature instanceof Monster) {
@@ -254,6 +260,7 @@ public class Combat {
 
 	public DefaultListModel updateCreaturesInCE(DefaultListModel creature_model) {
 		List<Object> creatures = theEncounter.getCreaturesInCe();
+		creature_model.removeAllElements();
 		for (int index = 0; index < creatures.size(); index++) {
 			CreatureBeanShallow aBean = new CreatureBeanShallow();
 			aBean.createPanelFrom(creatures.get(index));
@@ -287,6 +294,14 @@ public class Combat {
 		return_data[1] = addingThisTuple.getValue1();
 		return_data[2] = addingThisTuple.getValue2();
 		return return_data;
+	}
+
+	public void removeTuples(int[] theseTuples) {
+		List<Tuple> removingTheseTuples = theEncounter.getTally().getTuples();
+		for (int index=0; index < theseTuples.length; index++) {
+			removingTheseTuples.remove(index);
+		}
+		theEncounter.getTally().setTuples(removingTheseTuples);
 	}
 	
 }

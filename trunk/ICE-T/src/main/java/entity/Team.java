@@ -270,20 +270,29 @@ public class Team implements EntityM {
 		for (Monster m : monstersDB){
 			mDao.deleteMonster(m.getId());
 		}
-    	for (Monster m : monsters){
-    		mDao.saveMonsterInTeam(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
-    				m.isSecondWind(), m.getTempHP(), m.getCharacterSheet(), this);
-    	}	
-    	logger.info("Updating NPC Team " + getName());
-    	TeamDao tDao = new TeamDaoImpl();
-		tDao.updateNPCteam(getId(), getName(), getMonsters(), getTraphazards());
-		TrapHazardDao thDao = new TrapHazardDaoImpl();
-		for (TrapHazard th : getTraphazards()){
-			thDao.updateTrapHazardInTeam(th.getId(), th.getName(), th.getAvoidance(), th.getLevel(), th.getAvoidanceSkill(), th.getTriggers(),
+		if ( (this.getMonsters() != null && !this.getMonsters().isEmpty()) || 
+				(this.getTraphazards() != null && !this.getTraphazards().isEmpty()) ) {
+			for (Monster m : monsters) {
+				mDao.saveMonsterInTeam(m.getMonsterName(), m.getCurrentHP(),
+						m.getCurrentHealSurges(), m.getInitiative(),
+						m.isSecondWind(), m.getTempHP(), m.getCharacterSheet(),
+						this);
+			}
+			logger.info("Updating NPC Team " + getName());
+			TeamDao tDao = new TeamDaoImpl();
+			tDao.updateNPCteam(getId(), getName(), getMonsters(),
+					getTraphazards());
+			TrapHazardDao thDao = new TrapHazardDaoImpl();
+			for (TrapHazard th : getTraphazards()){
+				thDao.updateTrapHazardInTeam(th.getId(), th.getName(), th.getAvoidance(), th.getLevel(), th.getAvoidanceSkill(), th.getTriggers(),
 					th.getXp(), th.getDifficultyLevel(), th.getCounterMeasureDescription(), th.getType(), th.getRole(), th.getCounterMeasureSkill(),
 					this);
-		}			
-		return 1;
+			}			
+			return 1;
+		} else {
+			this.removeNPC();
+			return -1;
+		}
 	}
 
 	public void remove() {
