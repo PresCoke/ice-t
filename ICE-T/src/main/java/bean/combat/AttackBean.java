@@ -23,6 +23,7 @@ public class AttackBean extends Bean {
 		//TODO: add html code to make look good!!
 		//name (action, use) * Effect Type
 		//Attack Type, Ablility vs. Defense; damage string. Effect string
+		//[if exists Miss: [miss string]
 		//
 		//alternatively
 		//

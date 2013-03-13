@@ -23,6 +23,7 @@ public class CreatureBeanShallow extends Bean {
 		
 	}
 	
+	//remove object instantiation from within render call and instead put it somewhere else; create globals etc...
 	public Component getListCellRendererComponent(JList theList, Object theValue,
 			int index, boolean isSelected, boolean hasFocus) {
 		
@@ -77,7 +78,7 @@ public class CreatureBeanShallow extends Bean {
 		CharacterSheet theSheet = theMonster.getCharacterSheet();
 		String name = theSheet.getName(), level = Integer.toString(theSheet.getLevel()), exp = Integer.toString(theSheet.getXP());
 		String bloodied = Integer.toString(theSheet.getBloodied());
-		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(theMonster.getInitiative());
+		String speed = Integer.toString(theSheet.getSpeed());
 		
 		JLabel isSecondWindUsed_label = new JLabel(creat_l10n.getString("SecondWind_creature"));
 		JCheckBox isSecondWindUsed_box = new JCheckBox();
@@ -128,55 +129,57 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-		initiative_field.setValue(theMonster.getCurrentHP());
+		initiative_field.setValue(theMonster.getInitiative());
 
 		JPanel aCreature_panel = new JPanel();
 		aCreature_panel.setLayout( new BoxLayout(aCreature_panel, BoxLayout.PAGE_AXIS) );
 		JLabel header_label = new JLabel(
 				name + " - " + creat_l10n.getString("LVL_entity") + " " + level +" "+ exp + " XP\n"
 				);
-		
-		JPanel health_panel = new JPanel();
-		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
-		health_panel.add( new JLabel(creat_l10n.getString("CurrentHP_entity")) );
-		health_panel.add(currentHP_field);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(new JLabel(creat_l10n.getString("Bloodied_entity") + " "+ bloodied));
-		health_panel.add(Box.createHorizontalGlue());
-		
-		JPanel extra_panel = new JPanel();
-		extra_panel.setLayout( new BoxLayout(extra_panel, BoxLayout.LINE_AXIS));
-		extra_panel.add( new JLabel(creat_l10n.getString("Init_entity") + " ") );
-		extra_panel.add(initiative_field);
-		extra_panel.add(Box.createHorizontalGlue());
-		extra_panel.add( new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed) );
+		JLabel speed_label = new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed); 
+		JLabel currentHP_label =  new JLabel(creat_l10n.getString("CurrentHP_entity")); 
+		JLabel bloodied_label = new JLabel(creat_l10n.getString("Bloodied_entity") + " "+ bloodied); 
+		JLabel initiative_label =  new JLabel(creat_l10n.getString("Init_entity") + " ");
 		
 		GroupLayout aCreature_layout = new GroupLayout(aCreature_panel);
 		aCreature_layout.setHorizontalGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.LEADING) 
 				.addComponent(header_label)
-				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						)
 				.addGroup( aCreature_layout.createSequentialGroup()
 						.addComponent(isSecondWindUsed_label)
 						.addComponent(isSecondWindUsed_box))
-				.addComponent(extra_panel));
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(initiative_label)
+						.addComponent(initiative_field)
+						.addComponent(speed_label)
+						));
 		aCreature_layout.setVerticalGroup( aCreature_layout.createSequentialGroup()
 				.addComponent(header_label)
-				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						)
 				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(isSecondWindUsed_label)
 						.addComponent(isSecondWindUsed_box))
-				.addComponent(extra_panel));
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(initiative_label)
+						.addComponent(initiative_field)
+						.addComponent(speed_label)	
+				));
+		aCreature_layout.linkSize(initiative_field, currentHP_field);
 		aCreature_panel.setLayout(aCreature_layout);
 		
 		
 		if (isCurrentCreature) {
 			aCreature_panel.setBackground(Color.GREEN);
-			health_panel.setBackground(Color.GREEN);
-			extra_panel.setBackground(Color.GREEN);
 		} else if (isSelected) {
 			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
-			health_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
-			extra_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
 		}
 		
 		return aCreature_panel;
@@ -194,7 +197,7 @@ public class CreatureBeanShallow extends Bean {
 		CharacterSheet theSheet = thePlayer.getCharacterSheet();
 		String name = theSheet.getName(), level = Integer.toString(theSheet.getLevel()), exp = Integer.toString(theSheet.getXP());
 		String bloodied = Integer.toString(theSheet.getBloodied());
-		String speed = Integer.toString(theSheet.getSpeed()), initiative = Integer.toString(thePlayer.getInitiative());
+		String speed = Integer.toString(theSheet.getSpeed());
 		
 		JLabel isSecondWindUsed_label = new JLabel(creat_l10n.getString("SecondWind_creature"));
 		JCheckBox isSecondWindUsed_box = new JCheckBox();
@@ -205,6 +208,7 @@ public class CreatureBeanShallow extends Bean {
 				thePlayer.setSecondWind( ((JCheckBox) ae.getSource()).isSelected() ); 
 			}
 		});
+		
 		JSpinner currentHP_field = new JSpinner (new SpinnerNumberModel(thePlayer.getCurrentHP(), -1*theSheet.getBloodied(), theSheet.getMaxHP(), 1) );
 		currentHP_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -227,6 +231,8 @@ public class CreatureBeanShallow extends Bean {
 			}
 		});
 		currentHP_field.setValue(thePlayer.getCurrentHP());
+		
+		JLabel initiative_label = new JLabel(creat_l10n.getString("Init_entity") + " ");
 		JSpinner initiative_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), 0, 100, 1));
 		initiative_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -248,55 +254,54 @@ public class CreatureBeanShallow extends Bean {
 				}
 			}
 		});
-
+		initiative_field.setValue(thePlayer.getInitiative());
+		
 		JPanel aCreature_panel = new JPanel();
-		aCreature_panel.setLayout( new BoxLayout(aCreature_panel, BoxLayout.PAGE_AXIS) );
 		JLabel header_label = new JLabel(
 				name + " - " + creat_l10n.getString("LVL_entity") + " " + level+ " " + exp + " XP\n"
 				);
-		
-		JPanel health_panel = new JPanel();
-		health_panel.setLayout(new BoxLayout(health_panel, BoxLayout.LINE_AXIS));
-		health_panel.add( new JLabel(creat_l10n.getString("CurrentHP_entity")) );
-		health_panel.add(currentHP_field);
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(new JLabel(creat_l10n.getString("Bloodied_entity") + " "+ bloodied));
-		health_panel.add(Box.createHorizontalGlue());
-		health_panel.add(isSecondWindUsed_label);
-		health_panel.add(isSecondWindUsed_box);
-		
-		JPanel extra_panel = new JPanel();
-		extra_panel.setLayout( new BoxLayout(extra_panel, BoxLayout.LINE_AXIS));
-		extra_panel.add( new JLabel(creat_l10n.getString("Init_entity") + " ") );
-		extra_panel.add(initiative_field);
-		extra_panel.add(Box.createHorizontalGlue());
-		extra_panel.add( new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed) );
+		JLabel speed_label = new JLabel(creat_l10n.getString("Speed_entity") + " "+ speed);
+		JLabel bloodied_label = new JLabel(creat_l10n.getString("Bloodied_entity") + " "+ bloodied);
+		JLabel currentHP_label =  new JLabel(creat_l10n.getString("CurrentHP_entity")); 
 		
 		GroupLayout aCreature_layout = new GroupLayout(aCreature_panel);
 		aCreature_layout.setHorizontalGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.LEADING) 
 				.addComponent(header_label)
-				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						)
 				.addGroup( aCreature_layout.createSequentialGroup()
 						.addComponent(isSecondWindUsed_label)
 						.addComponent(isSecondWindUsed_box))
-				.addComponent(extra_panel));
+				.addGroup( aCreature_layout.createSequentialGroup()
+						.addComponent(initiative_label)
+						.addComponent(initiative_field)
+						.addComponent(speed_label)
+						));
 		aCreature_layout.setVerticalGroup( aCreature_layout.createSequentialGroup()
 				.addComponent(header_label)
-				.addComponent(health_panel)
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(currentHP_label)
+						.addComponent(currentHP_field)
+						.addComponent(bloodied_label)
+						)
 				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(isSecondWindUsed_label)
 						.addComponent(isSecondWindUsed_box))
-				.addComponent(extra_panel));
+				.addGroup( aCreature_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(initiative_label)
+						.addComponent(initiative_field)
+						.addComponent(speed_label)	
+				));
+		aCreature_layout.linkSize(initiative_field, currentHP_field);
 		aCreature_panel.setLayout(aCreature_layout);
 		
 		if (isCurrentCreature) {
 			aCreature_panel.setBackground(Color.GREEN);
-			health_panel.setBackground(Color.GREEN);
-			extra_panel.setBackground(Color.GREEN);
 		} else if (isSelected) {
 			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
-			health_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
-			extra_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
 		}
 		
 		return aCreature_panel;
