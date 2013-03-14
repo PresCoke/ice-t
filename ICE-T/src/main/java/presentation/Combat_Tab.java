@@ -19,7 +19,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 	private JPanel combat_panel;
 	private JButton autoRoll_button, organizeInitiative_button, finishTurn_button,
 	 /*The buttons below might work better as menus that expand up and allow drag and dropping of commonly use entities (maybe a search bar like safari)*/
-					addTeam_button, addEffect_button;
+					addTeam_button, addEffect_button, GRE_button;
 	private DefaultListModel creature_model;
 	private JList creature_list;	
 	private JEditorPane storyNotes_pane;
@@ -52,6 +52,9 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		addTuple_button.addActionListener(this);
 		removeTuple_button = new JButton(combatTab_l10n.getString("RemoveTuple_Button"));
 		removeTuple_button.addActionListener(this);
+		
+		GRE_button = new JButton(combatTab_l10n.getString("GRE_Button"));
+		GRE_button.addActionListener(this);
 				
 		storyNotes_pane = new JEditorPane();
 		storyNotes_pane.setBorder( BorderFactory.createEtchedBorder() );
@@ -195,12 +198,15 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 		creature_model = new DefaultListModel();
 		creature_model = controller_reference.updateCreaturesInCE(creature_model);
-		((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).setIsCurrentCreature(true);
-		Object theCreature = ((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).getEntity();
-		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
-		theBean.createPanelFrom(theCreature);
-		currentCreature_pane.removeAll();
-		currentCreature_pane.add(theBean.getPanel());
+		int currentId = controller_reference.getCurrentCreatureId();
+		if (currentId >= 0) {
+			((CreatureBeanShallow) creature_model.get(currentId)).setIsCurrentCreature(true);
+			Object theCreature = ((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).getEntity();
+			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
+			theBean.createPanelFrom(theCreature);
+			currentCreature_pane.removeAll();
+			currentCreature_pane.add(theBean.getPanel());
+		}
 		
 		/*List<Object> creatures = theEncounter.getCreaturesInCe();
 		for (int index = 0; index < creatures.size(); index++) {
@@ -410,6 +416,23 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 			this.revalidatePanel();
 		} else if (source == organizeInitiative_button) {
 			creature_model = controller_reference.organizeCreaturesByInitiative(creature_model);
+			int index = controller_reference.finishTurn();
+			if (index-1 >= 0) {
+				((CreatureBeanShallow) creature_model.get(index - 1)).setIsCurrentCreature(false);
+			} else {
+				((CreatureBeanShallow) creature_model.lastElement() ).setIsCurrentCreature(false);
+			}
+			
+			index = controller_reference.resetCurrentCreatureTurn();
+			((CreatureBeanShallow) creature_model.get(index)).setIsCurrentCreature(true);
+			creature_list.ensureIndexIsVisible(index);
+			
+			Object theCreature = ((CreatureBeanShallow) creature_model.get(index)).getEntity();
+			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
+			theBean.createPanelFrom(theCreature);
+			currentCreature_pane.removeAll();
+			currentCreature_pane.add(theBean.getPanel());
+			
 			this.revalidatePanel();
 		} else if (source == finishTurn_button) {
 			int index = controller_reference.finishTurn();
@@ -453,6 +476,9 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 			for (int index=0; index < selected_rows.length; index++) {
 				gmTally_model.removeRow( selected_rows[index] );
 			}
+		} else if (source == GRE_button) {
+			GRE_Window GRE_window = new GRE_Window(controller_reference, this);
+			GRE_window.showFrame();
 		}
 		
 	}

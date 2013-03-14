@@ -3,6 +3,7 @@ package mediator;
 import java.util.List;
 import java.util.ResourceBundle;
 import controller.App_Root;
+import entity.CombatEncounter;
 import resource.*;
 
 /**
@@ -76,6 +77,17 @@ public class Mediator {
 			
 			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
 			return th_dao.readAllTrapHazards();
+		} else if (selectedEntityType.equals(entityNames.getString("CombatEncounter_entity"))) {
+			
+			entity.dao.CombatEncounterDao ce_dao = new entity.dao.CombatEncounterDaoImpl();
+			List<Object[]> allCEs = ce_dao.readAllCombatEncounters();
+			int currently_open = App_Root.combat_controller.getID();
+			for (int index = 0; index < allCEs.size(); index++) {
+				if ( ((Integer) allCEs.get(index)[0]) == currently_open) {
+					allCEs.remove(index);
+				}
+			}
+			return allCEs;
 		} else {
 			return null;
 		}
@@ -104,6 +116,11 @@ public class Mediator {
 			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
 			entity.TrapHazard th = th_dao.getTrapHazard(selectedEntityId);
 			return th;
+		} else if (selectedEntityType.equals(entityNames.getString("CombatEncounter_entity"))) {
+			
+			entity.dao.CombatEncounterDao ce_dao = new entity.dao.CombatEncounterDaoImpl();
+			entity.CombatEncounter ce = ce_dao.getCombatEncounter(selectedEntityId);
+			return ce;
 		} else {
 			return null;
 		}

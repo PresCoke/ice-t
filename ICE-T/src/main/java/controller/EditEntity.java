@@ -24,7 +24,7 @@ public class EditEntity {
 
 	public String[] getEntityTypeNames() {
 		ArrayList<String> entity_names = new ArrayList<String>();
-		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityEditTypes", App_Root.language_locale);
+		ResourceBundle entityNames = ResourceBundle.getBundle("filters.mainGUI_l10n.EntityTypeName", App_Root.language_locale);
 		Enumeration<String> entityName_keys = entityNames.getKeys();
 		for (int index = 0; entityName_keys.hasMoreElements(); index++) {
 			String key = (String) entityName_keys.nextElement();
@@ -64,6 +64,8 @@ public class EditEntity {
 			editableEntity = new TrapHazardForm();
 		} else if (entityType.equals(entityNames.getString("Team_entity"))) {
 			editableEntity = new TeamForm();
+		} else if ( entityType.equals(entityNames.getString("CombatEncounter_entity")) ) {
+			editableEntity = new CombatEncounterForm();
 		}
 		
 		return editableEntity.createPanelFromExistingEntity( theEntity );
@@ -128,6 +130,9 @@ public class EditEntity {
 			Monster m = (Monster) theEntity;
 			CharacterSheet cs = m.getCharacterSheet();
 			cs.remove();
+		} else if (theEntity instanceof CombatEncounter) {
+			CombatEncounter ce = (CombatEncounter) theEntity;
+			ce.remove();
 		}
 	}
 

@@ -305,5 +305,14 @@ public class Combat {
 	public int getCurrentCreatureId() {
 		return theEncounter.getCurrentCreatureId();
 	}
+
+	public int resetCurrentCreatureTurn() {
+		theEncounter.setCurrentCreatureId(0);
+		return 0;
+	}
+
+	public boolean isEmpty() {
+		return theEncounter.isEmpty();
+	}
 	
 }
