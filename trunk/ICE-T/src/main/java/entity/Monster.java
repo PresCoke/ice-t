@@ -290,4 +290,12 @@ public class Monster implements EntityM, Comparable<Monster> {
 		}
 	}
 
+	public void resetMonsterStats() {
+		currentHP = characterSheet.getMaxHP();
+		currentHealSurges = characterSheet.getSurgesPerDay();
+		initiative = characterSheet.getInitiative();
+		secondWind = false;
+		tempHP = 0;
+	}
+
 }

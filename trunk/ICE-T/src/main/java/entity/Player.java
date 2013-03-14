@@ -304,4 +304,12 @@ public class Player implements EntityM, Comparable<Player> {
 			return 1; 
 		}
 	}
+
+	public void resetCharacterStats() {
+		currentHP = characterSheet.getMaxHP();
+		currentHealSurges = characterSheet.getSurgesPerDay();
+		initiative = characterSheet.getInitiative();
+		secondWind = false;
+		tempHP = 0;
+	}
 }

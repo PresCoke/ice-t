@@ -223,7 +223,7 @@ public class Root_Window {
 						App_Root.combat_controller.setCombatEncounter(new CombatEncounter());
 						combat_tab = new Combat_Tab(App_Root.combat_controller);
 						content.removeAll();
-						content = (JComponent) combat_tab.getPanel();
+						content = (JComponent) combat_tab.getAndCreatePanel();
 						main_window.setContentPane(content);
 						main_window.pack();
 						main_window.validate();
@@ -257,7 +257,7 @@ public class Root_Window {
 		
 		main_window.setJMenuBar(app_menubar);
 		
-		content = (JComponent)combat_tab.getPanel();
+		content = (JComponent)combat_tab.getAndCreatePanel();
 		
 		main_window.setTitle(root_window_l10n.getString("App_title"));
 		//main_window.setDefaultLookAndFeelDecorated(true);
@@ -279,6 +279,6 @@ public class Root_Window {
 	}
 
 	public Component getFrame() {
-		return main_window;
+		return combat_tab.getPanel();
 	}
 }

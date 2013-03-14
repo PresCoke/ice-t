@@ -28,6 +28,7 @@ public class CreatureBeanShallow extends Bean {
 			int index, boolean isSelected, boolean hasFocus) {
 		
 		JPanel theFinalPane = new JPanel();
+		theFinalPane.setBorder( BorderFactory.createEtchedBorder() );
 		boolean isCurrentCreature = false;
 		if (theValue instanceof TrapHazard) {
 			 theFinalPane = createTrapPanel((TrapHazard) theValue);
@@ -46,11 +47,15 @@ public class CreatureBeanShallow extends Bean {
 		} else {
 			return (new JPanel());
 		}
-		if (isCurrentCreature) {
-			theFinalPane.setBackground(Color.GREEN);
-		}
+		
+		theFinalPane.setBorder( BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(2, 2, 2, 2),
+				BorderFactory.createLineBorder(Color.GRAY)) );
 		if (isSelected) {
 			theFinalPane.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+		}
+		if (isCurrentCreature) {
+			theFinalPane.setBackground(Color.GREEN);
 		}
 		
 		return theFinalPane;
@@ -176,10 +181,11 @@ public class CreatureBeanShallow extends Bean {
 		aCreature_panel.setLayout(aCreature_layout);
 		
 		
+		if (isSelected) {
+			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+		}
 		if (isCurrentCreature) {
 			aCreature_panel.setBackground(Color.GREEN);
-		} else if (isSelected) {
-			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
 		}
 		
 		return aCreature_panel;
@@ -298,10 +304,11 @@ public class CreatureBeanShallow extends Bean {
 		aCreature_layout.linkSize(initiative_field, currentHP_field);
 		aCreature_panel.setLayout(aCreature_layout);
 		
+		if (isSelected) {
+			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+		}
 		if (isCurrentCreature) {
 			aCreature_panel.setBackground(Color.GREEN);
-		} else if (isSelected) {
-			aCreature_panel.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
 		}
 		
 		return aCreature_panel;
@@ -590,6 +597,11 @@ public class CreatureBeanShallow extends Bean {
 
 	public void setIsCurrentCreature(boolean b) {
 		this.isCurrentCreature = b;
+	}
+
+	public boolean isCurrentCreature() {
+		// TODO Auto-generated method stub
+		return isCurrentCreature;
 	}
 
 }

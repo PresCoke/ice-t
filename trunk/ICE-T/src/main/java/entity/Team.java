@@ -229,6 +229,17 @@ public class Team implements EntityM {
 	public int getNumberOfTrapsHazards() {
 		return this.traphazards.size();
 	}
+	public void resetCreatureStats() {
+		if (!players.isEmpty() && players != null) {
+			for (Player p : players) {
+				p.resetCharacterStats();
+			}
+		} else if (!monsters.isEmpty() && monsters != null) {
+			for (Monster m : monsters) {
+				m.resetMonsterStats();
+			}
+		}
+	}
 	
 
 	/**

@@ -19,7 +19,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 	private JPanel combat_panel;
 	private JButton autoRoll_button, organizeInitiative_button, finishTurn_button,
 	 /*The buttons below might work better as menus that expand up and allow drag and dropping of commonly use entities (maybe a search bar like safari)*/
-					addTeam_button, addEffect_button, addCreature_button;
+					addTeam_button, addEffect_button;
 	private DefaultListModel creature_model;
 	private JList creature_list;	
 	private JEditorPane storyNotes_pane;
@@ -47,8 +47,6 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		addTeam_button.addActionListener(this);
 		addEffect_button = new JButton(combatTab_l10n.getString("AddEffect_Button"));
 		addEffect_button.addActionListener(this);
-		addCreature_button = new JButton(combatTab_l10n.getString("AddCreature_Button"));
-		addCreature_button.addActionListener(this);
 		
 		addTuple_button = new JButton(combatTab_l10n.getString("AddTuple_Button"));
 		addTuple_button.addActionListener(this);
@@ -78,10 +76,14 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 	}
 
-	public Component getPanel() {
+	public Component getAndCreatePanel() {
 		this.createPanel();
 		
 		return combat_panel;	
+	}
+	
+	public Component getPanel() {
+		return combat_panel;
 	}
 	
 //	private void initializePanel() {
@@ -192,7 +194,15 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 		
 		creature_model = new DefaultListModel();
-		List<Team> creatures = theEncounter.getTeams();
+		creature_model = controller_reference.updateCreaturesInCE(creature_model);
+		((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).setIsCurrentCreature(true);
+		Object theCreature = ((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).getEntity();
+		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
+		theBean.createPanelFrom(theCreature);
+		currentCreature_pane.removeAll();
+		currentCreature_pane.add(theBean.getPanel());
+		
+		/*List<Object> creatures = theEncounter.getCreaturesInCe();
 		for (int index = 0; index < creatures.size(); index++) {
 			List<Player> players = creatures.get(index).getPlayers();
 			//TODO: assign team a colour!
@@ -215,7 +225,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 					creature_model.addElement(traps.get(t_index));
 				}
 			}
-		}
+		}*/
 		creature_list = new JList(creature_model);
 		creature_list.addListSelectionListener(this);
 		creature_list.setLayoutOrientation(JList.VERTICAL);
@@ -269,7 +279,6 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		button_panel.add( Box.createHorizontalGlue() );
 		button_panel.add(addTeam_button);
 		button_panel.add(addEffect_button);
-		button_panel.add(addCreature_button);
 		
 		JScrollPane creature_pane = new JScrollPane(creature_list);
 		creature_pane.setBorder( BorderFactory.createEtchedBorder() );
@@ -277,8 +286,8 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		creature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		creature_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		creature_pane.setPreferredSize( new Dimension( 1*screen_width/8, 6*screen_height/10 ) );
-		creature_pane.setMinimumSize( new Dimension( 1*screen_width/8, 6*screen_height/10 ) );
+		creature_pane.setPreferredSize( new Dimension( 2*screen_width/8, 6*screen_height/10 ) );
+		creature_pane.setMinimumSize( new Dimension( 2*screen_width/8, 6*screen_height/10 ) );
 
 		JPanel tempStoryNotes_panel = new JPanel();
 		tempStoryNotes_panel.setLayout( new BorderLayout() );
@@ -342,8 +351,8 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		characterSheet_panel.setLayout( new GridLayout(1, 2, 5, 0) );
 		characterSheet_panel.add(currentCreature_pane);
 		characterSheet_panel.add(selectedCreature_pane);
-		characterSheet_panel.setPreferredSize( new Dimension(5*screen_width/8, 6*screen_height/10) );
-		characterSheet_panel.setMinimumSize( new Dimension(5*screen_width/8, 6*screen_height/10) );
+		characterSheet_panel.setPreferredSize( new Dimension(4*screen_width/8, 6*screen_height/10) );
+		characterSheet_panel.setMinimumSize( new Dimension(4*screen_width/8, 6*screen_height/10) );
 		
 		GroupLayout combat_layout = new GroupLayout(combat_panel);
 		combat_layout.setHorizontalGroup( combat_layout.createParallelGroup( GroupLayout.Alignment.LEADING)
@@ -398,26 +407,43 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 							((Monster) creature).getCharacterSheet().getInitiative() );
 				}
 			}
-			this.revalidateList();
+			this.revalidatePanel();
 		} else if (source == organizeInitiative_button) {
 			creature_model = controller_reference.organizeCreaturesByInitiative(creature_model);
-			this.revalidateList();
+			this.revalidatePanel();
 		} else if (source == finishTurn_button) {
-			((CreatureBeanShallow) creature_model.get(controller_reference.getCombatEncounter().getCurrentCreatureId()))
-				.setIsCurrentCreature(false);
 			int index = controller_reference.finishTurn();
 			((CreatureBeanShallow) creature_model.get(index)).setIsCurrentCreature(true);
 			creature_list.ensureIndexIsVisible(index);
-			this.revalidateList();
+			if (index-1 >= 0) {
+				((CreatureBeanShallow) creature_model.get(index - 1)).setIsCurrentCreature(false);
+			} else {
+				((CreatureBeanShallow) creature_model.lastElement() ).setIsCurrentCreature(false);
+			}
+			
+			Object theCreature = ((CreatureBeanShallow) creature_model.get(index)).getEntity();
+			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
+			theBean.createPanelFrom(theCreature);
+			currentCreature_pane.removeAll();
+			currentCreature_pane.add(theBean.getPanel());
+			
+			this.revalidatePanel();
 			
 		} else if (source == addTeam_button) {
 			AddTeam_Window team_add_window = new AddTeam_Window(controller_reference, this);
 			team_add_window.showFrame();
 			creature_model = controller_reference.updateCreaturesInCE(creature_model);
 		} else if (source == addEffect_button) {
-			
-		} else if (source == addCreature_button) {
-			
+			if (creature_list.getSelectedIndices().length <= 0) {
+				ResourceBundle combatTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.CombatTab", App_Root.language_locale);
+				JOptionPane.showMessageDialog(combat_panel,
+											  combatTab_l10n.getString("Effect_Warning"),
+											  "Effect",
+											  JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			AddEffect_Window effect_add_window = new AddEffect_Window(controller_reference, this);
+			effect_add_window.showFrame();
 		} else if (source == addTuple_button) {
 			Object[] new_tuple = controller_reference.addTuple();
 			gmTally_model.addRow(new_tuple);
@@ -431,29 +457,65 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		
 	}
 
-	private void revalidateList() {
-		creature_list.revalidate();
-		creature_list.repaint();
+	public void revalidatePanel() {
+		combat_panel.revalidate();
+		combat_panel.repaint();
 	}
 
 	public void valueChanged(ListSelectionEvent lsevt) {
 		int first_index = creature_list.getSelectedIndex();
 		if (first_index < 0) {
 			return;
-		} else if (creature_list.isSelectedIndex(first_index)) {
-			//creature_list.setS
+		}/* else if (creature_list.isSelectedIndex(first_index)) {
+			creature_list.setSelectedIndex(first_index);
+		}*/
+		Object theCreature = ((CreatureBeanShallow) creature_model.get(first_index) );
+		if ( ((CreatureBeanShallow) theCreature).isCurrentCreature() ) {
+			selectedCreature_pane.removeAll();
+			revalidatePanel();
+			return;
 		}
-		Object theCreature = ((CreatureBeanShallow) creature_model.get(first_index)).getEntity();
+		theCreature = ((CreatureBeanShallow) theCreature).getEntity();
 		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 		theBean.createPanelFrom(theCreature);
 		selectedCreature_pane.removeAll();
 		selectedCreature_pane.add(theBean.getPanel());
-		combat_panel.revalidate();
-		combat_panel.repaint();
+		revalidatePanel();
 	}
 
 	public void updateTeamModel() {
 		creature_model = controller_reference.updateCreaturesInCE(creature_model);
+	}
+
+	public void addThisEffectToSelectedCreatures(Object entity) {
+		Effect theEffect = (Effect) entity;
+		
+		int[] selectedCreatures = creature_list.getSelectedIndices();
+		for (int index = 0; index < selectedCreatures.length; index++) {
+			Object theCreature = creature_model.get(selectedCreatures[index]);
+			if (theCreature instanceof CreatureBeanShallow) {
+				theCreature = ((CreatureBeanShallow) theCreature).getEntity();
+			}
+			if (theCreature instanceof Player) {
+				((Player) theCreature).addEffect(theEffect);
+			} else if (theCreature instanceof Monster) {
+				((Monster) theCreature).addEffect(theEffect);
+			}
+		}
+		
+		Object theCreature = ((CreatureBeanShallow) creature_model.get(controller_reference.getCurrentCreatureId())).getEntity();
+		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
+		theBean.createPanelFrom(theCreature);
+		currentCreature_pane.removeAll();
+		currentCreature_pane.add(theBean.getPanel());
+		
+		theCreature = ((CreatureBeanShallow) creature_model.get(creature_list.getSelectedIndex())).getEntity();
+		theBean = new CreatureCombatDetailed();
+		theBean.createPanelFrom(theCreature);
+		currentCreature_pane.removeAll();
+		currentCreature_pane.add(theBean.getPanel());
+		
+		this.revalidatePanel();
 	}
 	
 

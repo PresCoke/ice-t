@@ -80,7 +80,8 @@ public class EffectForm implements FormBean {
 				.addComponent(effectMetrics_label)
 				.addComponent(effectMetrics_field)
 				);
-		effectForm_layout.linkSize(SwingConstants.VERTICAL, effectName_field, effectName_label);
+		effectForm_layout.linkSize(effectName_field, effectName_label, effectChanges_field);
+		effectForm_layout.linkSize(effectDuration_label, effectDuration_list);
 		effectForm_Panel.setLayout(effectForm_layout);
 	}
 	

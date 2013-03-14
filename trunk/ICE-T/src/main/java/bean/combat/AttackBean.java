@@ -54,17 +54,18 @@ public class AttackBean extends Bean {
 		String hit = "", miss = "";
 		String sustain = "";
 		
-		JEditorPane theAttackBean = new JEditorPane();
-		TitledBorder title = BorderFactory.createTitledBorder(name);
-		title.setTitleJustification(TitledBorder.LEFT);
-		theAttackBean.setBorder(title);
-		if (isSelected) {
-			theAttackBean.setBackground( system_defaults.getColor("List.selectionBackground") );
-		}
 		if (aAttack.isBasic()) {
 			basic = "BASIC";
 		} else {
 			basic = "";
+		}
+		
+		JEditorPane theAttackBean = new JEditorPane();
+		TitledBorder title = BorderFactory.createTitledBorder(name+" - "+basic);
+		title.setTitleJustification(TitledBorder.LEFT);
+		theAttackBean.setBorder(title);
+		if (isSelected) {
+			theAttackBean.setBackground( system_defaults.getColor("List.selectionBackground") );
 		}
 		switch (aAttack.getAction()) {
 		case standard:
@@ -80,13 +81,13 @@ public class AttackBean extends Bean {
 		}
 		switch (aAttack.getSustain()) {
 		case standard:
-			action = attack_l10n.getString("Standard_attack"); break;
+			sustain = attack_l10n.getString("Standard_attack"); break;
 		case move:
-			action = attack_l10n.getString("Move_attack"); break;
+			sustain = attack_l10n.getString("Move_attack"); break;
 		case minor:
-			action = attack_l10n.getString("Minor_attack"); break;
+			sustain = attack_l10n.getString("Minor_attack"); break;
 		case NONE:
-			action = ""; break;
+			sustain = ""; break;
 		}
 		switch (aAttack.getUseType()) {
 		case atWill:
@@ -219,21 +220,25 @@ public class AttackBean extends Bean {
 		}
 		hit = aAttack.getHit();
 		miss = aAttack.getMiss();
-		String fullText = name+" - "+basic+"\n"+
-				use + " * "+pwr_src+" "+effect+" "+damage+" "+accessories+"\n"+
-				action+attackType+ "\n"+
-				attack_l10n.getString("Primary_attack") + aAttack.getPrimaryTarget()+"\n"+ 
-				attack_l10n.getString("Attack_attack") + ability + " v. "+ defense+"\n"+
-				attack_l10n.getString("Hit_attack")+hit+"\n"+attack_l10n.getString("Miss_attack") +miss;
+		String fullText = "("+action+", "+use+") * "+effect+" "+damage+"\n"+
+						  attackType+", "+ ability + " v. "+ defense+"; "+"\n"+hit;
+//				use + " * "+pwr_src+" "+effect+" "+damage+" "+accessories+"\n"+
+//				action+attackType+ "\n"+
+//				attack_l10n.getString("Primary_attack") + aAttack.getPrimaryTarget()+"\n"+ 
+//				attack_l10n.getString("Attack_attack") + ability + " v. "+ defense+"\n"+
+//				attack_l10n.getString("Hit_attack")+hit;
 		//Need to do something about missing fields
+		if (!aAttack.getMiss().equals("")) {
+			fullText+= "\n"+attack_l10n.getString("Miss_attack") +miss;
+		}
 		if (!aAttack.getSecondaryTarget().equals("")) {
-			fullText+= attack_l10n.getString("Secondary_attack")+aAttack.getSecondaryTarget();
+			fullText+= "\n"+attack_l10n.getString("Secondary_attack")+aAttack.getSecondaryTarget();
 		}
 		if (!aAttack.getTrigger().equals("")) {
-			fullText+= attack_l10n.getString("Trigger_attack")+aAttack.getTrigger();
+			fullText+= "\n"+attack_l10n.getString("Trigger_attack")+aAttack.getTrigger();
 		}
 		if (aAttack.getSustain() != EntityEnum.A_Sustain.NONE ) {
-			fullText+= attack_l10n.getString("Sustain_attack") + sustain;
+			fullText+= "\n"+attack_l10n.getString("Sustain_attack") + sustain;
 		}
 				
 		theAttackBean.setText(fullText);

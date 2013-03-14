@@ -99,7 +99,9 @@ public class AddTeam_Window implements ActionListener {
 			}
 			for (int index = 0; index < selected_indices.length; index++) {
 				int id = (Integer) entity_names_and_IDs.get(selected_indices[index])[0];
-				addingTheseTeams.add( (Team) App_Root.resource_mediator.getEntityOfID(id, entity_type_name) );
+				Team addingThis =  (Team) App_Root.resource_mediator.getEntityOfID(id, entity_type_name);
+				addingThis.resetCreatureStats();
+				addingTheseTeams.add(addingThis);
 			}
 			controller_reference.addTheseTeamsToCE(addingTheseTeams);
 			parent_window.updateTeamModel();
