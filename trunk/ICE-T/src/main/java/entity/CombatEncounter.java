@@ -455,7 +455,7 @@ public class CombatEncounter implements EntityM {
 				//this might already be handled...
 				value.remove();
 			}
-			if (t.getMonsters().isEmpty() && t.getTraphazards().isEmpty()) {
+			if (t.getMonsters().isEmpty() && t.getTraphazards().isEmpty() && !t.getPlayers().isEmpty()) {
 				t.remove();
 			}
 		}
@@ -468,6 +468,10 @@ public class CombatEncounter implements EntityM {
 				t.getTraphazards().remove(value);
 			}
 		}
+	}
+
+	public boolean isEmpty() {
+		return teams.isEmpty();
 	}
 
 
