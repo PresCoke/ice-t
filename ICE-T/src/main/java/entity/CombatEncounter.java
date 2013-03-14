@@ -244,9 +244,9 @@ public class CombatEncounter implements EntityM {
 	 */
 	public List<Object> organizeCreaturesIntoRespectiveLists(){	
     	logger.info("Retrieving all the teams attached to the Combat Encounter " + getName());
-    	monstersInCe = new ArrayList<Monster>();
-    	playersInCe =  new ArrayList<Player>();
-		creaturesInCe = new ArrayList<Object>();
+    	monstersInCe = new ArrayList<Monster>(0);
+    	playersInCe =  new ArrayList<Player>(0);
+		creaturesInCe = new ArrayList<Object>(0);
 		List<Team> teams = this.getTeams();
     	logger.info("Retrieving all the creatures in the Combat Encounter " + getName());
 		for (Team t : teams){
@@ -268,11 +268,14 @@ public class CombatEncounter implements EntityM {
 			}
 		}
 		//Sorting players
-    	logger.info("Sorting the players");
-		Collections.sort(playersInCe);
+    	//logger.info("Sorting the players");
+		//Collections.sort(playersInCe);
 		//Sorting all the creatures (players & monsters)
     	logger.info("Sorting all the creatures in the game");
-		for (int index = 0; index < teams.size(); index++) {
+    	creaturesInCe.addAll(playersInCe);
+    	creaturesInCe.addAll(monstersInCe);
+		/*for (int index = 0; index < teams.size(); index++) {
+			
 			List<Player> players = teams.get(index).getPlayers();
 			if (players != null && !players.isEmpty()) {
 				for (int p_index = 0; p_index < players.size(); p_index++) {
@@ -280,36 +283,49 @@ public class CombatEncounter implements EntityM {
 				}
 				continue;
 			} else {
-//				List<TrapHazard> traps = teams.get(index).getTraphazards();
 				List<Monster> monsters = teams.get(index).getMonsters();
 				for (int m_index = 0; m_index < monsters.size(); m_index++) {
 					creaturesInCe.add(monsters.get(m_index));
 				}
-//				for (int t_index = 0; t_index < traps.size(); t_index++) {
-//					//TODO: this will need to be put into a bean in order to change the object state.
-//					creaturesInCe.add(traps.get(t_index));
-//				}
+			}
+		}*/
+		Object key;
+		for (int j = 1, i = 0; j < creaturesInCe.size(); j++) {
+			key = creaturesInCe.get(j);
+			if (key instanceof Player) {
+				i = j - 1;
+				while (i >= 0) {
+					if (creaturesInCe.get(i) instanceof Player) {
+						if ( ((Player) creaturesInCe.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
+							break;
+						}
+					} else if (creaturesInCe.get(i) instanceof Monster) {
+						if ( ((Monster) creaturesInCe.get(i)).getInitiative() > ((Player) key).getInitiative() ) {
+							break;
+						}
+					}
+					creaturesInCe.set(i+1, creaturesInCe.get(i));
+					i = i - 1;
+				}
+				creaturesInCe.set(i+1, key);
+			} else if (key instanceof Monster) {
+				i = j - 1;
+				while (i >= 0) {
+					if (creaturesInCe.get(i) instanceof Player) {
+						if ( ((Player) creaturesInCe.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
+							break;
+						}
+					} else if (creaturesInCe.get(i) instanceof Monster) {
+						if ( ((Monster) creaturesInCe.get(i)).getInitiative() > ((Monster) key).getInitiative() ) {
+							break;
+						}
+					}
+					creaturesInCe.set(i+1, creaturesInCe.get(i));
+					i = i - 1;
+				}
+				creaturesInCe.set(i+1, key);
 			}
 		}
-//    	if (monstersInCe == null || monstersInCe.isEmpty()){
-//    		for (Player p : playersInCe){
-//    			creaturesInCe.add(p);
-//    		}
-//    	} else {
-//    		int gameMasterInitiative = monstersInCe.get(0).getInitiative();
-//    		int index = 0;
-//    		for (int i = 0; i<playersInCe.size(); i++){
-//    			Player p = playersInCe.get(i);
-//    			creaturesInCe.add(p);
-//    			if (p.getInitiative()<gameMasterInitiative){
-//    				index = i;
-//    			}
-//    		}
-//    		for (Monster m : monstersInCe){
-//    			creaturesInCe.add(index, m);
-//    		}
-//    	}
-//    	
 		return creaturesInCe;
 	}
 	/*
@@ -330,6 +346,14 @@ public class CombatEncounter implements EntityM {
 			} else if (t.getPlayers().size() != 0 && (t.getTraphazards().size() != 0 || t.getMonsters().size() != 0)) {
 				tmDAO.updateNPCteam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getMonsters(), t.getTraphazards());
 			}
+		}
+		PlayerDao pDAO = new PlayerDaoImpl();
+		for (Player p : playersInCe) {
+			pDAO.updatePlayer(p, p.getTeam());
+		}
+		MonsterDao mDAO = new MonsterDaoImpl();
+		for (Monster m : monstersInCe) {
+			mDAO.updateMonster(m, m.getTeam());
 		}
 		return id;
 	}
@@ -393,7 +417,14 @@ public class CombatEncounter implements EntityM {
         		}
         	}
         }
-		
+        PlayerDao pDAO = new PlayerDaoImpl();
+		for (Player p : playersInCe) {
+			pDAO.updatePlayer(p, p.getTeam());
+		}
+		MonsterDao mDAO = new MonsterDaoImpl();
+		for (Monster m : monstersInCe) {
+			mDAO.updateMonster(m, m.getTeam());
+		}
     	
     	return this.id;
 	}
@@ -439,9 +470,6 @@ public class CombatEncounter implements EntityM {
 		}
 	}
 
-	public void updateTeamsBasedOnTransientModels() {
-		
-	}
 
 }
 

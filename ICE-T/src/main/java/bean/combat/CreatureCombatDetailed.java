@@ -1,5 +1,6 @@
 package bean.combat;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.awt.*;
@@ -24,6 +25,8 @@ public class CreatureCombatDetailed {
 //	private JSpinner tempHP_field;
 //	private JSpinner currentInit_field;
 //	private JCheckBox secondWind_field;
+	DefaultListModel effect_model;
+	JList effect_list;
 	
 	public CreatureCombatDetailed() {
 		
@@ -110,8 +113,6 @@ public class CreatureCombatDetailed {
 		DefaultListModel attack_model;
 		String tooltip;
 		JScrollPane effect_panel;
-		JList effect_list;
-		DefaultListModel effect_model;
 		
 		String size = "", role = "";
 		switch (thePlayer.getCharacterSheet().getSize()) {
@@ -149,19 +150,22 @@ public class CreatureCombatDetailed {
 			role = player_l10n.getString("Soldier_role"); break;
 		}
 		
-		generalInfo_label = new JLabel(player_l10n.getString("PlayerName_entity") + " " + thePlayer.getPlayerName() + " " +
+		generalInfo_label = new JLabel("<html>" +
+									   player_l10n.getString("PlayerName_entity") + " " + thePlayer.getPlayerName() + " " +
 									   player_l10n.getString("Name_entity") + " " + thePlayer.getCharacterSheet().getName() + " "+
 									   player_l10n.getString("LVL_entity") + " " + thePlayer.getCharacterSheet().getLevel() + " "+
-									   thePlayer.getCharacterSheet().getXP() + "XP\n" +
-									   size + " " + role + "\n"
+									   thePlayer.getCharacterSheet().getXP() + "XP<br/>" +
+									   size + " " + role + "</html>"
 									   );
 		init_label = new JLabel(player_l10n.getString("Init_entity"));
-		init_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), 0, 100, 1));
+		init_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), thePlayer.getCharacterSheet().getInitiative(), 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int init = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				//TODO: tricky as fuck may not work!!!
 				thePlayer.setInitiative(init);
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		((JSpinner.DefaultEditor) init_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
@@ -175,6 +179,8 @@ public class CreatureCombatDetailed {
 				if (key < 0 || key > 9) {
 					ke.consume();
 				}
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		}); 
 		
@@ -204,6 +210,8 @@ public class CreatureCombatDetailed {
 			public void actionPerformed(ActionEvent ae) {
 				//Tricky as fuck might not work;
 				thePlayer.setSecondWind( ((JCheckBox) ae.getSource()).isSelected() ); 
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		currentHP_label = new JLabel(player_l10n.getString("CurrentHP_entity"));
@@ -213,6 +221,8 @@ public class CreatureCombatDetailed {
 				int hp = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				//TODO: tricky as fuck may not work!!!
 				thePlayer.setCurrentHP(hp);
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		((JSpinner.DefaultEditor) currentHP_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
@@ -226,10 +236,14 @@ public class CreatureCombatDetailed {
 				if (key < 0 || key > 9) {
 					ke.consume();
 				}
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		
 		bloodied_label = new JLabel(" " + player_l10n.getString("Bloodied_entity")+" "+thePlayer.getCharacterSheet().getBloodied());
+		
+		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		
 		attack_model = new DefaultListModel();
 		List<Attack> list_O_attacks = thePlayer.getCharacterSheet().getAttacks();
@@ -241,6 +255,7 @@ public class CreatureCombatDetailed {
 		attack_panel = new JScrollPane(attack_list);
 		attack_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		attack_panel.setPreferredSize( new Dimension( 0, 2*screen_height/10 ) );
 		
 		tooltip = "<html>";
 		if (thePlayer.getCharacterSheet().getAcrobatics() > 0) {
@@ -306,10 +321,31 @@ public class CreatureCombatDetailed {
 		}
 		effect_list = new JList(effect_model);
 		effect_list.setCellRenderer(new EffectCombat());
+		effect_list.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				char key = ke.getKeyChar();
+				if (key == '\b'/*|| delete key for those computers which have it...*/) {
+					int[] selected_indices = effect_list.getSelectedIndices(); 
+					if (selected_indices.length < 0) {
+						return;
+					}
+					for (int index = 0; index < selected_indices.length; index++) {
+						thePlayer.removeEffect( (Effect) effect_model.getElementAt(selected_indices[index]) );
+						effect_model.removeElementAt(selected_indices[index]);
+					}
+				}
+			}
+		});
 		effect_panel = new JScrollPane(effect_list);
 		effect_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
+		effect_panel.setPreferredSize( new Dimension( 0, 2*screen_height/10 ) );
 		GroupLayout player_layout = new GroupLayout(player_panel);
 		player_layout.setHorizontalGroup( player_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(generalInfo_label)
@@ -387,8 +423,6 @@ public class CreatureCombatDetailed {
 		DefaultListModel attack_model;
 		String tooltip;
 		JScrollPane effect_panel;
-		JList effect_list;
-		DefaultListModel effect_model;
 		
 		String size = "", role = "", origin = "", type = "";
 		switch (theMonster.getCharacterSheet().getSize()) {
@@ -454,12 +488,14 @@ public class CreatureCombatDetailed {
 									   size + " "  + origin+ " "+type+" "+ theMonster.getCharacterSheet().getXP() + " XP" +
 									   "</html>");
 		init_label = new JLabel(monster_l10n.getString("Init_entity"));
-		init_field = new JSpinner( new SpinnerNumberModel(theMonster.getInitiative(), 0, 100, 1));
+		init_field = new JSpinner( new SpinnerNumberModel(theMonster.getInitiative(), theMonster.getCharacterSheet().getInitiative(), 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int init = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				//TODO: tricky as fuck may not work!!!
 				theMonster.setInitiative(init);
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		((JSpinner.DefaultEditor) init_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
@@ -473,6 +509,8 @@ public class CreatureCombatDetailed {
 				if (key < 0 || key > 9) {
 					ke.consume();
 				}
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		}); 
 		
@@ -502,6 +540,8 @@ public class CreatureCombatDetailed {
 			public void actionPerformed(ActionEvent ae) {
 				//Tricky as fuck might not work;
 				theMonster.setSecondWind( ((JCheckBox) ae.getSource()).isSelected() ); 
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		currentHP_label = new JLabel(monster_l10n.getString("CurrentHP_entity"));
@@ -511,6 +551,8 @@ public class CreatureCombatDetailed {
 				int hp = (Integer) ((JSpinner) arg0.getSource()).getValue();
 				//TODO: tricky as fuck may not work!!!
 				theMonster.setCurrentHP(hp);
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		((JSpinner.DefaultEditor) currentHP_field.getEditor()).getTextField().addKeyListener( new KeyListener() {
@@ -524,10 +566,14 @@ public class CreatureCombatDetailed {
 				if (key < 0 || key > 9) {
 					ke.consume();
 				}
+				((JPanel) App_Root.mainWindow.getFrame()).revalidate();
+				((JPanel) App_Root.mainWindow.getFrame()).repaint();
 			}
 		});
 		
 		bloodied_label = new JLabel(" " + monster_l10n.getString("Bloodied_entity")+" "+theMonster.getCharacterSheet().getBloodied());
+		
+		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		
 		attack_model = new DefaultListModel();
 		List<Attack> list_O_attacks = theMonster.getCharacterSheet().getAttacks();
@@ -539,6 +585,7 @@ public class CreatureCombatDetailed {
 		attack_panel = new JScrollPane(attack_list);
 		attack_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		attack_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		attack_panel.setPreferredSize( new Dimension( 0, 2*screen_height/10 ) );
 		
 		tooltip = "<html>";
 		if (theMonster.getCharacterSheet().getAcrobatics() > 0) {
@@ -604,9 +651,31 @@ public class CreatureCombatDetailed {
 		}
 		effect_list = new JList(effect_model);
 		effect_list.setCellRenderer(new EffectCombat());
+		effect_list.addKeyListener( new KeyListener() {
+			public void keyPressed(KeyEvent ke) {
+				
+			}
+			public void keyReleased(KeyEvent ke) {
+				
+			}
+			public void keyTyped(KeyEvent ke) {
+				char key = ke.getKeyChar();
+				if (key == '\b'/*|| delete key for those computers which have it...*/) {
+					int[] selected_indices = effect_list.getSelectedIndices(); 
+					if (selected_indices.length < 0) {
+						return;
+					}
+					for (int index = 0; index < selected_indices.length; index++) {
+						theMonster.removeEffect( (Effect) effect_model.getElementAt(selected_indices[index]) );
+						effect_model.removeElementAt(selected_indices[index]);
+					}
+				}
+			}
+		});
 		effect_panel = new JScrollPane(effect_list);
 		effect_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		effect_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		effect_panel.setPreferredSize( new Dimension( 0, 2*screen_height/10 ) );
 		
 		GroupLayout monster_layout = new GroupLayout(monster_panel);
 		monster_layout.setHorizontalGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.LEADING)

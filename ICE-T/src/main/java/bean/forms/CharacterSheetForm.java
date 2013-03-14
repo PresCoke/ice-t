@@ -31,6 +31,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	
 	private CharacterSheet theCharacter;
 	private entity.Player thePlayer;
+	private boolean isNewPlayer;
 	private JPanel characterForm_panel;
 	private JTextField maxHP_field, bloodied_field, surgeValue_field, surgeNum_field;
 	private JTextField name_field;
@@ -84,6 +85,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	public JPanel createEntityPanel() {
 		theCharacter = new CharacterSheet();
 		thePlayer = new entity.Player();
+		isNewPlayer = true;
 		theCharacter.setNPC(false);
 		
 		createPanel();
@@ -94,6 +96,7 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 	public JPanel createPanelFromExistingEntity(Object usingThis) {
 		if (usingThis instanceof entity.Player) {
 			thePlayer = (entity.Player) usingThis;
+			isNewPlayer = false;
 			theCharacter = thePlayer.getCharacterSheet();
 			if (theCharacter.isNPC()) {
 				theCharacter = new CharacterSheet();
@@ -176,12 +179,13 @@ public class CharacterSheetForm implements FormBean, KeyListener, ActionListener
 			thePlayer = new entity.Player(player_field.getText(), theCharacter);
 		}
 		thePlayer.setPlayerName(player_field.getText());
-		thePlayer.setCurrentHealSurges(theCharacter.getSurgesPerDay());
-		thePlayer.setCurrentHP(theCharacter.getMaxHP());
-		thePlayer.setInitiative(theCharacter.getInitiative());
-		thePlayer.setSecondWind(false);
-		thePlayer.setTempHP(0);
-		
+		if (isNewPlayer) {
+			thePlayer.setCurrentHealSurges(theCharacter.getSurgesPerDay());
+			thePlayer.setCurrentHP(theCharacter.getMaxHP());
+			thePlayer.setInitiative(theCharacter.getInitiative());
+			thePlayer.setSecondWind(false);
+			thePlayer.setTempHP(0);
+		}
 		return thePlayer;
 	}
 	

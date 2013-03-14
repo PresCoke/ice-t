@@ -17,10 +17,10 @@ public class Combat {
 	private static final Logger logger = Logger.getLogger(Combat.class);
 	private CombatEncounter theEncounter;
 	private List<Object> creaturesInTheCE;
-	private ListIterator currentCreature;
+	private int currentCreature;
 	
 	public Combat() {
-		creaturesInTheCE = new ArrayList<Object>();
+		creaturesInTheCE = new ArrayList<Object>(0);
 	}
 
 	public CombatEncounter getCombatEncounter() {
@@ -28,7 +28,6 @@ public class Combat {
 	}
 
 	public void saveOpenCombatEncounter(String name) {
-		theEncounter.updateTeamsBasedOnTransientModels();
 		theEncounter.setName(name);
 		theEncounter.setCreaturesInCe(creaturesInTheCE);
 		int CE_id = theEncounter.save();
@@ -37,7 +36,6 @@ public class Combat {
 	}
 
 	public void updateOpenCombatEncounter() {
-		theEncounter.updateTeamsBasedOnTransientModels();
 		theEncounter.setCreaturesInCe(creaturesInTheCE);
 		int CE_id = theEncounter.edit();
 		App_Root.changeLastOpenEncounter(CE_id);
@@ -50,6 +48,7 @@ public class Combat {
 		theEncounter = openEncounter;
 		theEncounter.organizeCreaturesIntoRespectiveLists();
 		creaturesInTheCE = theEncounter.getCreaturesInCe();
+		setCurrentCreature(theEncounter.getCurrentCreatureId());
 	}
 	/**
 	 * Allow the game master to roll a D20 automatically
@@ -134,18 +133,15 @@ public class Combat {
 	    	logger.info("The currentCreatureId is null so this is a new game.");
 	    	Object first_creature = creaturesInTheCE.get(0);
 	    	if (first_creature instanceof Player) {
-	    		theEncounter.setCurrentCreatureId( ((entity.Player) first_creature).getCharacterSheet().getId() );
+	    		theEncounter.setCurrentCreatureId( 0 );/*((entity.Player) first_creature).getId() );*/
 	    	} else if (first_creature instanceof Monster) {
-	    		theEncounter.setCurrentCreatureId( ((entity.Monster) first_creature).getCharacterSheet().getId() );
+	    		theEncounter.setCurrentCreatureId( 0 );/*((entity.Monster) first_creature).getId() );*/
 	    	} 
 	    	this.setCurrentCreature(theEncounter.getCurrentCreatureId());
 		} else {
 			logger.info("The currentCreatureId is non-null so set the current creature to the saved one.");
 			this.setCurrentCreature(theEncounter.getCurrentCreatureId());
 	    }
-		
-		currentCreature = creaturesInTheCE.listIterator(0);
-		currentCreature.next();
 		
 		return creature_model;
 	}
@@ -158,13 +154,14 @@ public class Combat {
 		/*
 		 * Going to have to take a careful look at this...
 		 */
-		if (currentCreature.hasNext()) {
-			currentCreature.next();
-			return currentCreature.nextIndex();
+		currentCreature++;
+		if (currentCreature < creaturesInTheCE.size()) {
+			theEncounter.setCurrentCreatureId(currentCreature);
+			return currentCreature;
 		} else {
-			currentCreature = creaturesInTheCE.listIterator(0);
-			currentCreature.next();
-			return currentCreature.nextIndex();
+			currentCreature = 0;
+			theEncounter.setCurrentCreatureId(currentCreature);
+			return currentCreature;
 		}
 	}
 	
@@ -229,7 +226,8 @@ public class Combat {
 	}*/
 	
 	private void setCurrentCreature(int currentCreatureId) {
-		theEncounter.setCurrentCreatureId(currentCreatureId);
+    	currentCreature = currentCreatureId;
+		theEncounter.setCurrentCreatureId(currentCreature);
 	}
 
 	public void removeTheseCreatures(List<Object> removed_creatures) {
@@ -302,6 +300,10 @@ public class Combat {
 			removingTheseTuples.remove(index);
 		}
 		theEncounter.getTally().setTuples(removingTheseTuples);
+	}
+
+	public int getCurrentCreatureId() {
+		return theEncounter.getCurrentCreatureId();
 	}
 	
 }
