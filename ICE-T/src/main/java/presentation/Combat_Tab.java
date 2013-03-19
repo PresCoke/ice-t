@@ -283,6 +283,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		button_panel.add(autoRoll_button);
 		button_panel.add(organizeInitiative_button);
 		button_panel.add( Box.createHorizontalGlue() );
+		button_panel.add(GRE_button);
 		button_panel.add(addTeam_button);
 		button_panel.add(addEffect_button);
 		

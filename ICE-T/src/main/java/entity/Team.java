@@ -253,24 +253,36 @@ public class Team implements EntityM {
 	
 	public int saveNPC(List<Monster> monsters) {
     	logger.info("Saving Monsters before saving the team.");
-		MonsterDao mDao = new MonsterDaoImpl();
-    	for (Monster m : monsters){
-    		mDao.saveMonster(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
-    			m.isSecondWind(), m.getTempHP(), m.getCharacterSheet());
-    	}
-    	if(monsters != null && !monsters.isEmpty()){
+    	/*if(monsters != null && !monsters.isEmpty()){
 			List<Monster> monstersDB = mDao.getMonstersByName(monsters.get(0).getMonsterName());
 			this.setMonsters(monstersDB);
-    	}
+    	}*/
     	logger.info("Saving NPC Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
-		return tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
+    	int id = tDao.saveNPCteam(getName(), getMonsters(), getTraphazards());
+    	this.setId(id);
+    	
+    	
+    	MonsterDao mDao = new MonsterDaoImpl();
+    	for (Monster m : monsters){
+    		int m_id = mDao.saveMonsterInTeam(m.getMonsterName(), m.getCurrentHP(), m.getCurrentHealSurges(), m.getInitiative(),
+    			m.isSecondWind(), m.getTempHP(), m.getCharacterSheet(), this);
+    		m.setId(m_id);
+    	}
+		return id;
 	}
 
 	public int edit() {
-    	logger.info("Editing Combat Encounter " + getName());
+    	logger.info("Editing Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.updateTeam(getId(), getName(), getPlayers());
+		return 1;
+	}
+	
+	public int editTeam(CombatEncounter ce) {
+		logger.info("Editing Team " + getName());
+    	TeamDao tDao = new TeamDaoImpl();
+    	tDao.updateTeam(getId(), ce, getName(), getPlayers());
 		return 1;
 	}
 	
@@ -305,16 +317,50 @@ public class Team implements EntityM {
 			return -1;
 		}
 	}
+	
+	public int editNPCTeam(CombatEncounter ce, List<Monster> monsters) {
+		logger.info("Updating Monsters before updating the team.");
+		MonsterDao mDao = new MonsterDaoImpl();
+		List<Monster> monstersDB = mDao.getMonstersInTeam(getId());
+		for (Monster m : monstersDB){
+			mDao.deleteMonster(m.getId());
+		}
+		if ( (this.getMonsters() != null && !this.getMonsters().isEmpty()) || 
+				(this.getTraphazards() != null && !this.getTraphazards().isEmpty()) ) {
+			for (Monster m : monsters) {
+				int id = mDao.saveMonsterInTeam(m.getMonsterName(), m.getCurrentHP(),
+						m.getCurrentHealSurges(), m.getInitiative(),
+						m.isSecondWind(), m.getTempHP(), m.getCharacterSheet(),
+						this);
+				m.setId(id);
+			}
+			logger.info("Updating NPC Team " + getName());
+			TeamDao tDao = new TeamDaoImpl();
+			tDao.updateNPCteam(getId(), ce, getName(), getMonsters(),
+					getTraphazards());
+			TrapHazardDao thDao = new TrapHazardDaoImpl();
+			for (TrapHazard th : getTraphazards()){
+				thDao.updateTrapHazardInTeam(th.getId(), th.getName(), th.getAvoidance(), th.getLevel(), th.getAvoidanceSkill(), th.getTriggers(),
+					th.getXp(), th.getDifficultyLevel(), th.getCounterMeasureDescription(), th.getType(), th.getRole(), th.getCounterMeasureSkill(),
+					this);
+			}			
+			return 1;
+		} else {
+			this.removeNPC();
+			return -1;
+		}
+	}
 
 	public void remove() {
-    	logger.info("Removing Combat Encounter " + getName());
+    	logger.info("Removing Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
 		tDao.deleteTeam(getId());
 	}
 	
 	public void removeNPC() {
-    	logger.info("Removing Combat Encounter " + getName());
+    	logger.info("Removing Team " + getName());
     	TeamDao tDao = new TeamDaoImpl();
+    	tDao.updateNPCteam(getId(), null, getName(), getMonsters(), getTraphazards());
 		tDao.deleteNPCTeam(getId());
 	}
 

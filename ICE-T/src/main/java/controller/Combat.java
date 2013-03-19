@@ -10,6 +10,7 @@ import javax.swing.DefaultListModel;
 import org.apache.log4j.Logger;
 
 import bean.combat.CreatureBeanShallow;
+import entity.dao.*;
 
 import entity.*;
 
@@ -167,41 +168,29 @@ public class Combat {
 	
 	/**
 	 * Generate a random encounter, that is to say a random team of monsters
-	 * @return list of creatures and traps
+	 * @return list of teams
 	 */
-	/*public List<Object> generateRandomEncounter(){
+	public List<Team> generateRandomEncounterTeams(int num_teams) {
 		
-		//Retrieving all the creatures' level in the combat encounter
-    	logger.info("Retrieving all the creatures in the CE");
-		List<Integer> levels = new ArrayList<Integer>();
-		for (Player c : playersInCe){
-			levels.add(c.getCharacterSheet().getId());
-		}
+		java.util.Random random_generator = new java.util.Random();
+		int alpha = random_generator.nextInt(26) + 65;
+		int numeric = random_generator.nextInt(100);
+		String monster_name = Character.toString((char) alpha)+numeric;
 		
-		//Choosing Encounter level
-    	logger.info("Choosing a level for the random encounter");
-		int creaturesNumber = levels.size();
-		int sum = 0;
-		for (int level : levels){
-			sum += level;
-		}
-		Random random = new Random();
-		int r = random.nextInt(3) - random.nextInt(3);
-		int levelEncounter = sum/creaturesNumber + r;
-		if (levelEncounter < 1){
-			levelEncounter = 1;
-		}
-		XPbudget = levelEncounter*250;
+		int XPbudget = theEncounter.getXP_budget();
 
 		//Getting all NPC creatures and traps in database that would suit the XPbudget
 		List<Object> npcs = new ArrayList<Object>();
     	logger.info("Getting all NPC creatures that would suit the XP budget");
-		MonsterDao mDao = new MonsterDaoImpl();
+		CharacterSheetDao mDao = new CharacterSheetDaoImpl();
 		List<Monster> monsters = new ArrayList<Monster>();
-		List<Monster> allMonsters = mDao.getAllMonsters();
-		for (Monster m : allMonsters){
-			if(m.getCharacterSheet().getXP()<=XPbudget){
-				monsters.add(m);
+		
+		List<CharacterSheet> allMonsters = mDao.getAllNPCCharacterSheets();
+		for (CharacterSheet m : allMonsters){
+			if(m.getXP()<=XPbudget){
+				Monster monster = new Monster(m);
+				monster.setMonsterName(monster_name);
+				monsters.add(monster);
 			}
 		}
     	logger.info("Getting all traps that would suit the XP budget");
@@ -221,10 +210,52 @@ public class Combat {
     	}
     	for (TrapHazard th : trapHazards){
     		npcs.add(th);
-    	}				
-		return npcs;
-	}*/
+    	}
+    	
+    	int npc_size = npcs.size();
+    	
+    	List<Team> randomTeams = new ArrayList<Team>(0);
+    	for (int index = 0; index < num_teams; index++) {
+    		int xp = XPbudget;
+    		int specificXP = 0;
+    		int num_iterations = 0;
+    		Random r = new Random();
+    		randomTeams.add(new Team());
+    		while (xp > 0 && num_iterations < 10) {
+    			//TODO: this may not terminate...
+    			Object o = npcs.get( abs(r.nextInt(npc_size)) );
+    			if (o instanceof Monster) {
+    				specificXP = ((Monster) o).getCharacterSheet().getXP(); 
+    				if ( specificXP > xp ) {
+    					num_iterations++;
+    					continue;
+    				}
+    				num_iterations = 0;
+    				randomTeams.get(index).addMonster( (Monster) o );
+    			} else if (o instanceof TrapHazard) {
+    				specificXP = ((TrapHazard) o).getXp(); 
+    				if (specificXP > xp) {
+    					num_iterations++;
+    					continue;
+    				}
+    				num_iterations = 0;
+    				randomTeams.get(index).addTrapHazard( (TrapHazard) o );
+    			}
+    			
+    			xp -= specificXP;
+    		}
+    	}
+    	
+		return randomTeams;
+	}
 	
+	private int abs(int nextInt) {
+		if (nextInt < 0) {
+			nextInt *= -1;
+		}
+		return nextInt;
+	}
+
 	private void setCurrentCreature(int currentCreatureId) {
     	currentCreature = currentCreatureId;
 		theEncounter.setCurrentCreatureId(currentCreature);

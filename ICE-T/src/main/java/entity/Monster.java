@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -81,6 +82,7 @@ public class Monster implements EntityM, Comparable<Monster> {
 		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 
 	/**
@@ -94,6 +96,7 @@ public class Monster implements EntityM, Comparable<Monster> {
 		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	
 	public Monster(String monsterName, CharacterSheet sheet) {
@@ -101,9 +104,10 @@ public class Monster implements EntityM, Comparable<Monster> {
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
-		initiative = characterSheet.getLevel();
+		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	
 	public Monster(CharacterSheet sheet) {
@@ -111,9 +115,10 @@ public class Monster implements EntityM, Comparable<Monster> {
 		characterSheet = sheet;
 		currentHP = characterSheet.getMaxHP();
 		currentHealSurges = characterSheet.getSurgesPerDay();
-		initiative = characterSheet.getLevel();
+		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	/**
 	 * Getters & Setters

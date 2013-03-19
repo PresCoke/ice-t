@@ -34,7 +34,7 @@ public class TeamDaoImpl implements TeamDao {
     	logger.info("Retrieval of all teams in the database");
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
-		Query q = session.createSQLQuery("Select Team_id, Team_name from Team");
+		Query q = session.createSQLQuery("Select * from Team");
 		List<Object[]> teams = q.list();
 		return teams;
 	}
@@ -115,20 +115,20 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = new Team(name);
-            for (Monster m : monsters){
-                Monster monster = (Monster) session.get(Monster.class, m.getId());
-                t.addMonster(monster);
-            }
+            /*for (Monster m : monsters){
+                //Monster monster = (Monster) session.get(Monster.class, m.getId());
+                t.addMonster(m);
+            }*/
             teamID = (Integer) session.save(t);
         	logger.info("Team " + name + " was successfully saved in the database.");
             //Set the monsters
         	logger.debug("Setting monsters");
         	Team team = (Team) session.get(Team.class, teamID);
-        	for (Monster m : monsters){
-                Monster monster = (Monster) session.get(Monster.class, m.getId());
-                monster.setTeam(team);
-                session.update(monster);
-            }
+        	/*for (Monster m : monsters){
+                //Monster monster = (Monster) session.get(Monster.class, m.getId());
+                m.setTeam(team);
+                session.update(m);
+            }*/
             //Set the trapHazards
             logger.debug("Setting traps");
             team.setTraphazards(traphazards);
@@ -168,6 +168,10 @@ public class TeamDaoImpl implements TeamDao {
         	e.printStackTrace();
             transaction.rollback();
             logger.fatal("Error while updating NPC Team " + name + " in the database --- " + e.getMessage());
+        } catch (Exception e) {
+        	e.printStackTrace();
+            transaction.rollback();
+            logger.fatal("Error while updating NPC Team " + name + " in the database --- " + e.getMessage());
         } finally {
             session.close();
         }
@@ -180,6 +184,7 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = (Team) session.get(Team.class, teamId);
+            t.setCombatEncounter(null);
             //Update monsters
             logger.info("Update of monsters");
             MonsterDao mDao = new MonsterDaoImpl();
@@ -193,6 +198,7 @@ public class TeamDaoImpl implements TeamDao {
                 th.setTeam(null);
                 session.update(th);
             }
+            //session.update(t);
             //Deletion of the team
             logger.info("Deletion of NPC team " + t.getName());
             session.delete(t);
@@ -213,6 +219,7 @@ public class TeamDaoImpl implements TeamDao {
         try {
             transaction = session.beginTransaction();
             Team t = (Team) session.get(Team.class, teamId);
+            t.setCombatEncounter(null);
             //Update creatures
             logger.info("Update of players");
             for (Player p : t.getPlayers()){
@@ -334,14 +341,13 @@ public class TeamDaoImpl implements TeamDao {
 			t.setName(name);
 			t.setCombatEncounter(encounter);
 			// Set the monsters
-			logger.debug("Setting NPC team's monsters and monsters' team");
+			/*logger.debug("Setting NPC team's monsters and monsters' team");
 			for (Monster m : monsters) {
-				Monster monster = (Monster) session.get(Monster.class,
-						m.getId());
-				t.addMonster(monster);
-				monster.setTeam(t);
-				session.update(monster);
-			}
+				//Monster monster = (Monster) session.get(Monster.class, m.getId());
+				t.addMonster(m);
+				m.setTeam(t);
+				session.update(m);
+			}*/
 			// Set the traps/hazards
 			logger.debug("Modifying previous traps/hazards' team");
 			List<TrapHazard> trapHazardsDB = t.getTraphazards();
