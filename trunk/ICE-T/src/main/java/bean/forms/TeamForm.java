@@ -313,7 +313,6 @@ public class TeamForm implements FormBean, ActionListener {
 	}
 	
 	public Object getEntity() {
-		//TODO: auto-generate names if they're monsters
 		theTeam.setName(name_field.getText());
 		return theTeam;
 	}
@@ -322,6 +321,7 @@ public class TeamForm implements FormBean, ActionListener {
 		boolean isValidForm = true;
 		String invalidFieldString = "";
 		
+		//TODO: put warning strings in files
 		if ( (theTeam.getNumberOfMonsters() + theTeam.getNumberOfPlayers() + theTeam.getNumberOfTrapsHazards()) == 0) {
 			isValidForm = false;
 			invalidFieldString += "You must add at least one creature or one trap before saving.\n";

@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -86,6 +87,7 @@ public class Player implements EntityM, Comparable<Player> {
 		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 
 	/**
@@ -99,6 +101,7 @@ public class Player implements EntityM, Comparable<Player> {
 		initiative = 0;
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	
 	public Player(String name, CharacterSheet sheet) {
@@ -109,6 +112,7 @@ public class Player implements EntityM, Comparable<Player> {
 		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	
 	public Player(CharacterSheet sheet) {
@@ -119,6 +123,7 @@ public class Player implements EntityM, Comparable<Player> {
 		initiative = characterSheet.getInitiative();
 		secondWind = false;
 		tempHP = 0;
+		effects = new ArrayList<Effect>(0);
 	}
 	/**
 	 * Getters & Setters

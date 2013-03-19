@@ -193,7 +193,7 @@ public class CombatEncounter implements EntityM {
 		return this.teams.remove(index);
 	}
 	
-	public boolean removeTeam(Attack thisTeam) {
+	public boolean removeTeam(Team thisTeam) {
 		return this.teams.remove(thisTeam);
 	}
 	
@@ -342,19 +342,21 @@ public class CombatEncounter implements EntityM {
     	TeamDao tmDAO = new TeamDaoImpl();
 		for (Team t : getTeams()) {
 			if (t.getPlayers().size() != 0 && t.getTraphazards().size() == 0 && t.getMonsters().size() == 0) {
-				tmDAO.updateTeam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getPlayers());
+				t.editTeam(this);
+				//tmDAO.updateTeam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getPlayers());
 			} else if (t.getPlayers().size() != 0 && (t.getTraphazards().size() != 0 || t.getMonsters().size() != 0)) {
-				tmDAO.updateNPCteam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getMonsters(), t.getTraphazards());
+				t.editNPCTeam(this, t.getMonsters());
+				//tmDAO.updateNPCteam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getMonsters(), t.getTraphazards());
 			}
 		}
-		PlayerDao pDAO = new PlayerDaoImpl();
+		/*PlayerDao pDAO = new PlayerDaoImpl();
 		for (Player p : playersInCe) {
 			pDAO.updatePlayer(p, p.getTeam());
 		}
 		MonsterDao mDAO = new MonsterDaoImpl();
 		for (Monster m : monstersInCe) {
 			mDAO.updateMonster(m, m.getTeam());
-		}
+		}*/
 		return id;
 	}
 
@@ -409,22 +411,24 @@ public class CombatEncounter implements EntityM {
         	}
         }
         if(getTeams() != null && !getTeams().isEmpty()){
-        	for (Team t : getTeams()){
+        	for (Team t : getTeams()) {
         		if (t.getPlayers().size() != 0 && t.getMonsters().size() == 0 && t.getTraphazards().size() == 0) {
-        			tmDAO.updateTeam(t.getId(), ceDB, t.getName(), t.getPlayers());
+        			t.editTeam(ceDB);
+        			//tmDAO.updateTeam(t.getId(), ceDB, t.getName(), t.getPlayers());
         		} else if (t.getPlayers().size() == 0 && (t.getMonsters().size() != 0 || t.getTraphazards().size() != 0) ) {
-        			tmDAO.updateNPCteam(t.getId(), ceDB, t.getName(), t.getMonsters(), t.getTraphazards());
+        			t.editNPCTeam(ceDB, t.getMonsters());
+        			//tmDAO.updateNPCteam(t.getId(), ceDB, t.getName(), t.getMonsters(), t.getTraphazards());
         		}
         	}
         }
-        PlayerDao pDAO = new PlayerDaoImpl();
+        /*PlayerDao pDAO = new PlayerDaoImpl();
 		for (Player p : playersInCe) {
 			pDAO.updatePlayer(p, p.getTeam());
 		}
 		MonsterDao mDAO = new MonsterDaoImpl();
 		for (Monster m : monstersInCe) {
 			mDAO.updateMonster(m, m.getTeam());
-		}
+		}*/
     	
     	return this.id;
 	}
@@ -455,8 +459,12 @@ public class CombatEncounter implements EntityM {
 				//this might already be handled...
 				value.remove();
 			}
-			if (t.getMonsters().isEmpty() && t.getTraphazards().isEmpty() && !t.getPlayers().isEmpty()) {
-				t.remove();
+			boolean monster_empty = t.getMonsters().isEmpty();
+			boolean trap_empty = t.getTraphazards().isEmpty();
+			boolean player_empty = t.getPlayers().isEmpty();
+			if (monster_empty && trap_empty && player_empty) {
+				this.removeTeam(t);
+				t.removeNPC();
 			}
 		}
 	}
@@ -472,6 +480,22 @@ public class CombatEncounter implements EntityM {
 
 	public boolean isEmpty() {
 		return teams.isEmpty();
+	}
+
+	public int getXP_budget() {
+		//Retrieving all the creatures' level in the combat encounter
+    	logger.info("Retrieving all the creatures in the CE");
+    	XPbudget = 0;
+    	int party_level = 0;
+		for (Player c : playersInCe){
+			party_level += c.getCharacterSheet().getLevel();
+		}
+		party_level = party_level / playersInCe.size();
+		//Choosing Encounter level
+    	logger.info("Choosing a level for the random encounter");
+		XPbudget = party_level* controller.GenerateRandomEncounter.StdMonster_XPLevels[party_level];
+		
+		return XPbudget;
 	}
 
 

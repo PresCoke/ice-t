@@ -72,7 +72,14 @@ public class Mediator {
 		} else if (selectedEntityType.equals(entityNames.getString("Team_entity"))) {
 			
 			entity.dao.TeamDaoImpl te_dao = new entity.dao.TeamDaoImpl();
-			return te_dao.readAllTeams();
+			int currently_open_CE = App_Root.combat_controller.getID();
+			List<Object[]> allTeams = te_dao.readAllTeams();
+			for (int index = 0; index < allTeams.size(); index++) {
+				if ( ((Integer) allTeams.get(index)[2]) == currently_open_CE) {
+					allTeams.remove(index);
+				}
+			}
+			return allTeams;
 		} else if (selectedEntityType.equals(entityNames.getString("TrapHazard_entity"))) {
 			
 			entity.dao.TrapHazardDaoImpl th_dao = new entity.dao.TrapHazardDaoImpl();
