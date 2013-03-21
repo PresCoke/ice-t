@@ -75,6 +75,9 @@ public class Mediator {
 			int currently_open_CE = App_Root.combat_controller.getID();
 			List<Object[]> allTeams = te_dao.readAllTeams();
 			for (int index = 0; index < allTeams.size(); index++) {
+				if ( allTeams.get(index)[2] == null) {
+					continue;
+				}
 				if ( ((Integer) allTeams.get(index)[2]) == currently_open_CE) {
 					allTeams.remove(index);
 				}

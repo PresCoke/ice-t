@@ -66,14 +66,20 @@ public class CreatureCombatDetailed {
 	}
 	
 	public JPanel getPanel() {
+		JPanel theFinalPanel = new JPanel();
+		theFinalPanel.setLayout(new BorderLayout() );
+		theFinalPanel.setBorder( BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		if (thePlayer != null && theMonster == null && theTrap == null) {
-			return createPlayerPanel();
+			theFinalPanel.add(createPlayerPanel(), BorderLayout.CENTER);
+			return theFinalPanel;
 		} else if (thePlayer == null && theMonster != null && theTrap == null) {
-			return createMonsterPanel();
+			theFinalPanel.add(createMonsterPanel(), BorderLayout.CENTER);
+			return theFinalPanel;
 		} else if (thePlayer == null && theMonster == null && theTrap != null) {
-			return createTrapPanel();
+			theFinalPanel.add(createTrapPanel(), BorderLayout.CENTER);
+			return theFinalPanel;
 		} else {
-			return null;
+			return theFinalPanel;
 		}
 	}
 	
@@ -98,7 +104,6 @@ public class CreatureCombatDetailed {
 		 */
 		ResourceBundle player_l10n = ResourceBundle.getBundle("filters.beanGUI_l10n.Entity", App_Root.language_locale);
 		JPanel player_panel = new JPanel();
-		JLabel generalInfo_label;
 		JLabel init_label;
 		JSpinner init_field;
 		JLabel speed_label;
@@ -150,13 +155,24 @@ public class CreatureCombatDetailed {
 			role = player_l10n.getString("Soldier_role"); break;
 		}
 		
-		generalInfo_label = new JLabel("<html>" +
-									   player_l10n.getString("PlayerName_entity") + " " + thePlayer.getPlayerName() + " " +
-									   player_l10n.getString("Name_entity") + " " + thePlayer.getCharacterSheet().getName() + " "+
-									   player_l10n.getString("LVL_entity") + " " + thePlayer.getCharacterSheet().getLevel() + " "+
-									   thePlayer.getCharacterSheet().getXP() + "XP<br/>" +
-									   size + " " + role + "</html>"
-									   );
+		JLabel name_label = new JLabel(player_l10n.getString("PlayerName_entity") + " " + thePlayer.getPlayerName() + " " +
+				   					   player_l10n.getString("Name_entity") + " " + thePlayer.getCharacterSheet().getName());
+		JLabel level_label = new JLabel(player_l10n.getString("LVL_entity") + " " + thePlayer.getCharacterSheet().getLevel());
+		JLabel size_label = new JLabel(size + " " + role);
+		JLabel xp_label = new JLabel(thePlayer.getCharacterSheet().getXP() + " XP");
+		
+		JPanel player_text_1 = new JPanel();
+		player_text_1.setLayout( new BoxLayout(player_text_1, BoxLayout.LINE_AXIS) );
+		player_text_1.add(name_label);
+		player_text_1.add(Box.createHorizontalGlue());
+		player_text_1.add(level_label);
+		
+		JPanel player_text_2 = new JPanel();
+		player_text_2.setLayout( new BoxLayout(player_text_2, BoxLayout.LINE_AXIS) );
+		player_text_2.add(size_label);
+		player_text_2.add(Box.createHorizontalGlue());
+		player_text_2.add(xp_label);
+		
 		init_label = new JLabel(player_l10n.getString("Init_entity"));
 		init_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), thePlayer.getCharacterSheet().getInitiative(), 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
@@ -204,7 +220,7 @@ public class CreatureCombatDetailed {
 				
 				"</html>");
 		
-		secondWind_label = new JLabel(" " + player_l10n.getString("SecondWind_creature"));
+		secondWind_label = new JLabel(player_l10n.getString("SecondWind_creature"));
 		secondWindUsed_checkbox.setSelected(thePlayer.isSecondWind());
 		secondWindUsed_checkbox.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -348,7 +364,8 @@ public class CreatureCombatDetailed {
 		effect_panel.setPreferredSize( new Dimension( 0, 2*screen_height/10 ) );
 		GroupLayout player_layout = new GroupLayout(player_panel);
 		player_layout.setHorizontalGroup( player_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(generalInfo_label)
+				.addComponent(player_text_1)
+				.addComponent(player_text_2)
 				.addGroup( player_layout.createSequentialGroup()
 						.addComponent(init_label)
 						.addComponent(init_field)
@@ -356,7 +373,8 @@ public class CreatureCombatDetailed {
 				.addGroup( player_layout.createSequentialGroup()
 						.addComponent(currentHP_label)
 						.addComponent(currentHP_field)
-						.addComponent(bloodied_label)
+						.addComponent(bloodied_label))
+				.addGroup( player_layout.createSequentialGroup()
 						.addComponent(secondWind_label)
 						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
@@ -364,7 +382,8 @@ public class CreatureCombatDetailed {
 				.addComponent(effect_panel)
 				);
 		player_layout.setVerticalGroup( player_layout.createSequentialGroup()
-				.addComponent(generalInfo_label)
+				.addComponent(player_text_1)
+				.addComponent(player_text_2)
 				.addGroup( player_layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(init_label)
 						.addComponent(init_field)
@@ -372,7 +391,8 @@ public class CreatureCombatDetailed {
 				.addGroup( player_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(currentHP_label)
 						.addComponent(currentHP_field)
-						.addComponent(bloodied_label)
+						.addComponent(bloodied_label))
+				.addGroup( player_layout.createParallelGroup(GroupLayout.Alignment.CENTER)	
 						.addComponent(secondWind_label)
 						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
@@ -408,7 +428,6 @@ public class CreatureCombatDetailed {
 		
 		ResourceBundle monster_l10n = ResourceBundle.getBundle("filters.beanGUI_l10n.Entity", App_Root.language_locale);
 		JPanel monster_panel = new JPanel();
-		JLabel generalInfo_label;
 		JLabel init_label;
 		JSpinner init_field;
 		JLabel speed_label;
@@ -481,12 +500,24 @@ public class CreatureCombatDetailed {
 		case magicalBeast:
 			type = monster_l10n.getString("MagicalBeast_monster"); break;
 		}
-		generalInfo_label = new JLabel("<html>" + 
-									   monster_l10n.getString("Name_entity") +" "+ theMonster.getCharacterSheet().getName() +
-									   " "+monster_l10n.getString("LVL_entity")+" " + theMonster.getCharacterSheet().getLevel() +
-									   " "+ role+"<br/>" +
-									   size + " "  + origin+ " "+type+" "+ theMonster.getCharacterSheet().getXP() + " XP" +
-									   "</html>");
+		
+		JLabel name_label = new JLabel(monster_l10n.getString("Name_entity")+" "+theMonster.getCharacterSheet().getName());
+		JLabel level_label = new JLabel(monster_l10n.getString("LVL_entity")+" "+theMonster.getCharacterSheet().getLevel()+" "+role);
+		JLabel origin_label = new JLabel(size + " "  + origin+ " "+type);
+		JLabel xp_label = new JLabel(theMonster.getCharacterSheet().getXP() + " XP");
+		
+		JPanel monster_text_1 = new JPanel();
+		monster_text_1.setLayout( new BoxLayout(monster_text_1, BoxLayout.LINE_AXIS) );
+		monster_text_1.add(name_label);
+		monster_text_1.add(Box.createHorizontalGlue());
+		monster_text_1.add(level_label);
+		
+		JPanel monster_text_2 = new JPanel();
+		monster_text_2.setLayout( new BoxLayout(monster_text_2, BoxLayout.LINE_AXIS) );
+		monster_text_2.add(origin_label);
+		monster_text_2.add(Box.createHorizontalGlue());
+		monster_text_2.add(xp_label);
+		
 		init_label = new JLabel(monster_l10n.getString("Init_entity"));
 		init_field = new JSpinner( new SpinnerNumberModel(theMonster.getInitiative(), theMonster.getCharacterSheet().getInitiative(), 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
@@ -534,7 +565,7 @@ public class CreatureCombatDetailed {
 				
 				"</html>");
 		
-		secondWind_label = new JLabel(" " + monster_l10n.getString("SecondWind_creature"));
+		secondWind_label = new JLabel(monster_l10n.getString("SecondWind_creature"));
 		secondWindUsed_checkbox.setSelected(theMonster.isSecondWind());
 		secondWindUsed_checkbox.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -679,7 +710,8 @@ public class CreatureCombatDetailed {
 		
 		GroupLayout monster_layout = new GroupLayout(monster_panel);
 		monster_layout.setHorizontalGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(generalInfo_label)
+				.addComponent(monster_text_1)
+				.addComponent(monster_text_2)
 				.addGroup( monster_layout.createSequentialGroup()
 						.addComponent(init_label)
 						.addComponent(init_field)
@@ -687,7 +719,8 @@ public class CreatureCombatDetailed {
 				.addGroup( monster_layout.createSequentialGroup()
 						.addComponent(currentHP_label)
 						.addComponent(currentHP_field)
-						.addComponent(bloodied_label)
+						.addComponent(bloodied_label))
+				.addGroup( monster_layout.createSequentialGroup()
 						.addComponent(secondWind_label)
 						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
@@ -695,7 +728,8 @@ public class CreatureCombatDetailed {
 				.addComponent(effect_panel)
 				);
 		monster_layout.setVerticalGroup( monster_layout.createSequentialGroup()
-				.addComponent(generalInfo_label)
+				.addComponent(monster_text_1)
+				.addComponent(monster_text_2)
 				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(init_label)
 						.addComponent(init_field)
@@ -703,7 +737,8 @@ public class CreatureCombatDetailed {
 				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(currentHP_label)
 						.addComponent(currentHP_field)
-						.addComponent(bloodied_label)
+						.addComponent(bloodied_label))
+				.addGroup( monster_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(secondWind_label)
 						.addComponent(secondWindUsed_checkbox))
 				.addComponent(ability_defense_label)
@@ -860,19 +895,68 @@ public class CreatureCombatDetailed {
 			cmSkill = trap_l10n.getString("THIE_trap");
 			break;
 		}
-		JEditorPane trap_text = new JEditorPane();
-		trap_text.setEditable(false);
+		JLabel trap_name = new JLabel();
+		JLabel trap_level = new JLabel();
+		JLabel trap_type = new JLabel();
+		JLabel trap_xp = new JLabel();
+		JLabel trap_avoid = new JLabel();
 		
-		trap_text.setText( theTrap.getName()+ " "+trap_l10n.getString("LVL_entity")+theTrap.getLevel()+" "+role+"\n"+
-						   type+ " "+theTrap.getXp() + " XP\n"+
-						   avoidance_skill+" - "+Integer.toString(theTrap.getAvoidance())+"\n"+
-						   trap_l10n.getString("Trigger_trap")+" "+theTrap.getTriggers()+"\n"+
-						   trap_l10n.getString("CounterText_trap")+" "+cmSkill+" - "+theTrap.getDifficultyLevel()+"\n"+
-						   theTrap.getCounterMeasureDescription()
+		trap_name.setText( theTrap.getName()+" " );
+		trap_level.setText( trap_l10n.getString("LVL_entity")+theTrap.getLevel()+" "+role );
+		trap_type.setText( type+" ");
+		trap_xp.setText(theTrap.getXp() + " XP");
+		trap_avoid.setText(trap_l10n.getString("Avoidance_trap")+" "+avoidance_skill+" - "+Integer.toString(theTrap.getAvoidance()));
+		
+		JPanel trap_text_1 = new JPanel();
+		trap_text_1.setLayout(new BoxLayout(trap_text_1, BoxLayout.LINE_AXIS));
+		trap_text_1.add(trap_name);
+		trap_text_1.add(Box.createHorizontalGlue());
+		trap_text_1.add(trap_level);
+		
+		JPanel trap_text_2 = new JPanel();
+		trap_text_2.setLayout(new BoxLayout(trap_text_2, BoxLayout.LINE_AXIS));
+		trap_text_2.add(trap_type);
+		trap_text_2.add(Box.createHorizontalGlue());
+		trap_text_2.add(trap_xp);
+		
+		JPanel trap_text_3 = new JPanel();
+		trap_text_3.setLayout(new BoxLayout(trap_text_3, BoxLayout.LINE_AXIS));
+		trap_text_3.add(trap_avoid);
+		trap_text_3.add(Box.createHorizontalGlue());
+		
+		JEditorPane trigger_pane = new JEditorPane();
+		trigger_pane.setEditable(false);
+		trigger_pane.setBorder( BorderFactory.createTitledBorder(trap_l10n.getString("Trigger_trap")) );
+		trigger_pane.setText(theTrap.getTriggers());
+		
+		JEditorPane counter_pane = new JEditorPane();
+		counter_pane.setEditable(false);
+		counter_pane.setBorder( BorderFactory.createTitledBorder(trap_l10n.getString("CounterText_trap")+" "+cmSkill+" - "+theTrap.getDifficultyLevel()) );
+		counter_pane.setText(theTrap.getCounterMeasureDescription());
+		
+		JPanel attack_panel = new JPanel();
+		attack_panel.setLayout( new BorderLayout() );
+		attack_panel.add(atk.getListCellRendererComponent(null, atk.getEntity(), 0, false, false), BorderLayout.CENTER);
+		GroupLayout trap_layout = new GroupLayout(trap_panel);
+		trap_layout.setHorizontalGroup( trap_layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(trap_text_1)
+				.addComponent(trap_text_2)
+				.addComponent(trap_text_3)
+				.addComponent(trigger_pane)
+				.addComponent(counter_pane)
+				.addComponent(attack_panel)
 				);
-		trap_panel.setLayout( new BorderLayout() );
-		trap_panel.add(trap_text, BorderLayout.CENTER);
-		trap_panel.add(atk.getListCellRendererComponent(null, atk.getEntity(), 0, false, false), BorderLayout.PAGE_END);
+		trap_layout.setVerticalGroup( trap_layout.createSequentialGroup()
+				.addComponent(trap_text_1)
+				.addComponent(trap_text_2)
+				.addComponent(trap_text_3)
+				.addComponent(trigger_pane)
+				.addComponent(counter_pane)
+				.addComponent(attack_panel)
+				);
+		trap_layout.linkSize(SwingConstants.VERTICAL, attack_panel, trigger_pane, counter_pane);
+		trap_panel.setLayout( trap_layout );
+		
 		return trap_panel;
 	}
 

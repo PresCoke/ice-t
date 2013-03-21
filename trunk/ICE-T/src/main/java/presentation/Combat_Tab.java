@@ -67,6 +67,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		currentCreature_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 2, 0),
 				BorderFactory.createLineBorder(Color.GRAY) 					) );
+		currentCreature_pane.setLayout( new BorderLayout() );
 		
 //		selectedCreature_pane = new JScrollPane();
 //		selectedCreature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -76,6 +77,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		selectedCreature_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 2, 5),
 				BorderFactory.createLineBorder(Color.GRAY) 					) );
+		selectedCreature_pane.setLayout( new BorderLayout() );
 		
 	}
 
@@ -205,7 +207,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 			theBean.createPanelFrom(theCreature);
 			currentCreature_pane.removeAll();
-			currentCreature_pane.add(theBean.getPanel());
+			currentCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 		}
 		
 		/*List<Object> creatures = theEncounter.getCreaturesInCe();
@@ -238,7 +240,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		creature_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		//TODO change renderer
 		creature_list.setCellRenderer(new CreatureBeanShallow());
-		creature_list.setPreferredSize(new Dimension(170, 0));
+		//creature_list.setPreferredSize(new Dimension(170, 0));
 		creature_list.setFixedCellWidth(140);
 		creature_list.setFixedCellHeight(100);
 		
@@ -293,8 +295,8 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
 		creature_pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		creature_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		creature_pane.setPreferredSize( new Dimension( 2*screen_width/8, 6*screen_height/10 ) );
-		creature_pane.setMinimumSize( new Dimension( 2*screen_width/8, 6*screen_height/10 ) );
+		creature_pane.setPreferredSize( new Dimension( 3*screen_width/20, 0 ) );
+		creature_pane.setMinimumSize( new Dimension( 3*screen_width/20, 0 ) );
 
 		JPanel tempStoryNotes_panel = new JPanel();
 		tempStoryNotes_panel.setLayout( new BorderLayout() );
@@ -303,8 +305,8 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 				BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY), combatTab_l10n.getString("Story_Title"))
 				) );
 		tempStoryNotes_panel.add(storyNotes_pane, BorderLayout.CENTER);
-		tempStoryNotes_panel.setPreferredSize( new Dimension( 1*screen_width/8, 4*screen_height/10 ) );
-		tempStoryNotes_panel.setMinimumSize( new Dimension( 1*screen_width/8, 4*screen_height/10 ) );
+		tempStoryNotes_panel.setPreferredSize( new Dimension( 4*screen_width/20, 4*screen_height/8 ) );
+		tempStoryNotes_panel.setMaximumSize( new Dimension( 4*screen_width/20, 4*screen_height/8 ) );
 		
 		String[] columnNames = {combatTab_l10n.getString("TupleColName_Title"),
 				combatTab_l10n.getString("TupleColSucc_Title"),
@@ -351,15 +353,15 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		table_container.add(gmTally_table.getTableHeader(), BorderLayout.PAGE_START);
 		table_container.add(gmTally_table, BorderLayout.CENTER);
 		table_container.add(addTuple_panel, BorderLayout.PAGE_END);
-		table_container.setPreferredSize( new Dimension( 1*screen_width/8, 4*screen_height/10 ) );
-		table_container.setMinimumSize( new Dimension( 1*screen_width/8, 4*screen_height/10 ) );
+		table_container.setPreferredSize( new Dimension( 4*screen_width/20, 3*screen_height/8 ) );
+		table_container.setMaximumSize( new Dimension( 4*screen_width/20, 3*screen_height/8 ) );
 		
 		JPanel characterSheet_panel = new JPanel();
 		characterSheet_panel.setLayout( new GridLayout(1, 2, 5, 0) );
 		characterSheet_panel.add(currentCreature_pane);
 		characterSheet_panel.add(selectedCreature_pane);
-		characterSheet_panel.setPreferredSize( new Dimension(4*screen_width/8, 6*screen_height/10) );
-		characterSheet_panel.setMinimumSize( new Dimension(4*screen_width/8, 6*screen_height/10) );
+		characterSheet_panel.setPreferredSize( new Dimension(10*screen_width/20, 7*screen_height/8) );
+		characterSheet_panel.setMinimumSize( new Dimension(10*screen_width/20, 7*screen_height/8) );
 		
 		GroupLayout combat_layout = new GroupLayout(combat_panel);
 		combat_layout.setHorizontalGroup( combat_layout.createParallelGroup( GroupLayout.Alignment.LEADING)
@@ -380,6 +382,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 								.addComponent(tempStoryNotes_panel)
 								.addComponent(table_container)))
 				);
+		combat_layout.linkSize(SwingConstants.VERTICAL, creature_pane, characterSheet_panel);
 		combat_panel.setLayout(combat_layout);
 	}
 
@@ -432,7 +435,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 			theBean.createPanelFrom(theCreature);
 			currentCreature_pane.removeAll();
-			currentCreature_pane.add(theBean.getPanel());
+			currentCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 			
 			this.revalidatePanel();
 		} else if (source == finishTurn_button) {
@@ -449,7 +452,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 			CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 			theBean.createPanelFrom(theCreature);
 			currentCreature_pane.removeAll();
-			currentCreature_pane.add(theBean.getPanel());
+			currentCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 			
 			this.revalidatePanel();
 			
@@ -506,7 +509,7 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 		theBean.createPanelFrom(theCreature);
 		selectedCreature_pane.removeAll();
-		selectedCreature_pane.add(theBean.getPanel());
+		selectedCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 		revalidatePanel();
 	}
 
@@ -534,13 +537,13 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 		CreatureCombatDetailed theBean = new CreatureCombatDetailed();
 		theBean.createPanelFrom(theCreature);
 		currentCreature_pane.removeAll();
-		currentCreature_pane.add(theBean.getPanel());
+		currentCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 		
 		theCreature = ((CreatureBeanShallow) creature_model.get(creature_list.getSelectedIndex())).getEntity();
 		theBean = new CreatureCombatDetailed();
 		theBean.createPanelFrom(theCreature);
-		currentCreature_pane.removeAll();
-		currentCreature_pane.add(theBean.getPanel());
+		selectedCreature_pane.removeAll();
+		selectedCreature_pane.add(theBean.getPanel(), BorderLayout.CENTER);
 		
 		this.revalidatePanel();
 	}
