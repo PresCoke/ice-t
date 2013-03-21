@@ -56,6 +56,7 @@ public class App_Root
 			Exception_Window.showException(fe);
 			language_locale = new Locale("en_CA");
 			dbPath = "";
+			
 		} catch (IOException ioe) {
             logger.fatal("Error while loading or closing the file ApplicationSettings.properties --- " + ioe.getMessage());
 			Exception_Window.showException(ioe);

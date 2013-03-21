@@ -289,6 +289,7 @@ public class Combat {
 
 	public DefaultListModel updateCreaturesInCE(DefaultListModel creature_model) {
 		List<Object> creatures = theEncounter.getCreaturesInCe();
+		creatures.addAll(theEncounter.getTrapsInCe());
 		creature_model.removeAllElements();
 		for (int index = 0; index < creatures.size(); index++) {
 			CreatureBeanShallow aBean = new CreatureBeanShallow();
