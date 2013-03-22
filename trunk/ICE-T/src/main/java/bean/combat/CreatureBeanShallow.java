@@ -608,7 +608,29 @@ public class CreatureBeanShallow extends Bean {
 				+ cmDC + "<br>" + cmDescription + "<br>" + attack_summary
 				+ "</html");
 		
-		if (isSelected) {
+		if (isSelected && isCurrentCreature) {
+			trap_text.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createLineBorder(Color.BLACK),
+					BorderFactory.createCompoundBorder(
+							BorderFactory.createMatteBorder(5, 5, 5, 5, Color.WHITE), 
+							BorderFactory.createEmptyBorder(5, 5, 5, 5))
+					)
+				);
+			trap_text_1.setBackground(new Color(0, 178, 238));
+			trap_text_2.setBackground(new Color(0, 178, 238));
+			trap_text.setBackground(new Color(0, 178, 238));
+		} else if (isCurrentCreature) {
+			trap_text.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createLineBorder(Color.BLACK),
+					BorderFactory.createCompoundBorder(
+							BorderFactory.createMatteBorder(5, 5, 5, 5, Color.WHITE), 
+							BorderFactory.createEmptyBorder(5, 5, 5, 5))
+					)
+				);
+			trap_text_1.setBackground(new Color(0, 238, 0));
+			trap_text_2.setBackground(new Color(0, 238, 0));
+			trap_text.setBackground(new Color(0, 238, 0));
+		} else if (isSelected) {
 			trap_text.setBorder(BorderFactory.createCompoundBorder(
 					BorderFactory.createLineBorder(Color.WHITE),
 					BorderFactory.createCompoundBorder(

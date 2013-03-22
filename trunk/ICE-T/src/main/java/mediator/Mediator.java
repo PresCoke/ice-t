@@ -138,7 +138,11 @@ public class Mediator {
 
 	public entity.CombatEncounter getCombatEncounterOfID(int thisID) {
 		entity.dao.CombatEncounterDao ceDAO =  new entity.dao.CombatEncounterDaoImpl();
-		entity.CombatEncounter ce = ceDAO.getCombatEncounter(thisID);
-		return ce;
+		if (ceDAO.doesEncounterExist(thisID)) {
+			entity.CombatEncounter ce = ceDAO.getCombatEncounter(thisID);
+			return ce;
+		} else {
+			return new entity.CombatEncounter();
+		}
 	}
 }

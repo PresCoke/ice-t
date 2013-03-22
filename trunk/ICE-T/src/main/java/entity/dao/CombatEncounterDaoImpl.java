@@ -63,11 +63,16 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
 	            }
             }
             //Set the teams
-           /* if (teams != null && !teams.isEmpty()){
+           /*if (teams != null && !teams.isEmpty()){
                 logger.debug("Setting CE's teams");
 	            ce.setTeams(teams);
 	            for (Team t : teams){
 	            	t.setCombatEncounter(ce);
+	            	if (t.getPlayers().size() != 0 && t.getTraphazards().size() == 0 && t.getMonsters().size() == 0) {
+	    				t.editTeam(ce);
+	            	} else if (t.getPlayers().size() != 0 && (t.getTraphazards().size() != 0 || t.getMonsters().size() != 0)) {
+	    				t.editNPCTeam(ce, t.getMonsters());
+	            	}
 	            }  
 	            logger.debug("Teams updated");
             }*/
@@ -161,6 +166,19 @@ public class CombatEncounterDaoImpl implements CombatEncounterDao {
             session.close();
         }	
         return ce;
+	}
+
+	public boolean doesEncounterExist(int thisID) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Query q = session.createSQLQuery("Select * from CombatEncounter where CombatEncounter.CombatEncounter_id = " + thisID);
+		List<Object[]> ces = q.list();
+		if (ces.size() == 0) {
+			logger.debug("Combat Encounter " + Integer.toString(thisID) + " does not exist" );
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }

@@ -24,7 +24,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	private JList entityName_list;
 	private DefaultListModel name_list;
 	private JPanel entityEdit_pane;
-	private JButton save_button, remove_button, cancel_button;
+	private JButton save_button, remove_button, cancel_button, open_button;
 	private EditEntity controller_reference;
 	private GroupLayout editEntity_layout;
 	private int num_entities;
@@ -60,6 +60,9 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		editEntity_panel.setBorder( BorderFactory.createEmptyBorder(0, 10, 15, 10) );
 		
 		ResourceBundle editTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.NewEditTab", App_Root.language_locale);
+		int screen_width = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
+		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
+		
 		
 		this.getEntityNamesOfType(entityType);
 		entityName_list = new JList(name_list);
@@ -67,15 +70,14 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		entityName_list.addListSelectionListener(this);
 		JScrollPane name_pane = new JScrollPane(entityName_list);
 		name_pane.setBorder( BorderFactory.createEtchedBorder() );
-		name_pane.setPreferredSize( new Dimension(150, 0) ); //TODO: find better way then specifying exact sizes
-		name_pane.setMinimumSize( new Dimension(150, 0) );
-//		name_pane.setMaximumSize( new Dimension(150, 0) );
+		name_pane.setPreferredSize( new Dimension(screen_width/8, 2*screen_height/3) );
+		name_pane.setMaximumSize( new Dimension(screen_width/8, screen_height) );
 		
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
 		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );
-		listSelection_panel.setPreferredSize( new Dimension(150, 0) );
-//		listSelection_panel.setMaximumSize( new Dimension(150, 0) );
+		//listSelection_panel.setPreferredSize( new Dimension(150, 0) );
+		//listSelection_panel.setMaximumSize( new Dimension(150, 0) );
 		listSelection_panel.add(name_pane);
 		
 		save_button = new JButton(editTab_l10n.getString("Save_Button"));
@@ -84,6 +86,8 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		remove_button.addActionListener(this);
 		cancel_button = new JButton(editTab_l10n.getString("Cancel_Button"));
 		cancel_button.addActionListener(this);
+		open_button = new JButton(editTab_l10n.getString("Open_Button"));
+		open_button.addActionListener(this);
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
@@ -93,7 +97,7 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		button_panel.add(cancel_button);
 		
 		entityEdit_pane = new JPanel();
-		entityEdit_pane.setPreferredSize( new Dimension(300, 300) );
+		entityEdit_pane.setPreferredSize( new Dimension(5*screen_width/8, 2*screen_height/3) );
 		entityEdit_pane.setOpaque(false);
 		entityEdit_pane.setBorder( BorderFactory.createCompoundBorder( 
 				BorderFactory.createEmptyBorder(7, 0, 0, 0),
@@ -131,6 +135,10 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 		} else if ( (JButton) evt.getSource() == this.cancel_button ) {
 			this.editEntity_window.setVisible(false);
 			this.editEntity_window.dispose();
+		} else if ((JButton) evt.getSource() == this.open_button) {
+			this.controller_reference.openCombatEncounter();
+			this.editEntity_window.setVisible(false);
+			this.editEntity_window.dispose();
 		}
 		
 	}
@@ -144,25 +152,34 @@ public class Edit_Tab implements ListSelectionListener, ActionListener {
 	}
 	
 	private void getEntityInfoFor(String selectedEntityName) {
+		int screen_width = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getWidth() );
+		int screen_height = (int) Math.round( Toolkit.getDefaultToolkit().getScreenSize().getHeight() );
+		
 		entityEdit_pane = this.controller_reference.getEntityPanelOfName(selectedEntityName, entityType);
 		
 		TitledBorder temp_border = BorderFactory.createTitledBorder( BorderFactory.createLineBorder(Color.GRAY) );
 		temp_border.setTitle(selectedEntityName);
 		temp_border.setTitleJustification(TitledBorder.CENTER);
 		entityEdit_pane.setBorder(temp_border);
-		entityEdit_pane.setPreferredSize( new Dimension(0,0) );
+		entityEdit_pane.setPreferredSize( new Dimension(5*screen_width/8, 2*screen_height/3) );
 		
 		JPanel button_panel = new JPanel();
 		button_panel.setLayout( new BoxLayout(button_panel, BoxLayout.LINE_AXIS) );
 		button_panel.add( Box.createHorizontalGlue() );
-		button_panel.add(save_button);
+		if (selectedEntityName.equals(
+				ResourceBundle.getBundle("filters.MainGUI_l10n.EntityTypeName", App_Root.language_locale)
+				.getString("CombatEncounter_entity"))) {
+			button_panel.add(open_button);
+		} else {
+			button_panel.add(save_button);
+		}
 		button_panel.add(remove_button);
 		button_panel.add(cancel_button);
 		
 		JScrollPane name_pane = new JScrollPane(entityName_list);
 		name_pane.setBorder( BorderFactory.createEtchedBorder() );
-		name_pane.setPreferredSize( new Dimension(150, 0) ); //TODO: find better way then specifying exact sizes
-		name_pane.setMinimumSize( new Dimension(150, 0) );
+		name_pane.setPreferredSize( new Dimension(screen_width/8, 2*screen_height/3) );
+		name_pane.setMaximumSize( new Dimension(screen_width/8, screen_height) );
 		JPanel listSelection_panel = new JPanel();
 		listSelection_panel.setLayout( new BoxLayout(listSelection_panel, BoxLayout.LINE_AXIS) );
 		listSelection_panel.setBorder( BorderFactory.createEmptyBorder(7, 0, 0, 5) );

@@ -33,6 +33,7 @@ public class TeamRenderer implements ListCellRenderer, TableCellRenderer {
 		} else {
 			return (new JPanel());
 		}
+		theFinalPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		if (isSelected) {
 			theFinalPane.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
 		}
