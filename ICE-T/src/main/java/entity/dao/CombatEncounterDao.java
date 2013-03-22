@@ -58,4 +58,6 @@ public interface CombatEncounterDao {
 	 */
 	public CombatEncounter getCombatEncounter(int combatEncounterId);
 
+	public boolean doesEncounterExist(int thisID);
+
 }

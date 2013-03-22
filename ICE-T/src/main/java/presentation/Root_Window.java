@@ -146,7 +146,7 @@ public class Root_Window {
 								null,
 								""
 								);
-					if (name != null || name.length() > 0) {
+					if (name != null) {
 						App_Root.combat_controller.saveOpenCombatEncounter(name);
 					} else {
 						JOptionPane.showMessageDialog(main_window,
@@ -209,6 +209,7 @@ public class Root_Window {
 					String ce = ResourceBundle.getBundle("filters.MainGUI_l10n.EntityTypeName", App_Root.language_locale)
 							.getString("CombatEncounter_entity");
 					if (entityToBeCreated.equals(ce)) {
+						int CE_id;
 						String [] options = {"Yes", "No", "Cancel"};
 						int x = JOptionPane.showOptionDialog(App_Root.mainWindow.getFrame(),
 								  "Do you wish to save the currently open Encounter?",//TODO: make french
@@ -222,25 +223,34 @@ public class Root_Window {
 						if (x == JOptionPane.CANCEL_OPTION || x == JOptionPane.CLOSED_OPTION) {
 							return;
 						}
-						else if (x == JOptionPane.YES_OPTION) {
-							if (App_Root.combat_controller.getID() < 0) {
-								ResourceBundle save_l10n = ResourceBundle.getBundle("filters.MainGUI_l10n.RootWindow", App_Root.language_locale);
-								String name = "";
-								do {
-									name = (String) JOptionPane.showInputDialog(
-											App_Root.mainWindow.getFrame(),
-											save_l10n.getString("SaveCE_message"),
-											save_l10n.getString("SaveCE_title"),
-											JOptionPane.PLAIN_MESSAGE,
-											null,
-											null,
-											""
-											);
-								} while (name == null || name.length() <= 0);
+						if (App_Root.combat_controller.getID() < 0 && !App_Root.combat_controller.isEmpty()) {
+							ResourceBundle save_l10n = ResourceBundle.getBundle("filters.MainGUI_l10n.RootWindow", App_Root.language_locale);
+							String name = (String) JOptionPane.showInputDialog(
+										main_window,
+										save_l10n.getString("SaveCE_message"),
+										save_l10n.getString("SaveCE_title"),
+										JOptionPane.PLAIN_MESSAGE,
+										null,
+										null,
+										""
+										);
+							if (name != null) {
 								App_Root.combat_controller.saveOpenCombatEncounter(name);
 							} else {
-								App_Root.combat_controller.updateOpenCombatEncounter();
+								JOptionPane.showMessageDialog(main_window,
+										  "Must give Combat Encounter a name.", // TODO: make french
+										  "ICE-T",
+										  JOptionPane.WARNING_MESSAGE);
+								return;
 							}
+						} else if (!App_Root.combat_controller.isEmpty()) {
+							App_Root.combat_controller.updateOpenCombatEncounter();
+						} else {
+							JOptionPane.showMessageDialog(main_window,
+									  "Cannot save empty encounter.", // TODO: make french
+									  "ICE-T",
+									  JOptionPane.WARNING_MESSAGE);
+							return;
 						}
 						App_Root.combat_controller.setCombatEncounter(new CombatEncounter());
 						combat_tab = new Combat_Tab(App_Root.combat_controller);

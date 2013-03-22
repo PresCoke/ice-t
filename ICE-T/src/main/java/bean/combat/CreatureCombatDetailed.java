@@ -174,7 +174,7 @@ public class CreatureCombatDetailed {
 		player_text_2.add(xp_label);
 		
 		init_label = new JLabel(player_l10n.getString("Init_entity"));
-		init_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative(), thePlayer.getCharacterSheet().getInitiative(), 100, 1));
+		init_field = new JSpinner( new SpinnerNumberModel(thePlayer.getInitiative()+thePlayer.getCharacterSheet().getInitiative(), thePlayer.getCharacterSheet().getInitiative(), 100, 1));
 		init_field.addChangeListener( new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int init = (Integer) ((JSpinner) arg0.getSource()).getValue();

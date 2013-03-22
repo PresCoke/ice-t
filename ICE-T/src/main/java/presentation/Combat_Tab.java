@@ -481,8 +481,16 @@ public class Combat_Tab implements ActionListener, ListSelectionListener {
 				gmTally_model.removeRow( selected_rows[index] );
 			}
 		} else if (source == GRE_button) {
-			GRE_Window GRE_window = new GRE_Window(controller_reference, this);
-			GRE_window.showFrame();
+			if (controller_reference.getCombatEncounter().getPlayersInCE().size() > 0) {
+				GRE_Window GRE_window = new GRE_Window(controller_reference, this);
+				GRE_window.showFrame();
+			} else {
+				ResourceBundle combatTab_l10n = ResourceBundle.getBundle("filters.mainGUI_l10n.CombatTab", App_Root.language_locale);
+				JOptionPane.showMessageDialog(combat_panel,
+						  combatTab_l10n.getString("GRE_Warning"),
+						  combatTab_l10n.getString("GRE_Button"),
+						  JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 	}

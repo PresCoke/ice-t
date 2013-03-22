@@ -134,14 +134,14 @@ public class Combat {
 	    	logger.info("The currentCreatureId is null so this is a new game.");
 	    	Object first_creature = creaturesInTheCE.get(0);
 	    	if (first_creature instanceof Player) {
-	    		theEncounter.setCurrentCreatureId( 0 );/*((entity.Player) first_creature).getId() );*/
+	    		theEncounter.setCurrentCreatureId( -1 );/*((entity.Player) first_creature).getId() );*/
 	    	} else if (first_creature instanceof Monster) {
-	    		theEncounter.setCurrentCreatureId( 0 );/*((entity.Monster) first_creature).getId() );*/
+	    		theEncounter.setCurrentCreatureId( -1 );/*((entity.Monster) first_creature).getId() );*/
 	    	} 
 	    	this.setCurrentCreature(theEncounter.getCurrentCreatureId());
 		} else {
 			logger.info("The currentCreatureId is non-null so set the current creature to the saved one.");
-			this.setCurrentCreature(theEncounter.getCurrentCreatureId());
+			this.setCurrentCreature(-1);
 	    }
 		
 		return creature_model;
@@ -155,6 +155,7 @@ public class Combat {
 		/*
 		 * Going to have to take a careful look at this...
 		 */
+		
 		currentCreature++;
 		if (currentCreature < creaturesInTheCE.size()) {
 			theEncounter.setCurrentCreatureId(currentCreature);
@@ -208,8 +209,10 @@ public class Combat {
     	for (Monster c : monsters){
     		npcs.add(c);
     	}
-    	for (TrapHazard th : trapHazards){
-    		npcs.add(th);
+    	for (TrapHazard th : trapHazards) {
+    		if (!theEncounter.getTrapsInCe().contains(th)) {
+    			npcs.add(th);
+    		}
     	}
     	
     	int npc_size = npcs.size();
@@ -240,6 +243,8 @@ public class Combat {
     				}
     				num_iterations = 0;
     				randomTeams.get(index).addTrapHazard( (TrapHazard) o );
+    				npcs.remove( (TrapHazard) o);
+    				npc_size--;
     			}
     			
     			xp -= specificXP;

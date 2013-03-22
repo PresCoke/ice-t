@@ -140,4 +140,11 @@ public class EditEntity {
 		return editableEntity.validateEntity();
 	}
 
+	public void openCombatEncounter() {
+		Object theEntity = editableEntity.getEntity();
+		if (theEntity instanceof CombatEncounter) {
+			App_Root.combat_controller.setCombatEncounter((CombatEncounter) theEntity); 
+		}
+	}
+
 }

@@ -338,15 +338,15 @@ public class CombatEncounter implements EntityM {
     	CombatEncounterDao ceDao = new CombatEncounterDaoImpl();
     	int id = ceDao.saveCombatEncounter(getName(), getNotes(), getCurrentCreatureId(), getRewards(),
 				getTally(), getTally().getTuples(), getTeams());
-    	
+    	this.setId(id);
     	TeamDao tmDAO = new TeamDaoImpl();
 		for (Team t : getTeams()) {
 			if (t.getPlayers().size() != 0 && t.getTraphazards().size() == 0 && t.getMonsters().size() == 0) {
 				t.editTeam(this);
-				//tmDAO.updateTeam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getPlayers());
+//				tmDAO.updateTeam(t.getId(), this, t.getName(), t.getPlayers());
 			} else if (t.getPlayers().size() != 0 && (t.getTraphazards().size() != 0 || t.getMonsters().size() != 0)) {
 				t.editNPCTeam(this, t.getMonsters());
-				//tmDAO.updateNPCteam(t.getId(), ceDao.getCombatEncounter(id), t.getName(), t.getMonsters(), t.getTraphazards());
+//				tmDAO.updateNPCteam(t.getId(), this, t.getName(), t.getMonsters(), t.getTraphazards());
 			}
 		}
 		/*PlayerDao pDAO = new PlayerDaoImpl();

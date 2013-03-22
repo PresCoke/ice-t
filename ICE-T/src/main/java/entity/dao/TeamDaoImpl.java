@@ -307,7 +307,7 @@ public class TeamDaoImpl implements TeamDao {
 				player.setTeam(null);
 				session.update(player);
 			}
-			logger.debug("Modifying previous players' team done");
+			//logger.debug("Modifying previous players' team done");
 			t.removeAllPlayers();
 			session.update(t);
 			logger.debug("Setting team's players and players' team");

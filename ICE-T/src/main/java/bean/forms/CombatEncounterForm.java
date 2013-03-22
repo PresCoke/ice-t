@@ -3,7 +3,9 @@ package bean.forms;
 import javax.swing.JPanel;
 
 public class CombatEncounterForm implements FormBean {
+	
 	private entity.CombatEncounter theCombatEncounter;
+	
 	public JPanel createEntityPanel() {
 		theCombatEncounter = new entity.CombatEncounter();
 		return new JPanel();
